@@ -50,7 +50,9 @@ def for_instances(host_list, route_info):
     name = path.replace("/", "_")
     name = name.replace("+", "_")
     for host in host_list:
-        url = "%s%s" % (host, path)
+        # Attention！ 直接读取path
+        url = "%s" %path
+#         url = "%s%s" % (host, path)
         if (get_xml(url, name)):
             fnLog("抓取成功")
             break
