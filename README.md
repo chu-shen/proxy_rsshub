@@ -14,7 +14,7 @@ https://github.com/wdssmq/proxy_rsshub
 
 ---start---
 
-2021-09-26 08:54:18
+2021-09-26 10:52:30
 
 title: The Airbnb Tech Blog - Medium
 
@@ -23,6 +23,10 @@ path: [https://medium.com/feed/airbnb-engineering](xml/https:__medium.com_feed_a
 title: v2ex 最热
 
 path: [https://www.v2ex.com/index.xml](xml/https:__www.v2ex.com_index.xml.xml "v2ex 最热") 「[raw](xml/https:__www.v2ex.com_index.xml.xml?raw=true "v2ex 最热")」
+
+title: Continuing Ed  — with Edward Snowden
+
+path: [https://edwardsnowden.substack.com/feed/](xml/https:__edwardsnowden.substack.com_feed_.xml "Continuing Ed  — with Edward Snowden") 「[raw](xml/https:__edwardsnowden.substack.com_feed_.xml?raw=true "Continuing Ed  — with Edward Snowden")」
 
 
 ---end---
