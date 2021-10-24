@@ -8,15 +8,207 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2021-10-23T16:20:56Z</updated>
+<updated>2021-10-23T20:48:43Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[随想] 为什么不大力发展无线传输</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810104#reply0" />
+	<id>tag:www.v2ex.com,2021-10-24:/t/810104</id>
+	<published>2021-10-24T00:48:43Z</published>
+	<updated>2021-10-23T20:48:43Z</updated>
+	<author>
+		<name>WeiShenMe</name>
+		<uri>https://www.v2ex.com/member/WeiShenMe</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	昨天整理房间，被电子设备的那一盘盘各种各样的线恶心坏了，那些线的粗细，软硬，形状，长短，各不相同，非常难以整理，最后干脆不让桌子靠墙，留点缝隙，直接把线放下去悬空完事。<br />这时候想到各厂商整天只会无脑堆摄像头就挺郁闷的，啥时候研究一下消费级电子产品的无线充电与数据传输，如果实现了，那就能做到桌面无线化了，想想就太完美了……
+	]]></content>
+</entry><entry>
+	<title>[硬件] 求教这是什么问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810103#reply2" />
+	<id>tag:www.v2ex.com,2021-10-24:/t/810103</id>
+	<published>2021-10-24T00:14:31Z</published>
+	<updated>2021-10-24T00:20:18Z</updated>
+	<author>
+		<name>lwldcr</name>
+		<uri>https://www.v2ex.com/member/lwldcr</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>家里的台式机，最近这半年开始偶尔会出个问题，表现为:</p>
+<ol>
+<li>开机自检卡在 bios 界面很久，约莫有三分钟的样子</li>
+<li>进系统后会发现有几块磁盘没挂载上，其他功能正常</li>
+</ol>
+<p>这种现象不是每次都出现，从最早的偶尔，到后来的频繁，现在大概 10 次有 8 次这样子</p>
+<p>老铁们诊断一下可能是啥问题，是不是电源不行了，或者是主板有问题</p>
+<p>因为用的不太多，一直放着没太在意，这两天收拾家当，想顺手解决一下</p>
+<p>电源是<code>鑫谷（ Segotep ）额定 500W GP600P 白金版电源</code></p>
+<p>主板是<code>华擎 b360m pro4</code></p>
+
+	]]></content>
+</entry><entry>
+	<title>[Python] 是否有针对为了兼容的多余代码的代码检查？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810102#reply0" />
+	<id>tag:www.v2ex.com,2021-10-24:/t/810102</id>
+	<published>2021-10-24T00:14:21Z</published>
+	<updated>2021-10-24T00:14:21Z</updated>
+	<author>
+		<name>Contextualist</name>
+		<uri>https://www.v2ex.com/member/Contextualist</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Python 每个新版本中的标准库会新增一些更便捷的功能，但自己在写库时为了兼容旧版本 Python 就不会使用那些最近新增的功能。例如用 pathlib 删除一个文件，无论文件存在与否：</p>
+<pre><code class="language-Python">from pathlib import Path
+
+# 写法一 (Python 3.8+)
+Path('file').unlink(missing_ok=True)
+
+# 写法二
+try:
+    Path('file').unlink()
+except FileNotFoundError:
+    pass
+</code></pre>
+<p>因为 <code>missing_ok</code> 是 Python 3.8 时新增的选项，所以如果要兼容 Python 3.8 以前的版本，就会用写法二。</p>
+<p>在最初库写成一段时间后，可能会决定放弃支持一些 Python 的旧版本。在这个例子里，如果我想放弃对 Python 3.7 的支持，如果有工具能找出现有代码中的可能为写法二的部分，提示我考虑写法一，那对维护工作就省心多了。那有这种代码检查吗？</p>
+<hr/>
+<p>题外话：分享一个解决我这个问题相反问题的工具：<a href="https://github.com/netromdk/vermin" rel="nofollow">vermin</a>。可以用来检查一个 Python 文件 /包所需要的最低 Python 版本。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[MacBook Pro] 把 Face id 装在 MacBook Pro 上是否合适？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810101#reply4" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810101</id>
+	<published>2021-10-23T22:35:13Z</published>
+	<updated>2021-10-24T00:11:11Z</updated>
+	<author>
+		<name>0Vincent0Zhang0</name>
+		<uri>https://www.v2ex.com/member/0Vincent0Zhang0</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	看到很多 v 友都觉得新 mbp 没 face id 很可惜，不过 mbp 如果加上了 face id 之后，那应该怎么和用户交互呢？毕竟 mbp 的使用场景和手机的差异还是很大的。在这方面可能苹果也还没准备好。<br />假如需要暂时离开需要锁屏的场景，是不是锁屏之后还要用手遮挡摄像头直到离开？还是要闭上眼睛再离开😂
+	]]></content>
+</entry><entry>
+	<title>[问与答] macOS 有必要用 4K 显示器吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810100#reply5" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810100</id>
+	<published>2021-10-23T20:29:39Z</published>
+	<updated>2021-10-23T22:54:10Z</updated>
+	<author>
+		<name>dingwen07</name>
+		<uri>https://www.v2ex.com/member/dingwen07</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	用来看网页、写代码，看视频用内置显示器了。<br />听说 macOS 在 1080p 或 2K 下字体会糊？但是我看了下好像 4K 的显示器基本上都要 400 刀以上。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 中国残联是否允许接受社会资金捐助？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810099#reply4" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810099</id>
+	<published>2021-10-23T19:01:30Z</published>
+	<updated>2021-10-23T17:01:30Z</updated>
+	<author>
+		<name>DingYuanYing</name>
+		<uri>https://www.v2ex.com/member/DingYuanYing</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>中国的残疾人便利程度在世界主要经济体中是非常落后的，中国残联，我们把话说难听一点，不做事很多年了。</p>
+<p>最近残联突然有很多大动作，并且配合了非常到位的舆论宣传攻势。资助电子竞技比赛提供无障碍观赛直播间，号召服装业提供“一只鞋”服务，并且知乎热搜微博热搜都很到位，说实话这还是头一回这么主动出击，也形成了良好的社会反响。</p>
+<p>一般来说，类似 NGO 能做成事是需要有大量资金倾斜的，赞助买热搜等等都需要花钱。考虑到残联的“人民团体”法律性质，是什么导致这种常规没有声音的组织突然具备了活力？</p>
+<p>我很好奇残联是否有直接接受社会大金额捐助的通道，个人不太相信是国家突然划拨。</p>
+<p>结合最近几年国内轰轰烈烈的同性恋平权运动和两性平权运动，。</p>
+<p>（本人坚定支持两性平等取向平等，残疾人的生活应该变得更加便利。）</p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 有办湖南电信 1000M 的朋友吗 ，实测效果不佳，坐标湘潭</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810098#reply3" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810098</id>
+	<published>2021-10-23T18:04:47Z</published>
+	<updated>2021-10-23T19:58:41Z</updated>
+	<author>
+		<name>fan88</name>
+		<uri>https://www.v2ex.com/member/fan88</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>湖南湘潭，199 套餐，免费升了 1000M ，但光猫竟然不送！</p>
+<p>原有的千兆猫测下来 700M ，花了 300 买了台华为 HN8145V 10GEPON 注册成功，满心欢喜去测，竟然特么还是 700M ，离谱啊，这 1000M 感觉不给力。</p>
+<p>但是从测速的速度变化来看，速度是从 200M 一路慢慢慢到 700M ，涨得很慢。所以这就不像是 QOS 限制了 700M （ QOS 限制会有非常明显的从突发的一个较高值回落到一个固定值），更像是性能问题。不太清楚出在哪个环节。光猫已桥接，直接接 PC 拨号测速的。光猫性能问题？亦或是小区带宽满了？</p>
+<p><img alt="测速图" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://app.hnust.edu.cn/static/cdn/38cfa1f7f201929e0bc5244ff5cd616.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] 微信关闭朋友圈入口后似乎不会有互动消息了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810097#reply0" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810097</id>
+	<published>2021-10-23T17:58:40Z</published>
+	<updated>2021-10-23T17:58:40Z</updated>
+	<author>
+		<name>CEBBCAT</name>
+		<uri>https://www.v2ex.com/member/CEBBCAT</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	之前即使关闭了朋友圈入口，从个人主页点进去的消息列表还是会有互动消息。
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 一个极其舒适的前端 ASMR 视频</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810096#reply1" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810096</id>
+	<published>2021-10-23T17:47:14Z</published>
+	<updated>2021-10-23T18:47:14Z</updated>
+	<author>
+		<name>Wongbrah</name>
+		<uri>https://www.v2ex.com/member/Wongbrah</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<div class="embedded_video_wrapper"><iframe src="https://www.youtube.com/embed/bSMZgXzC9AA" class="embedded_video" allowfullscreen="" type="text/html" id="ytplayer" frameborder="0"></iframe></div>
+	]]></content>
+</entry><entry>
+	<title>[ThinkPad] thinkpad 这个产品让人「生气」的点</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810094#reply2" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810094</id>
+	<published>2021-10-23T17:02:01Z</published>
+	<updated>2021-10-23T20:17:38Z</updated>
+	<author>
+		<name>moliliang</name>
+		<uri>https://www.v2ex.com/member/moliliang</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	[仅代表个人主观看法] <br /><br />thinkpad 这个产品其实挺好的，我的第三款笔记本就是 thinkpad t420s ，他陪伴我走过了一小部分职业生涯。<br /><br />后来就一直用的 macbook ，然后因为我的 macbook 15 寸有点老了，啥也不干发热量有点大。<br /><br />最近发了新款 MacBook 之后，还是想继续升级用 mac 的，奈何配个 32g 内存竟差不多 2w 了～ 老婆不批准～<br /><br />然后发现最近的 thinkpad 其实还挺不错的吧，尤其是 amd 款的新品，价格诱人。<br /><br />根据我的个人开发场景以及考虑到便携性，考虑了几款 thinkpad 型号。<br /><br />16 寸隐士系列（ x1 ，p1 ），x13 2021 款锐龙，t14/s 2021 款锐龙。<br /><br />上面几款型号中，隐士最心动，但是价格偏高了（淘宝美行行价格在 1.2w ），并且偏重。<br /><br />其次是 x13 锐龙，目前没有 32g 内存可以选，并且只有感人的 1080p 屏幕（ 16:10 ，比 1080p 高一点），2k+屏幕看官方资料似乎也没。<br /><br />最后是 t14/s ，能加内存这点可以，但是……16:9 的屏幕，下面可以跑火车，也算了。<br /><br />----------<br /><br />最后，坦白说，thinkpad 完全可以在开发领域占有更多市场，但是联想似乎并不关心，按他们的节奏搞搞商务，zf 市场，他们可能也过得挺滋润的～<br /><br />---------<br /><br />所以选了一票之后，为什么「生气」，就是那种恨铁不成钢的生气吧。。。<br /><br /><br />找一个符合我的需求的 pc ，好难。。。<br /><br />--------<br /><br />这篇帖子吐槽的成分更多，可能最后还是继续 mac 了。。。
+	]]></content>
+</entry><entry>
+	<title>[Apple TV] 小白来问 2 个 atv 的问题，请求各位大神解惑</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810093#reply5" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810093</id>
+	<published>2021-10-23T16:48:00Z</published>
+	<updated>2021-10-23T20:48:58Z</updated>
+	<author>
+		<name>linxuanv</name>
+		<uri>https://www.v2ex.com/member/linxuanv</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	本人主要用途的看局域网里的电影。<br /><br />内网环境均满足千兆<br /><br />infuse 试了 2 种方法，<br />一种直接连接局域网的里插电脑上的移动机械硬盘，smb 协议，实际测速不快，有时 100+Mbps ，最快 200Mpbs ，看 4k 缓冲较久，体验不佳<br /><br />另一种是 infusel 里连接 plex （本来以为要钱，结果 infuse 里连 plex 好像直接可以免费看），测速最少 600Mbps ，最快 900Mpbs ，体验良好<br /><br />请问这个 plex 是什么逻辑呀？也是局域网吗？还是有经过 plex 的服务器啥的？亦或者说 plex 有专属的协议啥的？这速度也差太多了吧<br /><br />最后个问题就是，苹果 tv+我记得国内也能直连的，但是我是路由器 fq ，走的还是节点流量，请问要如何分流让 tv+直连啊？<br /><br />先谢谢各位大神了！
+	]]></content>
+</entry><entry>
+	<title>[macOS] Mac 版 Safari 有个很不苹果的细节</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810092#reply6" />
+	<id>tag:www.v2ex.com,2021-10-23:/t/810092</id>
+	<published>2021-10-23T16:46:36Z</published>
+	<updated>2021-10-24T00:24:31Z</updated>
+	<author>
+		<name>Aaron325</name>
+		<uri>https://www.v2ex.com/member/Aaron325</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	按住 command+数字可以快速切花标签页，页面少的时候还好说，多了还不如直接点。<br />按道理讲，按下去的时候标签页应该自动在上面显示出数字。<br />实际上全靠盲曹
+	]]></content>
+</entry><entry>
 	<title>[优惠信息] 微信支付 X App Store 限时充值特惠 (10/22-10/24)</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810089#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810089#reply13" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810089</id>
 	<published>2021-10-23T16:20:56Z</published>
-	<updated>2021-10-23T16:20:56Z</updated>
+	<updated>2021-10-24T00:40:18Z</updated>
 	<author>
 		<name>shahua365</name>
 		<uri>https://www.v2ex.com/member/shahua365</uri>
@@ -30,10 +222,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 技术 or 管理，你会选哪个？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810088#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810088#reply7" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810088</id>
 	<published>2021-10-23T16:19:49Z</published>
-	<updated>2021-10-23T16:17:49Z</updated>
+	<updated>2021-10-24T00:04:28Z</updated>
 	<author>
 		<name>dtgxx</name>
 		<uri>https://www.v2ex.com/member/dtgxx</uri>
@@ -52,10 +244,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Windows] Windows 11 的那个任务栏角溢出有办法和以前一样全部显示吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810087#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810087#reply1" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810087</id>
 	<published>2021-10-23T16:02:43Z</published>
-	<updated>2021-10-23T16:02:43Z</updated>
+	<updated>2021-10-23T17:02:43Z</updated>
 	<author>
 		<name>keyfunc</name>
 		<uri>https://www.v2ex.com/member/keyfunc</uri>
@@ -68,10 +260,10 @@
 	]]></content>
 </entry><entry>
 	<title>[macOS] 如何用命令导出 edge 和 chrome 的书签？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810084#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810084#reply1" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810084</id>
 	<published>2021-10-23T15:02:33Z</published>
-	<updated>2021-10-23T15:00:33Z</updated>
+	<updated>2021-10-23T16:00:33Z</updated>
 	<author>
 		<name>cmichael</name>
 		<uri>https://www.v2ex.com/member/cmichael</uri>
@@ -97,10 +289,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 啊，受不了了，校园网自从装了态势感知系统，这网络就没法用了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810081#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810081#reply6" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810081</id>
 	<published>2021-10-23T14:44:25Z</published>
-	<updated>2021-10-23T15:27:22Z</updated>
+	<updated>2021-10-23T16:27:22Z</updated>
 	<author>
 		<name>mjikop1231</name>
 		<uri>https://www.v2ex.com/member/mjikop1231</uri>
@@ -127,10 +319,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Linux] 请问如果要组建 100 个节点以上的集群，如何给机器配置免密登录呢？如果后期这个集群扩容到 200 个节点以上，该如何操作？有大佬提供下思路吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810079#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810079#reply8" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810079</id>
 	<published>2021-10-23T14:06:46Z</published>
-	<updated>2021-10-23T15:31:03Z</updated>
+	<updated>2021-10-23T16:31:03Z</updated>
 	<author>
 		<name>hfylcy123</name>
 		<uri>https://www.v2ex.com/member/hfylcy123</uri>
@@ -140,10 +332,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Python] 一个小白想法， Python 为什么不通过命令行开关切换两种 GIL 模式？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810078#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810078#reply9" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810078</id>
 	<published>2021-10-23T14:04:15Z</published>
-	<updated>2021-10-23T15:24:50Z</updated>
+	<updated>2021-10-23T19:24:50Z</updated>
 	<author>
 		<name>O5oz6z3</name>
 		<uri>https://www.v2ex.com/member/O5oz6z3</uri>
@@ -153,10 +345,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 温州“遇见志同道合”线下沙龙 - 集合温州对互联网开发有热情的小伙伴</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810077#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810077#reply1" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810077</id>
 	<published>2021-10-23T14:00:29Z</published>
-	<updated>2021-10-23T14:00:29Z</updated>
+	<updated>2021-10-23T15:00:29Z</updated>
 	<author>
 		<name>bigbod</name>
 		<uri>https://www.v2ex.com/member/bigbod</uri>
@@ -177,10 +369,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Android] 深入理解 android 包体积优化，给 apk 瘦身全部技巧</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810075#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810075#reply13" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810075</id>
 	<published>2021-10-23T13:52:14Z</published>
-	<updated>2021-10-23T16:19:43Z</updated>
+	<updated>2021-10-23T18:12:31Z</updated>
 	<author>
 		<name>little2song</name>
 		<uri>https://www.v2ex.com/member/little2song</uri>
@@ -372,10 +564,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 听说币安停止招聘了，有没有内部老哥知道情况的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810074#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810074#reply5" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810074</id>
 	<published>2021-10-23T13:43:47Z</published>
-	<updated>2021-10-23T16:02:48Z</updated>
+	<updated>2021-10-23T21:37:41Z</updated>
 	<author>
 		<name>jyizhao</name>
 		<uri>https://www.v2ex.com/member/jyizhao</uri>
@@ -385,10 +577,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] M1 MacBook Pro 13 16GB 1TB 有必要 Trade in 升级 M1 Max Macbook 16 64GB 1TB 吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810073#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810073#reply15" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810073</id>
 	<published>2021-10-23T13:30:00Z</published>
-	<updated>2021-10-23T14:30:37Z</updated>
+	<updated>2021-10-23T21:20:18Z</updated>
 	<author>
 		<name>RedBullFreeWing</name>
 		<uri>https://www.v2ex.com/member/RedBullFreeWing</uri>
@@ -402,10 +594,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[问与答] 请问一下 制作国外 app 并且不打算发布到 google 商店,这个提示是不可避免的么.</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810070#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810070#reply6" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810070</id>
 	<published>2021-10-23T13:05:38Z</published>
-	<updated>2021-10-23T15:19:02Z</updated>
+	<updated>2021-10-23T17:56:06Z</updated>
 	<author>
 		<name>dreamkuo</name>
 		<uri>https://www.v2ex.com/member/dreamkuo</uri>
@@ -445,10 +637,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] MacBook Pro 2021 14&amp;16inch 选购统计问卷</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810068#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810068#reply11" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810068</id>
 	<published>2021-10-23T12:44:50Z</published>
-	<updated>2021-10-23T13:55:57Z</updated>
+	<updated>2021-10-23T16:29:56Z</updated>
 	<author>
 		<name>shuxuanok</name>
 		<uri>https://www.v2ex.com/member/shuxuanok</uri>
@@ -472,10 +664,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] 看了新 MBP 的上手视频，反而能接受刘海了，毕竟能把顶部菜单栏改成黑色背景隐藏刘海，应用全屏也不会延伸到刘海，这种刘海区域直接给多做一截屏幕出来的思路不错，交互上甚至比以前更舒服了。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810066#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810066#reply14" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810066</id>
 	<published>2021-10-23T12:38:23Z</published>
-	<updated>2021-10-23T15:00:59Z</updated>
+	<updated>2021-10-24T00:02:01Z</updated>
 	<author>
 		<name>ZZY19890604</name>
 		<uri>https://www.v2ex.com/member/ZZY19890604</uri>
@@ -488,10 +680,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[Apple] 兄弟们有没有 parallels desktop 17 版本的软件包？非 17.1</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810065#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810065#reply1" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810065</id>
 	<published>2021-10-23T12:33:57Z</published>
-	<updated>2021-10-23T12:27:57Z</updated>
+	<updated>2021-10-23T13:27:57Z</updated>
 	<author>
 		<name>cernard</name>
 		<uri>https://www.v2ex.com/member/cernard</uri>
@@ -578,10 +770,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[程序员] 视频在线播放卡慢，如何实现视频分片加载呢？前段 vue，后台 go</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810055#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810055#reply5" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810055</id>
 	<published>2021-10-23T11:29:07Z</published>
-	<updated>2021-10-23T12:32:13Z</updated>
+	<updated>2021-10-23T16:24:20Z</updated>
 	<author>
 		<name>NotreDame</name>
 		<uri>https://www.v2ex.com/member/NotreDame</uri>
@@ -592,10 +784,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[Apple] 新的 MacBook 可以体验了吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810054#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810054#reply9" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810054</id>
 	<published>2021-10-23T10:58:40Z</published>
-	<updated>2021-10-23T14:57:08Z</updated>
+	<updated>2021-10-23T15:57:08Z</updated>
 	<author>
 		<name>MakHoCheung</name>
 		<uri>https://www.v2ex.com/member/MakHoCheung</uri>
@@ -606,10 +798,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[问与答] yoga14s vs macbook air</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810053#reply14" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810053#reply15" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810053</id>
 	<published>2021-10-23T10:58:23Z</published>
-	<updated>2021-10-23T15:50:48Z</updated>
+	<updated>2021-10-23T16:50:48Z</updated>
 	<author>
 		<name>tibifide</name>
 		<uri>https://www.v2ex.com/member/tibifide</uri>
@@ -628,10 +820,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[问与答] 想往 OS 内核方向发展，需要做什么？国内有哪些内核做的比较好的公司？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810050#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810050#reply8" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810050</id>
 	<published>2021-10-23T10:34:51Z</published>
-	<updated>2021-10-23T15:49:40Z</updated>
+	<updated>2021-10-23T16:49:40Z</updated>
 	<author>
 		<name>rickli</name>
 		<uri>https://www.v2ex.com/member/rickli</uri>
@@ -643,10 +835,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] 弱弱的问一下现在 apple arm 芯片恢复出厂 变砖的 bug 还在吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810048#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810048#reply6" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810048</id>
 	<published>2021-10-23T10:14:53Z</published>
-	<updated>2021-10-23T16:16:42Z</updated>
+	<updated>2021-10-23T16:43:30Z</updated>
 	<author>
 		<name>RikkaFlame</name>
 		<uri>https://www.v2ex.com/member/RikkaFlame</uri>
@@ -670,10 +862,10 @@ $$
 	]]></content>
 </entry><entry>
 	<title>[互联网] 程序员 5 年坚持制作免费教程造福百万学生</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810045#reply28" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810045#reply34" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810045</id>
 	<published>2021-10-23T10:04:20Z</published>
-	<updated>2021-10-23T15:00:30Z</updated>
+	<updated>2021-10-24T00:41:12Z</updated>
 	<author>
 		<name>meisen</name>
 		<uri>https://www.v2ex.com/member/meisen</uri>
@@ -750,10 +942,10 @@ RewriteRule ^(.*)$ /index.php/$1 [L]
 	]]></content>
 </entry><entry>
 	<title>[Apple] 新款 MacBook M1 Pro 16 真机上手视频</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810038#reply46" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810038#reply48" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810038</id>
 	<published>2021-10-23T09:10:34Z</published>
-	<updated>2021-10-23T16:09:31Z</updated>
+	<updated>2021-10-23T18:09:31Z</updated>
 	<author>
 		<name>MonkeyD1</name>
 		<uri>https://www.v2ex.com/member/MonkeyD1</uri>
@@ -783,239 +975,16 @@ RewriteRule ^(.*)$ /index.php/$1 [L]
 	]]></content>
 </entry><entry>
 	<title>[iPhone] 在线抢到的 iPhone ，取货人信息填错就拿不到手机了吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810033#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810033#reply4" />
 	<id>tag:www.v2ex.com,2021-10-23:/t/810033</id>
 	<published>2021-10-23T08:52:25Z</published>
-	<updated>2021-10-23T06:52:25Z</updated>
+	<updated>2021-10-23T07:52:25Z</updated>
 	<author>
 		<name>V9NN</name>
 		<uri>https://www.v2ex.com/member/V9NN</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	在手机 Apple Store 上抢购的，因为抢购时间限制，操作很快，导致取货人身份证号码错误（当时没输完整就下单付款了）。<br /><br />打电话问了直营店的客服，说这种情况就不能拿到手机。<br />又问了苹果在线客服，不提供修改取货人信息的入口。<br /><br />那么这个辛辛苦苦抢到的 iPhone ，就不能拿到手了吗？
-	]]></content>
-</entry><entry>
-	<title>[Linux] 请教一个服务器的问题，视频放在服务器上，客户端观看视频，视频的解析是在服务器还是客户端，或者说服务器主要的消耗是哪方面</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810032#reply1" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810032</id>
-	<published>2021-10-23T08:44:17Z</published>
-	<updated>2021-10-20T08:44:17Z</updated>
-	<author>
-		<name>fredshao</name>
-		<uri>https://www.v2ex.com/member/fredshao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	请教一个服务器的问题，视频放在服务器上，客户端观看视频，视频的解析是在服务器还是客户端，或者说服务器主要的消耗是哪方面。
-	]]></content>
-</entry><entry>
-	<title>[问与答] Outlook 无法添加 gmail 邮箱</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810031#reply3" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810031</id>
-	<published>2021-10-23T08:42:37Z</published>
-	<updated>2021-10-21T10:58:17Z</updated>
-	<author>
-		<name>ievnkai</name>
-		<uri>https://www.v2ex.com/member/ievnkai</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>v 友们，请问一下，你们的 outlook 可以正常登录 gmail 邮箱吗？
-我参照微软官方指导操作无法完成登录。</p>
-<p>系统：win11
-代理已挂好
-Gmail 已打开 IMAP</p>
-<p>当前无限提示：</p>
-<pre><code>发生错误
-
-无法连接到传入（ POP/IMAP ）服务器。请检查...然后重试
-</code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[MacBook Pro] 我错了，我之前说刘海无所谓的，我反悔了...</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810029#reply4" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810029</id>
-	<published>2021-10-23T08:35:18Z</published>
-	<updated>2021-10-23T11:34:18Z</updated>
-	<author>
-		<name>tomtom9</name>
-		<uri>https://www.v2ex.com/member/tomtom9</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>唐突啊，hin 唐突啊。</p>
-<p>为我的出言不逊谢罪🙇。</p>
-<p>视频链接
-<a href="https://www.youtube.com/watch?v=frs9pBKRh20" rel="nofollow">https://www.youtube.com/watch?v=frs9pBKRh20</a></p>
-<p>爆料原文链接
-<a href="https://www.v2ex.com/t/809961" rel="nofollow">https://www.v2ex.com/t/809961</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[JetBrains] Webstorm 今年 1024 有优惠活动吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810028#reply1" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810028</id>
-	<published>2021-10-23T08:32:52Z</published>
-	<updated>2021-10-23T08:36:58Z</updated>
-	<author>
-		<name>hoshizukiko</name>
-		<uri>https://www.v2ex.com/member/hoshizukiko</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>搜了下贴好像没有人发新的活动。有个去年 12 月的半价又没赶上
-记得去年 1024 是个转发抽奖。
-前年 1024 是半价。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[iPod] iPod 发布 20 周年</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810026#reply4" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810026</id>
-	<published>2021-10-23T08:17:43Z</published>
-	<updated>2021-10-23T12:25:20Z</updated>
-	<author>
-		<name>Mirage09</name>
-		<uri>https://www.v2ex.com/member/Mirage09</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>刷到了 MacRumors 的新闻，iPod 已经发布了 20 年了。MacRumors 提到他们发布的新闻链接还是 alive 的，里面的评论内容现在看起来很有意思：</p>
-<blockquote>
-<p>Our news story covering the original iPod's announcement is still live on our website, and the comment section on the story is well known for containing several negative comments about the device. One commenter described the iPod as "far from revolutionary" and another commenter wrote "all this hype for something so ridiculous!" </p>
-</blockquote>
-<p>还有一个有意思的事情是里面的评论跟 email thread 非常像，现在完全看不到这个风格了。</p>
-<p>Link to MacRumors: <a href="https://www.macrumors.com/2021/10/23/ipod-turns-20-anniversary/" rel="nofollow">https://www.macrumors.com/2021/10/23/ipod-turns-20-anniversary/</a></p>
-<p>Link to MacRumors original post: <a href="https://www.macrumors.com/2001/10/23/apples-new-thing-ipod/" rel="nofollow">https://www.macrumors.com/2001/10/23/apples-new-thing-ipod/</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[JavaScript] 一个 async function 数组， 怎样一个一个顺序执行？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810025#reply11" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810025</id>
-	<published>2021-10-23T08:14:56Z</published>
-	<updated>2021-10-23T10:12:14Z</updated>
-	<author>
-		<name>selfcreditgiving</name>
-		<uri>https://www.v2ex.com/member/selfcreditgiving</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想做到的是，每过一秒，分别打印:<br/>
-<code>this is 0</code><br/>
-<code>this is 1</code><br/>
-<code>this is 2</code><br/>
-~<br/>
-<code>this is 8</code> </p>
-<p>下面的代码结果是过一秒后全部执行。</p>
-<p>是不是哪里写的不对呢，多谢指教</p>
-<pre><code class="language-JavaScript">var jobs = [];
-
-for(let i = 0; i &lt; 8; i++) {
-    jobs.push(async function(){
-        setTimeout(function(){
-            console.log("this is " + i)
-        },1000)
-    });
-}
-
-(async function () {
-    for (const job of jobs) {
-        await job()
-    }
-        
-})();
-</code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请教一个 Android Gradle 多渠道打包的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810024#reply0" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810024</id>
-	<published>2021-10-23T08:14:08Z</published>
-	<updated>2021-10-23T08:12:08Z</updated>
-	<author>
-		<name>SmaliYu</name>
-		<uri>https://www.v2ex.com/member/SmaliYu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>因为需求要实现不同的渠道使用不同的库，因此把一部分代码抽取到渠道文件夹里，然而一部分渠道是需要 32 位包，另一部分需要 32 位和 64 位两个包。目前我的渠道文件夹有这么几个：</p>
-<pre><code>_32bit
-_32bit_huawei
-_32bit_oppo
-_32bit_xiaomi
-_64bit
-_64bit_xiaomi
-</code></pre>
-<p>这里面_32bit_xiaomi&amp;_64bit_xiaomi 里的代码相同，_32bit&amp;_32bit_oppo&amp;_64bit 这三个文件夹里代码相同（ oppo 的图标和其他渠道的不一样），我应该如何做让这个 gradle 写的优雅一点，目前我使用的最传统的方式，每次修改某一个渠道代码，如果需要同步到另一个文件夹，就复制粘贴然后确认覆盖。</p>
-<p>ps：为什么不打一个 universal 包呢？都打进来太大了，而且现在市场对权限声明比较敏感，不可取。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] Macbook Pro 发货了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810021#reply19" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810021</id>
-	<published>2021-10-23T07:58:22Z</published>
-	<updated>2021-10-23T13:07:42Z</updated>
-	<author>
-		<name>bigbanana233</name>
-		<uri>https://www.v2ex.com/member/bigbanana233</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	14 寸 Max 32 ，64GB ，2T 今天上午 10 点多发货了，预计到达时间 26 日。<br /><br /><a target="_blank" href="https://i.imgur.com/SikEErq.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/SikEErq.png" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[问与答] iOS 有没有什么比较好的全·虚拟键盘解决方案啊？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810020#reply0" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810020</id>
-	<published>2021-10-23T07:54:42Z</published>
-	<updated>2021-10-23T07:52:42Z</updated>
-	<author>
-		<name>trh</name>
-		<uri>https://www.v2ex.com/member/trh</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>就像安卓上的 Hacker's Keyboard 一样，有的时候把 iPad 连接了电脑，想要躺着工作，但是忽然发现 Ctrl 、Shift 、CMD 键都无法输入，有啥好的办法么？</p>
-<p>最希望有官方的解决方案，但是似乎要借助于第三方虚拟键盘，不过稍微搜了搜也没啥特别中意的。</p>
-<p>求助万能的 v 友。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[前端开发] 今天测试说网页登录的时候如果密码输入错误浏览器不要弹出记住密码，如果输入正确浏览器弹出记住密码，请问各位大佬这个功能怎么实现啊？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810019#reply18" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810019</id>
-	<published>2021-10-23T07:51:47Z</published>
-	<updated>2021-10-23T14:31:59Z</updated>
-	<author>
-		<name>wzx155</name>
-		<uri>https://www.v2ex.com/member/wzx155</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[中州韻] 求分享一个 Rime 的小鹤双拼词库</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810017#reply8" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810017</id>
-	<published>2021-10-23T07:34:12Z</published>
-	<updated>2021-10-23T13:00:18Z</updated>
-	<author>
-		<name>lslvxy</name>
-		<uri>https://www.v2ex.com/member/lslvxy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>求分享一个 Rime 的小鹤双拼词库
-先在找的都是全拼的词库
-双拼用习惯了,求个词库</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] macbook 官网教育版还能员工 85 不</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/810016#reply8" />
-	<id>tag:www.v2ex.com,2021-10-23:/t/810016</id>
-	<published>2021-10-23T07:09:42Z</published>
-	<updated>2021-10-23T09:21:32Z</updated>
-	<author>
-		<name>fangwenxue</name>
-		<uri>https://www.v2ex.com/member/fangwenxue</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
 	]]></content>
 </entry>
 </feed>
