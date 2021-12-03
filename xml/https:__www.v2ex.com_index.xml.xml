@@ -8,15 +8,323 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2021-12-02T16:19:13Z</updated>
+<updated>2021-12-03T00:49:51Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[iPhone] 请教各位， iPhone 的官方硅胶壳是有比较重的味道嘛？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819694#reply0" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819694</id>
+	<published>2021-12-03T00:52:51Z</published>
+	<updated>2021-12-03T00:49:51Z</updated>
+	<author>
+		<name>3o6trd6b</name>
+		<uri>https://www.v2ex.com/member/3o6trd6b</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	MagSafe 硅胶保护壳。<br />上次用官壳是 2017 年的 iPhone 8 了，已经没有太大印象了。<br />味道不是说很难闻，就是存在感比较强，工作中放在键盘边上还是能闻到。<br />不知道过几天会不会淡一些。<br />不知道皮革的味道是否会淡一些。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 求助，请婚假公司可以因为当前工作紧急不批吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819693#reply1" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819693</id>
+	<published>2021-12-03T00:50:36Z</published>
+	<updated>2021-12-03T00:52:52Z</updated>
+	<author>
+		<name>leedf</name>
+		<uri>https://www.v2ex.com/member/leedf</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>今年结婚的时候由于公司比较忙，也不没有请婚假，现在对这个公司彻底失望了，想在离职前把婚假请了，婚假结束后立即提离职，当前公司在忙一个很紧急的项目，担心老板不批婚假怎么办</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Android] 现在有无开源的安卓手机上的虚拟机 APP？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819692#reply0" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819692</id>
+	<published>2021-12-03T00:50:27Z</published>
+	<updated>2021-12-02T00:47:27Z</updated>
+	<author>
+		<name>cathedrel</name>
+		<uri>https://www.v2ex.com/member/cathedrel</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	国产的 VMOS 不想用，要权限的嘴脸比以前那些大厂的 APP 还不要脸，而且不好备份，我希望是生成一个虚拟机文件，虚拟系统的所有东西都在里面，换手机的时候直接拷贝过去就可以在新手机上运行原来的虚拟系统，省的一个个 APP 去备份，而且不单是备份各个 APP ，重点是 MAGISK 和 XPOSED 以及各个插件，不是备份能解决的，要一个个安装调试，麻烦
+	]]></content>
+</entry><entry>
+	<title>[Swift] 求助 Alamofire 的 publisher 用法</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819691#reply1" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819691</id>
+	<published>2021-12-03T00:44:09Z</published>
+	<updated>2021-12-03T00:51:45Z</updated>
+	<author>
+		<name>SorryChen</name>
+		<uri>https://www.v2ex.com/member/SorryChen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>在学习 macOS 开发想捣鼓个小东西自己用，零基础。这两天研究了研究 Publisher ，感觉也算是大概懂了，但是在用 Alamofire 的 publisher 的时候，怎么也搞不定了。比如如下这个只有一个函数的 APP ，为什么请求不成功呢：</p>
+<pre><code>
+import SwiftUI
+
+import Alamofire
+
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, world!")
+            .padding()
+            .onAppear(perform: load)
+    }
+    
+    struct TestResponse: Decodable {
+        let userId: Int
+        let id: Int
+        let title: String
+        let body: String
+    }
+    
+    func load(){
+        AF.request("https://jsonplaceholder.typicode.com/posts", method: .get, parameters: nil)
+            .validate()
+            .publishDecodable(type: [TestResponse].self)
+            .print()
+            .sink { print($0) }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+</code></pre>
+<p>打印出来的是：</p>
+<pre><code>receive subscription: (Alamofire.DataResponsePublisher&lt;Swift.Array&lt;Test.ContentView.TestResponse&gt;&gt;.(unknown context at $1080f8314).Inner&lt;Combine.Publishers.Print&lt;Alamofire.DataResponsePublisher&lt;Swift.Array&lt;Test.ContentView.TestResponse&gt;&gt;&gt;.(unknown context at $7ff81332d748).Inner&lt;Combine.Subscribers.Sink&lt;Alamofire.DataResponse&lt;Swift.Array&lt;Test.ContentView.TestResponse&gt;, Alamofire.AFError&gt;, Swift.Never&gt;&gt;&gt;)
+request unlimited
+receive cancel
+receive value: (failure(Alamofire.AFError.explicitlyCancelled))
+receive finished
+</code></pre>
+<p>为什么会出现 explicitlyCancelled 呢，谢谢大家。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 在 Infosys 呆了近一个月 辞了想做 remote job 了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819690#reply0" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819690</id>
+	<published>2021-12-03T00:40:15Z</published>
+	<updated>2021-12-03T00:39:15Z</updated>
+	<author>
+		<name>KomiSans</name>
+		<uri>https://www.v2ex.com/member/KomiSans</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>废话不多说 简历如下-&gt;</p>
+<p><a href="https://imgtu.com/i/oUe4BQ" rel="nofollow"><img alt="oUe4BQ.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://z3.ax1x.com/2021/12/03/oUe4BQ.png"/></a></p>
+<p>没想到 V 友提供的建议是真的 Infosys 确实不太推荐去
+自己还有半年就回天津了 不在上海继续呆着了 打算找个远程</p>
+<p>我的项目经验比较少说实话...</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 超车的时候，对方突然加速，对方在想什么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819689#reply10" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819689</id>
+	<published>2021-12-03T00:39:40Z</published>
+	<updated>2021-12-03T00:51:05Z</updated>
+	<author>
+		<name>howoldareyou2</name>
+		<uri>https://www.v2ex.com/member/howoldareyou2</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	今早遇到开慢车的，我看没什么其他车，就没有按喇叭催促，直接超车。可就在我超车的同时，对方突然开始一直加速。<br />我感觉有些窝火，我觉得自己采取了友善的方式，确得到了恶意的对待。我有些想不通，开始怀疑自己的抉择。<br />如果有一天你车开的很慢，你希望后面的车按喇叭催促，还是默默超车呢？
+	]]></content>
+</entry><entry>
+	<title>[程序员] 如何看别人的 pr?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819688#reply2" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819688</id>
+	<published>2021-12-03T00:37:33Z</published>
+	<updated>2021-12-03T00:46:07Z</updated>
+	<author>
+		<name>wszgrcy</name>
+		<uri>https://www.v2ex.com/member/wszgrcy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>比如别人合到我项目上的 pr,如果是改的少,在 github 上就可以直接看就行了</li>
+<li>如果改的比较多,并且不知道期望运行是否正确,应该如何实现呢?</li>
+<li>个人想到的可能是直接去他的代码里 clone.....但是感觉有点暴力,并且如何环境复杂的话审核 pr 更麻烦了,不能每一个都这么做</li>
+<li>问下经常评审代码的大佬,这个正规流程是啥?</li>
+</ul>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 外区 apple ID 使用问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819685#reply1" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819685</id>
+	<published>2021-12-03T00:06:10Z</published>
+	<updated>2021-12-03T00:20:23Z</updated>
+	<author>
+		<name>Sabrina9</name>
+		<uri>https://www.v2ex.com/member/Sabrina9</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	想请问一下大家，我的手机是登陆了日区账号，但是 apple pay 里添加了国内银联卡用来消费，ID 邮箱收到了一封中文邮件。是不是我的 ID 隐私协议啥的就成遵循国内的协议了，不太理解，网上搜索无果，就像比如说好像用外区 apple ID 在国内直营店登记买设备，也会收到中文邮件，ID 隐私协议就得遵循国内了，希望有了解的大佬能够解释一下，谢谢！
+	]]></content>
+</entry><entry>
+	<title>[Google] google 也开始作恶了吗？——记一次信用卡被盗刷</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819684#reply12" />
+	<id>tag:www.v2ex.com,2021-12-03:/t/819684</id>
+	<published>2021-12-03T00:04:07Z</published>
+	<updated>2021-12-03T00:52:49Z</updated>
+	<author>
+		<name>v2000000001ex</name>
+		<uri>https://www.v2ex.com/member/v2000000001ex</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>昨晚凌晨 3 点，短信提示有境外支付被拒。
+<img alt="222.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.loli.net/2021/12/03/gpU62N8KyazWRbf.png"/></p>
+<p>想了想几种可能性，线路都是全程加密的（自己的 vps ，ss over tls ），不可能是出在线路上，那么，要么出在源头，要么出现在另一头。</p>
+<p>1.回想下最近的信用卡操作。前几天添加了 google 支付，用于体验 gcp 。效果奇差，就把支付信息全部删除了，同时给卡加了境外支付锁。</p>
+<p>2.检查了下 paypal ，paypal 余额正常。排除。</p>
+<p>3.检查了下 chrome 的插件，只有下面 2 个
+<img alt="p.PNG" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.loli.net/2021/12/03/xvSWHBA819kFrpM.png"/></p>
+<p>4.等下我再打电话给银行确认下支付请求来自哪里</p>
+<p>想想问问大家有没有类似的经历？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 请问大家 iOS 访问 V2EX 用什么客服端</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819683#reply11" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819683</id>
+	<published>2021-12-02T23:40:47Z</published>
+	<updated>2021-12-03T00:50:39Z</updated>
+	<author>
+		<name>yyingx</name>
+		<uri>https://www.v2ex.com/member/yyingx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	早上好！请问大家 iOS 访问 V2EX 用什么客服端
+	]]></content>
+</entry><entry>
+	<title>[程序员] 有人用过 vlang 这个语言吗 看介绍好像可以一统天下的样子 蛮吊蛮吊的</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819682#reply3" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819682</id>
+	<published>2021-12-02T23:31:13Z</published>
+	<updated>2021-12-03T00:17:46Z</updated>
+	<author>
+		<name>xoxo419</name>
+		<uri>https://www.v2ex.com/member/xoxo419</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[职场话题] 闲来无事，海外的同学，来聊聊工作生活，后悔了么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819681#reply10" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819681</id>
+	<published>2021-12-02T22:52:50Z</published>
+	<updated>2021-12-03T00:46:18Z</updated>
+	<author>
+		<name>caixiangyu17</name>
+		<uri>https://www.v2ex.com/member/caixiangyu17</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	我自己先来，90 的，11 年国内双非大学毕业，北京工作两年多，当时收入一万多点，感觉拿户口无望，北京不是长久之地，所以 14 年来了澳洲读了八大的 master ，16 年毕业了国内经验澳洲基本不咋认，所以工作也的确没那么好找。找了一个小公司，一边混点澳洲经验，一边考雅思拿身份。结果运气不好赶上了澳洲 pr 疯狂涨分，一直卡 5 分，就蹉跎了的时间，陆续考雅思四个 7 和四个 8 （考的是 PTE ，对标雅思，其实比雅思简单一点）也怪自己不积极，两次都是如果早考下来一两个月就很容易拿到了。结果 16 年毕业 19 年才拿到身份。然后换了工作，现在基本上澳洲工作五年吧，年薪也是很尴尬，大概 12 万澳元。的确是比很多毕业就拿身份的差了不少。毕竟考英语那几年，特别痛苦，基本上没有什么职业发展，技术也都是吃老本。<br />总体来说，对现在生活还算习惯。基本上在悉尼稳定，也背上了房贷，不过已经过了 30 岁，可能工资比国内大厂都有差距。基本上就是比上不足，比下有余吧。环境挺好，工作压力还行，不是特别大。晋升空间也还有。<br />问题主要有三，<br />小问题就是好吃的不如国内，逼的自己练就一身厨艺。<br />中问题就是人际交流大多数日常还是和中国人 social 。同事虽然人也都很好，毕竟都是受过高等教育的，至少明面上都很和善，不过因为英语毕竟不是母语，工作没问题，工作之余闲聊也还凑活，但是纯闲聊英文水平就捉襟见肘了。<br />大问题就是以后双方父母怎么办。<br />基本上就是这些，海外的同学来聊聊，大家工作都怎么样
+	]]></content>
+</entry><entry>
+	<title>[macOS] Monterey 新 beta 出来了，触摸板点不动的问题感觉已经修复，赶紧升级了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819680#reply1" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819680</id>
+	<published>2021-12-02T21:09:52Z</published>
+	<updated>2021-12-03T00:22:46Z</updated>
+	<author>
+		<name>Borden</name>
+		<uri>https://www.v2ex.com/member/Borden</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>好像是 beta4 ，感觉这破系统终于可以用了，亚克西。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Google] Google Pixel 6 Pro</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819678#reply12" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819678</id>
+	<published>2021-12-02T20:28:35Z</published>
+	<updated>2021-12-03T00:42:58Z</updated>
+	<author>
+		<name>ltltfuture</name>
+		<uri>https://www.v2ex.com/member/ltltfuture</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	大家有入手的吗，体验如何？<br /><br />我是上个月 Bestbuy 提前发货拿到的 256 ，512 的晚了一步官网买不到了<br /><br />现在用下来整体还不错，因为从 Pixel 4 换上来的， 该有的软件优势一直都在，惊艳感不那么强。<br /><br />主要说下问题，缺点大部分是软件方面的，相信后续更新能够解决大部分。<br />1 ，刚开始电量尿崩，亮屏 4 个小时左右，用了一俩周之后基本一天只用 50%的电，亮屏大概 7 ，8 小时。<br />2 ，一些应用对 Android 12 适配的不好，比如淘宝这些，部分页面打开就是空白。<br />3 ，充电慢，用的第一代 stand 无线充，手机戴的 dbrand 的壳子，有时候手机温热的时候无线充一下午，发现电还掉了 1%...（据说这代默认充电的时候后台跑机器学习）<br />4 ，亮度控制一般。<br />5 ，指纹只能说是一般了，貌似没有学习功能，经常位置没对太准就解不开。<br /><br />优点其实也大部分是软件方面<br />1 ，原生系统还是比第三方或者 ios 的好用，会议出行预约这些，用国外的环境来说就很自动的加入日程提醒，不需要手动操心。<br />2 ，一些国产软件现在就放在 work space 里，随便给权限，用完就冷冻，不用担心在本机储存里拉屎（工作空间一段时间后清空重装就行）<br />3 ，当然最好的还是，系统更新是最快的，这是我最看重的。
+	]]></content>
+</entry><entry>
+	<title>[程序员] 微博等简中网页性能问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819677#reply1" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819677</id>
+	<published>2021-12-02T18:11:28Z</published>
+	<updated>2021-12-02T18:15:31Z</updated>
+	<author>
+		<name>Zien</name>
+		<uri>https://www.v2ex.com/member/Zien</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>今天微博编辑历史记录时，<em><strong>CPU GPU MEM</strong></em> 飙升，测试了几次，虽然没那么严重但是能明显感觉到流畅性不行。类似的问题在这几年越来越明显，简中网页的体验越来越差（这个我确信可以明确感觉到）。</p>
+<p>但是微博元素并不多，请问下这种情况是否和其他因素，诸如网络，输入法（ mac 自带的拼音输入法）等导致的？
+我不太懂前端，想知道他们是如何做到体验如此之差的？抑或是我对简中网络环境的偏见？</p>
+<hr/>
+<p>PS：排除法测试了一圈感觉不够直观， 请问有没有方便的工具来量化这些？<em>（开发者工具自带的性能测试我没看太懂。）</em></p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 刚获得 2021 年 Mac App of the Year 的 Craft 发布了 2.0</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819676#reply1" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819676</id>
+	<published>2021-12-02T16:54:00Z</published>
+	<updated>2021-12-02T17:07:24Z</updated>
+	<author>
+		<name>troyl</name>
+		<uri>https://www.v2ex.com/member/troyl</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	APP STORE AWARDS 2021 Mac App of the Year：<br /><a target="_blank" href="https://apps.apple.com/us/story/id1591089619" rel="nofollow noopener">https://apps.apple.com/us/story/id1591089619</a><br /><br />Craft:<br /><a target="_blank" href="https://www.craft.do" rel="nofollow noopener">https://www.craft.do</a><br /><br />Craft 2.0:<br /><a target="_blank" href="https://www.craft.do/s/lEjdSXBpq9jSgg" rel="nofollow noopener">https://www.craft.do/s/lEjdSXBpq9jSgg</a>
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有什么好的流量卡套餐么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819675#reply4" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819675</id>
+	<published>2021-12-02T16:37:17Z</published>
+	<updated>2021-12-02T18:36:17Z</updated>
+	<author>
+		<name>hsczy</name>
+		<uri>https://www.v2ex.com/member/hsczy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	目前用的是 5 元包月的联通小米卡，网速差的想死。之前买的物联网流量卡动不动就要注销换卡，实则变相加钱。诸君有流量卡推荐的么？
+	]]></content>
+</entry><entry>
+	<title>[Linux] 想知道应该用 LVM 还是 ZFS? 以及最佳实践</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819674#reply3" />
+	<id>tag:www.v2ex.com,2021-12-02:/t/819674</id>
+	<published>2021-12-02T16:33:10Z</published>
+	<updated>2021-12-02T17:33:10Z</updated>
+	<author>
+		<name>dangyuluo</name>
+		<uri>https://www.v2ex.com/member/dangyuluo</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>以前一直没有折腾过系统分区，所有文件安装在同一块硬盘上，最大，但是经历过一次硬盘损坏数据部分丢失后感觉开发电脑还是要配置 RAID1 。
+我的应用场景其实不是很复杂，一块 NVME 打算做系统盘，一块 SATA SSD 挂载到 Docker 目录下（因为实在是太大了），两块 SATA SSD 打算做 Raid1 ，挂载到<code>/home/&lt;my name&gt;.</code>目录。似乎 LVM 和 ZFS 都可以胜任。</p>
+<p>请问大家有没有经验，这种情况下应该采用哪种模式比较合适呢？还是说两种模式混合使用。</p>
+
+	]]></content>
+</entry><entry>
 	<title>[macOS] 大家都是怎么清洁 magic keyboard 的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819673#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819673#reply6" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819673</id>
 	<published>2021-12-02T16:07:33Z</published>
-	<updated>2021-12-02T16:19:13Z</updated>
+	<updated>2021-12-02T21:21:23Z</updated>
 	<author>
 		<name>deadtomb</name>
 		<uri>https://www.v2ex.com/member/deadtomb</uri>
@@ -27,10 +335,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 我的 iPhone13Pro 5G 信号是真的差，有同样遇到这个问题的么</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819672#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819672#reply10" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819672</id>
 	<published>2021-12-02T16:00:57Z</published>
-	<updated>2021-12-02T16:17:11Z</updated>
+	<updated>2021-12-03T00:33:35Z</updated>
 	<author>
 		<name>Cassano</name>
 		<uri>https://www.v2ex.com/member/Cassano</uri>
@@ -56,27 +364,6 @@
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 是否可以直接公布那些拳法大师的信息,搞成一个名单,让那些人现实中碰一碰？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819670#reply3" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819670</id>
-	<published>2021-12-02T15:53:28Z</published>
-	<updated>2021-12-02T16:01:04Z</updated>
-	<author>
-		<name>fantasyVision</name>
-		<uri>https://www.v2ex.com/member/fantasyVision</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ul>
-<li>
-<p>在网上看到一堆人在网络世界中肆无忌惮,什么话都说，经过多年的算法推荐,那些经常接受使人愤怒的推送潜移默化的更加暴躁,但是由这个直接去报复社会,去伤害无辜的人,这个完全可以去重新投胎了</p>
-</li>
-<li>
-<p>鉴于已经泄露的多数的数据库,实现撞库还是可以的,借此实现社工查询应该可以实现</p>
-</li>
-</ul>
-
-	]]></content>
-</entry><entry>
 	<title>[iOS] iOS 更新屏蔽及修改 DNS 方法研究</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819669#reply0" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819669</id>
@@ -91,10 +378,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Java] ReacitveRedisTemplate 如何将 lambda 里的代码也和外层代码一起同步</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819668#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819668#reply2" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819668</id>
 	<published>2021-12-02T15:33:24Z</published>
-	<updated>2021-12-02T15:30:24Z</updated>
+	<updated>2021-12-02T17:29:43Z</updated>
 	<author>
 		<name>77yf77yf77yf</name>
 		<uri>https://www.v2ex.com/member/77yf77yf77yf</uri>
@@ -117,10 +404,10 @@
 	]]></content>
 </entry><entry>
 	<title>[macOS] Mac 上 apple music 登录 apple id 后无法搜索</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819666#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819666#reply2" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819666</id>
 	<published>2021-12-02T15:21:26Z</published>
-	<updated>2021-12-02T15:20:26Z</updated>
+	<updated>2021-12-02T16:32:59Z</updated>
 	<author>
 		<name>Clloz1992</name>
 		<uri>https://www.v2ex.com/member/Clloz1992</uri>
@@ -131,7 +418,7 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] windows 系统怎样优化输入法？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819665#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819665#reply5" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819665</id>
 	<published>2021-12-02T15:20:59Z</published>
 	<updated>2021-12-02T16:01:15Z</updated>
@@ -167,10 +454,10 @@
 	]]></content>
 </entry><entry>
 	<title>[iPhone] iPhone 在用流量时收不到推送，怎么解决？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819660#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819660#reply9" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819660</id>
 	<published>2021-12-02T14:52:08Z</published>
-	<updated>2021-12-02T16:02:56Z</updated>
+	<updated>2021-12-02T18:48:41Z</updated>
 	<author>
 		<name>LoneFireBlossom</name>
 		<uri>https://www.v2ex.com/member/LoneFireBlossom</uri>
@@ -198,10 +485,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 迫于房子刚装修好，求一款实测有效的除甲醛空气净化器</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819658#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819658#reply10" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819658</id>
 	<published>2021-12-02T14:50:19Z</published>
-	<updated>2021-12-02T15:29:14Z</updated>
+	<updated>2021-12-02T19:47:50Z</updated>
 	<author>
 		<name>JuicyJ</name>
 		<uri>https://www.v2ex.com/member/JuicyJ</uri>
@@ -211,10 +498,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 问一下，诸君公司拉山头的情况严重不严重？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819657#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819657#reply1" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819657</id>
 	<published>2021-12-02T14:46:38Z</published>
-	<updated>2021-12-02T12:44:38Z</updated>
+	<updated>2021-12-02T13:44:38Z</updated>
 	<author>
 		<name>proxychains</name>
 		<uri>https://www.v2ex.com/member/proxychains</uri>
@@ -237,10 +524,10 @@
 	]]></content>
 </entry><entry>
 	<title>[信息安全] 关于 1password 保险库备份问题有坑莫踩</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819655#reply16" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819655#reply23" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819655</id>
 	<published>2021-12-02T14:40:28Z</published>
-	<updated>2021-12-02T16:13:09Z</updated>
+	<updated>2021-12-03T00:52:01Z</updated>
 	<author>
 		<name>skfu</name>
 		<uri>https://www.v2ex.com/member/skfu</uri>
@@ -250,10 +537,10 @@
 	]]></content>
 </entry><entry>
 	<title>[NAS] 想要一个可视化的像 omv 或者群晖那种的 web 管理面板</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819653#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819653#reply9" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819653</id>
 	<published>2021-12-02T14:25:12Z</published>
-	<updated>2021-12-02T16:21:34Z</updated>
+	<updated>2021-12-02T19:56:53Z</updated>
 	<author>
 		<name>LxnChan</name>
 		<uri>https://www.v2ex.com/member/LxnChan</uri>
@@ -266,10 +553,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 家庭 1000M 宽带标准的测速方法？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819652#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819652#reply2" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819652</id>
 	<published>2021-12-02T14:23:23Z</published>
-	<updated>2021-12-02T14:56:23Z</updated>
+	<updated>2021-12-02T16:56:23Z</updated>
 	<author>
 		<name>idragonet</name>
 		<uri>https://www.v2ex.com/member/idragonet</uri>
@@ -280,10 +567,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] Goland 2021.03 发布，支持 ssh code</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819651#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819651#reply1" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819651</id>
 	<published>2021-12-02T14:16:33Z</published>
-	<updated>2021-12-02T12:16:33Z</updated>
+	<updated>2021-12-02T13:16:33Z</updated>
 	<author>
 		<name>Co1a</name>
 		<uri>https://www.v2ex.com/member/Co1a</uri>
@@ -294,10 +581,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] B 站收藏视频 失效了怎么找到视频</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819650#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819650#reply6" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819650</id>
 	<published>2021-12-02T13:53:46Z</published>
-	<updated>2021-12-02T14:31:10Z</updated>
+	<updated>2021-12-02T16:35:46Z</updated>
 	<author>
 		<name>amiwrong123</name>
 		<uri>https://www.v2ex.com/member/amiwrong123</uri>
@@ -309,10 +596,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 有关自建图床类服务 ( 10TB 左右 )有什么坑或者现成的选择吗? 主要避免重复上传文件名哈希</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819649#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819649#reply7" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819649</id>
 	<published>2021-12-02T13:43:15Z</published>
-	<updated>2021-12-02T15:37:31Z</updated>
+	<updated>2021-12-02T16:37:31Z</updated>
 	<author>
 		<name>ClericPy</name>
 		<uri>https://www.v2ex.com/member/ClericPy</uri>
@@ -362,10 +649,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 怎么样才能做到为自己而活呢？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819645#reply15" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819645#reply18" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819645</id>
 	<published>2021-12-02T13:29:33Z</published>
-	<updated>2021-12-02T15:04:06Z</updated>
+	<updated>2021-12-02T17:04:06Z</updated>
 	<author>
 		<name>fiht</name>
 		<uri>https://www.v2ex.com/member/fiht</uri>
@@ -411,10 +698,10 @@
 </entry><entry>
 	<title>[Apple] 价格一样
 闪迪 e61 和三星 t7 哪个好</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819642#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819642#reply7" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819642</id>
 	<published>2021-12-02T13:19:47Z</published>
-	<updated>2021-12-02T14:41:34Z</updated>
+	<updated>2021-12-02T15:41:34Z</updated>
 	<author>
 		<name>xyzmhx</name>
 		<uri>https://www.v2ex.com/member/xyzmhx</uri>
@@ -443,10 +730,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Java] 有没有办法防止通过发送邮件验证码的接口乱发邮件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819640#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819640#reply7" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819640</id>
 	<published>2021-12-02T13:13:16Z</published>
-	<updated>2021-12-02T15:07:20Z</updated>
+	<updated>2021-12-02T16:07:20Z</updated>
 	<author>
 		<name>77yf77yf77yf</name>
 		<uri>https://www.v2ex.com/member/77yf77yf77yf</uri>
@@ -540,10 +827,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 一个问题：迫于需要在 Mac 上打英文，有没有 Mac 上的英文联想输入法推荐？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819635#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819635#reply6" />
 	<id>tag:www.v2ex.com,2021-12-02:/t/819635</id>
 	<published>2021-12-02T12:49:50Z</published>
-	<updated>2021-12-02T15:35:50Z</updated>
+	<updated>2021-12-02T21:30:51Z</updated>
 	<author>
 		<name>jasondennis12139</name>
 		<uri>https://www.v2ex.com/member/jasondennis12139</uri>
@@ -604,289 +891,6 @@
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p>M1 MAX 使用 PD17 ，创建 macos 12 vm ，分辨率 1440*900 ，并且不能更改，正在询问 PD ，PD 也有说明，不知道什么时候能修复，官网也有说明 <a href="https://kb.parallels.com/en/125561" rel="nofollow">https://kb.parallels.com/en/125561</a></p>
 
-	]]></content>
-</entry><entry>
-	<title>[上海] 4k 能不能租到大世界通勤 40 分钟左右一室户厨房门独立的房子</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819632#reply3" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819632</id>
-	<published>2021-12-02T12:36:41Z</published>
-	<updated>2021-12-02T16:23:22Z</updated>
-	<author>
-		<name>unii23i</name>
-		<uri>https://www.v2ex.com/member/unii23i</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	工作地点太远，不想租那边所以折中一下<br />一门关和民水民电，最好是 30 平以上
-	]]></content>
-</entry><entry>
-	<title>[Apple] 求教一个 Apple Pay 风控问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819631#reply17" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819631</id>
-	<published>2021-12-02T12:32:17Z</published>
-	<updated>2021-12-02T15:08:41Z</updated>
-	<author>
-		<name>bugprogrammer</name>
-		<uri>https://www.v2ex.com/member/bugprogrammer</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>今天看到一位 V 友说误操作 Apple Pay 导致非柜风控，有几个问题请教一下：
-1 IOS/iPadOS 设备每次刷机，再使用 Apple Pay ，银行名下都相当于新增了一张银行卡吗？
-2 银行 App 能不能查到名下有多少张卡，还是说必须上网点？
-3 可不可以去网点注销这类虚拟卡？
-4 如果开通京东闪付 /美团闪付，Apple Pay 里绑定京东闪付，能不能规避这个问题？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 阿里云公共 DNS 为什么 IPV4 的表现更优秀 ？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819629#reply1" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819629</id>
-	<published>2021-12-02T11:57:30Z</published>
-	<updated>2021-12-01T00:00:39Z</updated>
-	<author>
-		<name>wuruxu</name>
-		<uri>https://www.v2ex.com/member/wuruxu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<pre><code>root@OpenWrt:/etc/config# ping 2400:3200:baba::1
-PING 2400:3200:baba::1 (2400:3200:baba::1): 56 data bytes
-64 bytes from 2400:3200:baba::1: seq=0 ttl=117 time=17.769 ms
-64 bytes from 2400:3200:baba::1: seq=1 ttl=117 time=17.254 ms
-64 bytes from 2400:3200:baba::1: seq=2 ttl=117 time=17.282 ms
-64 bytes from 2400:3200:baba::1: seq=3 ttl=117 time=17.398 ms
-64 bytes from 2400:3200:baba::1: seq=4 ttl=117 time=17.463 ms
-64 bytes from 2400:3200:baba::1: seq=5 ttl=117 time=17.272 ms
-64 bytes from 2400:3200:baba::1: seq=6 ttl=117 time=17.289 ms
-^C
---- 2400:3200:baba::1 ping statistics ---
-7 packets transmitted, 7 packets received, 0% packet loss
-round-trip min/avg/max = 17.254/17.389/17.769 ms
-root@OpenWrt:/etc/config# ping 223.5.5.5
-PING 223.5.5.5 (223.5.5.5): 56 data bytes
-64 bytes from 223.5.5.5: seq=0 ttl=120 time=6.538 ms
-64 bytes from 223.5.5.5: seq=1 ttl=120 time=5.857 ms
-64 bytes from 223.5.5.5: seq=2 ttl=120 time=5.919 ms
-64 bytes from 223.5.5.5: seq=3 ttl=120 time=6.022 ms
-64 bytes from 223.5.5.5: seq=4 ttl=120 time=5.883 ms
-64 bytes from 223.5.5.5: seq=5 ttl=120 time=5.899 ms
-^C
---- 223.5.5.5 ping statistics ---
-6 packets transmitted, 6 packets received, 0% packet loss
-round-trip min/avg/max = 5.857/6.019/6.538 ms
-root@OpenWrt:/etc/config#
-</code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[奇思妙想] 记录下自己做抖音的历程</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819627#reply2" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819627</id>
-	<published>2021-12-02T11:43:22Z</published>
-	<updated>2021-12-02T12:41:22Z</updated>
-	<author>
-		<name>braveMan</name>
-		<uri>https://www.v2ex.com/member/braveMan</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>    说起抖音，其实我还是一直比较遗憾的</p>
-<p>    记得 19 年的时候，自己了解到书单号这个东西，花了 500 的学费跟着别人做，那会正是书单的一个爆发期，选几张图片，随便加点情感文字就能火，涨粉也特别快，自己那会做了 7,8 天的样子，记得好像有几百个粉丝了都，后来因为太懒就没做了，同时期的一个朋友，做到现在，总共两个号，一个 100w 粉丝，一个 60w ，一个月靠带货就能有 1w~3w 不等的收入，而且做起来后每天的维护成本也比较低，都是空闲时间做好后定时发布，偶尔发些蹭热点作品啥的，副业收入比主业都高</p>
-<p>    后来随着书单号的变种，出现了影视剪辑，一个同事给我发了份号称 5000 买的课程，我又开始做影视剪辑，那会怎么说呢，也是属于上升期，选择一部电视剧，切割几个精彩片段合成，发布，简单的不能再简单了，而且还没有说出现现在的搬运问题啊，版权问题之类的，半个月左右的时间就 2000 多粉丝了，但是人啊，同一个坑总是会再次跌倒了，没错，我又偷懒没做了，要不然现在有几个几十万粉丝做点啥不好呢~~~</p>
-<p>    今年 5 月份开始，想做点副业，先做了一个月的影视剪映，并且中间投过 200 的豆荚，最后收获了不到 200 个粉丝，感觉无望，后又开始做书单号，总共做了 3 个书单号，到目前为止，最高的粉丝也就 1800 ，实名认证后带货多次，未出一单，目前只是每天发发作品，先让涨粉着。9 月份的时候了解到头条音乐号，又花了 200 的大洋开始操作，截止到目前为止，收益总共 2000+，算是做副业第一次有了正收益的。但是呢，这个音乐号就比较耗费时间，完全是一种体力活动，用时间来换取微薄的收益，并且完全没有成长性，对未来的发展没有任何益处。</p>
-<p>    所以呢，副业的发展还是要从自身从事的行业或者拥有的技能开始，那作为一名程序员，我们发展副业的方向有哪些呢，比如做独立博客、技术公众号、it 教学、接私活等.....,在我目前的认知和能力范围内，我觉得接私活可能是我比较倾向的方面，但是这又遇到问题了，没有私活可以接啊，那就需要找一个稳定的私活来源了，怎么办？</p>
-<p>    因此，最终我的想法还是回到做抖音上面了，打造个人 Ip ，做一个属于自己的，关于编程，程序员类的抖音，先以涨粉为初级目标，以拓展私活渠道为核心目的开展。</p>
-<p>    昨天发了第一个抖音，播放 478 ，没有破 500 播放，但是呢有两个赞，还是比较开心的哈。现在距离过年还有两个月的时间，我的涨粉目标就是保 1000 争 3000 ，先把粉丝量提升上来。</p>
-<p>    发这边文章呢，有两个目的，第一个是记录下自己的副业路程，其次呢，也是记录下后续做抖音的过程，给自己一个鞭策吧。</p>
-<p>最后呢，做两个问卷调查吧
-①：你正在做的副业有哪些呢？
-②: 希望各位大佬能我一些建议</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 怎么获取到 telegram、discord、twitter 的自己的账号的关注人数？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819626#reply2" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819626</id>
-	<published>2021-12-02T11:27:48Z</published>
-	<updated>2021-12-02T12:49:49Z</updated>
-	<author>
-		<name>svt</name>
-		<uri>https://www.v2ex.com/member/svt</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>倒是找到了三个渠道的 api ，
-但是看着让我难受过去了，完全看不懂</p>
-<p>Telegram: <a href="https://core.telegram.org/method/channels.getFullChannel" rel="nofollow">https://core.telegram.org/method/channels.getFullChannel</a>
-Twitter: <a href="https://developer.twitter.com/en/docs/twitter-api/v1/accounts-and-users/create-manage-lists/api-reference/get-lists-members" rel="nofollow">https://developer.twitter.com/en/docs/twitter-api/v1/accounts-and-users/create-manage-lists/api-reference/get-lists-members</a>
-Discord: <a href="https://discord.com/developers/docs/resources/channel#get-channel" rel="nofollow">https://discord.com/developers/docs/resources/channel#get-channel</a></p>
-<p>有没有大佬之前做过，赐教一下</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请教一下大佬们，关于腾讯云自建 cloudreve， wdbdav 上传文件的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819625#reply3" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819625</id>
-	<published>2021-12-02T11:19:20Z</published>
-	<updated>2021-12-02T12:09:14Z</updated>
-	<author>
-		<name>neochen13</name>
-		<uri>https://www.v2ex.com/member/neochen13</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	为什么我的部署了 cloudreve 后，webdav 上传文件，报 413 额，文件才 4m ，我 nginx 里的配置也设置了吖
-	]]></content>
-</entry><entry>
-	<title>[Apple] Telegram 在 mac 上无法复制图片给 mac QQ 的问题有解决方法吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819624#reply1" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819624</id>
-	<published>2021-12-02T11:14:28Z</published>
-	<updated>2021-12-02T11:12:28Z</updated>
-	<author>
-		<name>YuiTH</name>
-		<uri>https://www.v2ex.com/member/YuiTH</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>盲猜是专门屏蔽的，从某一个版本 QQ 开始直接复制 TG 的图片到 QQ 窗口发送会出现提示此条消息发送失败：</p>
-<p><a href="https://i.imgur.com/YluvNoE.png" rel="nofollow">https://i.imgur.com/YluvNoE.png</a></p>
-<p>目前只能下载下来再从下载文件夹拖到 QQ 去。有没有什么优雅一点的解决方案？</p>
-<p>讽刺我为什么混用 QQ TG 的就免开尊口了，总要和非程序员有联络的，总比微信好得多。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 有没有用 AIDente 这个充电管理软件的兄弟，想问个问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819621#reply3" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819621</id>
-	<published>2021-12-02T10:57:50Z</published>
-	<updated>2021-12-02T11:32:58Z</updated>
-	<author>
-		<name>misaka9982</name>
-		<uri>https://www.v2ex.com/member/misaka9982</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>这个充电限定到自己设定的百分比的意思是不是充电到某个百分比，然后停止充电，掉一点电继续充的意思</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 这是什么鬼，骚扰电话吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819620#reply0" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819620</id>
-	<published>2021-12-02T10:44:56Z</published>
-	<updated>2021-12-01T10:43:56Z</updated>
-	<author>
-		<name>hnjed2018</name>
-		<uri>https://www.v2ex.com/member/hnjed2018</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>算了，没法发图</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 国内视频网站亏损，会员费用高，广告多是不是因为带宽费昂贵的缘故？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819619#reply18" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819619</id>
-	<published>2021-12-02T10:44:49Z</published>
-	<updated>2021-12-02T12:05:11Z</updated>
-	<author>
-		<name>yoa1q7y</name>
-		<uri>https://www.v2ex.com/member/yoa1q7y</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	从国内外 VPS 的售价能看出差别很大<br />另外这几个帖子：<br />为啥国内云服务器带宽这么贵？ <a target="_blank" href="https://www.v2ex.com/t/560405" rel="nofollow noopener">https://www.v2ex.com/t/560405</a><br />为什么国外的云主机一般都是超大带宽，相比之下，国内的带宽却很贵？ <a target="_blank" href="https://www.v2ex.com/t/615334" rel="nofollow noopener">https://www.v2ex.com/t/615334</a><br /><br />然后又因为宽带运营商是垄断机构，导致视频网站不敢说，有苦说不出？
-	]]></content>
-</entry><entry>
-	<title>[汽车] 刚拿驾照适合去 4s 店试驾吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819618#reply11" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819618</id>
-	<published>2021-12-02T10:43:52Z</published>
-	<updated>2021-12-02T12:14:03Z</updated>
-	<author>
-		<name>wxd92</name>
-		<uri>https://www.v2ex.com/member/wxd92</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[程序员] 请问你们有用 liquibase 框架工具吗？请教一个问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819617#reply1" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819617</id>
-	<published>2021-12-02T10:41:38Z</published>
-	<updated>2021-12-02T11:32:18Z</updated>
-	<author>
-		<name>Glen93</name>
-		<uri>https://www.v2ex.com/member/Glen93</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	我们在现有的项目上引进了 liquibase,但是数据库中目前已经有表，线上也在运行，如何将之前 SQL 脚本引到 liquibase 中，这样项目在新环境部署的时候 让他先执行原有的 sql ，然后再执行后期在 liquibase 上维护的脚本，而不会影响线上正在运行的项目
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 在 Namecheap 注册域名后各种骚扰邮件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819615#reply6" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819615</id>
-	<published>2021-12-02T10:28:27Z</published>
-	<updated>2021-12-02T15:02:50Z</updated>
-	<author>
-		<name>heygum97</name>
-		<uri>https://www.v2ex.com/member/heygum97</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>就是一些印度的软件开发团队, 有我名字,电话,邮箱,域名等信息.</p>
-<p>问我需不需要服务, 发邮件问, 加 Whatsapp 问, 还有说我电话打不通在 whatsapp 问的.</p>
-<p>再也不想用 namecheap 了.</p>
-
-	]]></content>
-</entry><entry>
-	<title>[JavaScript] 大佬们 问个问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819614#reply0" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819614</id>
-	<published>2021-12-02T10:27:48Z</published>
-	<updated>2021-12-02T10:27:48Z</updated>
-	<author>
-		<name>qwertyzzz</name>
-		<uri>https://www.v2ex.com/member/qwertyzzz</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="1638440779(1).png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.loli.net/2021/12/02/EB83uXInlr1edmH.png"/></p>
-<p>像这种如何通过在控制台输入 js 来切换呀
-有 iframe 引入的东西 top 里面没有 手动切换到那儿可以 但是因为我要写脚本 想通过 js 切换</p>
-
-	]]></content>
-</entry><entry>
-	<title>[MacBook Pro] 半夜电池损耗原因找到了 docker</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819613#reply4" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819613</id>
-	<published>2021-12-02T10:19:16Z</published>
-	<updated>2021-12-02T15:16:33Z</updated>
-	<author>
-		<name>wtotal</name>
-		<uri>https://www.v2ex.com/member/wtotal</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	试了几天了，开着 docker 盒盖耗电 30%多，关掉 docker 盒盖几乎不减少电量
-	]]></content>
-</entry><entry>
-	<title>[程序员] 《Effective Java 》读后感</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819610#reply6" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819610</id>
-	<published>2021-12-02T10:12:50Z</published>
-	<updated>2021-12-02T15:52:09Z</updated>
-	<author>
-		<name>fy1206</name>
-		<uri>https://www.v2ex.com/member/fy1206</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有读过这本书的小伙伴 可以分享读后感，也可以分享下读之前需要注意什么？哪些是重点？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 迫于快到期了，收个年费爱奇艺呀，多少钱呢</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/819609#reply2" />
-	<id>tag:www.v2ex.com,2021-12-02:/t/819609</id>
-	<published>2021-12-02T09:54:46Z</published>
-	<updated>2021-12-02T09:52:46Z</updated>
-	<author>
-		<name>dtgxx</name>
-		<uri>https://www.v2ex.com/member/dtgxx</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	迫于快到期了，收个年费爱奇艺呀，多少钱呢<br />bGlndWFuZ3Z2
 	]]></content>
 </entry>
 </feed>
