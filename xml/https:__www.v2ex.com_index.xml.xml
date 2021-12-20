@@ -8,15 +8,423 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2021-12-19T16:20:01Z</updated>
+<updated>2021-12-20T00:45:14Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[问与答] 今天 xshell 突然抽风了，必须要我更新，但是它的更新程序又提示说已经是最新的版本，感觉很迷惑</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823219#reply0" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823219</id>
+	<published>2021-12-20T00:46:14Z</published>
+	<updated>2021-12-20T00:45:14Z</updated>
+	<author>
+		<name>leipengcheng</name>
+		<uri>https://www.v2ex.com/member/leipengcheng</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="image-20211220084534845" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img2020.cnblogs.com/blog/1311231/202112/1311231-20211220084535967-1099313941.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] MacOS 连接 Wireguard 下如何配置多 DNS？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823216#reply1" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823216</id>
+	<published>2021-12-20T00:38:13Z</published>
+	<updated>2021-12-20T00:38:13Z</updated>
+	<author>
+		<name>dangyuluo</name>
+		<uri>https://www.v2ex.com/member/dangyuluo</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我在家里有跑着几个服务，没有公网域名，因此在家里的网络(10.0.0.1/24)上跑了一个 DNS ，其 IP 为<code>10.0.0.233</code>，用来解析这几台内网机器的 IP ，比如<code>home_service_a=&gt;10.0.0.230</code>。有时候想在外面连回家里的网络，就配置了 Wireguard ，并且将内网 DNS<code>10.0.0.233</code>下发给客户端。这时候可以愉快地在外面访问家里的网络，并且 DNS 解析<code>home_service_a</code>正常。</p>
+<p>但是，我们公司也有自己的内网 DNS 来解析一些 lab 机器，比如<code>lab-machine-01=&gt;<a href="http://10.31.32.xxx" rel="nofollow">10.31.32.xxx</a></code>。当我在公司连接上 Wireguard 后，发现<code>ping lab-machine-01</code>不通了，错误为找不到 IP 。<code>nslookup</code>也是同样的结果。初步判断为所有 DNS 请求都被发到了 Wireguard 分配的家庭 DNS 服务器(10.0.0.233)上。</p>
+<p>具体表现为：</p>
+<pre><code class="language-shell"># After connecting to Wireguard in compnay
+$ nslookup lab-machine-01 # In office network only!!
+Server:		10.0.0.233 # This is the home DNS server IP
+Address:	10.0.0.233#53
+
+** server can't find lab-machine-01: NXDOMAIN
+</code></pre>
+<p>我注意到，在连接 Wireguard 后，<code>scutils --dns</code>里的解析顺序标明第一 DNS 确实是家庭 DNS</p>
+<pre><code>$ scutil --dns
+DNS configuration
+
+resolver #1
+  search domain[0] : int.companyname.com
+  nameserver[0] : 10.0.0.233 # Home DNS IP
+  nameserver[1] : 10.0.0.1
+  nameserver[2] : 8.8.8.8
+  flags    : Supplemental, Request A records
+  reach    : 0x00000002 (Reachable)
+  order    : 102200
+
+resolver #2
+  nameserver[0] : 10.31.xx.xx # Company DNS IP
+  if_index : 10 (en0)
+  flags    : Request A records
+  reach    : 0x00020002 (Reachable,Directly Reachable Address)
+  order    : 200000
+</code></pre>
+<p>请问有没有什么办法配置多个 DNS 解析呢？任意一个请求成功获得 IP 即可</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 求问 epub 笔记标记管理问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823215#reply0" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823215</id>
+	<published>2021-12-20T00:37:35Z</published>
+	<updated>2021-12-20T00:36:35Z</updated>
+	<author>
+		<name>xinghen57</name>
+		<uri>https://www.v2ex.com/member/xinghen57</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>各位 v 友，epub 的笔记标记管理各位是如何解决的？</p>
+<p>平时使用 calibre 管理电子书，手机或平板阅读。calibre 可以实现 epub 标记及笔记等功能。不过我每次导出书到 i 手机阅读，都是单独的 epub ，笔记标记每次都丢失。</p>
+<p>阅读器对 epub 的笔记标记好像都是单独数据库存储，各位有好的方法管理么？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[生活] 求推荐一款红茶</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823214#reply5" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823214</id>
+	<published>2021-12-20T00:32:45Z</published>
+	<updated>2021-12-20T00:57:10Z</updated>
+	<author>
+		<name>zhuwd</name>
+		<uri>https://www.v2ex.com/member/zhuwd</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	第一次见丈母娘，老太太喜欢喝红茶，但是咱也没喝茶的习惯不知道什么品牌的红茶比较合适，希望 V 友们给点建议
+	]]></content>
+</entry><entry>
+	<title>[程序员] 星标 4 万, GitHub 排行榜项目全新升级 (软件/资料分离、加设增速榜、新星榜、英文榜)</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823213#reply3" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823213</id>
+	<published>2021-12-20T00:13:03Z</published>
+	<updated>2021-12-20T11:56:31Z</updated>
+	<author>
+		<name>kon9chunkit</name>
+		<uri>https://www.v2ex.com/member/kon9chunkit</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h1>前情提要</h1>
+<p>我在 GitHub 发布了一个叫「<a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts" rel="nofollow">GitHub 中文排行榜</a>」的项目，意在帮助一些看英文项目比较吃力的朋友，找到适合他们的好项目。</p>
+<p>该项目收到了很多的认可，但同时也存在着不少的非议、吐槽，主要集中在以下几方面：</p>
+<ol>
+<li>中文项目质量偏低，比不上英文项目；</li>
+<li>收录了很多资料类项目，稀释了排行榜的质量；</li>
+<li>只收录长期高星项目，无法发现优秀的新项目；</li>
+<li>缺乏审核机制，有些不良内容也上榜；</li>
+</ol>
+<p>.</p>
+<h1>打怪升级</h1>
+<p>上述的吐槽我一直有关注，也能理解大家的心情，我也很感谢大家的鞭策，只是碍于平常较忙，优化进度有点拖后了。</p>
+<p>针对上述问题我已经做了相应优化，并且后续也会持续优化：</p>
+<ol>
+<li>中文项目比不上英文项目这个说法不太恰当，只能说英文项目的世界更加广阔。针对需要挖掘英文项目的同学，我做了个「<a href="https://github.com/kon9chunkit/GitHub-English-Top-Charts" rel="nofollow">GitHub 英文排行榜</a>」；</li>
+<li>资料类项目不能说没有价值，只是不能干扰到软件项目，需要分类展示，目前项目已实现「<a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts" rel="nofollow">软件类 /资料类项目分榜</a>」，大家各取所需，互不干扰；</li>
+<li>除了老项目，确实有很多增长强劲的新项目，所以我增设了「<a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts" rel="nofollow">中文增速榜</a>」和「<a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts" rel="nofollow">中文新星榜</a>」，可以发现更多优质有趣的后起之秀；</li>
+<li>现在会介入人工审核，还得靠大家多反馈错误、问题，我会持续处理的；</li>
+</ol>
+<p>.</p>
+<h1>项目一览</h1>
+<p><a href="https://github.com/kon9chunkit/GitHub-Chinese-Top-Charts" rel="nofollow"><img alt="image" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/1dRTdMer.png"/></a></p>
+<p><a href="https://github.com/kon9chunkit/GitHub-English-Top-Charts" rel="nofollow"><img alt="image" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/l37SvJwh.png"/></a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 该如何设置问卷</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823212#reply0" />
+	<id>tag:www.v2ex.com,2021-12-20:/t/823212</id>
+	<published>2021-12-20T00:11:27Z</published>
+	<updated>2021-12-19T20:08:27Z</updated>
+	<author>
+		<name>vue666</name>
+		<uri>https://www.v2ex.com/member/vue666</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	最近有一个想法，为了提高自己的胆量和表达能力，其实就是搭讪能力吧可以说，打算以问卷的形式来询问别人问题，问些什么问题比较好，又能提高后续继续聊的机会，并且能加到微信，认真的，不要说不切实际的问题了
+	]]></content>
+</entry><entry>
+	<title>[Flutter] 针对 Win Desktop 的打包，如何解决”未知的开发者“这类问题呢？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823211#reply0" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823211</id>
+	<published>2021-12-19T18:56:58Z</published>
+	<updated>2021-12-19T18:56:58Z</updated>
+	<author>
+		<name>kwanzaa</name>
+		<uri>https://www.v2ex.com/member/kwanzaa</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>经过搜索之后，发现必须向 CA 交钱。有没有不用掏钱的方式呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 有人自己编译过 CrossOver 么? 与发售版有什么区别?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823210#reply2" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823210</id>
+	<published>2021-12-19T18:52:59Z</published>
+	<updated>2021-12-19T20:14:59Z</updated>
+	<author>
+		<name>israinbow</name>
+		<uri>https://www.v2ex.com/member/israinbow</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h6>提桶跑路后就失去了使用 MacOS 的机会, 一心相念着买一台自己用, 为了能把个人应用迁移上 MacOS 提前做一下各种兼容性调研</h6>
+<p>我只知道 CrossOver 是 wine 带有 GUI 的封装, 但是源码里说明书中关于运行程序的介绍, 依然是 wine 的命令.</p>
+<pre><code class="language-shell">6. RUNNING PROGRAMS
+
+When invoking Wine, you may specify the entire path to the executable,
+or a filename only.
+
+For example: to run app (被河蟹的记事本.en_US):
+
+    wine 记事本    (using the search Path as specified in
+    wine 记事本.exe    the registry to locate the file)
+
+    wine c:\\windows\\记事本.exe    (using DOS filename syntax)
+
+    wine ~/.wine/drive_c/windows/记事本.exe  (using Unix filename syntax)
+
+    wine 记事本.exe readme.txt          (calling program with parameters)
+
+</code></pre>
+<p>据介绍</p>
+<blockquote>
+<p>95% of the Wine code base we develop for CrossOver gets released back
+into the Wine project for the open source community</p>
+</blockquote>
+<p>95% 的代码贡献给了 wine 社区, 那剩下 5% 的代码只是 GUI 和 用户支持么? 或者还有容器技术?</p>
+
+	]]></content>
+</entry><entry>
+	<title>[北京] 望京西园转租,1100 左右,小空间</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823209#reply0" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823209</id>
+	<published>2021-12-19T18:24:48Z</published>
+	<updated>2021-12-19T18:22:48Z</updated>
+	<author>
+		<name>Ryan3yan</name>
+		<uri>https://www.v2ex.com/member/Ryan3yan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	在北京大半年没工作,考虑回老家,挺憋屈的<br />房租大概 22 年 6 月到期,到时候可以续租<br /><br />多小呢,你住学校的那种上下架+一个瑜伽垫(或者一张凳子)这样的宽度<br />没有阳光,5 室+厨房卫生间等<br /><br />上架我一般用来放行李,比如自行车、行李箱,这样空间觉得还好<br />基本除了睡觉不大能做太多的事情<br />当然放个瑜伽垫做健身运动还行,比如仰卧起坐、平板支撑<br /><br />13241553251 电话,或者站内回复吧,但站内可能不怎么经常看
+	]]></content>
+</entry><entry>
+	<title>[上海] 元旦想租辆车，在周边转一转，有什么自驾的地方值得推荐么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823207#reply1" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823207</id>
+	<published>2021-12-19T17:33:23Z</published>
+	<updated>2021-12-19T18:33:23Z</updated>
+	<author>
+		<name>jamme</name>
+		<uri>https://www.v2ex.com/member/jamme</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[程序员] API 与 ABI 的区别</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823205#reply3" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823205</id>
+	<published>2021-12-19T17:01:37Z</published>
+	<updated>2021-12-19T18:11:47Z</updated>
+	<author>
+		<name>kaiduo</name>
+		<uri>https://www.v2ex.com/member/kaiduo</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="image" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://user-images.githubusercontent.com/23253540/146651072-7da54412-294e-48f1-afd3-0c9385416d5c.png"/></p>
+<p>原文链接: <a href="https://github.com/xiaoxiaojx/blog/issues/22" rel="nofollow">https://github.com/xiaoxiaojx/blog/issues/22</a></p>
+<h2>背景</h2>
+<p>Node-API 的基本概念里面提到了 ABI, 前端开发的同学对这个词语可能就比较陌生，和平时经常提到的 API 有什么区别？</p>
+<blockquote>
+<p>Node-API （以前称为 N-API ）是用于构建原生插件的 API 。它独立于底层 JavaScript 运行时（例如，V8 ）并作为 Node.js 本身的一部分进行维护。此 API 将在 Node.js 的各个版本中保持稳定的应用程序二进制接口 (ABI)。它旨在将插件与底层 JavaScript 引擎中的更改隔离开来，并允许为一个主要版本编译的模块无需重新编译即可在 Node.js 的后续主要版本上运行</p>
+</blockquote>
+<h2>API 与 ABI</h2>
+<h3>API 应用程序接口</h3>
+<p>这是从应用程序 /库公开的一组公共类型 /变量 /函数。 在 C/C++ 中，这是应用程序附带的头文件中公开的内容。</p>
+<h3>ABI 二进制接口</h3>
+<p>这就是编译器构建应用程序的方式。 它定义了事物（但不限于）：</p>
+<ul>
+<li>如何将参数传递给函数（寄存器 /堆栈）</li>
+<li>谁从堆栈中清除参数（调用者 /被调用者）</li>
+<li>返回值放置的位置以供返回</li>
+<li>异常如何传播</li>
+</ul>
+<h3>举个例子</h3>
+<p>下面的 main.c 程序依赖了 mylib 这个库, mylib 这个库对外暴露了 mylib_init 这个接口, 该接口的出参与入参可以看 mylib.h 中的类型定义。</p>
+<pre><code class="language-c">// main.c
+
+#include &lt;assert.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include "mylib.h"
+
+int main(void) {
+    mylib_mystruct *myobject = mylib_init(1);
+    assert(myobject-&gt;old_field == 1);
+    free(myobject);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+<pre><code class="language-c">// mylib.c
+
+#include &lt;stdlib.h&gt;
+
+#include "mylib.h"
+
+mylib_mystruct* mylib_init(int old_field) {
+    mylib_mystruct *myobject;
+    myobject = malloc(sizeof(mylib_mystruct));
+    myobject-&gt;old_field = old_field;
+    return myobject;
+}
+</code></pre>
+<pre><code class="language-c">// mylib.h
+
+#ifndef MYLIB_H
+#define MYLIB_H
+
+typedef struct {
+    int old_field;
+} mylib_mystruct;
+
+mylib_mystruct* mylib_init(int old_field);
+
+#endif
+</code></pre>
+<p>现在 mylib 这个库进行了 v2 版本的升级。v2 版本修改了 mylib_mystruct 的定义, 新增加了 new_field 字段，新的定义如下</p>
+<pre><code class="language-c">// mylib.h
+
+typedef struct {
+    int new_field;
+    int old_field;
+} mylib_mystruct;
+</code></pre>
+<p>此时我们只重新编译 mylib, 不重新编译 main.c 主程序。然后运行 main.out, 发现 main 函数里面的 assert 错误了...</p>
+<pre><code class="language-c">// main.c
+
+assert(myobject-&gt;old_field == 1);
+</code></pre>
+<p>因为 myobject 还是访问的第一个字段, 但是现在第一个字段为 new_field 了，程序中并没有为它赋值。<em><strong>此时对于用户来说 API 没有造成 break change, 可以不用修改代码来适配。但是由于 ABI 的 break change 导致需要重新编译主程序，所以 ABI 的稳定性的维持是高于 API 的</strong></em>。</p>
+<p>如果把新增 new_field 放在 old_field 之后了，发现程序运行是没有问题的。mylib 通过后者的方式去升级 v2 版本，即使新增了字段，ABI 依然是稳定的。</p>
+<pre><code class="language-c">// mylib.h
+
+typedef struct {
+    int old_field;
+    int new_field;
+} mylib_mystruct;
+</code></pre>
+<h2>扩展阅读</h2>
+<p>下面所示的使用 Node-API 开发的 c++ 插件的代码例子, 对于我来说就比较好奇 napi_value 的定义</p>
+<pre><code class="language-c">// demo
+
+napi_status status;
+napi_value object, string;
+status = napi_create_object(env, &amp;object);
+if (status != napi_ok) {
+  napi_throw_error(env, ...);
+  return;
+}
+
+status = napi_create_string_utf8(env, "bar", NAPI_AUTO_LENGTH, &amp;string);
+if (status != napi_ok) {
+  napi_throw_error(env, ...);
+  return;
+}
+
+status = napi_set_named_property(env, object, "foo", string);
+if (status != napi_ok) {
+  napi_throw_error(env, ...);
+  return;
+}
+</code></pre>
+<p>最后我们在 js_native_api_types.h 文件找到了 napi_value 的定义。napi_value 是 struct napi_value__ 类型的指针，其实 napi_value__ 是未定义的。从源码中的注释可知， 编译时 undefined structs 会比 void* 更加安全。</p>
+<pre><code class="language-c">// src/js_native_api_types.h
+
+// JSVM API types are all opaque pointers for ABI stability
+// typedef undefined structs instead of void* for compile time type safety
+typedef struct napi_value__* napi_value;
+</code></pre>
+<p>实测上面的 napi_value__ 是 undefined 编译是会通过的，实际使用的时候强制类型转换为目标类型即可。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/3784389/difference-between-api-and-abi" rel="nofollow">Difference between API and ABI</a></li>
+</ul>
+
+	]]></content>
+</entry><entry>
+	<title>[奇思妙想] 可以给开发一个 hr 自动过滤小白的外挂</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823204#reply1" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823204</id>
+	<published>2021-12-19T16:58:57Z</published>
+	<updated>2021-12-19T17:56:57Z</updated>
+	<author>
+		<name>VKRUSSIA</name>
+		<uri>https://www.v2ex.com/member/VKRUSSIA</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>一键过滤+拉黑简历包含 jsp 等原始技术字样的应届小白</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请问在国内的大家 目前合法使用的搜索引擎应该用哪个？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823203#reply13" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823203</id>
+	<published>2021-12-19T16:55:14Z</published>
+	<updated>2021-12-20T00:51:40Z</updated>
+	<author>
+		<name>deadtomb</name>
+		<uri>https://www.v2ex.com/member/deadtomb</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近几年一直在用 bing ，虽然搜索结果的全面性差了一些。在 bing 无法合法使用之后，应该找哪个作为替代呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Java] [深夜回想] 好像一直在学习新东西但是没有停下来巩固，所以想请问一些问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823202#reply3" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823202</id>
+	<published>2021-12-19T16:47:48Z</published>
+	<updated>2021-12-19T20:02:26Z</updated>
+	<author>
+		<name>RedBeanIce</name>
+		<uri>https://www.v2ex.com/member/RedBeanIce</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近一年半年有在学习很多奇怪的东西，但是基本上都是浅尝辄止，最近感觉不太对。。</p>
+<p>毕业 3 年中级 title ，一个传统行业 crud 人员，公司业务已经基本上了如指掌没有太多新意，数据结构基础手写 avl 树大概问题不大，计算机网络知识较差，leetcode3 年刷了 20 来题，有使用 netty 与 vue 简单的写过可以正常运行的 webim ，有玩过 mybatis,spring,cloud 等提供的插件 or 拦截器或者其他的东西写过一些 demo ，有使用智能家居的好玩的东西（ hassios ），jvm 问题分析也是简单的入门，RabbitRocketKafkaESsharding 只会粗浅使用，，等等，都是浅尝辄止</p>
+<p>最近源于心态的转变，好像感觉好像有点杂乱，应该停下来走一走，对自己的技术栈好好的分一下类，或者至少再研究一下什么的</p>
+<p>最近开始看实现原理以及使用场景，第一个是 threadlocal 及其子类与 ttl ，写了文章作为总结记录
+以前学习都是没有这样子研究实现原理以及使用场景</p>
+<p>我最近的想法是，利用所有知识写一个网站出来，用大炮打蚊子，解决身边常见问题。同时积累上面说的实现原理以及使用场景的知识
+ps:也有朋友告诉我，手写个简单的 spring ，mybatis 什么的吧，然后用这个东西去跑你的项目。</p>
+<p>不知道有没有大佬在我这个阶段经历过，请求指教我接下来应该如何做，预计 2-3 年后会有一次跳槽。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] Agenda 的这种收费模式就比较容易接受了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823200#reply0" />
+	<id>tag:www.v2ex.com,2021-12-19:/t/823200</id>
+	<published>2021-12-19T16:42:25Z</published>
+	<updated>2021-12-19T16:40:25Z</updated>
+	<author>
+		<name>huguadao</name>
+		<uri>https://www.v2ex.com/member/huguadao</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>在购买时间点之前的功能全部永久解锁，并包括未来 12 个月添加的功能。<br/><br/>就 Agenda 软件本身而言，是挺适合成为思考的笔记软件，顺带还能将笔记直接转变为可执行的日程和任务。<br/><br/>那么，如果有购买的朋友可以用这个链接咱们都再各加 6 个月，多续点命，看能不能等到 webdav 或者 box 甚至点对点加密同步～～～<br/><br/><a href="https://accounts.agenda.com/referral/02636AE7-7A0D-4F6D-972D-92748A06FA60" rel="nofollow">https://accounts.agenda.com/referral/02636AE7-7A0D-4F6D-972D-92748A06FA60</a></p>
+
+	]]></content>
+</entry><entry>
 	<title>[问与答] i7-4790 + 2070s vs i7-10710U + 5700xt</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823199#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823199#reply3" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823199</id>
 	<published>2021-12-19T16:20:01Z</published>
-	<updated>2021-12-19T16:20:01Z</updated>
+	<updated>2021-12-19T17:20:01Z</updated>
 	<author>
 		<name>youthfire</name>
 		<uri>https://www.v2ex.com/member/youthfire</uri>
@@ -299,33 +707,6 @@ module.exports = {
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 技术团队出现能力强、可替代不易、但是不服管的组长，如何处理？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823195#reply7" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823195</id>
-	<published>2021-12-19T15:24:39Z</published>
-	<updated>2021-12-19T16:23:01Z</updated>
-	<author>
-		<name>davidshen</name>
-		<uri>https://www.v2ex.com/member/davidshen</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>今天想和大家讨论个团队管理的问题：
-团队里面随着几年的发展，出现了一些：综合能力强、可替代不易、可以独当一面的人，但是，其身为组长，却不太服管，例如：会基于自己的价值观去引导团队的成员，而不会考虑部门和公司层面的问题；会对组员散播负面情绪等。</p>
-<ol>
-<li>他可能由于个人感官的一些问题，会引导组员全体申请在家办公，怀疑公司的某些气味会导致大家身体问题，但是，公司通过第三方机构测空气质量，没有问题，但是，他还是会坚持自己在家办公，而且，还一直宣传组员也在家办公。</li>
-<li>会宣传“不做不错，少做少错”的价值观，代码可以跑起来的，就不用重构等。</li>
-</ol>
-<p>大家如果遇到这种员工，该如何处理？原则还是尽量用他，必定可替代性不高，接班人不好马上培养，但是又如何让其积极正向？</p>
-<br/>
---------------------------------------------------------------------------------------------
-<p>在下线下也组了一个群，主要是针对 IT 技术人员的，现在已经 300 号人，主要是讨论技术、想法和程序猿副业：
-这个群如果大家有兴趣也可以加我微信（群里已经 300 号人，相互交流）：shen_da_wei
-<br/></p>
-<hr/>
-<p>对了，有些朋友说我组群有企图，其实进群的人都知道，没有任何广告和其他的东西，就是搭个平台，资源的互补、讨论技术啥的，大家自己考虑，这是大家的权利。</p>
-
-	]]></content>
-</entry><entry>
 	<title>[宽带症候群] 广州电信双栈上传速度</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823194#reply2" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823194</id>
@@ -374,10 +755,10 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] MacBook Pro 磁吸线待机时偶尔自动断开连接正常吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823192#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823192#reply2" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823192</id>
 	<published>2021-12-19T14:40:58Z</published>
-	<updated>2021-12-19T14:40:58Z</updated>
+	<updated>2021-12-19T16:40:58Z</updated>
 	<author>
 		<name>wilhexm</name>
 		<uri>https://www.v2ex.com/member/wilhexm</uri>
@@ -388,10 +769,10 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[macOS] 科学画图软件求推荐</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823191#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823191#reply11" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823191</id>
 	<published>2021-12-19T14:33:27Z</published>
-	<updated>2021-12-19T16:13:07Z</updated>
+	<updated>2021-12-20T00:37:53Z</updated>
 	<author>
 		<name>dhou45</name>
 		<uri>https://www.v2ex.com/member/dhou45</uri>
@@ -404,30 +785,16 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[iPhone] iOS safari 一直不显示经常访问的网站？是不是 bug？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823190#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823190#reply1" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823190</id>
 	<published>2021-12-19T14:31:42Z</published>
-	<updated>2021-12-19T14:31:42Z</updated>
+	<updated>2021-12-19T15:31:42Z</updated>
 	<author>
 		<name>xk1357240</name>
 		<uri>https://www.v2ex.com/member/xk1357240</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	这个问题从秋季升级 15 到现在一直都很疑惑，一直用这个浏览网页论坛。。。<br />插件只装了个 dark reader
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 又发现了一个类 notion 的阵地</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823189#reply5" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823189</id>
-	<published>2021-12-19T14:09:42Z</published>
-	<updated>2021-12-19T15:44:59Z</updated>
-	<author>
-		<name>sunfei</name>
-		<uri>https://www.v2ex.com/member/sunfei</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://allflow.cn/login?code=RSUU50" rel="nofollow">https://allflow.cn/login?code=RSUU50</a></p>
-
 	]]></content>
 </entry><entry>
 	<title>[酷工作] [深圳/北京/上海] Shopee 内推，直推自己部门， Go / Java / 前端 / QA，年前面试年后入职</title>
@@ -482,7 +849,7 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有没有可以自定义的公众号订阅的服务？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823186#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823186#reply3" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823186</id>
 	<published>2021-12-19T13:54:53Z</published>
 	<updated>2021-12-19T14:41:47Z</updated>
@@ -495,10 +862,10 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 在公网 ipv6 上开 smb 的风险大吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823184#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823184#reply15" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823184</id>
 	<published>2021-12-19T13:42:55Z</published>
-	<updated>2021-12-19T16:10:54Z</updated>
+	<updated>2021-12-20T00:52:53Z</updated>
 	<author>
 		<name>kizunai</name>
 		<uri>https://www.v2ex.com/member/kizunai</uri>
@@ -513,10 +880,10 @@ module.exports = {
 	]]></content>
 </entry><entry>
 	<title>[随想] 买个口琴 重拾童年</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823183#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823183#reply5" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823183</id>
 	<published>2021-12-19T13:42:08Z</published>
-	<updated>2021-12-19T16:16:14Z</updated>
+	<updated>2021-12-19T18:34:14Z</updated>
 	<author>
 		<name>qfdk</name>
 		<uri>https://www.v2ex.com/member/qfdk</uri>
@@ -541,7 +908,7 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	]]></content>
 </entry><entry>
 	<title>[iPad] 关于 iPad 总是在看视频时丢失和耳机的蓝牙连接</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823178#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823178#reply3" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823178</id>
 	<published>2021-12-19T12:51:26Z</published>
 	<updated>2021-12-19T13:51:52Z</updated>
@@ -554,10 +921,10 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	]]></content>
 </entry><entry>
 	<title>[问与答] 实验室服务器大家都是怎么管理使用的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823176#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823176#reply14" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823176</id>
 	<published>2021-12-19T12:48:49Z</published>
-	<updated>2021-12-19T16:20:06Z</updated>
+	<updated>2021-12-19T19:23:53Z</updated>
 	<author>
 		<name>chizuo</name>
 		<uri>https://www.v2ex.com/member/chizuo</uri>
@@ -608,10 +975,10 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	]]></content>
 </entry><entry>
 	<title>[Vim] 一个简单的 neovim 高亮插件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823170#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823170#reply7" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823170</id>
 	<published>2021-12-19T12:06:14Z</published>
-	<updated>2021-12-19T14:45:36Z</updated>
+	<updated>2021-12-19T17:01:22Z</updated>
 	<author>
 		<name>MagicBall8</name>
 		<uri>https://www.v2ex.com/member/MagicBall8</uri>
@@ -620,19 +987,6 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	<p>阅读代码的时候经常需要标记多个变量函数名称，写了一个可以使用不同颜色做标记的插件，最主要是可以循环使用设置的颜色，不需要手动清除旧的标记： <a href="https://github.com/dwrdx/mywords.nvim" rel="nofollow">https://github.com/dwrdx/mywords.nvim</a></p>
 <p>借用了 <a href="https://www.vim.org/scripts/script.php?script_id=1238" rel="nofollow">https://www.vim.org/scripts/script.php?script_id=1238</a> 的逻辑</p>
 
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 转载， b 站泡沫的形成与毁灭</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823169#reply31" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823169</id>
-	<published>2021-12-19T12:02:27Z</published>
-	<updated>2021-12-19T16:05:28Z</updated>
-	<author>
-		<name>tomtom9</name>
-		<uri>https://www.v2ex.com/member/tomtom9</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	文章比较长，讲述了 b 站在游戏和内容领域的发展历程。<br /><br />简言之是开局良好，但因转型过速、管理无力以及企业文化导致增长放缓、投资者转向悲观态度。<br /><br />我自己是 b 站 6 年老用户了，看到今年的移动端 b 站首页，能感觉到什么但 u 又说不出来；看完文章还需消化消化，先分享出来给大家看看。<br /><br />原文链接如下<br /><a target="_blank" href="https://36kr.com/p/1533082150703107?channel=copy_url" rel="nofollow noopener">https://36kr.com/p/1533082150703107?channel=copy_url</a>
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 星标 4 万， GitHub 排行榜项目全新升级 (中/英文分离、软件/资料分离、加设增速榜、新星榜)</title>
@@ -692,19 +1046,6 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 
 	]]></content>
 </entry><entry>
-	<title>[Google] Google 翻车😓😓 Google 谷歌网盘宣布正式开始审查用户文件，不正当内容禁止传播</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823166#reply26" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823166</id>
-	<published>2021-12-19T11:20:44Z</published>
-	<updated>2021-12-19T16:21:03Z</updated>
-	<author>
-		<name>qiumio</name>
-		<uri>https://www.v2ex.com/member/qiumio</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	谷歌更新了 Google Drive 的新使用条款，根据条款，谷歌开始限制违规文件的访问，彻底凉凉，最后一块网盘圣地也翻车了，目前不知道谷歌会不会擅自和谐违规文件，彩虹色文件被明确禁止
-	]]></content>
-</entry><entry>
 	<title>[问与答] ios [屏幕使用时间] 统计信息， 默认是周日开始，如何修改 周一 为 开始</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823162#reply2" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823162</id>
@@ -732,10 +1073,10 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	]]></content>
 </entry><entry>
 	<title>[生活] 你好 2022</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823160#reply26" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823160#reply33" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823160</id>
 	<published>2021-12-19T10:34:24Z</published>
-	<updated>2021-12-19T16:19:16Z</updated>
+	<updated>2021-12-20T00:44:28Z</updated>
 	<author>
 		<name>zuobinwang</name>
 		<uri>https://www.v2ex.com/member/zuobinwang</uri>
@@ -783,10 +1124,10 @@ PS：输了无所谓主要是客服和第三方商家勾结起来让人恶心</t
 	]]></content>
 </entry><entry>
 	<title>[问与答] 求 dukto 的平替</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823158#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823158#reply3" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823158</id>
 	<published>2021-12-19T10:16:49Z</published>
-	<updated>2021-12-19T11:16:49Z</updated>
+	<updated>2021-12-19T13:16:49Z</updated>
 	<author>
 		<name>dreamramon</name>
 		<uri>https://www.v2ex.com/member/dreamramon</uri>
@@ -867,10 +1208,10 @@ start();
 	]]></content>
 </entry><entry>
 	<title>[Visual Studio Code] [c/c++]在 apple silicon 上还没支持原生 debugging?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823155#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823155#reply11" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823155</id>
 	<published>2021-12-19T10:06:12Z</published>
-	<updated>2021-12-19T16:09:28Z</updated>
+	<updated>2021-12-19T17:20:27Z</updated>
 	<author>
 		<name>stimw</name>
 		<uri>https://www.v2ex.com/member/stimw</uri>
@@ -901,10 +1242,10 @@ start();
 	]]></content>
 </entry><entry>
 	<title>[Python] 编程猫真是锈掉了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823151#reply16" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823151#reply17" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823151</id>
 	<published>2021-12-19T09:39:06Z</published>
-	<updated>2021-12-19T14:40:03Z</updated>
+	<updated>2021-12-19T15:40:03Z</updated>
 	<author>
 		<name>yqf0215</name>
 		<uri>https://www.v2ex.com/member/yqf0215</uri>
@@ -949,10 +1290,10 @@ start();
 	]]></content>
 </entry><entry>
 	<title>[macOS] 使用 caps lock 切换输入法偶尔失灵</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823147#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823147#reply12" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823147</id>
 	<published>2021-12-19T09:05:08Z</published>
-	<updated>2021-12-19T12:03:28Z</updated>
+	<updated>2021-12-19T13:03:28Z</updated>
 	<author>
 		<name>Aurora7</name>
 		<uri>https://www.v2ex.com/member/Aurora7</uri>
@@ -978,7 +1319,7 @@ start();
 	]]></content>
 </entry><entry>
 	<title>[iPad] 出去玩，用 iPad Pro 取代了 MacBook Pro</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823142#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823142#reply10" />
 	<id>tag:www.v2ex.com,2021-12-19:/t/823142</id>
 	<published>2021-12-19T08:25:31Z</published>
 	<updated>2021-12-19T13:49:28Z</updated>
@@ -1007,242 +1348,6 @@ start();
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p>老哥们，打算明年考研，专业课考数电，准备自学，目前处于入门阶段，有没有推荐的课程？
 之前学 react 有个老哥推荐的<a href="https://v2ex.com/t/783314" rel="nofollow">课</a>，非常好。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] OH 卡牌线上怎么能玩起来？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823137#reply0" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823137</id>
-	<published>2021-12-19T07:29:26Z</published>
-	<updated>2021-12-17T07:28:26Z</updated>
-	<author>
-		<name>ldm2478596374</name>
-		<uri>https://www.v2ex.com/member/ldm2478596374</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	线上一对一 OH 卡牌，怎么能玩起来，既能玩起来，又能互动，有没有类似的 app ，小程序，在线网站之类的
-	]]></content>
-</entry><entry>
-	<title>[NFT] 这才是 NFT 该有的样子 -- 我创建的 NFT</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823134#reply23" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823134</id>
-	<published>2021-12-19T07:02:25Z</published>
-	<updated>2021-12-19T11:37:51Z</updated>
-	<author>
-		<name>zuobinwang</name>
-		<uri>https://www.v2ex.com/member/zuobinwang</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>NFT 不应该是几件衣服，几个饰品来回换来获得价值认同，而应该是创作者的一次次修改打磨出的作品。</p>
-<p>基于这个理念，在 solana 公链上上创作了 Numbers 这个项目，获得了不少认可。
-已有的 21 件作品中，已经卖出了 14 件。</p>
-<p>这个世界上，也一定会有人是因为你新奇的想法而认可你，而不是所谓的“传销”❤️。</p>
-<p>Numbers 作品链接：
-<a href="https://solsea.io/collection/61a5d86ac72528633da6f0d4" rel="nofollow">https://solsea.io/collection/61a5d86ac72528633da6f0d4</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[云计算] 有个大胆的想法 Oracle cloud: always free VM 跑网心云会怎么样</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823133#reply6" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823133</id>
-	<published>2021-12-19T07:02:20Z</published>
-	<updated>2021-12-19T11:17:27Z</updated>
-	<author>
-		<name>hymzhek</name>
-		<uri>https://www.v2ex.com/member/hymzhek</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>网心云 docker 版本
-好多人的都在吃灰</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 你们的 finder 搜索功能支持中文分词的吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823132#reply6" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823132</id>
-	<published>2021-12-19T07:02:15Z</published>
-	<updated>2021-12-19T12:39:20Z</updated>
-	<author>
-		<name>heyjei</name>
-		<uri>https://www.v2ex.com/member/heyjei</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	工作中，文件管理器最常用的功能就是搜索功能了，windows 10 的文件管理器的搜索功能真的很好用。<br />但是换到 mac 之后，我发现 finder 居然不支持中文分词搜索，finder 的中文搜索居然是匹配单个字的，而不是匹配词语！！！<br /><br />这是因为我的 Mac 是英文，还是 finder 搜索本身就不支持中文分词？
-	]]></content>
-</entry><entry>
-	<title>[硬件] 树莓派 ffmpeg 推流有能力实时转码不</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823131#reply1" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823131</id>
-	<published>2021-12-19T07:01:59Z</published>
-	<updated>2021-12-19T08:01:59Z</updated>
-	<author>
-		<name>ppbaozi</name>
-		<uri>https://www.v2ex.com/member/ppbaozi</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>推 rtsp h265 到 rtmp h264 ，分辨率 2k 码率 1500k</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 有没有支持无显卡启动的虚拟化软件？比如 PVE ESXI 之类的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823129#reply4" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823129</id>
-	<published>2021-12-19T06:46:02Z</published>
-	<updated>2021-12-19T09:04:52Z</updated>
-	<author>
-		<name>zjsegzhf</name>
-		<uri>https://www.v2ex.com/member/zjsegzhf</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://v2ex.com/t/822847#reply19" rel="nofollow">https://v2ex.com/t/822847#reply19</a>
-接上个话题。
-我更新了 bios ，在 windows 下拔掉独显已经能开机了，远程过去看设备管理器连显示适配器选项都没了，估计主板的核显供电被阉割了，核显没法工作。
-然后我插上独显装了 PVE ，拔掉独显开机，风扇正常，网口灯不亮，路由器找不到该设备，ip 不通。
-不知道是不是 PVE 不支持无显卡启动？</p>
-<p>有没有支持无显卡启动的虚拟化软件啊？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Vue.js] 关于前端技术提升的疑问</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823128#reply8" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823128</id>
-	<published>2021-12-19T06:43:45Z</published>
-	<updated>2021-12-19T09:04:46Z</updated>
-	<author>
-		<name>newxhk</name>
-		<uri>https://www.v2ex.com/member/newxhk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>请问大佬们有什么个人产品需要人帮忙嘛？我目前将近有一年工作经验，平时工作接触全是业务层面的问题，觉得这样对自己技术提升不大，因为遇到什么问题才回去了解。这种方式学习的技术体系太过于碎片化了，看起来就像是什么方面都了解一点，但是深究就不行。大佬先别骂，我也知道这样不对，要靠自己主动去学习新技术才对。但是怎么说呢，就是主动汲取这种方式有点太枯燥了，没什么动力坚持不了多久。所以想着通过带有一定目的的方式强迫自己学习。或者大佬们有其他好的建议可以提出来。最后无论大佬提出什么建议，都十分感谢。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 做了一点点小的功能，以备不时之需</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823127#reply5" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823127</id>
-	<published>2021-12-19T06:42:07Z</published>
-	<updated>2021-12-19T10:56:09Z</updated>
-	<author>
-		<name>airdb</name>
-		<uri>https://www.v2ex.com/member/airdb</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>核心流量入口：微信搜一搜 #宝贝回家</p>
-<p>小程序地址： #小程序://宝贝回家 /公益客服 /P8ohgMTcWKxFPAb</p>
-<p>Tips:  『#.*』 可在微信直接点击打开</p>
-<p>页面展示：
-好像无法上传图片，大家自行浏览吧</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://wechat-1251018873.file.myqcloud.com/dean/souyisou.jpeg"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://wechat-1251018873.file.myqcloud.com/dean/wxkf-gongyikefu.jpeg"/></p>
-<p>欢迎大家 一块做好事， 加入技术志愿者
-微信打开 <a href="https://work.weixin.qq.com/kfid/kfc02343d9ba414880a" rel="nofollow">https://work.weixin.qq.com/kfid/kfc02343d9ba414880a</a></p>
-<p>解释说明：以上内容，是咱们技术公益志愿者业余时间共同完成的。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 快 2022 年了，请问各位大佬，用 VS Code 写嵌入式 C 的最佳姿势是什么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823126#reply6" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823126</id>
-	<published>2021-12-19T06:30:09Z</published>
-	<updated>2021-12-19T08:37:11Z</updated>
-	<author>
-		<name>dudamao</name>
-		<uri>https://www.v2ex.com/member/dudamao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>背景：在汽车嵌入式软件行业工作，日常编辑大型工程（ Autosar ）。</p>
-<p>用过的几类编辑器软件：</p>
-<p>Source Insight：全局搜索太慢了，很多宏没法识别，函数跳转不够准确。
-Clion：只能在自己的电脑上用，除了 double shift 的搜索不是特别准，其他方面都很好，奈何公司电脑不能安装。
-VS Code：全局搜索又快又准，但头文件识别有问题，函数没法跳转，在 google 上搜了很多方法都不好用，而且内存占用真的太大了……</p>
-<p>目前看比较容易在公司环境下使用的就是 VS Code ，所以有比较好能让 VS Code 识别 C 语言头函数的方法吗？</p>
-<p>求教！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[全球工单系统] nasyun 现在是不是打不开了？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823124#reply0" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823124</id>
-	<published>2021-12-19T06:17:43Z</published>
-	<updated>2021-12-19T06:16:43Z</updated>
-	<author>
-		<name>Scirocco</name>
-		<uri>https://www.v2ex.com/member/Scirocco</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="www.nasyun.com" rel="nofollow">那是云</a> 现在是不是打不开了？</p>
-<p>搜群晖的话还是这个论坛东西最多，然而我好像打不开了。。不知道是论坛倒了还是网络问题</p>
-
-	]]></content>
-</entry><entry>
-	<title>[音乐] 华语音乐的最后希望在宝岛，宝岛音乐的希望在年轻的乐团，分享一下我心中那些值得一听的新时代台湾乐团</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/823123#reply33" />
-	<id>tag:www.v2ex.com,2021-12-19:/t/823123</id>
-	<published>2021-12-19T06:06:46Z</published>
-	<updated>2021-12-19T15:53:18Z</updated>
-	<author>
-		<name>YuxiangLuo</name>
-		<uri>https://www.v2ex.com/member/YuxiangLuo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>前言</h2>
-<ol>
-<li>我会避免在标题和正文中使用“小众“、”宝藏乐队“等油腻或者已经开始变得油腻的词语。</li>
-<li>本文不会包含落日飞车、告五人、茄子蛋等耳熟能详的乐队。</li>
-<li>虽然按专辑分享会显得更懂音乐，但我还是会按单曲来分享。</li>
-<li>歌曲评级仅代表我个人的喜欢程度。</li>
-<li>部分歌曲名在 spotify 上会有不同，比如《挖掘机》在 spotify 上叫《怪手》。</li>
-</ol>
-<h2>现在让我们开始分享吧</h2>
-<h3>1 、美秀集团</h3>
-<ul>
-<li>S 级 ——《米儿》《生活袂晓过》</li>
-<li>A 级 —— 《细粒的目睭》《小老婆》《挡一根》《卷烟》《做事人》《马克吐温》</li>
-</ul>
-<p>第一次听他们的歌曲可能会觉得这是城乡结合部的杀马特土嗨乐队，而且主唱的发型、长相和嗓音都有点像面筋哥。但是只要你接受了他们的风格，就会发现他们真的很牛逼（面筋哥其实也很牛逼）。</p>
-<h3>2 、浅堤</h3>
-<ul>
-<li>S 级 ——《挖掘机》《多崎作》《高雄》</li>
-<li>A 级 ——《树影》《月光》《青春咱的梦》《叨位是你的厝》</li>
-</ul>
-<p>一个轻快、清新的乐队，刚发了新专辑。听他们的快歌会让你觉得来到了阳光明媚的周六上午。但是轻快的歌曲可能在讲一个沉重的故事。女主唱又写词又作曲又唱歌，声音也很好听。我很喜欢他们的吉他和鼓点。</p>
-<h3>3 、怕胖团</h3>
-<ul>
-<li>S 级 —— 《我没有用，没办法给你想要的生活》《后照镜》《想想当初吧》</li>
-<li>A 级 —— 《鱼》《月旁月光》《抱歉我不想跟你道歉》</li>
-<li>搞怪级 —— 《蚊子妳来咬我啊！我才不怕妳？！！！》《内外夹攻大力丸》</li>
-</ul>
-<p>一个台味很浓的台湾乐队（诶，你很机车诶！），爱情 hàn 友情是他们的主要创作主题，三个很明显的元素：很纯粹的悲伤、带了点恶搞的悲伤、带了很多恶搞的快乐。但是有一点我不喜欢，就是他们很执着于《抄你妈的笔记本》这个很不雅的谐音梗（甚至还专门出了一个 2021 版）。查了一下居然是 2007 年就创立的乐队了，虽然已经不年轻了但是我还是想加进来。</p>
-<h3>4 、热写生</h3>
-<ul>
-<li>S 级 —— 《爱与胶囊》</li>
-<li>A 级 —— 《在船底搔痒》《青元春朗》</li>
-</ul>
-<p>说实话他们的歌我听不太懂，歌词看上去很有文化很哲学，歌曲听上去给人的感觉是独一无二的——目前还没有听过风格类似的乐队，即使是故弄玄虚也值得一听。</p>
-<h3>5 、青虫 aoi</h3>
-<ul>
-<li>S 级 —— 《我毋是刁故意》《青鸟》《大树公》</li>
-<li>A 级 —— 《分手后你才送我生日蛋糕》《简幼》《媠花》</li>
-</ul>
-<p>这支乐队大多数歌曲都是闽南语，女主唱的声音很温暖，歌词写得也很棒。擅于讲述亲情，发掘生活中有意义的事物。</p>
-<h3>6 、当代电影大师</h3>
-<ul>
-<li>S 级 —— 《那些事情是真的有意思吗》</li>
-<li>A 级 —— 《我觉得春天好像要来了》</li>
-</ul>
-<p>很装逼的一支乐队，刚发了第一张正式专辑(有 15 首歌)，我觉得最惊艳的还是《那些事情是真的有意思吗》的前半段，词、节奏和鼓点都太强了。</p>
-<h3>7 、Crispy 脆乐团</h3>
-<ul>
-<li>S 级 —— 《转圈圈》</li>
-<li>A 级 —— 《 Deja Vu 》</li>
-</ul>
-<p>他们应该还有其他好听的歌，但是因为我听得不多，难做选择。顺带一提，转圈圈的 MV 拍得很有意思，我是在 youtube 看到那个 MV 才关注他们的。</p>
-<h3>8 、好乐团 /Goodband</h3>
-<ul>
-<li>S 级 —— 《我们一样可惜》《我把我的青春给你》</li>
-<li>A 级 —— 《他们说我是没有用的年轻人》《蒸发》</li>
-</ul>
-<p>一个很丧的乐队，女主唱的假音相当牛逼，他们的歌很悲伤但是很好听，深夜 emo 必备。</p>
 
 	]]></content>
 </entry>
