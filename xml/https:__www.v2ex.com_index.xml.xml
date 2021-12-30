@@ -8,15 +8,542 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2021-12-29T16:21:55Z</updated>
+<updated>2021-12-28T00:42:19Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
-	<title>[程序员] usdt 有类似 bitcore 这样本地钱包客户端吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825184#reply0" />
+	<title>[分享创造] 一份关于 vite.config.ts 项目常用项配置</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825195#reply0" />
+	<id>tag:www.v2ex.com,2021-12-30:/t/825195</id>
+	<published>2021-12-30T00:43:19Z</published>
+	<updated>2021-12-28T00:42:19Z</updated>
+	<author>
+		<name>vipbic</name>
+		<uri>https://www.v2ex.com/member/vipbic</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h2>vite.config.ts</h2>
+<p>完整的配置我已上传 GitHub ，<a href="https://github.com/hangjob/vue-vite-admin-ts" rel="nofollow">点击查看</a></p>
+<p>这是通过这个配置打包好的项目地址 : <a href="https://hangjob.github.io/vue-vite-admin-ts/dist/lib.html" rel="nofollow">演示地址</a></p>
+<p><img alt="https://s4.ax1x.com/2021/12/30/T2YBX6.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s4.ax1x.com/2021/12/30/T2YBX6.png"/></p>
+<h3>开启 JSX</h3>
+<p>编写高性能的组件,JSX 列子组件</p>
+<pre><code class="language-js">new Vue({ 
+    el: '#demo', 
+    render: function (h) { 
+        return ( 
+            &lt;AnchoredHeading level={1}&gt; 
+                &lt;span&gt;Hello&lt;/span&gt; world! 
+            &lt;/AnchoredHeading&gt; 
+        ) 
+    } 
+})
+</code></pre>
+<pre><code class="language-ts">import vueJsx from '@vitejs/plugin-vue-jsx'
+
+export {
+    vueJsx
+}
+</code></pre>
+<h3>配置多页面</h3>
+<pre><code class="language-ts">rollupOptions: {
+    input: {
+        example: path.resolve(process.cwd(), 'index.html'), // 把页面放在外面，路径简短 防止 src/packages/web/index.html ，建议 vite 把 key(web 、lib)可也阔以映射成页面路径，就避免这个问题
+        lib: path.resolve(process.cwd(), 'lib.html')
+    },
+}
+</code></pre>
+<h3>压缩最小输出</h3>
+<pre><code class="language-ts">rollupOptions: {
+    // 两种方式 
+    // 一，也可以指定包名打包
+    // output: {
+    //     manualChunks: {
+    //         "vxe-table": ["vxe-table"],
+    //         "echarts": ["echarts"],
+    //         "xe-utils": ["xe-utils"],
+    //         "lodash": ['lodash'],
+    //         "ant-design-vue": ['ant-design-vue'],
+    //         "@antv/g2plot": ['@antv/g2plot'],
+    //         "@antv/g2": ['@antv/g2'],
+    //     }
+    // },
+    // 二，自动分割包名输出 chunkSizeWarningLimit 配置大小
+    output: {
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/static/[name]-[hash].[ext]',
+        manualChunks(id: any) {
+            if (id.includes('node_modules')) {
+                return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
+        }
+    },
+},
+</code></pre>
+<h3>移除 console</h3>
+<pre><code class="language-ts">terserOptions: {
+    compress: {
+        drop_console: true,
+        drop_debugger: true,
+    },
+}
+</code></pre>
+<h3>配置别名</h3>
+<pre><code class="language-ts">resolve: {
+    alias: {
+        // 如果报错__dirname 找不到，需要安装 node,执行 yarn add @types/node --save-dev
+        "@": path.resolve(__dirname, "src"),
+        "__ROOT__": path.resolve(__dirname, ""),
+        "comps": path.resolve(__dirname, "src/components"),
+    }
+},
+</code></pre>
+<p>当配置了别名的时候，为了让编辑器能更好的识别别名，需要配置<code>jsconfig.json</code>文件，放在 vite.config.ts 同级别即可，编辑器会自动读取</p>
+<pre><code class="language-json">{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "__ROOT__/*": [
+                "*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+</code></pre>
+<h3>vxe-table 表格，按需加载</h3>
+<p>一个基于 <a href="https://www.npmjs.com/package/vue" rel="nofollow">vue</a> 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、贼灵活的配置项、扩展接口等.</p>
+<pre><code class="language-ts">import styleImport from 'vite-plugin-style-import' //按需加载模块
+
+export function configStyleImport() {
+    return styleImport({
+        libs: [
+            {
+                libraryName: 'vxe-table',
+                esModule: true,
+                resolveComponent: (name) =&gt; `vxe-table/es/${name}`,
+                resolveStyle: (name) =&gt; `vxe-table/es/${name}/style.css`
+            }
+        ]
+    })
+}
+</code></pre>
+<h3>开启压缩</h3>
+<pre><code class="language-ts">import viteCompression from 'vite-plugin-compression' // 开启压缩
+
+export function configViteCompression() {
+    // 开启压缩 [文档]( https://github.com/anncwb/vite-plugin-compression/blob/main/README.zh_CN.md)
+    return  viteCompression({
+        verbose: true,
+        disable: false,
+        // filter:()=&gt;{}, // 那些资源不压缩
+        threshold: 1024 * 50, // 体积大于 threshold 才会被压缩,单位 b
+        deleteOriginFile: false,// 压缩后是否删除源文件
+        algorithm: 'gzip', // 压缩算法,可选 [ 'gzip' , 'brotliCompress' ,'deflate' , 'deflateRaw']
+        ext: '.gz', // 生成的压缩包后缀
+    })
+}
+</code></pre>
+<h3>开启 CDN</h3>
+<p>字只需要配置即可，自动生成模板所引用的 cdn 路径</p>
+<pre><code class="language-ts">import importToCDN from 'vite-plugin-cdn-import'
+
+export function configCDN() {
+    return importToCDN({
+        modules: [
+            {
+                name: 'element-plus',
+                var: 'ElementPlus',
+                path: 'https://unpkg.com/element-plus/lib/index.full.js',
+                css: 'https://unpkg.com/element-plus/lib/theme-chalk/index.css',
+            },
+            {
+                name: 'vant',
+                var: 'vant',
+                path: 'https://cdn.jsdelivr.net/npm/vant@next/lib/vant.min.js',
+                css: 'https://cdn.jsdelivr.net/npm/vant@next/lib/index.css',
+            }
+        ]
+    })
+}
+</code></pre>
+<h3>注入变量到 html 模板中</h3>
+<pre><code class="language-ts">import html from 'vite-plugin-html'
+
+export function configHtml(opt: any) {
+    return html({
+        inject: {
+            injectData: {...opt.variables}
+        },
+        minify: true
+    })
+}
+</code></pre>
+<h3>配置构建依赖包 lib</h3>
+<pre><code class="language-ts">lib: {
+    entry: path.resolve(process.cwd(), 'src/packages/install.ts'),
+    name: 'vueViteAdminTs', // 构建依赖包的时候， 对外暴露的名称
+    fileName: (format: string) =&gt; `index.${format}.js`,
+    rollupOptions: {
+        external: ['vue', 'vue-router'],
+        output: {
+            globals: {
+                vue: 'Vue'
+            }
+        }
+    }
+},
+rollupOptions: {
+    output: {
+        inlineDynamicImports: true,
+    }
+}
+</code></pre>
+<h3>配置代理</h3>
+<pre><code class="language-ts">export function configServer() {
+    return {
+        host: '0.0.0.0',
+        port: 8290,
+        https: false,
+        proxy: {
+            '^/api': {
+                target: 'http://127.0.0.1:7001',
+                changeOrigin: true,
+                rewrite: (path: any) =&gt; path.replace(/^/api/, '')
+            }
+        }
+    }
+}
+</code></pre>
+<h3>配置 less</h3>
+<p>修改全局 less 变量</p>
+<pre><code class="language-ts">import theme from '../../src/packages/theme/ming'
+
+export function configCss() {
+    return {
+        preprocessorOptions: {
+            less: {
+                modifyVars: {
+                    ...theme
+                },
+                javascriptEnabled: true,
+            },
+        }
+    }
+}
+</code></pre>
+<h2>推荐配置</h2>
+<h3><a href="https://cn.windicss.org/integrations/vite.html" rel="nofollow">windicss</a></h3>
+<pre><code class="language-ts">import WindiCSS from 'vite-plugin-windicss'
+
+export default {
+  plugins: [
+    WindiCSS(),
+  ],
+}
+</code></pre>
+<p>如果担心命名冲突，在根目录新建<code>windi.config.ts</code>，可以通过以下方式给属性模式添加自定义前缀：</p>
+<pre><code class="language-js">export default {
+  attributify: {
+    prefix: 'w:',
+  },
+}
+</code></pre>
+<p>使用列子：</p>
+<pre><code class="language-html">&lt;button 
+  w:bg="blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600"
+  w:text="sm white"
+  w:font="mono light"
+  w:p="y-2 x-4"
+  w:border="2 rounded blue-200"
+&gt;
+  Button
+&lt;/button&gt;
+</code></pre>
+<h3><a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fjpkleemans%2Fvite-svg-loader%23readme" rel="nofollow" title="https://github.com/jpkleemans/vite-svg-loader#readme">vite-svg-loader</a></h3>
+<p><code>vite-svg-loader</code>插件可以让你像引用组件一样引用<code>svg</code>文件.</p>
+<pre><code class="language-js">import svgLoader from 'vite-svg-loader' 
+export default defineConfig({ plugins: [vue(), svgLoader()] })
+</code></pre>
+<p>使用</p>
+<pre><code class="language-vue">&lt;template&gt;
+  &lt;MyIcon /&gt;
+&lt;/template&gt;
+
+import MyIcon from './my-icon.svg'
+</code></pre>
+<h3><a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fantfu%2Fvite-plugin-components" rel="nofollow" title="https://github.com/antfu/vite-plugin-components">vite-plugin-components</a></h3>
+<p><code>vite-plugin-components</code>可以实现组件库或内部组件的自动按需引入组件,而不需要手动的进行 import,可以帮我们省去不少<code>import</code>的代码</p>
+<pre><code class="language-ts">import Vue from '@vitejs/plugin-vue'
+import ViteComponents from 'vite-plugin-components'
+
+export default {
+  plugins: [
+    Vue(),
+    ViteComponents()
+  ],
+};
+</code></pre>
+<p>好了，关与 vite 的配置，我就先写到这了，至于后面有新的配置，或者有新的变化，我会在<a href="https://github.com/hangjob/vue-vite-admin-ts" rel="nofollow">这个仓库</a>里面进行配置，以及验证可行性</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享创造] yet another 阿 B 下载器</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825194#reply0" />
+	<id>tag:www.v2ex.com,2021-12-30:/t/825194</id>
+	<published>2021-12-30T00:37:12Z</published>
+	<updated>2021-12-30T00:37:12Z</updated>
+	<author>
+		<name>wxsm</name>
+		<uri>https://www.v2ex.com/member/wxsm</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><a href="https://github.com/wxsms/bilibili-video2mp3" rel="nofollow">https://github.com/wxsms/bilibili-video2mp3</a></p>
+<p>用法（需要预先安装 node.js &amp; ffmpeg ）：</p>
+<pre><code>npx bilibili-video2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3
+</code></pre>
+<p>特色：</p>
+<ol>
+<li>命令行调用</li>
+<li>支持下载单个视频，或一次性下载视频的所有分集</li>
+<li>支持下载后自动转换为 mp3</li>
+<li>支持一次性填入多个 url 地址（逗号分隔）</li>
+</ol>
+<p>适合有喜欢的 b 站歌手但是又不想在 b 站听歌的人~</p>
+
+	]]></content>
+</entry><entry>
+	<title>[酷工作] Pipe17 Back-end Engineer 持续火热招聘！全球化团队召唤未来之星！</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825192#reply0" />
+	<id>tag:www.v2ex.com,2021-12-30:/t/825192</id>
+	<published>2021-12-30T00:04:23Z</published>
+	<updated>2021-12-30T00:04:23Z</updated>
+	<author>
+		<name>ghostagram</name>
+		<uri>https://www.v2ex.com/member/ghostagram</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Pipe17 Back-end Engineer （ Web 后端工程师）</p>
+<p>我们能够提供：
+绝对人性的工作时间，没有 996 ，没有 997 ，每周一天的 WFH 远程办公，Work Hard Play Harder
+绝对扁平的工作氛围，容纳多种想法，随时脑暴，跨洋碰撞与文化交流
+绝对有竞争力的职位，薪资与能力匹配挂钩，美国总部期权发放，没有上限的发展空间
+绝对有爱的团队文化，工作时超认真对待，私下聚餐、运动、爬山、旅游，YOLO!!!</p>
+<p>职位描述：
+工作职责:</p>
+<ol>
+<li>设计 /开发 /维护 企业的业务平台系统与数据库。</li>
+<li>维护 Web 后台管理系统后端。</li>
+</ol>
+<p>任职资格:</p>
+<ol>
+<li>2 年以上 Python 后端开发经验，3 年以上 IT 行业从业经验。</li>
+<li>基础扎实，熟练掌握常见算法和数据结构。</li>
+<li>了解设计模式，有一定设计能力。</li>
+<li>熟悉 SaaS 或 PaaS 企业级软件系统的开发。</li>
+<li>熟悉一定的企业级软件系统的运维经验。</li>
+<li>良好的编程习惯和职业素养。</li>
+<li>良好的问题分析和交流能力。</li>
+<li>良好的团队意识和协作经验。</li>
+<li>具备使用英文进行日常工作的读写能力。</li>
+</ol>
+<p>技术要求：</p>
+<ol>
+<li>熟悉 Python 编程和 Node.js 编程。</li>
+<li>数据 Python 常用 Web 开发框架，Django 、Flask 等等。</li>
+<li>熟练使用 NoSQL 数据库（ Redis ，MongoDB 等）。</li>
+<li>熟悉 MySQL 数据库使用。</li>
+<li>熟练使用 Lunix 系统工作。</li>
+<li>了解 Web 前端开发技术，如 React 、Vue 。</li>
+</ol>
+<p>加分项：</p>
+<ol>
+<li>使用过 Serveless 。</li>
+<li>了解运维技术，具备运维经验。</li>
+<li>沟通能力良好，能够参与挖掘用户需求。</li>
+<li>良好的英文听说能力。</li>
+</ol>
+<p>Pipe17 介绍</p>
+<ol>
+<li>
+<p>市场背景：
+全球电商高速发展的同时，从订单到物流等多个环节，所需要接触的平台和系统却复杂多样，导致美国本土商家和跨境电商商家长期被各种繁杂渠道以及人工效率低下等问题困扰，出现销售订单流失、销量无法提高、客户满意度降低、隐形管理成本居高不下的经营问题。</p>
+</li>
+<li>
+<p>解决方案：
+Pipe17 通过研发 SaaS 系统，搭建电商网站、配送渠道和运营系统之间的自动化桥梁，商家无需雇佣专业人员管理多个渠道，仅通过 Pipe17 即可多系统管理。从而降低商家管理成本，提高运营效率，从而提升商家利润。
+成立不到两年时间，Pipe17 已对接超过 100 家电商企业，超过 50 家合作平台，日订单量超过 25 万单。伴随客户数量的增长、以及集成平台的日益增加，Pipe17 将具备更强的数据整合和分析能力，从而对电商卖家提供运营支撑、数据整合、市场洞察等全方位的产品与服务价值。
+已打通电商平台包括：Amazon, Shopify, BigCommerce, BrandBoom, Fabric
+已打通 ERP 系统包括：NetSuite, Cin7, Brightpearl
+已打通物流系统包括：Deliverr, Amazon MCF, Mochila, ShipStation
+官网： <a href="https://pipe17.com/" rel="nofollow">https://pipe17.com/</a></p>
+</li>
+<li>
+<p>我们的愿景 Our Vision
+我们致力于电商行业的最优化履约服务：让现代商家能够轻松的选择数字化服务，不受企业技术能力的限制，能够毫不费力的将各类服务连接起来助力自身的业务增长。
+We are dedicated to the idea of optimal fulfillment: a state of calm for modern merchants where they are free to experiment with and choose the digital services that best fit their business, unhindered by technology limitations, knowing that everything can be connected together effortlessly to support their growth.</p>
+</li>
+<li>
+<p>我们的使命 Our Mission
+我们相信电商运营需要一种新型的技术伙伴，这将帮助他们成功。首先是帮商家处理许多的在他们生意发展过程中遇到的日益增长的技术挑战，其次是应对客户日益增长的期待，我们希望成为这个技术伙伴。
+我们的系统架构基于云端设计，团队来自 SaaS 和 AI 领域的专家，立志于对客户的生意产生百倍影响。
+系统能够轻松无缝的连接许多电商服务，能够同步数据并实时看到你的商业运行情况。从进入购物车到配送到客户手中，我们将知道什么时候在哪个环节出现了问题。
+We believe that eCommerce operations need a new kind of technology partner to succeed. One that is addressing the major technical challenges they face in growing their businesses and serving the ever increasing expectations of their digital customers.
+We want to be that partner. We are cloud architects, builders of SaaS and AI experts, here to make a 100X impact on our customers’ businesses.
+We make it fast, painless and seamless to connect, synchronize and see your entire commerce operation in real time, from shopping cart to customer, and know when something goes wrong.
+Simple and powerful. And we’re just getting started. Pipe17.</p>
+</li>
+<li>
+<p>核心价值观 Company Values
+主人公意识 - 责任感能够推动我们不断向前
+分享文化 - 信息孤岛对释放团队价值十分有害，让我们确保大家都认识到这一点
+创造力 - 最冒险的事就是不冒任何险，我们在这里就是挑战权威，让我们充满创造力吧
+专注于结果 - 我们需要持续专注于目标，持续交付超出客户预期的结果将贯穿我们工作的始终
+持续精进 - 先跑通再优化。作为一个工程师文化的组织，最重要的事情就是交付好的产品功能。快速发布并且快速的获取用户反馈在目前阶段极其重要。</p>
+</li>
+</ol>
+<ul>
+<li>Ownership Mentality - It is our responsibility to move us together forward</li>
+<li>Culture of Sharing - Silos are detrimental for the ability to execute as a team, let's make sure everyone is aware</li>
+<li>Creativity - The riskiest thing is to take no risk. We are here to challenge the establishment so let's all be creative</li>
+<li>Results Focused - Let's always keep our eyes on the target. Delivering Exceeding Customer expectation is going to take us the whole way.</li>
+<li>Continuous Improvement - Make it Work then make it better. As an engineering organization, the most important thing is shipping features. Launching quickly and getting feedback is critical to us at this stage.</li>
+</ul>
+<ol>
+<li>
+<p>媒体报道：
+Pipe17 完成 800 万美金的天使轮融资，无需一行代码链接电商系统
+Pipe17 closes $8M to connect a range of e-commerce tools without any code required <a href="https://techcrunch.com/2021/02/18/pipe17-closes-8m-to-connect-a-range-of-e-commerce-tools-without-any-code-required/" rel="nofollow">https://techcrunch.com/2021/02/18/pipe17-closes-8m-to-connect-a-range-of-e-commerce-tools-without-any-code-required/</a>
+电商物流创业公司 Pipe17 完成 800 万美金融资驱动疫情期间线上电商行业高速发展
+E-commerce logistics startup Pipe17 raises $8M amid pandemic-driven online shopping surge <a href="https://www.geekwire.com/2021/e-commerce-logistics-startup-pipe17-raises-8m-amid-pandemic-driven-online-shopping-boom/" rel="nofollow">https://www.geekwire.com/2021/e-commerce-logistics-startup-pipe17-raises-8m-amid-pandemic-driven-online-shopping-boom/</a></p>
+</li>
+<li>
+<p>核心团队：
+CEO—Mo Ashfar
+GLP Capital 执行合伙人，前 Oracle VP ，前 Spoken Communication CEO 后被 Avaya 收购，剑桥大学 PhD</p>
+</li>
+</ol>
+<p>CPO—Dave Shaffer
+前 Oracle 产品 VP 、前 Workato VP 、前苹果片区经理</p>
+<p>CTO--Gilad Odinak
+前微软技术 VP 、个人名下有 140 余项专利技术</p>
+<p>VP ENGINEERING—John Shao
+前 Avaya 资深技术总监、Oracle 技术总监、VMware 研发经理</p>
+<p>其余研发与产品团队来自 Linkedin, GE, NetSuite 等全球知名企业。</p>
+<p>Chengdu Cooperation CEO — Roger Fang
+前阿里、腾讯高级产品经理，前"聘宝"创始人
+研发团队来自聚美、知道创宇等企业 5 年以上高级工程师，具备丰富软件开发与架构经验
+产品团队深耕 toB 行业 5 年以上，具备丰富垂直领域企业级管理系统产品设计经验</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iPhone] 我希望 iPhone 可以设置屏幕密码输错次数，现在只有 10 次机会太少了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825191#reply10" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825191</id>
+	<published>2021-12-29T23:32:36Z</published>
+	<updated>2021-12-30T00:54:23Z</updated>
+	<author>
+		<name>bzw875</name>
+		<uri>https://www.v2ex.com/member/bzw875</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>老婆莫名其妙把我屏幕密码改了，然后我不知情试了 7 次。然后她有不确定试了 3 次。然后就弹出 iPhone 已锁定，如果设置可以设置这个数字的话，我想设置 30 次吧</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请教个[选中后自动复制]的技术问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825190#reply1" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825190</id>
+	<published>2021-12-29T22:34:24Z</published>
+	<updated>2021-12-30T00:23:03Z</updated>
+	<author>
+		<name>Ryan3yan</name>
+		<uri>https://www.v2ex.com/member/Ryan3yan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>想在电脑上实现这样的功能,找了软件,看了苹果的快捷指令 /自动操作 /AppleScript app,都没找到.
+最后找了到油猴脚本,基本能实现</p>
+<p>document.addEventListener('selectionchange', () =&gt; {
+let clipboard = window.getSelection().toString()
+if (!clipboard) return
+GM_setClipboard(clipboard, 'text')
+})</p>
+<p>tell </p>
+<p>但仅限于浏览器,我想在电脑全局上可以使用,这样就不需要当想移动内容时(文字+文件等,跟我们平时粘贴复制的对象一样啦)就不需要多按一次“command/ctrl+c”了.有大佬懂吗.</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iOS] 受不了自带的提醒事项了，经常错过啊，怎么办？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825189#reply19" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825189</id>
+	<published>2021-12-29T21:35:37Z</published>
+	<updated>2021-12-26T06:43:22Z</updated>
+	<author>
+		<name>yjs778</name>
+		<uri>https://www.v2ex.com/member/yjs778</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	各位有类似的 App 推荐吗？<br />我使用此类 app 所要达到的效果是很简单的<br /><br />1 ）提醒设定的时间到了，要像起床闹钟一样持续地大声和震动，拼命提醒我要去做这事！甚至还要像闹钟一样提供个类似 snooze 时间，现在忙，过一小时后继续暴力提醒！<br />---iOS 提醒事项经常看到提醒躺在锁屏通知里！没感觉到啊，气啊！<br /><br />2 ）如果设定的是每天都要提醒的事项（比如吃维生素），在设定的时间段内只要不勾选完成，就自动间隔一段时间继续提醒。<br />---iOS 每日提醒好像在早上九点会出现在锁屏，然后一整天都躺在那没声响了。<br /><br />3 ） Apple Watch 也要有震动，甚至还要响！<br /><br />提醒事项真的难用，可能她好用的功能我用不到吧。<br />又或者我设定错了？请教各位了。<br />BTW gps 地点提醒也是超级难用的，完全就是一个 bug 一样的存在！
+	]]></content>
+</entry><entry>
+	<title>[Windows] Windows subsystem for Linux (WSL)的用户有踩过什么坑吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825188#reply12" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825188</id>
+	<published>2021-12-29T20:56:31Z</published>
+	<updated>2021-12-30T00:53:10Z</updated>
+	<author>
+		<name>lydhr</name>
+		<uri>https://www.v2ex.com/member/lydhr</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>run 一个 ubuntu 的时候 memory 几乎没有增加，跑一些开源 code 是没问题了，感觉就是更高效 built-in 的 VM</p>
+
+	]]></content>
+</entry><entry>
+	<title>[C#] .NET 应用加载特定架构 DLL 的正确姿势</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825186#reply2" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825186</id>
+	<published>2021-12-29T18:31:48Z</published>
+	<updated>2021-12-29T22:32:13Z</updated>
+	<author>
+		<name>jim9606</name>
+		<uri>https://www.v2ex.com/member/jim9606</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近在改一个 .NET Framework 4.6.2 的项目，依赖一个非 C#的组件，这个组件只提供 x86 和 x64 的 DLL 。
+项目以前的方法是通过 DllImport 分别导入两个 DLL,x86 DLL 绑定 private method_32,x64 DLL 绑定 private method_64,然后在 public method 在运行时判断 Environment.Is64BitProcess 并转发至 method_32 还是 method_64 。</p>
+<p>现在有两个问题：</p>
+<ol>
+<li>有没有办法不用写这个 wrapper? 每导入一个方法都得写三个函数好麻烦；</li>
+<li>在 Windows 10 ARM 系统上会用哪个方法（不考虑已经挂掉的 WinRT 了）？永远选择 x86 DLL 吗？ Windows 11 ARM 有了 ARM64EC 之后会不会变成选择 x64 DLL 吗？以及这个项目升级 .NET 6 之后行为会变化吗？</li>
+</ol>
+
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] gravatar.com 域名也居然被污染了，烦人！</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825185#reply0" />
+	<id>tag:www.v2ex.com,2021-12-29:/t/825185</id>
+	<published>2021-12-29T16:31:05Z</published>
+	<updated>2021-12-29T02:31:05Z</updated>
+	<author>
+		<name>bclerdx</name>
+		<uri>https://www.v2ex.com/member/bclerdx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	刚发现 <a target="_blank" href="http://secure.gravatar.com" rel="nofollow noopener">secure.gravatar.com</a> 也被污染了，这是要干嘛啊？还让人用不用了？
+	]]></content>
+</entry><entry>
+	<title>[程序员] usdt 有类似 bitcore 这样本地钱包客户端吗？钱包装在自己机器上会安心很多。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825184#reply15" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825184</id>
 	<published>2021-12-29T16:24:55Z</published>
-	<updated>2021-12-29T16:21:55Z</updated>
+	<updated>2021-12-30T00:42:22Z</updated>
 	<author>
 		<name>Infinitify</name>
 		<uri>https://www.v2ex.com/member/Infinitify</uri>
@@ -29,10 +556,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Docker] docker 容器里面没有 yum 运行脚本要安装两个包 怎么办</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825183#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825183#reply11" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825183</id>
 	<published>2021-12-29T16:19:41Z</published>
-	<updated>2021-12-29T16:16:41Z</updated>
+	<updated>2021-12-29T17:36:33Z</updated>
 	<author>
 		<name>ling516</name>
 		<uri>https://www.v2ex.com/member/ling516</uri>
@@ -57,10 +584,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Android] 求助！小米 11Pro，仅能进入 fastboot 的情况能否卸载软件？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825181#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825181#reply2" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825181</id>
 	<published>2021-12-29T16:08:13Z</published>
-	<updated>2021-12-28T16:08:13Z</updated>
+	<updated>2021-12-28T23:24:46Z</updated>
 	<author>
 		<name>sidcid</name>
 		<uri>https://www.v2ex.com/member/sidcid</uri>
@@ -79,25 +606,11 @@
 
 	]]></content>
 </entry><entry>
-	<title>[分享发现] 今晚微博真好玩</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825180#reply6" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825180</id>
-	<published>2021-12-29T16:04:05Z</published>
-	<updated>2021-12-29T16:26:07Z</updated>
-	<author>
-		<name>StrorageBox</name>
-		<uri>https://www.v2ex.com/member/StrorageBox</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>一个人封杀全网，活久见，发个帖纪念一下，哈哈哈哈!</p>
-
-	]]></content>
-</entry><entry>
 	<title>[问与答] 关系型数据库表的数量如果增加到很多很多，是否会影响性能？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825179#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825179#reply2" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825179</id>
 	<published>2021-12-29T16:00:52Z</published>
-	<updated>2021-12-29T16:25:44Z</updated>
+	<updated>2021-12-29T16:52:02Z</updated>
 	<author>
 		<name>LeeReamond</name>
 		<uri>https://www.v2ex.com/member/LeeReamond</uri>
@@ -110,10 +623,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 新人 不会玩服务器，求问几个问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825178#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825178#reply12" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825178</id>
 	<published>2021-12-29T15:36:53Z</published>
-	<updated>2021-12-29T16:14:02Z</updated>
+	<updated>2021-12-29T18:16:23Z</updated>
 	<author>
 		<name>amiwrong123</name>
 		<uri>https://www.v2ex.com/member/amiwrong123</uri>
@@ -132,10 +645,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Android] 初学 Android，请教下当前 2020.3 的 AS 如何获取当前应用的开发版 sha1？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825177#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825177#reply5" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825177</id>
 	<published>2021-12-29T15:33:15Z</published>
-	<updated>2021-12-29T15:42:33Z</updated>
+	<updated>2021-12-29T18:01:28Z</updated>
 	<author>
 		<name>Features</name>
 		<uri>https://www.v2ex.com/member/Features</uri>
@@ -150,10 +663,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 求推荐笔记本，现在有哪些是视网膜屏幕啊，看了 redmi15 增强版， 4799，但是电池续航真的差！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825176#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825176#reply13" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825176</id>
 	<published>2021-12-29T15:16:42Z</published>
-	<updated>2021-12-29T16:00:10Z</updated>
+	<updated>2021-12-29T20:41:32Z</updated>
 	<author>
 		<name>sjmcefc2</name>
 		<uri>https://www.v2ex.com/member/sjmcefc2</uri>
@@ -165,10 +678,10 @@
 	]]></content>
 </entry><entry>
 	<title>[奇思妙想] 分享我做小工具副业一路走来的历程和一些经验(还是小有所获)</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825175#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825175#reply4" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825175</id>
 	<published>2021-12-29T15:06:38Z</published>
-	<updated>2021-12-29T15:50:51Z</updated>
+	<updated>2021-12-29T16:50:51Z</updated>
 	<author>
 		<name>liyu</name>
 		<uri>https://www.v2ex.com/member/liyu</uri>
@@ -258,10 +771,10 @@
 	]]></content>
 </entry><entry>
 	<title>[生活] 老铁们，人防车位能买吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825172#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825172#reply10" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825172</id>
 	<published>2021-12-29T14:33:51Z</published>
-	<updated>2021-12-29T15:09:40Z</updated>
+	<updated>2021-12-29T18:09:40Z</updated>
 	<author>
 		<name>yuan101010</name>
 		<uri>https://www.v2ex.com/member/yuan101010</uri>
@@ -273,10 +786,10 @@
 	]]></content>
 </entry><entry>
 	<title>[iOS] [求助] iOS 调教输入法 不再靠前显示前女友名字</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825171#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825171#reply8" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825171</id>
 	<published>2021-12-29T14:31:36Z</published>
-	<updated>2021-12-29T15:13:26Z</updated>
+	<updated>2021-12-29T20:42:11Z</updated>
 	<author>
 		<name>leverestfish</name>
 		<uri>https://www.v2ex.com/member/leverestfish</uri>
@@ -301,10 +814,10 @@
 	]]></content>
 </entry><entry>
 	<title>[互联网] 如何收到更多的垃圾短信呢？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825166#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825166#reply15" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825166</id>
 	<published>2021-12-29T13:37:20Z</published>
-	<updated>2021-12-29T14:46:14Z</updated>
+	<updated>2021-12-30T00:34:48Z</updated>
 	<author>
 		<name>ospider</name>
 		<uri>https://www.v2ex.com/member/ospider</uri>
@@ -314,10 +827,10 @@
 	]]></content>
 </entry><entry>
 	<title>[NAS] 群晖 Jellyfin 播放 H265 视频卡成狗啊 怎么破 。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825164#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825164#reply10" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825164</id>
 	<published>2021-12-29T13:22:41Z</published>
-	<updated>2021-12-29T14:44:49Z</updated>
+	<updated>2021-12-29T17:03:46Z</updated>
 	<author>
 		<name>callmeliusir</name>
 		<uri>https://www.v2ex.com/member/callmeliusir</uri>
@@ -342,10 +855,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 弱弱问一句，开发了一个批量助手 App,这个违法？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825162#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825162#reply12" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825162</id>
 	<published>2021-12-29T13:02:28Z</published>
-	<updated>2021-12-29T14:15:15Z</updated>
+	<updated>2021-12-29T15:15:15Z</updated>
 	<author>
 		<name>callme110</name>
 		<uri>https://www.v2ex.com/member/callme110</uri>
@@ -372,10 +885,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 请问怎么能提高说话时的表现</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825160#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825160#reply6" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825160</id>
 	<published>2021-12-29T12:59:54Z</published>
-	<updated>2021-12-29T13:38:26Z</updated>
+	<updated>2021-12-29T14:38:26Z</updated>
 	<author>
 		<name>1ver</name>
 		<uri>https://www.v2ex.com/member/1ver</uri>
@@ -453,10 +966,10 @@
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 年终奖合并计税延迟到 2023 年底了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825154#reply17" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825154#reply20" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825154</id>
 	<published>2021-12-29T12:20:40Z</published>
-	<updated>2021-12-29T13:46:00Z</updated>
+	<updated>2021-12-29T16:46:00Z</updated>
 	<author>
 		<name>Jooooooooo</name>
 		<uri>https://www.v2ex.com/member/Jooooooooo</uri>
@@ -481,10 +994,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 大家是如何解决外出时 USB C 口和 A 口的问题的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825150#reply21" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825150#reply28" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825150</id>
 	<published>2021-12-29T12:08:35Z</published>
-	<updated>2021-12-29T14:38:57Z</updated>
+	<updated>2021-12-29T19:58:37Z</updated>
 	<author>
 		<name>deadtomb</name>
 		<uri>https://www.v2ex.com/member/deadtomb</uri>
@@ -537,10 +1050,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有在线制作数据大屏的互联网工具平台吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825145#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825145#reply2" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825145</id>
 	<published>2021-12-29T11:34:01Z</published>
-	<updated>2021-12-29T11:34:01Z</updated>
+	<updated>2021-12-29T12:34:01Z</updated>
 	<author>
 		<name>Kakarrot</name>
 		<uri>https://www.v2ex.com/member/Kakarrot</uri>
@@ -560,10 +1073,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 最近回家了发现断断续续的会断网，看看大家有没有什么头绪</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825144#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825144#reply5" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825144</id>
 	<published>2021-12-29T11:23:57Z</published>
-	<updated>2021-12-29T15:47:58Z</updated>
+	<updated>2021-12-29T16:47:58Z</updated>
 	<author>
 		<name>LxnChan</name>
 		<uri>https://www.v2ex.com/member/LxnChan</uri>
@@ -597,10 +1110,10 @@
 	]]></content>
 </entry><entry>
 	<title>[游戏] 求推荐 iOS 上战棋类的游戏，《梦幻模拟战》（太肝了）单机版那种</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825143#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825143#reply6" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825143</id>
 	<published>2021-12-29T11:20:07Z</published>
-	<updated>2021-12-29T13:04:42Z</updated>
+	<updated>2021-12-29T14:04:42Z</updated>
 	<author>
 		<name>magic3584</name>
 		<uri>https://www.v2ex.com/member/magic3584</uri>
@@ -867,10 +1380,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] todesk 云游戏模式？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825140#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825140#reply6" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825140</id>
 	<published>2021-12-29T10:54:04Z</published>
-	<updated>2021-12-29T14:44:18Z</updated>
+	<updated>2021-12-29T18:50:57Z</updated>
 	<author>
 		<name>a5b6c7d8</name>
 		<uri>https://www.v2ex.com/member/a5b6c7d8</uri>
@@ -881,10 +1394,10 @@
 	]]></content>
 </entry><entry>
 	<title>[硬件] 请教诸位老哥，现在比较推荐的黑苹果 mini 主机有哪些呀</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825139#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825139#reply1" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825139</id>
 	<published>2021-12-29T10:52:48Z</published>
-	<updated>2021-12-29T10:52:48Z</updated>
+	<updated>2021-12-29T11:52:48Z</updated>
 	<author>
 		<name>yunxuanhao</name>
 		<uri>https://www.v2ex.com/member/yunxuanhao</uri>
@@ -920,10 +1433,10 @@ CMD 没有执行,怎么解决</p>
 	]]></content>
 </entry><entry>
 	<title>[macOS] 拼音输入法输入单词 release，最后的 se 两个字母自动消失</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825137#reply17" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825137#reply18" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825137</id>
 	<published>2021-12-29T10:35:12Z</published>
-	<updated>2021-12-29T13:05:59Z</updated>
+	<updated>2021-12-29T14:05:59Z</updated>
 	<author>
 		<name>l33ch</name>
 		<uri>https://www.v2ex.com/member/l33ch</uri>
@@ -941,10 +1454,10 @@ CMD 没有执行,怎么解决</p>
 	]]></content>
 </entry><entry>
 	<title>[问与答] 你对电脑显示器的参数要求有哪些？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825135#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825135#reply12" />
 	<id>tag:www.v2ex.com,2021-12-29:/t/825135</id>
 	<published>2021-12-29T10:16:58Z</published>
-	<updated>2021-12-29T14:41:08Z</updated>
+	<updated>2021-12-29T15:41:08Z</updated>
 	<author>
 		<name>Tumblr</name>
 		<uri>https://www.v2ex.com/member/Tumblr</uri>
@@ -983,134 +1496,6 @@ CMD 没有执行,怎么解决</p>
 <p>以及平时只看 PDF……现在是都存放到 WebDav 服务器中，只有最简单的文件夹来做区分，很凌乱</p>
 <p>想请问一下各位大佬们，有没有更好的选择……</p>
 
-	]]></content>
-</entry><entry>
-	<title>[程序员] 怎样快速找出图片所在地？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825132#reply8" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825132</id>
-	<published>2021-12-29T09:55:13Z</published>
-	<updated>2021-12-29T10:50:40Z</updated>
-	<author>
-		<name>bingoshe</name>
-		<uri>https://www.v2ex.com/member/bingoshe</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	这是 bing 壁纸，但是没注明是哪里，用搜索引擎识图不准确，看看哪位大佬知道方法或者去过这个地方哈哈哈<br /><a target="_blank" href="https://i.imgur.com/GOvmFpI.jpg" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/GOvmFpI.jpg" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[Apple] Home 也接收到垃圾邀请了，草</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825131#reply7" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825131</id>
-	<published>2021-12-29T09:48:48Z</published>
-	<updated>2021-12-29T12:13:19Z</updated>
-	<author>
-		<name>yousabuk</name>
-		<uri>https://www.v2ex.com/member/yousabuk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最新的 Gmail 注册的 apple ip ，没有登录过任何第三方 App ，使用的 iPhone 上只有微信一个国产 app ，而且不可能猜出来的，竟然也能接收到澳门威尼斯的垃圾要求，真的是服了 apple 对于垃圾信息的过滤了。</p>
-<p>家庭共享泄漏的？？？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[上海] [转租] 11 号线安亭地铁站，紫荆四村，次卧，独卫， 1000 元/月</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825130#reply0" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825130</id>
-	<published>2021-12-29T09:48:27Z</published>
-	<updated>2021-12-29T09:48:27Z</updated>
-	<author>
-		<name>XhstormR02</name>
-		<uri>https://www.v2ex.com/member/XhstormR02</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>[房源] 因公司方向转变需要转移工作城市，个人转租，原始户型非隔断，房东住在附近有问题随时上门解决；</p>
-<p>[转租手续费] 无转租手续费，无中介费，直接和房东签约。 房租押一付三；</p>
-<p>[可入住时间]  12 月底可以入住；</p>
-<p>[看房时间] 提前联系，可随时看房；</p>
-<p>[房间规格] 朝北次卧（ 14㎡），5 楼，带阁楼，3 室 1 厅 1 厨 3 卫，其中一个卫生间在阁楼上你可以独用，也可以选择使用客卫。阁楼空间很大可以住人也可以作为健身区活动室，目前在租的另外两个室友是男生，都在汽车创新港从事 IT 的工作人员，作息规律；</p>
-<p>[交通] 距离 11 号线安亭地铁站，步行大概 5 分钟。出门就是安亭汽车站，有 30min 直达虹桥枢纽 的嘉虹 3 线和驿动班车；距离汽车城、汽车创新港非常近，公交班次多；</p>
-<p>[周边配套] 距离安亭最大的综合商场嘉亭荟 5min 步行路程。周边有安亭集贸市场和安亭图书馆、文体中心等一系列配套设施</p>
-<p>WX:xhstormr</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img1.doubanio.com/view/group_topic/l/public/p517529267.webp"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img9.doubanio.com/view/group_topic/l/public/p517529266.webp"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[Java] 项目运行过程中突然挂了，只留下这么一句话，求教各位大佬指点迷津。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825128#reply2" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825128</id>
-	<published>2021-12-29T09:46:05Z</published>
-	<updated>2021-12-29T07:46:05Z</updated>
-	<author>
-		<name>liufude66</name>
-		<uri>https://www.v2ex.com/member/liufude66</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>日志只有这么一句：
-malloc_consolidate(): invalid chunk size</p>
-<p>真心看不懂。。。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 阅读英文内容，怎么才能快速抓住重点</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825127#reply10" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825127</id>
-	<published>2021-12-29T09:44:32Z</published>
-	<updated>2021-12-29T10:53:43Z</updated>
-	<author>
-		<name>x97bgt</name>
-		<uri>https://www.v2ex.com/member/x97bgt</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我英文普通阅读没问题，但是效率和体验却远不如中文文章。</p>
-<p>看中文，我会先全文扫一遍，了解整体结构后再挑着读。有时候看一些新闻，细节都是略过的，就快速扫过了解一下发生了什么事。</p>
-<p>但看英文内容，就做不到这样了。必须是集中注意力，从头看到尾，心里才会安稳。很难能通过先浏览全文来判断文章结构，不能分辨哪些是可以跳过的哪些是需要重点阅读的。</p>
-<p>总的来说，在快速阅读里，中文文章里我能抓到关键的词语，但英文就不行，每个单词看起来都同样重要。这主要针对的是博客、技术文章等一些长文，阅读之前你不知道它的主题。如果是主动搜索，拿着问题去 stackoverflow 看回答，那就跟中文一样很轻松了。</p>
-<p>这导致我看英文很痛苦。需要集中 100%的注意力，还经常感觉看完后没什么收获</p>
-<p>v 站的老兄们对此有什么心得和建议吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[互联网] 看到一个小老弟关注了一个域名 10 年</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825126#reply3" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825126</id>
-	<published>2021-12-29T09:29:10Z</published>
-	<updated>2021-12-29T10:30:35Z</updated>
-	<author>
-		<name>isno</name>
-		<uri>https://www.v2ex.com/member/isno</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我关注一个域名也 15 年了</p>
-<p><a href="http://isno.com" rel="nofollow">isno.com</a> 06 年开始关注，每年打开留意一下</p>
-<p>从 06 年 2000 多美金，涨到现在 28000 美金，15 年了，还是没卖出去</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 搞了个 ThinkPHP 3.x 版本的长期支持版本</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825124#reply9" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825124</id>
-	<published>2021-12-29T09:22:41Z</published>
-	<updated>2021-12-29T13:58:22Z</updated>
-	<author>
-		<name>xiaoyanbot</name>
-		<uri>https://www.v2ex.com/member/xiaoyanbot</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题： <a target="_blank" href="https://github.com/ThinkPHP-LTS/ThinkPHP-3-LTS" rel="nofollow noopener">https://github.com/ThinkPHP-LTS/ThinkPHP-3-LTS</a><br /><br />打算：持续维护 ThinkPHP 3.x 版本的语法，使用现代的 composer 等类库，但保持对原有语法和用法的兼容，以便此前程序可以平滑迁移升级。<br /><br />计划：<br />目前发现 PHP 7 上有不兼容，准备修复 PHP 7 的不兼容；<br />发现一些 TP5 、TP6 的比较好的特性，进行引入<br />关注和验证可能的漏洞情况，尝试修复。 增加一些主动防御的插件机制。<br /><br /><br />欢迎交流
-	]]></content>
-</entry><entry>
-	<title>[Spark] 有没有不错的 SparkStreaming+Kafka 的开源项目可以用来入门和进阶？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/825121#reply0" />
-	<id>tag:www.v2ex.com,2021-12-29:/t/825121</id>
-	<published>2021-12-29T09:12:52Z</published>
-	<updated>2021-12-29T09:12:52Z</updated>
-	<author>
-		<name>depress</name>
-		<uri>https://www.v2ex.com/member/depress</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最好能直接对标企业开发需求不是纯算子使用框架搭建的那种
 	]]></content>
 </entry>
 </feed>
