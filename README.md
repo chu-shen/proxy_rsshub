@@ -14,7 +14,7 @@ https://github.com/wdssmq/proxy_rsshub
 
 ---start---
 
-2022-01-09 16:13:47
+2022-01-09 16:41:09
 
 title: The Airbnb Tech Blog - Medium
 
@@ -27,6 +27,10 @@ path: [https://www.v2ex.com/index.xml](xml/https:__www.v2ex.com_index.xml.xml "v
 title: nyaa [Nemuri]
 
 path: [https://nyaa.si/?page=rss&u=Nemuri](xml/https:__nyaa.si_?page=rss&u=Nemuri.xml "nyaa [Nemuri]") 「[raw](xml/https:__nyaa.si_?page=rss&u=Nemuri.xml?raw=true "nyaa [Nemuri]")」
+
+title: nyaa iDOLM@STER lossless
+
+path: [https://nyaa.si/?page=rss&q=iDOLM%40STER+&c=2_1&f=0](xml/https:__nyaa.si_?page=rss&q=iDOLM%40STER_&c=2_1&f=0.xml "nyaa iDOLM@STER lossless") 「[raw](xml/https:__nyaa.si_?page=rss&q=iDOLM%40STER_&c=2_1&f=0.xml?raw=true "nyaa iDOLM@STER lossless")」
 
 
 ---end---
