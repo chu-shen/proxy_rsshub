@@ -8,15 +8,131 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-01-15T16:20:59Z</updated>
+<updated>2022-01-16T00:54:10Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[Apple] Safari is completely BROKEN at this time</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828516#reply0" />
+	<id>tag:www.v2ex.com,2022-01-16:/t/828516</id>
+	<published>2022-01-16T00:57:10Z</published>
+	<updated>2022-01-16T00:54:10Z</updated>
+	<author>
+		<name>INFP</name>
+		<uri>https://www.v2ex.com/member/INFP</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>设备是 M1 Air 16GB+1T ，Safari 极度不稳定，打开三四个标签页就再也打不开新页面了，一直提示</p>
+<p>The operation couldn't be completed. No space left on device. (NSPOSIXErrorDomain:28)</p>
+<p>完全没有办法使用，你永远不知道下一个 tab 能不能打开。</p>
+<p>看了一圈论坛，有很多人也遇到了相同的问题，而且都是 Monterey 之后出现的。</p>
+<p>到底是该怪含三量呢，还是该怪 Work from home 呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[MacBook Pro] 关于用以太网同时使用 Little Snitch 会造成断网的疑惑</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828515#reply0" />
+	<id>tag:www.v2ex.com,2022-01-16:/t/828515</id>
+	<published>2022-01-16T00:40:07Z</published>
+	<updated>2022-01-16T00:40:07Z</updated>
+	<author>
+		<name>Rooney1</name>
+		<uri>https://www.v2ex.com/member/Rooney1</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近折腾网线，就顺便随手测速，然后我发现一旦在有线连接的情况下使用测速（带宽是 1000m ）或者全速下载，过一会以太网那里就会显示 「自动分配 IP 」。。。ip 就变成 169.254.xxxx 接着肯定就不能打开网页了，我就跟着网络上的解决方法尝试然而都没有解决。。。除非重启电脑才能恢复正常，有时候就算是不下载测速多开几个网页也会出现这种情况，然后我也换了路由器和其他电脑排除测试。。</p>
+<p>结果就是无线网络下任何设备都不会出现问题，有线直连 imac ，老 mbp 均无问题。存在问题的就是新的 m1 mbp 使用有线网络一阵子会断网，显示 「自动分配 IP 」</p>
+<p>后来，我在安全模式下试了一下也是不会断网的，排除了网口</p>
+<p>因为以前在 imac 上一直用 Little Snitch ，所以换了本子也一直用，以致于开始并没有发现是 Little Snitch 的问题，后来删掉网络里的 Little Snitch 后一切正常</p>
+<p>但是我还是很想继续用这个软件，请教各位彦祖是我设置出现了什么问题么？
+另外论坛之前还有人提到 mac 上百度网盘下载会断网，我不清楚是不是也是这个原因</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Go 编程语言] 哪种方式对短链接服务做基准方式合适些? [golang]</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828514#reply1" />
+	<id>tag:www.v2ex.com,2022-01-15:/t/828514</id>
+	<published>2022-01-15T23:52:42Z</published>
+	<updated>2022-01-15T23:52:42Z</updated>
+	<author>
+		<name>xoxo419</name>
+		<uri>https://www.v2ex.com/member/xoxo419</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>目前想到的是两种方式</p>
+<ul>
+<li>使用 golang 自带的基准测试</li>
+<li>借助第三方 wkr 或 JMeter</li>
+</ul>
+<p>想用 golang Benchmark, 但是对数据准备有点疑虑</p>
+<h3>关于数据准备</h3>
+<ol>
+<li>长链接数据是先批量生成到文本文件中然后读取到测试用例中</li>
+<li>在基准测试生成及测试 同时进行</li>
+</ol>
+<p>两种方式哪种合适些，或还是有其他更好的方式呢？</p>
+<pre><code>func BenchmarkToShortUrl(b *testing.B) {
+	// 方式 1 这儿读取批量生成好的 URL
+
+	for i := 0; i &lt; b.N; i++ {
+    	// 方式 2 这里写生成 URL 代码
+		url := "http://www.xxxxx.com/QlLxLlUpMZFzRaXcteNt/hyuoAOdzGlmTDjuhfIKx/QyCpHrjAYcIQpvxDJAiM/"
+		toShortUrl(url)
+	}
+}
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[反馈] 未登录时访问受限制节点中的主题的跳转问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828512#reply0" />
+	<id>tag:www.v2ex.com,2022-01-15:/t/828512</id>
+	<published>2022-01-15T18:12:38Z</published>
+	<updated>2022-01-15T18:12:38Z</updated>
+	<author>
+		<name>asde111</name>
+		<uri>https://www.v2ex.com/member/asde111</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>现象：例如水深火热节点中的帖子，未登录时访问会 302 到 <a href="https://www.v2ex.com/restricted" rel="nofollow">https://www.v2ex.com/restricted</a> ，再 302 到登录页面，此时地址是 <a href="https://www.v2ex.com/signin?next=%2Frestricted" rel="nofollow">https://www.v2ex.com/signin?next=%2Frestricted</a> ，导致登录完会跳转回 <a href="https://www.v2ex.com/restricted" rel="nofollow">https://www.v2ex.com/restricted</a> 而不是原帖子</p>
+<p>预期：未登录时访问应该先 302 到登录页面 <a href="https://www.v2ex.com/signin?next=/t/xxxxxx" rel="nofollow">https://www.v2ex.com/signin?next=/t/xxxxxx</a> ，登录后跳转回原帖子，再根据用户的权限决定是否跳转到 <a href="https://www.v2ex.com/restricted" rel="nofollow">https://www.v2ex.com/restricted</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 无线路由器及电视盒子问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828510#reply0" />
+	<id>tag:www.v2ex.com,2022-01-15:/t/828510</id>
+	<published>2022-01-15T16:36:36Z</published>
+	<updated>2022-01-15T16:36:36Z</updated>
+	<author>
+		<name>RichardY</name>
+		<uri>https://www.v2ex.com/member/RichardY</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我有个海外版电视盒子，安装了影视类的应用来看剧，但看着看着就会出现看 10 秒卡 2 秒（出现一个加载的圈）。我不清楚到底是什么原因造成的，不同的剧都会出现这个问题，不同的 app 也都出现这个问题，而且由于我担心是无限路由器原因（盒子只能用无线网，路由器距离电视盒子也不远，并且没有墙），所以路由器也换过（固件也试过原装的和自己刷 openwrt ），仍然还是有这个问题，想请教是为什么？</p>
+<p>顺便还想问一下有没有什么能刷 openwrt 的，信号好的路由器推荐？</p>
+<p>谢谢</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Android] 某某出行 APP，如何避免自动缩放地图？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828509#reply3" />
+	<id>tag:www.v2ex.com,2022-01-15:/t/828509</id>
+	<published>2022-01-15T16:28:00Z</published>
+	<updated>2022-01-15T18:53:40Z</updated>
+	<author>
+		<name>abc8678</name>
+		<uri>https://www.v2ex.com/member/abc8678</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	每次想看一下范围边界，或者想看看禁停点。双击或两指放大之后，如果要拖动或继续放大的话，手就要很快才行，或者用一个手指固定住。不然地图就立刻自动缩放，把整个城市缩为一个小点。我再次放大，它又自动缩回去了。有没有办法锁住它？滴水到屏幕上按住吗？<br /><br />有时候想看着边界，走到边角再下来锁车，结果一路上不仅要拿着手机，还要一直按着屏幕，不然地图的比例尺又立刻变化了
+	]]></content>
+</entry><entry>
 	<title>[程序员] tmux 不支持 rz / sz ，于是有一个兼容 tmux 的 trz / tsz ( trzsz )，可以与 iTerm2 一起用，还有一个不错的进度条。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828507#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828507#reply4" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828507</id>
 	<published>2022-01-15T15:40:30Z</published>
-	<updated>2022-01-15T16:20:59Z</updated>
+	<updated>2022-01-15T17:20:59Z</updated>
 	<author>
 		<name>LonnyWong</name>
 		<uri>https://www.v2ex.com/member/LonnyWong</uri>
@@ -68,10 +184,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[生活] 《我来》什么狗屎注重用户隐私，根本就是狗屁！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828503#reply22" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828503#reply33" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828503</id>
 	<published>2022-01-15T15:10:45Z</published>
-	<updated>2022-01-15T16:15:12Z</updated>
+	<updated>2022-01-15T18:58:27Z</updated>
 	<author>
 		<name>lidiostic</name>
 		<uri>https://www.v2ex.com/member/lidiostic</uri>
@@ -101,10 +217,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 这样的小主机怎么样？当作 htpc，播放蓝光 4k hdr 电影。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828501#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828501#reply2" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828501</id>
 	<published>2022-01-15T14:59:38Z</published>
-	<updated>2022-01-15T15:07:13Z</updated>
+	<updated>2022-01-15T17:11:22Z</updated>
 	<author>
 		<name>stephen2009</name>
 		<uri>https://www.v2ex.com/member/stephen2009</uri>
@@ -114,10 +230,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[Ubuntu] 本地安装 Ubuntu Server 奇慢</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828500#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828500#reply3" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828500</id>
 	<published>2022-01-15T14:56:10Z</published>
-	<updated>2022-01-15T11:56:10Z</updated>
+	<updated>2022-01-15T12:56:10Z</updated>
 	<author>
 		<name>mafeifan</name>
 		<uri>https://www.v2ex.com/member/mafeifan</uri>
@@ -127,10 +243,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[Node.js] 基于 Express 和 TypeScript 写了一个快速开发的 API Server</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828499#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828499#reply6" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828499</id>
 	<published>2022-01-15T14:46:01Z</published>
-	<updated>2022-01-15T15:00:23Z</updated>
+	<updated>2022-01-15T18:00:23Z</updated>
 	<author>
 		<name>zorn</name>
 		<uri>https://www.v2ex.com/member/zorn</uri>
@@ -154,10 +270,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[ WATCH] watchOS 版的微信是史上最垃圾的应用，没有之一。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828497#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828497#reply6" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828497</id>
 	<published>2022-01-15T14:31:37Z</published>
-	<updated>2022-01-15T11:31:37Z</updated>
+	<updated>2022-01-15T16:31:37Z</updated>
 	<author>
 		<name>klementina</name>
 		<uri>https://www.v2ex.com/member/klementina</uri>
@@ -167,29 +283,11 @@ public interface TestClient {
 
 	]]></content>
 </entry><entry>
-	<title>[iPhone] Google Workspace Enterpress Standard 招队友</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828496#reply0" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828496</id>
-	<published>2022-01-15T14:31:00Z</published>
-	<updated>2022-01-15T14:30:00Z</updated>
-	<author>
-		<name>icootoo</name>
-		<uri>https://www.v2ex.com/member/icootoo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>Google Workspace Enterpress Standard 谷歌网盘无限容量正规车，招 5 个队友</p>
-<p>6 元一个月，开团队盘给你独享，无限容量</p>
-<p>我开好团队盘，把你谷歌账号拉进来做管理员，然后你把我的号 t 出去，就你一个人，给无限空间</p>
-<p>为什么是开团队盘，因为新开个用户，谷歌又要收一份钱</p>
-<p>需要的朋友加 vx：aWZMb3ZlV2FzVHJ1ZQ==</p>
-
-	]]></content>
-</entry><entry>
 	<title>[程序员] 如何避免“扣减了积分，但是没有成功创建订单”？ - 分布式事务相关</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828494#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828494#reply13" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828494</id>
 	<published>2022-01-15T13:51:44Z</published>
-	<updated>2022-01-15T15:28:49Z</updated>
+	<updated>2022-01-15T19:08:14Z</updated>
 	<author>
 		<name>JasonLaw</name>
 		<uri>https://www.v2ex.com/member/JasonLaw</uri>
@@ -221,10 +319,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 将近两个月时间电信终于把卡板给我换了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828492#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828492#reply6" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828492</id>
 	<published>2022-01-15T13:48:54Z</published>
-	<updated>2022-01-15T14:09:56Z</updated>
+	<updated>2022-01-15T16:09:56Z</updated>
 	<author>
 		<name>anbobi</name>
 		<uri>https://www.v2ex.com/member/anbobi</uri>
@@ -234,10 +332,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 问下 kotlin 中的继承问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828491#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828491#reply3" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828491</id>
 	<published>2022-01-15T13:48:21Z</published>
-	<updated>2022-01-15T13:57:38Z</updated>
+	<updated>2022-01-15T14:57:38Z</updated>
 	<author>
 		<name>swhoro</name>
 		<uri>https://www.v2ex.com/member/swhoro</uri>
@@ -270,10 +368,10 @@ public interface TestClient {
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] Genius Bar 更换 TopCase 结果电池没换...</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828490#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828490#reply17" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828490</id>
 	<published>2022-01-15T13:44:20Z</published>
-	<updated>2022-01-15T16:09:06Z</updated>
+	<updated>2022-01-15T18:28:42Z</updated>
 	<author>
 		<name>freddie0</name>
 		<uri>https://www.v2ex.com/member/freddie0</uri>
@@ -386,10 +484,10 @@ redis-server /usr/local/redis/etc/redis.conf#开启 redis
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 某东南亚公司，招起了「舆情」「监测」相关的岗位</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828480#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828480#reply3" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828480</id>
 	<published>2022-01-15T12:38:04Z</published>
-	<updated>2022-01-15T15:45:12Z</updated>
+	<updated>2022-01-15T17:34:17Z</updated>
 	<author>
 		<name>pikaqiu555</name>
 		<uri>https://www.v2ex.com/member/pikaqiu555</uri>
@@ -436,10 +534,10 @@ v 友可以给点建议吗？   </p>
 	]]></content>
 </entry><entry>
 	<title>[分享发现] [电影资源] 最近发现一个比较豆瓣电影的油猴脚本，用起来很方便，分享给大家</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828477#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828477#reply1" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828477</id>
 	<published>2022-01-15T12:27:29Z</published>
-	<updated>2022-01-15T12:26:29Z</updated>
+	<updated>2022-01-15T13:26:29Z</updated>
 	<author>
 		<name>anchao951220</name>
 		<uri>https://www.v2ex.com/member/anchao951220</uri>
@@ -461,10 +559,10 @@ v 友可以给点建议吗？   </p>
 	]]></content>
 </entry><entry>
 	<title>[问与答] 苹果美国官网有中文客服吗？打过去听不懂啊。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828476#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828476#reply12" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828476</id>
 	<published>2022-01-15T12:06:03Z</published>
-	<updated>2022-01-15T14:09:57Z</updated>
+	<updated>2022-01-15T19:47:24Z</updated>
 	<author>
 		<name>zjvbqla</name>
 		<uri>https://www.v2ex.com/member/zjvbqla</uri>
@@ -532,10 +630,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[地球] fsou 无法访问了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828472#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828472#reply9" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828472</id>
 	<published>2022-01-15T11:51:10Z</published>
-	<updated>2022-01-15T15:40:03Z</updated>
+	<updated>2022-01-15T18:44:35Z</updated>
 	<author>
 		<name>JsonTu</name>
 		<uri>https://www.v2ex.com/member/JsonTu</uri>
@@ -545,10 +643,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[Apple] Apple pay 银联卡码合一难产了？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828471#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828471#reply10" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828471</id>
 	<published>2022-01-15T11:41:25Z</published>
-	<updated>2022-01-15T16:19:44Z</updated>
+	<updated>2022-01-15T17:34:04Z</updated>
 	<author>
 		<name>fansvista</name>
 		<uri>https://www.v2ex.com/member/fansvista</uri>
@@ -593,10 +691,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 软路由+AP 下 apple tv 和 iPhone 无法通信</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828469#reply14" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828469#reply17" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828469</id>
 	<published>2022-01-15T11:23:03Z</published>
-	<updated>2022-01-15T14:32:16Z</updated>
+	<updated>2022-01-15T19:29:52Z</updated>
 	<author>
 		<name>leonme</name>
 		<uri>https://www.v2ex.com/member/leonme</uri>
@@ -606,10 +704,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[问与答] Win11 这个 BUG 有点崩溃</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828468#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828468#reply2" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828468</id>
 	<published>2022-01-15T11:17:31Z</published>
-	<updated>2022-01-15T11:17:31Z</updated>
+	<updated>2022-01-15T12:17:31Z</updated>
 	<author>
 		<name>pipixia</name>
 		<uri>https://www.v2ex.com/member/pipixia</uri>
@@ -621,10 +719,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[支付宝] 支付宝被封了咋办？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828467#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828467#reply7" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828467</id>
 	<published>2022-01-15T11:13:11Z</published>
-	<updated>2022-01-15T12:33:21Z</updated>
+	<updated>2022-01-15T13:33:21Z</updated>
 	<author>
 		<name>LiuJiang</name>
 		<uri>https://www.v2ex.com/member/LiuJiang</uri>
@@ -647,10 +745,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[电影] 请问黑客帝国系列讲的是什么俗气的爱情故事吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828465#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828465#reply3" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828465</id>
 	<published>2022-01-15T11:03:58Z</published>
-	<updated>2022-01-15T09:03:58Z</updated>
+	<updated>2022-01-15T10:03:58Z</updated>
 	<author>
 		<name>Building</name>
 		<uri>https://www.v2ex.com/member/Building</uri>
@@ -661,10 +759,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[Apple] 用了多年的 17 年 MBP，想等明年 M2 的 MBA。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828464#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828464#reply14" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828464</id>
 	<published>2022-01-15T11:01:33Z</published>
-	<updated>2022-01-15T16:17:54Z</updated>
+	<updated>2022-01-15T19:30:51Z</updated>
 	<author>
 		<name>YoungKing6</name>
 		<uri>https://www.v2ex.com/member/YoungKing6</uri>
@@ -689,10 +787,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[PowerShell] PowerShell 竟然强悍如斯！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828462#reply22" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828462#reply23" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828462</id>
 	<published>2022-01-15T10:35:09Z</published>
-	<updated>2022-01-15T13:47:56Z</updated>
+	<updated>2022-01-15T16:28:11Z</updated>
 	<author>
 		<name>Tumblr</name>
 		<uri>https://www.v2ex.com/member/Tumblr</uri>
@@ -705,10 +803,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[程序员] 心浮气躁的时候，你是怎么静下来的？(V 友整理)</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828460#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828460#reply6" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828460</id>
 	<published>2022-01-15T10:29:26Z</published>
-	<updated>2022-01-15T15:45:46Z</updated>
+	<updated>2022-01-15T17:21:53Z</updated>
 	<author>
 		<name>fy1206</name>
 		<uri>https://www.v2ex.com/member/fy1206</uri>
@@ -753,10 +851,10 @@ func parse(jsonString string) (i interface{}) {
 	]]></content>
 </entry><entry>
 	<title>[创业组队] 关于 VR 养老，我们重新思考，把重心聚焦在了数字宇宙的 VR 导游上。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828458#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828458#reply2" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828458</id>
 	<published>2022-01-15T10:10:03Z</published>
-	<updated>2022-01-15T10:10:03Z</updated>
+	<updated>2022-01-15T12:10:03Z</updated>
 	<author>
 		<name>wangshushu</name>
 		<uri>https://www.v2ex.com/member/wangshushu</uri>
@@ -906,10 +1004,10 @@ c1c0fd7328d4   mongo                       "docker-entrypoint.s…"   About an h
 	]]></content>
 </entry><entry>
 	<title>[分享创造] Hugo 博客主题 Icarus-Lite</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828453#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828453#reply5" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828453</id>
 	<published>2022-01-15T09:15:06Z</published>
-	<updated>2022-01-15T15:56:17Z</updated>
+	<updated>2022-01-15T19:18:37Z</updated>
 	<author>
 		<name>MrBrother</name>
 		<uri>https://www.v2ex.com/member/MrBrother</uri>
@@ -972,10 +1070,10 @@ c1c0fd7328d4   mongo                       "docker-entrypoint.s…"   About an h
 	]]></content>
 </entry><entry>
 	<title>[路由器] 家里 R2S 老是断网，有没有补救措施？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828450#reply35" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828450#reply39" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828450</id>
 	<published>2022-01-15T08:37:11Z</published>
-	<updated>2022-01-15T16:20:14Z</updated>
+	<updated>2022-01-15T17:38:05Z</updated>
 	<author>
 		<name>abc8678</name>
 		<uri>https://www.v2ex.com/member/abc8678</uri>
@@ -985,10 +1083,10 @@ c1c0fd7328d4   mongo                       "docker-entrypoint.s…"   About an h
 	]]></content>
 </entry><entry>
 	<title>[汽车] 电动汽车的增程，是不是加多了一个汽油发动机？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828449#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828449#reply6" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828449</id>
 	<published>2022-01-15T08:35:20Z</published>
-	<updated>2022-01-15T12:38:13Z</updated>
+	<updated>2022-01-15T17:36:25Z</updated>
 	<author>
 		<name>pperlee</name>
 		<uri>https://www.v2ex.com/member/pperlee</uri>
@@ -1013,10 +1111,10 @@ c1c0fd7328d4   mongo                       "docker-entrypoint.s…"   About an h
 	]]></content>
 </entry><entry>
 	<title>[云计算] 阿里云已经成为全世界最大的中文内容农场</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828447#reply19" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828447#reply20" />
 	<id>tag:www.v2ex.com,2022-01-15:/t/828447</id>
 	<published>2022-01-15T08:31:54Z</published>
-	<updated>2022-01-15T15:53:32Z</updated>
+	<updated>2022-01-15T16:38:25Z</updated>
 	<author>
 		<name>GM</name>
 		<uri>https://www.v2ex.com/member/GM</uri>
@@ -1040,83 +1138,6 @@ c1c0fd7328d4   mongo                       "docker-entrypoint.s…"   About an h
 <p>开放的办公环境和管理模式，弹性工作时间。英文要求能够正常读写。有兴趣的加 skype:david.deng86 或发邮件到 <a href="mailto:david.deng@axel.org">david.deng@axel.org</a>.</p>
 <p>主页：
 <a href="https://www.axel.org/" rel="nofollow">https://www.axel.org/</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[微信] WeChat 8.0.17 版本,非中国大陆地区也可以用人脸识别认证了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828445#reply0" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828445</id>
-	<published>2022-01-15T07:43:01Z</published>
-	<updated>2022-01-15T07:43:01Z</updated>
-	<author>
-		<name>Nooodw</name>
-		<uri>https://www.v2ex.com/member/Nooodw</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>WeChat 8.0.17 版本,非中国大陆地区也可以用人脸识别认证了,只是新增了隐私协议需要勾选,明确人脸数据是保存在中国大陆服务器的.</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Minecraft] 翻到一个回忆满满的存档，有人一起玩基岩版生存服吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828444#reply3" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828444</id>
-	<published>2022-01-15T07:40:56Z</published>
-	<updated>2022-01-15T08:40:56Z</updated>
-	<author>
-		<name>villivateur</name>
-		<uri>https://www.v2ex.com/member/villivateur</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>翻出来一个三四年前的陈年老档，掸掸灰居然还能用，现在已经更新到 1.18 版本了。</p>
-<p>纯原版生存，以前跟哥们肝了几个月，建了刷铁塔、农场、多个“豪宅”、各种自动化装备，以及长达“数公里”的铁道。</p>
-<p>说实在的，这难道不是“元宇宙”吗？</p>
-<p>服务器地址:</p>
-<p><a href="http://vvs2.vvzero.com:21251" rel="nofollow">vvs2.vvzero.com:21251</a> (ipv4)</p>
-<p><a href="http://vvs2.vvzero.com:21252" rel="nofollow">vvs2.vvzero.com:21252</a> (ipv6)</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Python] pandas 链式赋值总得用 copy</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828443#reply1" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828443</id>
-	<published>2022-01-15T07:26:54Z</published>
-	<updated>2022-01-15T07:41:53Z</updated>
-	<author>
-		<name>n2l</name>
-		<uri>https://www.v2ex.com/member/n2l</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>总会遇到链式赋值的提醒，无奈只能反复用 copy ，请问有没有类似 c 指针之类的操作，我只想修改源数据，要这么多 copy 后的玩意儿干啥</p>
-
-	]]></content>
-</entry><entry>
-	<title>[微信] 微信 iOS 版更新 终于加入语音消息播放暂停功能</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828442#reply6" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828442</id>
-	<published>2022-01-15T07:24:42Z</published>
-	<updated>2022-01-14T16:36:08Z</updated>
-	<author>
-		<name>WanzizZ</name>
-		<uri>https://www.v2ex.com/member/WanzizZ</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.cnbeta.com/articles/tech/1226195.htm" rel="nofollow">https://www.cnbeta.com/articles/tech/1226195.htm</a></p>
-<p>老哥们怎么看</p>
-
-	]]></content>
-</entry><entry>
-	<title>[互联网] 百度搜索调试了无障碍阅读模式，快捷键竟然是 ctrl ( Mac 下 Command ) +shift</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/828441#reply1" />
-	<id>tag:www.v2ex.com,2022-01-15:/t/828441</id>
-	<published>2022-01-15T07:20:28Z</published>
-	<updated>2022-01-15T03:20:28Z</updated>
-	<author>
-		<name>yaoyao1128</name>
-		<uri>https://www.v2ex.com/member/yaoyao1128</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>百度搜索调试了无障碍阅读模式，快捷键竟然是 ctrl ( Mac 下 Command ) + shift ，有愿意 ctrl + shift 切换输入法的用户发现了这个问题…………
-B 站已经好几个测试出现的了……话说开发和测试都是 Mac 用户么……不考虑 Windows 下的案件冲突么……</p>
 
 	]]></content>
 </entry>
