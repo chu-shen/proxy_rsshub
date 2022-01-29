@@ -8,15 +8,144 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-01-28T15:45:42Z</updated>
+<updated>2022-01-29T00:23:55Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[macOS] M1 更新 12.2 之后频繁黑屏死机</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831215#reply1" />
+	<id>tag:www.v2ex.com,2022-01-29:/t/831215</id>
+	<published>2022-01-29T00:06:03Z</published>
+	<updated>2022-01-29T00:23:55Z</updated>
+	<author>
+		<name>MasterCai</name>
+		<uri>https://www.v2ex.com/member/MasterCai</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>更新 12.2 正式版之后，合盖之后再打开总是会黑屏无反应，要么就是所有应用消失只剩一张壁纸并且疯狂弹一堆进程需要输密码，有遇到相同情况的吗？有什么办法回退到上个版本</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 请问比较全面的英文单词词库/字典有哪些？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831213#reply2" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831213</id>
+	<published>2022-01-28T21:47:57Z</published>
+	<updated>2022-01-28T21:59:04Z</updated>
+	<author>
+		<name>Johndo3</name>
+		<uri>https://www.v2ex.com/member/Johndo3</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	遇到一个问题，需要导入指定长度的英文单词，目前没有找到比较全的词库<br />各位有什么建议？
+	]]></content>
+</entry><entry>
+	<title>[问与答] Mysql 事务中使用排它锁无效可能是什么原因导致的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831212#reply0" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831212</id>
+	<published>2022-01-28T21:47:32Z</published>
+	<updated>2022-01-28T21:45:32Z</updated>
+	<author>
+		<name>LeeReamond</name>
+		<uri>https://www.v2ex.com/member/LeeReamond</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题，开发中遇到一个问题</p>
+<pre><code class="language-sql">usd test_db ；
+begin;
+select * from test_table where id = 2 for update;
+commit;
+</code></pre>
+<p>上述代码如果多线程同时执行的话，在前面的线程执行完之前，后面的应该是阻塞的，然而换了一台机器到测试服务器上跑以后，该库中使用相同语句却所有线程都会同时执行完毕，也就是说排他锁失效了。</p>
+<p>想问一下这可能是什么原因导致的，以前没见过这种情况。我使用 explain 解释后确定搜索一定走的是索引（主键），所有搜索语句也都指定了条件，为什么会这样呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[数据库] 浏览了数据库节点所有 39 页的主题，为什么没见有人吐槽 SQL？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831211#reply10" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831211</id>
+	<published>2022-01-28T20:45:29Z</published>
+	<updated>2022-01-29T00:32:47Z</updated>
+	<author>
+		<name>fantix</name>
+		<uri>https://www.v2ex.com/member/fantix</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>好吧我承认我有标题党+软文的目的性，但是我真的把 39 页的主题（和少部分内容）都看了一遍，看到节点里那么多 PingCAP 的文章，我觉得我应该也行（？），毕竟我还是想要正儿八经讨论一下 SQL 本身的。</p>
+<p>背景：10+ 年 Python 工程师，七七八八各种方向都做过，一直对 SQL 在应用开发——尤其是快速迭代的项目——中的使用方式有一些徘徊不定：</p>
+<ul>
+<li>手写 SQL 本身没毛病，但是集成到应用中要写一大堆多余的代码；</li>
+<li>ORM 大多封装的太隐秘了，再加上在几个项目中被坑到过，总体持批评态度；</li>
+<li>Query builder 能解决大部分的问题（ schema 定义、查询组装和重用、生成 SQL ），但是最后临门一脚没法封装成业务对象，还得包一层；</li>
+<li>2017 年有机会（ asyncpg 当时没有合适的 ORM ）用 SQLAlchemy 的 query builder 自己做了一个 ORM （<a href="https://python-gino.org/" rel="nofollow">GINO</a>），加了一个业务对象 loader 功能；</li>
+<li>至此感觉在 SQL 和应用程序之间的这些乱七八糟，基本上就都是这样的了：大部分时间够用了，能提高开发效率；但是啰里啰嗦一大堆，并且关键时候你还是得特别清楚整个技术栈是怎么运行的，该优化 SQL 的时候照样跑不了。</li>
+<li>中间肯定各种 NoSQL 也折腾过，在芝大还试用了 Graph 数据库，也做过 GraphQL API 。感觉各有所长，能在特定场景下发挥优势，但回到普罗大众的项目，还是关系模型最合适常规数据。</li>
+</ul>
+<p>直到 2021 年换到现在的工作，最近翻译了一篇老板写的<a href="https://juejin.cn/post/7057547778087469086" rel="nofollow">博客《 We Can Do Better Than SQL 》</a>，才感觉这些其实都是 SQL 的锅——关系模型是好模型，但被 SQL 这个交互层的接口给搅乱了。当然这里不是说 SQL 一无是处，毕竟现在如此广泛的应用，说明它是十分成功的，必然有其可取之处，类比 PHP 、JavaScript 或者 MySQL （手动大狗头怕是也难以保命了的那种）。</p>
+<p>这篇文章固然是在介绍我现在正参与开发的新开源数据库 <a href="https://www.oschina.net/p/edgedb" rel="nofollow">EdgeDB</a>，但是文中吐槽 SQL 的几个角度还是很有趣的，尤其 NULL 那一块 JavaScript 看了都自愧不如。我简单总结如下，供大家讨论：</p>
+<ol>
+<li>
+<p>正交性问题。</p>
+<p>大概就是说，SQL 语句很难写，特殊情况特别多，基本上没法做语句组合。</p>
+</li>
+<li>
+<p>不够紧凑。</p>
+<p>关键词有 469 个之多，这还只是 PostgreSQL 实现了的部分。就是不太像一门编程语言，比较啰嗦。</p>
+</li>
+<li>
+<p>语言设计不一致。</p>
+<p>NULL 的槽点都在这里，总结来说就是惊喜不断，碎片化也堪忧。如果没有 ORM 的保驾护航，萌新很容易踩坑。</p>
+</li>
+</ol>
+<p>谈及原因，主要说的就是，SQL 最一开始设计的是给非技术人员创建报表用的，人家没想着你能嵌到程序里这个玩法呀，怎么能设计出对工程师友好的语言呢。再加上资本主义的毒瘤把控了标准的制定，IBM 和 Oracle 互相攀比，没心情照顾使用者，有什么就用什么了。反正就是 SQL 到现在已经是这样了，大家也都习惯了，关系模型还得用，也就很少有人会去想搞一个新的语言出来。</p>
+<p>在后面就是 EdgeQL 的介绍了，主要集中在<a href="https://juejin.cn/post/7057547778087469086#heading-7" rel="nofollow">怎么让开发人员爽</a>。我就不多介绍了，有兴趣请自行阅读。</p>
+<p>还是回到主题，关于 SQL 的问题，同学们怎么想？确实影响开发效率和心智吗？以后 SQL 会不会像 C 语言一样，虽然仍是 IT 行业的基石，但很多新项目就会用 Rust 、Swift 、Go 这样的现代语言来开发了吗？查询语言这波能起来吗，要跟吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 移动宽带会阻断国外 IP？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831210#reply4" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831210</id>
+	<published>2022-01-28T19:04:29Z</published>
+	<updated>2022-01-29T00:19:57Z</updated>
+	<author>
+		<name>sun999</name>
+		<uri>https://www.v2ex.com/member/sun999</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	莫名其妙被移动阻断国外 IP 4 个小时，只有国内 IP 可以访问
+	]]></content>
+</entry><entry>
+	<title>[Android] 求助，两台不同的手机被谷歌识别为同一设备</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831208#reply2" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831208</id>
+	<published>2022-01-28T17:31:58Z</published>
+	<updated>2022-01-28T18:48:47Z</updated>
+	<author>
+		<name>toorich</name>
+		<uri>https://www.v2ex.com/member/toorich</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	这个问题比较奇葩，但我相信我不是第一个遇到的。<br /><br />我有两台小米手机，一台 5s Plus （已 root ），一台 MIX 3 ，两台设备均登陆了同一谷歌账号，当时换机的时候用小米换机把旧手机的数据转移了过来，不确定是否和这个有关，现在谷歌账号里这两台设备显示为同一台，一会 MIX 3 一会 5s Plus 的，肿么破啊（悲）
+	]]></content>
+</entry><entry>
+	<title>[职场话题] 校招 offer 对比指教</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831207#reply5" />
+	<id>tag:www.v2ex.com,2022-01-28:/t/831207</id>
+	<published>2022-01-28T17:20:54Z</published>
+	<updated>2022-01-28T18:26:02Z</updated>
+	<author>
+		<name>ak918xp</name>
+		<uri>https://www.v2ex.com/member/ak918xp</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	秋招终于结束了，目前拿了几个工作也开出具体的部门业务线和工资，烦请大家给点建议<br /><br />小红书-基础架构-中间件，根据内部同学说，主要是开发以及维护小红书自己封装的基于 thrift 和 netty 的 rpc 框架，包含服务注册和发现，数据序列化与反序列化，负载均衡，泳道之类的，还有封装别的一些中间件，比如 mysql ，rocketmq 之类的。rpc 框架写的比较成熟了，主要是做做各种测试熟悉框架。然后其他各种中间件主要是对开源版本的再做一层封装，让业务用起来简单点，基础架构部门技术成长性应该不错，就担心小红书下半年上市，走上快手的老路。大小周双倍加班费+上海户口<br /><br />华为云-数字化平台部-网上商城运营平台，跟部门的人聊了一下，主要也是用的是 JAVA 开发，介绍说主要是做华为云官网的网上商城的，主要负责支付交易系统等，感觉是一个销售华为云的电商平台，跟主流互联网大厂的业务范围也比较一致，电商系统通用性比较高，感觉也还行。工作强度是一周五天上班，工作日中两天要加班到 9 点，其余时间正常作息<br /><br />有没有大佬对小弟的 offer 提点建议，感激不尽
+	]]></content>
+</entry><entry>
 	<title>[Windows] 所以 window tray 的这个 bug，从 win95 一直延续到 win11？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831205#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831205#reply7" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831205</id>
 	<published>2022-01-28T15:46:42Z</published>
-	<updated>2022-01-28T15:45:42Z</updated>
+	<updated>2022-01-29T00:14:55Z</updated>
 	<author>
 		<name>phpfpm</name>
 		<uri>https://www.v2ex.com/member/phpfpm</uri>
@@ -56,7 +185,7 @@
 	]]></content>
 </entry><entry>
 	<title>[云修电脑] 遇到一个奇葩电脑问题，大佬来指引我排查方向</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831202#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831202#reply11" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831202</id>
 	<published>2022-01-28T14:33:04Z</published>
 	<updated>2022-01-28T16:17:44Z</updated>
@@ -69,10 +198,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 怎么给 Ubuntu Server 分配公网 IP</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831197#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831197#reply10" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831197</id>
 	<published>2022-01-28T13:56:54Z</published>
-	<updated>2022-01-28T15:34:05Z</updated>
+	<updated>2022-01-28T19:34:05Z</updated>
 	<author>
 		<name>me221</name>
 		<uri>https://www.v2ex.com/member/me221</uri>
@@ -89,10 +218,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 求推荐一款 32 寸的电脑显示器。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831196#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831196#reply1" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831196</id>
 	<published>2022-01-28T13:55:26Z</published>
-	<updated>2022-01-28T13:55:26Z</updated>
+	<updated>2022-01-28T14:55:26Z</updated>
 	<author>
 		<name>chaorenguilai198</name>
 		<uri>https://www.v2ex.com/member/chaorenguilai198</uri>
@@ -141,10 +270,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] idea2021 可以更新吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831192#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831192#reply11" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831192</id>
 	<published>2022-01-28T13:24:24Z</published>
-	<updated>2022-01-28T16:11:54Z</updated>
+	<updated>2022-01-29T00:41:44Z</updated>
 	<author>
 		<name>QZFCANBA</name>
 		<uri>https://www.v2ex.com/member/QZFCANBA</uri>
@@ -167,10 +296,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 微信 QQ 币-Apple Store 余额充值 9 折优惠回来了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831190#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831190#reply4" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831190</id>
 	<published>2022-01-28T12:32:57Z</published>
-	<updated>2022-01-28T13:19:43Z</updated>
+	<updated>2022-01-28T14:19:43Z</updated>
 	<author>
 		<name>YoungKing6</name>
 		<uri>https://www.v2ex.com/member/YoungKing6</uri>
@@ -180,10 +309,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 官网 Satechi 拓展坞速率</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831189#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831189#reply3" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831189</id>
 	<published>2022-01-28T12:27:57Z</published>
-	<updated>2022-01-28T12:26:57Z</updated>
+	<updated>2022-01-28T13:26:57Z</updated>
 	<author>
 		<name>yongfrank</name>
 		<uri>https://www.v2ex.com/member/yongfrank</uri>
@@ -193,10 +322,10 @@
 	]]></content>
 </entry><entry>
 	<title>[ WATCH] 大家一般多久会清洗表带？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831187#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831187#reply13" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831187</id>
 	<published>2022-01-28T12:18:47Z</published>
-	<updated>2022-01-28T14:48:48Z</updated>
+	<updated>2022-01-28T15:48:48Z</updated>
 	<author>
 		<name>gengchun</name>
 		<uri>https://www.v2ex.com/member/gengchun</uri>
@@ -223,10 +352,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 分享一款猫咪的红包封面🧧,颜值拉满</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831185#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831185#reply10" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831185</id>
 	<published>2022-01-28T11:43:26Z</published>
-	<updated>2022-01-28T16:12:35Z</updated>
+	<updated>2022-01-28T17:45:49Z</updated>
 	<author>
 		<name>lanyi96</name>
 		<uri>https://www.v2ex.com/member/lanyi96</uri>
@@ -280,10 +409,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 我也分享一下红包封面</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831181#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831181#reply5" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831181</id>
 	<published>2022-01-28T11:12:16Z</published>
-	<updated>2022-01-28T14:17:57Z</updated>
+	<updated>2022-01-28T15:17:57Z</updated>
 	<author>
 		<name>fox</name>
 		<uri>https://www.v2ex.com/member/fox</uri>
@@ -293,10 +422,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 2000 个微信红包封面，憨态可掬的“小老虎”手写福字~</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831180#reply16" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831180#reply21" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831180</id>
 	<published>2022-01-28T11:11:12Z</published>
-	<updated>2022-01-28T14:31:05Z</updated>
+	<updated>2022-01-28T20:32:23Z</updated>
 	<author>
 		<name>ichigo</name>
 		<uri>https://www.v2ex.com/member/ichigo</uri>
@@ -306,10 +435,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] App Store 余额可以用于 AC+的按月订阅计划吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831179#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831179#reply12" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831179</id>
 	<published>2022-01-28T11:11:10Z</published>
-	<updated>2022-01-28T15:50:06Z</updated>
+	<updated>2022-01-28T16:50:06Z</updated>
 	<author>
 		<name>qq1204076437</name>
 		<uri>https://www.v2ex.com/member/qq1204076437</uri>
@@ -320,10 +449,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 什么情况？手机留学正常，电脑失败？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831177#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831177#reply3" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831177</id>
 	<published>2022-01-28T10:44:36Z</published>
-	<updated>2022-01-28T12:02:04Z</updated>
+	<updated>2022-01-28T14:02:04Z</updated>
 	<author>
 		<name>DopaminePlz</name>
 		<uri>https://www.v2ex.com/member/DopaminePlz</uri>
@@ -348,10 +477,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 最近比较喜欢像素化的风格，写了一个像素化图片的小工具。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831174#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831174#reply4" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831174</id>
 	<published>2022-01-28T10:34:42Z</published>
-	<updated>2022-01-28T11:31:35Z</updated>
+	<updated>2022-01-28T12:31:35Z</updated>
 	<author>
 		<name>ifsct</name>
 		<uri>https://www.v2ex.com/member/ifsct</uri>
@@ -365,10 +494,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 发现 B 站网页端支持 AV1 编码了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831173#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831173#reply1" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831173</id>
 	<published>2022-01-28T10:29:55Z</published>
-	<updated>2022-01-28T10:28:55Z</updated>
+	<updated>2022-01-28T11:28:55Z</updated>
 	<author>
 		<name>meloyang05</name>
 		<uri>https://www.v2ex.com/member/meloyang05</uri>
@@ -392,10 +521,10 @@
 	]]></content>
 </entry><entry>
 	<title>[iPhone] iOS 15.4 实际体验了一下口罩解锁，体感上不如 Watch 解锁。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831170#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831170#reply11" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831170</id>
 	<published>2022-01-28T10:19:00Z</published>
-	<updated>2022-01-28T10:22:48Z</updated>
+	<updated>2022-01-28T12:22:48Z</updated>
 	<author>
 		<name>CivAx</name>
 		<uri>https://www.v2ex.com/member/CivAx</uri>
@@ -413,10 +542,10 @@
 	]]></content>
 </entry><entry>
 	<title>[生活] 请教大家关于怕停车麻烦，导致不想开车的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831166#reply21" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831166#reply28" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831166</id>
 	<published>2022-01-28T10:03:52Z</published>
-	<updated>2022-01-28T16:18:08Z</updated>
+	<updated>2022-01-28T18:23:55Z</updated>
 	<author>
 		<name>nbhaohao</name>
 		<uri>https://www.v2ex.com/member/nbhaohao</uri>
@@ -434,10 +563,10 @@
 	]]></content>
 </entry><entry>
 	<title>[ WATCH] Apple Watch 用户是否有感觉被忽悠到？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831165#reply26" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831165#reply42" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831165</id>
 	<published>2022-01-28T09:58:45Z</published>
-	<updated>2022-01-28T16:09:13Z</updated>
+	<updated>2022-01-28T23:26:26Z</updated>
 	<author>
 		<name>ro2020</name>
 		<uri>https://www.v2ex.com/member/ro2020</uri>
@@ -529,10 +658,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[Apple] [求助] 微信 App Store 充值无法关联 Apple ID，一直在输入手机号循环</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831162#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831162#reply2" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831162</id>
 	<published>2022-01-28T09:37:53Z</published>
-	<updated>2022-01-28T09:37:53Z</updated>
+	<updated>2022-01-28T10:37:53Z</updated>
 	<author>
 		<name>Kamiimeteor</name>
 		<uri>https://www.v2ex.com/member/Kamiimeteor</uri>
@@ -544,10 +673,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[分享创造] GDG “萌虎” 微信红包封面分享</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831161#reply27" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831161#reply33" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831161</id>
 	<published>2022-01-28T09:29:31Z</published>
-	<updated>2022-01-28T14:57:54Z</updated>
+	<updated>2022-01-29T00:51:07Z</updated>
 	<author>
 		<name>hanguokai</name>
 		<uri>https://www.v2ex.com/member/hanguokai</uri>
@@ -557,10 +686,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[Apple] 每更必问， macOS12.3b1 修复了 Cmd+轻触的问题了吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831160#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831160#reply16" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831160</id>
 	<published>2022-01-28T09:29:13Z</published>
-	<updated>2022-01-28T15:46:11Z</updated>
+	<updated>2022-01-28T20:09:42Z</updated>
 	<author>
 		<name>Warren1027</name>
 		<uri>https://www.v2ex.com/member/Warren1027</uri>
@@ -598,10 +727,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[Apple] 因 watch 升级，深刻感受到了 your device is not your&#39;s</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831156#reply28" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831156#reply40" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831156</id>
 	<published>2022-01-28T09:08:37Z</published>
-	<updated>2022-01-28T16:14:38Z</updated>
+	<updated>2022-01-28T04:06:00Z</updated>
 	<author>
 		<name>prin523</name>
 		<uri>https://www.v2ex.com/member/prin523</uri>
@@ -631,7 +760,7 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 清华源镜像站的彩蛋</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831154#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831154#reply7" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831154</id>
 	<published>2022-01-28T09:05:13Z</published>
 	<updated>2022-01-28T15:32:01Z</updated>
@@ -698,10 +827,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[美酒与美食] 肯德基页面设计和麦当劳差的真不是一点半点,都没胃口了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831150#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831150#reply5" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831150</id>
 	<published>2022-01-28T08:43:36Z</published>
-	<updated>2022-01-28T10:24:25Z</updated>
+	<updated>2022-01-28T12:24:25Z</updated>
 	<author>
 		<name>paopjian</name>
 		<uri>https://www.v2ex.com/member/paopjian</uri>
@@ -732,10 +861,10 @@ from (
 	]]></content>
 </entry><entry>
 	<title>[程序员] 音视频春节假期内卷指南（实操）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831148#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831148#reply3" />
 	<id>tag:www.v2ex.com,2022-01-28:/t/831148</id>
 	<published>2022-01-28T08:29:59Z</published>
-	<updated>2022-01-28T10:14:43Z</updated>
+	<updated>2022-01-28T11:14:43Z</updated>
 	<author>
 		<name>glumess</name>
 		<uri>https://www.v2ex.com/member/glumess</uri>
@@ -796,108 +925,6 @@ from (
 <p>最后欢迎关注微信公众号 <strong>音视频开发进阶</strong> 。</p>
 <p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://image.glumes.com/blog_image/20211114145512.png"/></p>
 
-	]]></content>
-</entry><entry>
-	<title>[Visual Studio Code] 杰伦们，帮我看看这是什么 VSCode 插件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831147#reply5" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831147</id>
-	<published>2022-01-28T08:29:23Z</published>
-	<updated>2022-01-27T14:35:51Z</updated>
-	<author>
-		<name>DearMark</name>
-		<uri>https://www.v2ex.com/member/DearMark</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://imgur.com/da8QEe8" rel="nofollow">https://imgur.com/da8QEe8</a>
-根据不同代码层次显示不同颜色，找了没找到。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Windows] 想问下有用 server2022 的没, 能不能安装微软商店, 能不能连接 xbox 手柄</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831145#reply5" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831145</id>
-	<published>2022-01-28T08:11:19Z</published>
-	<updated>2022-01-28T11:03:30Z</updated>
-	<author>
-		<name>bthulu</name>
-		<uri>https://www.v2ex.com/member/bthulu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>还有蓝牙驱动有解决了吗</p>
-
-	]]></content>
-</entry><entry>
-	<title>[职场话题] leader 说年终奖不少于几个 W，现在收到确切消息只有几 K</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831144#reply38" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831144</id>
-	<published>2022-01-28T08:06:58Z</published>
-	<updated>2022-01-28T16:11:25Z</updated>
-	<author>
-		<name>a784066538</name>
-		<uri>https://www.v2ex.com/member/a784066538</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>2021 年初，本来想走，结果被 leader 说 前期好好干，年终发不少于 5w, 今天通知年终奖 2K ，心里落差挺大的，付出了多少日夜汗水，加班没加班费，哎，真难啊，为何画饼吃？落差太大了</p>
-<p>leader 倒是从项目中获利 两位数 W ，对此大家怎么看~</p>
-<p>备注：坐标北京，非互联网，没有互联网年终奖高，见笑了啊~</p>
-
-	]]></content>
-</entry><entry>
-	<title>[iPhone] 13pm 微信视频和 FaceTime 模糊</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831143#reply0" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831143</id>
-	<published>2022-01-28T08:06:37Z</published>
-	<updated>2022-01-28T08:03:37Z</updated>
-	<author>
-		<name>shervy</name>
-		<uri>https://www.v2ex.com/member/shervy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	昨天刚入的，微信下载完就去测试了下视频，感觉像糊了，不管是前还是后；另：绝对不是背景虚化<br />FaceTime 也是一样，前置和后面都是朦胧的赶脚，拍照和拍视频倒是没问题，我这是个例？有没有<br />出现这种问题的 V 油。？
-	]]></content>
-</entry><entry>
-	<title>[重庆] 现在成都回重庆需要核酸检测吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831141#reply0" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831141</id>
-	<published>2022-01-28T07:58:07Z</published>
-	<updated>2022-01-28T07:58:07Z</updated>
-	<author>
-		<name>klakekent</name>
-		<uri>https://www.v2ex.com/member/klakekent</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[问与答] 电脑频繁蓝屏如何有效排查？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831138#reply20" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831138</id>
-	<published>2022-01-28T07:49:17Z</published>
-	<updated>2022-01-28T11:16:20Z</updated>
-	<author>
-		<name>wudaye</name>
-		<uri>https://www.v2ex.com/member/wudaye</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>DIY 主机，装了 win11 ，9 代英特尔，稳定使用了 2 个月，一个月前开始出现蓝屏现象，重装 win10 后还是会出现。
-蓝屏代码：CLOCK WATCHDOG TIMEOUT 。网上搜了一下说可能是 CPU 超频导致，但是我用的 BIOS 默认配置，没对任何硬件超过频。
-现象：浏览网页，或者看 B 站视频，系统突然卡死，几秒后蓝屏。强制关机重启，往往在启动后又再次蓝屏。
-复现方法：用浏览器插件批量同时打开 10+个网页，系统负载突然飙升，比较容易复现蓝屏。但是用 aida64 压 CPU 和内存都不复现。
-硬件和驱动：近期添置的唯一硬件是一个 2.4G 无线鼠标，没主动安装驱动，电脑所有驱动都由 win10/11 自动安装。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[创业组队] 2021 独立开发者初尝试 希望 2022 进展顺利</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/831137#reply0" />
-	<id>tag:www.v2ex.com,2022-01-28:/t/831137</id>
-	<published>2022-01-28T07:40:32Z</published>
-	<updated>2022-01-28T07:40:32Z</updated>
-	<author>
-		<name>acmerliu</name>
-		<uri>https://www.v2ex.com/member/acmerliu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	独立开发者真的很艰难。2021 为了更好的独立开发，自学产品交互，研究竞品。2-3 个项目有了雏形。2022 希望能进展顺利，留杭州过年，鼓励一下自己。如果 v 友有做地理开发者 app 上线，挂靠，软著申请，支付申请，个体户等可以沟通交流一下经验。vx:liuning8521 。 也可以合作一起研究想法，实现项目。
 	]]></content>
 </entry>
 </feed>
