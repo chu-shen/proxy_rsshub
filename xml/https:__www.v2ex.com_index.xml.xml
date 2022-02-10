@@ -8,10 +8,277 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-02-09T12:20:01Z</updated>
+<updated>2022-02-10T00:41:14Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[问与答] deepl pro 模拟网页翻译有限制吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832816#reply0" />
+	<id>tag:www.v2ex.com,2022-02-10:/t/832816</id>
+	<published>2022-02-10T00:42:14Z</published>
+	<updated>2022-02-10T00:41:14Z</updated>
+	<author>
+		<name>aries910</name>
+		<uri>https://www.v2ex.com/member/aries910</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>TB 上买了个一个月的试用账号，用来测试模拟网页翻译的，
+不是说没有限制么，连续用了两三个小时就提示
+“该团队账户目前已停用。你目前作为该团队成员无法使用 DeepL Pro 。”</p>
+<p>是账号买的不对，还是接口有什么限制，有用过的大佬给点提醒吗</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 虎牙 PC 网页端是屏蔽了 MutationObserver 功能吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832815#reply0" />
+	<id>tag:www.v2ex.com,2022-02-10:/t/832815</id>
+	<published>2022-02-10T00:41:57Z</published>
+	<updated>2022-02-02T00:40:57Z</updated>
+	<author>
+		<name>thefack</name>
+		<uri>https://www.v2ex.com/member/thefack</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>下面这段代码我试过很多网站，是可以检测到网页改变的，但是对虎牙主播的直播页面完全无效，就算写成扩展也无效，这是怎么做到的？</p>
+<pre><code class="language-js">  // Create callback function to execute when changes are observed
+  let fun= function (records) {
+    // 无论怎么增删元素，都不输出这句
+    console.log("检测到改动", records)
+  }
+
+  // Create an observer instance linked to the callback function
+  let observer = new MutationObserver(fun)
+
+  // Start observing the target node for configured mutations(changes)
+  observer.observe(document.body, {
+    attributes: true,
+    childList: true,
+    subtree: true
+  })
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 自用 Android 短信转发方案改进.</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832814#reply0" />
+	<id>tag:www.v2ex.com,2022-02-10:/t/832814</id>
+	<published>2022-02-10T00:33:43Z</published>
+	<updated>2022-02-10T00:33:43Z</updated>
+	<author>
+		<name>YamatoRyou</name>
+		<uri>https://www.v2ex.com/member/YamatoRyou</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>原帖: <a href="https://www.v2ex.com/t/832597" rel="nofollow">https://www.v2ex.com/t/832597</a><br/>
+因为正文排版, 以及宏的变动比较大, 所以不会在原帖 append 了.<br/>
+之前没能很好地处理断网期间的转发策略, 所以整个宏又被拆分为 2 个部分.  </p>
+<h1>此处修改原帖的宏, 使其成为第 1 部分:</h1>
+<ol>
+<li>
+--<br/>
+c) 动作 2-1: 添加 toast 用于提示短信自动转发失败后执行 Shell 命令, 将待发的短信暂存;<br/>
+d) 动作 2-2: 添加 Shell 脚本:  <pre><code># 需要 root 权限
+# 挂载根目录为可读写
+mount -o rw,remount /
+
+# 在末尾追加写入一条命令到 /sms_forward_queue.sh
+# 同样需要账号的 token 及房间 ID
+echo -E "curl -H \"Content-Type: application/json\" -H \"Authorization: Bearer &lt;access_token&gt;\" -s -X POST -k -d '{\"msgtype\": \"m.text\", \"body\": \"短信转发 (从队列). 发送者: [sms_number]\u000a\u000a[sms_message]\"}' \"https://example.com[:port]/_matrix/client/r0/rooms/%21room_id:example.com/send/m.room.message\"" &gt;&gt; /sms_forward_queue.sh
+
+# 在末尾追加写入一个换行符到 /sms_forward_queue.sh
+echo "\n" &gt;&gt; /sms_forward_queue.sh
+
+# 赋予 /sms_forward_queue.sh 可执行权限
+chmod 0766 /sms_forward_queue.sh
+
+# 因为 /sms_forward_queue.sh 的本质是一个 Shell 脚本, 所以选择保存到根目录直到时机成熟时执行
+</code></pre>
+</li>
+</ol>
+<h1>第 2 部分:</h1>
+<ol>
+<li>新建一个宏, 触发器选择 "固定时间间隔", 间隔推荐的取值范围 30 秒 ~ 5 分钟;  </li>
+<li>添加 2 个局部变量 (全部为字符串类型);  </li>
+<li>
+添加动作:<br/>
+a) 动作 1: 添加 Shell 脚本, 发送一个 GET 请求到 Synapse 服务器:<pre><code>curl -s https://example.com[:port]/_matrix/federation/v1/version
+# 不提交任何信息, 仅用于尝试连接服务器
+# 需要选择 "将输出保存为字符串变量, 选择步骤 2 新建的变量的其中一个"
+# 建议设置超时
+</code></pre>
+b) 动作 2: 添加 "如果条件", 在其中添加条件: "MacroDroid 特定" -&gt; "MacroDroid 变量", 选择步骤 2 新建的变量的其中一个. 运算符选择 "包括", 值填写  <pre><code>{"server":{"name":"Synapse","version":"
+</code></pre>
+<pre><code>// 用于判断服务器是否返回了 json, 因为 json 的格式固定就没用正则表达式, 反正无脑判断前几个字符就足够了.
+</code></pre>
+c) 动作 2-1: 添加 Shell 脚本:<pre><code># 判断 /sms_forward_queue.sh 是否存在, 存在返回 true, 不存在返回 false
+if [ -e /sms_forward_queue.sh ]
+then
+  print true
+else
+ print false
+fi
+</code></pre>
+d) 动作 2-2: 在其中添加 "如果条件", 在其中添加条件: "MacroDroid 特定" -&gt; "MacroDroid 变量", 选择步骤 2 新建的变量的另一个. 运算符选择 "=", 值填写  <pre><code>true
+</code></pre>
+e) 动作 2-2-1: 添加 toast 用于提示本条短信已暂存并进入待发队列;<br/>
+f) 动作 2-2-2: 添加 Shell 脚本:  <pre><code># 需要 root 权限
+# 挂载根目录为可读写
+mount -o rw,remount /
+
+# 执行 /sms_forward_queue.sh
+/sms_forward_queue.sh
+
+# 脚本执行完成后删除, 避免重复补发
+rm /sms_forward_queue.sh
+</code></pre>
+g) 动作 2-2-3 (可选): 此处可以添加一个通知 (或 toast) 用于提示短信自动补发成功.  </li>
+</ol>
+<p>以上动作的排列顺序:<br/>
+<a href="https://imgur.com/a/4C6y1pv" rel="nofollow">https://imgur.com/a/4C6y1pv</a><br/>
+<a href="https://imgur.com/a/F1rHMIq" rel="nofollow">https://imgur.com/a/F1rHMIq</a> </p>
+<p>效果:<br/>
+现在即使断网也不用担心短信漏发, 一旦恢复联网, 因为触发器的关系会自动执行 <code>/<a href="http://sms_forward_queue.sh" rel="nofollow">sms_forward_queue.sh</a></code> 中的命令.<br/>
+脚本执行完成后自动删除. 下一个断网周期会重新生成.<br/>
+如果长时间断网, 脚本中的命令会累积直到恢复联网.</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Android] 三星欧版 s22ultra，回国用有什么影响？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832813#reply5" />
+	<id>tag:www.v2ex.com,2022-02-10:/t/832813</id>
+	<published>2022-02-10T00:31:33Z</published>
+	<updated>2022-02-10T00:54:50Z</updated>
+	<author>
+		<name>603176766</name>
+		<uri>https://www.v2ex.com/member/603176766</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	首发学生优惠后，人民币约 8400 。<br /><br />送耳机，以旧换新额外补贴 150 欧元。<br /><br />不知道猎户座怎么样。一年后回国国内用方便吗？
+	]]></content>
+</entry><entry>
+	<title>[硬件] 显示器支架的困惑</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832811#reply2" />
+	<id>tag:www.v2ex.com,2022-02-10:/t/832811</id>
+	<published>2022-02-10T00:05:07Z</published>
+	<updated>2022-02-10T00:30:48Z</updated>
+	<author>
+		<name>blackbookbj277</name>
+		<uri>https://www.v2ex.com/member/blackbookbj277</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>买了个显示器伸缩的那种支架，发现线怎么弄都不好看，太让人抓狂了，强迫症患者不能接受。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[京东] 迫于京东自营苹果 3880-400 优惠券无处使用，有没有需要代拍的</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832810#reply0" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832810</id>
+	<published>2022-02-09T23:30:38Z</published>
+	<updated>2022-02-09T23:29:38Z</updated>
+	<author>
+		<name>gtchan13579</name>
+		<uri>https://www.v2ex.com/member/gtchan13579</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	赚点京豆返利，不收钱。看了一眼 iphone12 mini 64GB 凑单到手 3229
+	]]></content>
+</entry><entry>
+	<title>[分享创造] cheatsheet 都用过吧， Windows 版来了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832808#reply0" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832808</id>
+	<published>2022-02-09T18:52:46Z</published>
+	<updated>2022-02-09T18:51:46Z</updated>
+	<author>
+		<name>liuser666</name>
+		<uri>https://www.v2ex.com/member/liuser666</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>文字稿写不动了，看视频吧。</p>
+<p>[快捷键助手 - 小抄来袭-哔哩哔哩]  <a href="https://b23.tv/h2VvcK0" rel="nofollow">https://b23.tv/h2VvcK0</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 求一个大文件分享的方案</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832806#reply15" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832806</id>
+	<published>2022-02-09T17:40:29Z</published>
+	<updated>2022-02-10T00:44:16Z</updated>
+	<author>
+		<name>wazon</name>
+		<uri>https://www.v2ex.com/member/wazon</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><strong>需求：</strong> </p>
+<ol>
+<li>远程分享压缩包，容量&gt;40GB ，无需长期保存   </li>
+<li>希望尽可能降低接受方的麻烦（注册、安装、会员），为此发送方可以多花时间精力</li>
+<li>希望下载速度&gt;40Mbps ，即用两三个小时就能下完（收发方均在中国境内，运营商不定，不一定有 IPv6 ）</li>
+</ol>
+<p>在满足需求的前提下，价格越便宜越好<br/>
+分享是低频的，可以假设为每月 0~2 次    </p>
+<p><strong>尝试：</strong></p>
+<ol>
+<li>网盘类：百度网盘的下载速度都懂，阿里云盘除需转存、对分享的格式也有限制，其他很多网盘的默认容量较小  </li>
+<li>云服务类：境外对象存储速度不太稳定，境内流量价格偏贵（主流原价 0.5 元 /GB ）  </li>
+<li>自有宽带类：本人有公网 IPv4 的地方上传太慢，上传快的地方没有公网 IPv4  </li>
+</ol>
+<p>出于方便接受方的考虑，楼主暂时在考虑七牛云（ 0.26 元 /GB ）<br/>
+下载一次的流量费用还可以接受，但万一被反复下载还是有“破产”风险     </p>
+<p>另外还发现了奶牛快传这样的服务，感觉会员的价格有点偏贵     </p>
+<p><strong>想了解市面上对于这类需求是否存在一个更好的方案？</strong></p>
+
+	]]></content>
+</entry><entry>
+	<title>[深圳] 关于线下聚会，希望有深圳的朋友可以线下一起玩玩，只针对深圳的朋友</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832805#reply0" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832805</id>
+	<published>2022-02-09T17:29:45Z</published>
+	<updated>2022-02-09T17:28:45Z</updated>
+	<author>
+		<name>Gallienus</name>
+		<uri>https://www.v2ex.com/member/Gallienus</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>苦于找不到线下好玩的活动或者聚会，一来在深圳这边的朋友不多，二来大家的共同兴趣不一定相同。
+希望能组织或者有一些有趣的活动，大家周末一起玩玩聚聚，多认识认识一些朋友也好，索性就建了一个「这个周末去哪」的群。</p>
+<p>当然希望越多越多的朋友一起进来玩，这样才更加有趣，也欢迎各行各业的朋友一起来，说不定也能擦出一些火花哦。</p>
+<p>我知道 V 区的程序员估计已经是按耐不住了，毕竟找人玩确实是个技术活。</p>
+<p><img alt="IMG_0657.JPG" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/02/10/qySen152kCaON6x.jpg"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 闲鱼现场交易二手打印机，怎么验机？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832803#reply5" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832803</id>
+	<published>2022-02-09T16:45:59Z</published>
+	<updated>2022-02-09T19:14:28Z</updated>
+	<author>
+		<name>amiwrong123</name>
+		<uri>https://www.v2ex.com/member/amiwrong123</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>想要一个黑白激光打印机，必须要有的功能是自动双面打印。复印和扫描是加分项，但可以没有。</p>
+<p>看到知乎上说先让他打印 50 页空白文档，再让他打印几页测试文档，前者用来看他是不是卡纸，后者用来看他是不是掉粉。</p>
+<p>另外这种二手打印机，你们是宁愿闲鱼上现场二手交易，还是去淘宝上拼多多上买？</p>
+<p>今天我在闲鱼上看到一款松下 kx-mb778cn ，300 块还有复印扫描功能，很香啊。也看到有 hp 1020 这个经典款。
+淘宝拼多多上也有很多二手打印机。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有没有 stripe 的大佬，分享一下 stripe 养号经验呗，最近真的比较头疼</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832802#reply1" />
+	<id>tag:www.v2ex.com,2022-02-09:/t/832802</id>
+	<published>2022-02-09T16:35:40Z</published>
+	<updated>2022-02-09T16:46:03Z</updated>
+	<author>
+		<name>miaoge520</name>
+		<uri>https://www.v2ex.com/member/miaoge520</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>前段时间注册 stripe 个人账号收款，被关闭了，后来我请人帮我申请 EIN,重新注册了一个 stripe 公司账户，然后绑定了我的网站，又被关闭了，这个怪我，我违反了 stripe 服务条款，检测到我的网站出现色情，不得不佩服 stripe 的审核机制，有没有大佬分享一下经验啊</p>
+
+	]]></content>
+</entry><entry>
 	<title>[Node.js] 推广一波我写的 Mongoose 插件，可以让我们直接搜索 ref:&#39;xxx&#39; 的属性</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832799#reply0" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832799</id>
@@ -74,10 +341,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[macOS] 系统中文输入法按钮 ∧没有 Retina 化，是长久以来的 bug 么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832796#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832796#reply3" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832796</id>
 	<published>2022-02-09T15:40:51Z</published>
-	<updated>2022-02-09T15:46:40Z</updated>
+	<updated>2022-02-09T19:02:50Z</updated>
 	<author>
 		<name>Phycheez</name>
 		<uri>https://www.v2ex.com/member/Phycheez</uri>
@@ -91,10 +358,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[Windows] 目前兼容 MacType 的浏览器只有 Firefox 吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832794#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832794#reply4" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832794</id>
 	<published>2022-02-09T15:28:04Z</published>
-	<updated>2022-02-09T15:27:04Z</updated>
+	<updated>2022-02-09T20:58:56Z</updated>
 	<author>
 		<name>szzhiyang</name>
 		<uri>https://www.v2ex.com/member/szzhiyang</uri>
@@ -119,10 +386,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 你们习惯这种地图指示吗?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832790#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832790#reply6" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832790</id>
 	<published>2022-02-09T14:59:02Z</published>
-	<updated>2022-02-09T15:13:47Z</updated>
+	<updated>2022-02-09T16:13:47Z</updated>
 	<author>
 		<name>FaiChou</name>
 		<uri>https://www.v2ex.com/member/FaiChou</uri>
@@ -137,10 +404,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 打算换坑,哪里有面试题刷?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832789#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832789#reply10" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832789</id>
 	<published>2022-02-09T14:59:00Z</published>
-	<updated>2022-02-09T15:07:39Z</updated>
+	<updated>2022-02-10T00:00:07Z</updated>
 	<author>
 		<name>wxlwsy</name>
 		<uri>https://www.v2ex.com/member/wxlwsy</uri>
@@ -150,10 +417,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] B 站的视频源怎么放到了香港</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832788#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832788#reply6" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832788</id>
 	<published>2022-02-09T14:39:12Z</published>
-	<updated>2022-02-09T16:06:44Z</updated>
+	<updated>2022-02-09T20:00:59Z</updated>
 	<author>
 		<name>yorkyoung</name>
 		<uri>https://www.v2ex.com/member/yorkyoung</uri>
@@ -163,10 +430,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] 刚激活的 MacBook Pro 16 电池循环已经 10 次，是否正常？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832787#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832787#reply13" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832787</id>
 	<published>2022-02-09T14:35:59Z</published>
-	<updated>2022-02-09T14:59:46Z</updated>
+	<updated>2022-02-09T16:59:46Z</updated>
 	<author>
 		<name>popzuk</name>
 		<uri>https://www.v2ex.com/member/popzuk</uri>
@@ -177,10 +444,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 我离开 F500 创业，历时 12 个月开发了一个程序员零工副业平台， AMA</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832786#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832786#reply4" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832786</id>
 	<published>2022-02-09T14:35:04Z</published>
-	<updated>2022-02-09T11:35:04Z</updated>
+	<updated>2022-02-09T12:35:04Z</updated>
 	<author>
 		<name>CharlotteNovva</name>
 		<uri>https://www.v2ex.com/member/CharlotteNovva</uri>
@@ -193,10 +460,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[Java] 目前辞职在家，想面试一下试试水，结果笔试题一做 emo 了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832785#reply18" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832785#reply23" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832785</id>
 	<published>2022-02-09T14:23:05Z</published>
-	<updated>2022-02-09T16:05:14Z</updated>
+	<updated>2022-02-09T20:12:13Z</updated>
 	<author>
 		<name>unregister</name>
 		<uri>https://www.v2ex.com/member/unregister</uri>
@@ -207,10 +474,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[Blogger] 新年新家，从 Google Blogger 到 Hugo： 3. 令人惊喜的 GitHub Copilot</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832784#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832784#reply5" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832784</id>
 	<published>2022-02-09T14:10:02Z</published>
-	<updated>2022-02-09T15:18:05Z</updated>
+	<updated>2022-02-09T16:18:05Z</updated>
 	<author>
 		<name>bailitusu</name>
 		<uri>https://www.v2ex.com/member/bailitusu</uri>
@@ -223,10 +490,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[设计] 在 2021 年之后上线的新的网站项目中，你觉得设计方面让你最喜欢的是哪些？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832783#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832783#reply2" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832783</id>
 	<published>2022-02-09T14:06:27Z</published>
-	<updated>2022-02-09T16:17:20Z</updated>
+	<updated>2022-02-09T17:18:07Z</updated>
 	<author>
 		<name>Livid</name>
 		<uri>https://www.v2ex.com/member/Livid</uri>
@@ -236,7 +503,7 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 两个 offer 对比，求指教。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832781#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832781#reply0" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832781</id>
 	<published>2022-02-09T13:59:43Z</published>
 	<updated>2022-02-08T13:59:43Z</updated>
@@ -335,10 +602,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[全球工单系统] 请谨慎在奈飞小粉/奈飞 Fans/naifei.fans 家购买合租服务</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832780#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832780#reply4" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832780</id>
 	<published>2022-02-09T13:49:33Z</published>
-	<updated>2022-02-09T14:13:59Z</updated>
+	<updated>2022-02-09T16:13:59Z</updated>
 	<author>
 		<name>2473</name>
 		<uri>https://www.v2ex.com/member/2473</uri>
@@ -348,10 +615,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 想要系统学习唱歌的话，哪里能提供在线服务？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832779#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832779#reply5" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832779</id>
 	<published>2022-02-09T13:44:38Z</published>
-	<updated>2022-02-09T13:54:53Z</updated>
+	<updated>2022-02-09T17:10:57Z</updated>
 	<author>
 		<name>lc4t</name>
 		<uri>https://www.v2ex.com/member/lc4t</uri>
@@ -377,10 +644,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[Java] 2025 年 Java 才是究极体吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832777#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832777#reply7" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832777</id>
 	<published>2022-02-09T13:40:54Z</published>
-	<updated>2022-02-09T14:27:43Z</updated>
+	<updated>2022-02-09T15:27:43Z</updated>
 	<author>
 		<name>MakHoCheung</name>
 		<uri>https://www.v2ex.com/member/MakHoCheung</uri>
@@ -455,21 +722,8 @@ const newConditions = {
 
 	]]></content>
 </entry><entry>
-	<title>[Apple] 美区 Apple One Premire 超大杯找乘客</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832772#reply1" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832772</id>
-	<published>2022-02-09T12:32:21Z</published>
-	<updated>2022-02-09T15:05:59Z</updated>
-	<author>
-		<name>kreutec</name>
-		<uri>https://www.v2ex.com/member/kreutec</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	美区 Apple One Premire 超大杯 6 人车找长期稳定乘客，人满即开，季付 110 元，中途跳车不退款，翻车可按比例退，芝麻信用 780 。<br /><br />包含服务：Apple Music, Arcade, TV+, News+, Fitness+, iCloud 2TB (平均每人独立 333GB)。<br /><br />微信 (base64 解密)：amhlbmNoaWFu
-	]]></content>
-</entry><entry>
 	<title>[职场话题] 从面试时的公司 9 问，谈求职者与公司的不对等关系</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832770#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832770#reply8" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832770</id>
 	<published>2022-02-09T12:22:46Z</published>
 	<updated>2022-02-09T14:44:03Z</updated>
@@ -573,42 +827,6 @@ const newConditions = {
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	
-	]]></content>
-</entry><entry>
-	<title>[Apple] 马来区 Apple One Premier 超大杯拼车🚌</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832766#reply1" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832766</id>
-	<published>2022-02-09T12:08:52Z</published>
-	<updated>2022-02-09T16:06:11Z</updated>
-	<author>
-		<name>Starkay</name>
-		<uri>https://www.v2ex.com/member/Starkay</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h3>内容&amp;费用</h3>
-<p>包含 Music 、TV 、Arcade 、iCloud+（ 2T ，每人 333G ）、Fitness+</p>
-<p>马来西亚林吉特 69.9/月，人民币每人￥ 18/月</p>
-<p>相比美区仅少了 News(即使有也需要美国 ip 才能访问)，但美区人均要 35+/月</p>
-<p>而国区仅 Music+iCloud(200G ）就要 10+21=31 ，因此马区 Apple One 性价比很高</p>
-<h3>上车准备</h3>
-<p>本车使用国区 Apple ID 加入家庭组，然后用马区 Apple ID 登录 Store ，这样国区 Apple ID 才能使用 333G 的 iCloud+空间，参考：</p>
-<blockquote>
-<p>教程： <a href="https://zhuanlan.zhihu.com/p/377114774" rel="nofollow">https://zhuanlan.zhihu.com/p/377114774</a></p>
-</blockquote>
-<blockquote>
-<p>官方说明： <a href="https://support.apple.com/zh-cn/HT211862" rel="nofollow">https://support.apple.com/zh-cn/HT211862</a></p>
-</blockquote>
-<p>马区 Apple ID 需自备，注册或换区教程参考(实测可用)：</p>
-<blockquote>
-<p>教程： <a href="https://zhuanlan.zhihu.com/p/49754407" rel="nofollow">https://zhuanlan.zhihu.com/p/49754407</a></p>
-</blockquote>
-<blockquote>
-<p>马区地址生成器： <a href="https://www.meiguodizhi.com/my-address" rel="nofollow">https://www.meiguodizhi.com/my-address</a></p>
-</blockquote>
-<p>注意：一个号一年只能加入一个家庭，因此在过去一年内加入过其他家庭的不能上此车</p>
-<h3>上车方法</h3>
-<p>为了给车队的大家稳定的体验，仅支持季付或年付，上车请滴滴，或加我 vx：eGlua2FpNDU5Nw==(base64)，车满关贴</p>
-
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有没有适合影视设备出入库管理的系统或软件</title>
@@ -727,10 +945,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[程序员] 写的开源软件被剽窃了，竟然还发到 app store</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832755#reply36" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832755#reply47" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832755</id>
 	<published>2022-02-09T10:50:41Z</published>
-	<updated>2022-02-09T15:58:07Z</updated>
+	<updated>2022-02-10T00:28:25Z</updated>
 	<author>
 		<name>wangwangc</name>
 		<uri>https://www.v2ex.com/member/wangwangc</uri>
@@ -756,10 +974,10 @@ const newConditions = {
 	]]></content>
 </entry><entry>
 	<title>[问与答] 把开源项目新的 feature 更新到已经魔改过的自用版本上的最佳姿势是什么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832753#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832753#reply13" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832753</id>
 	<published>2022-02-09T10:39:41Z</published>
-	<updated>2022-02-09T14:04:48Z</updated>
+	<updated>2022-02-09T19:35:48Z</updated>
 	<author>
 		<name>ch2</name>
 		<uri>https://www.v2ex.com/member/ch2</uri>
@@ -801,7 +1019,7 @@ cherry-pick 大概率是不行的，把 v1-patch 的新 commit 导出.patch 文�
 	]]></content>
 </entry><entry>
 	<title>[硬件] 如何给服务器选购 UPS？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832750#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832750#reply3" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832750</id>
 	<published>2022-02-09T10:34:23Z</published>
 	<updated>2022-02-08T18:34:23Z</updated>
@@ -884,7 +1102,7 @@ cherry-pick 大概率是不行的，把 v1-patch 的新 commit 导出.patch 文�
 	]]></content>
 </entry><entry>
 	<title>[Google] 我的谷歌搜索结果为什么居中显示了？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832746#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832746#reply9" />
 	<id>tag:www.v2ex.com,2022-02-09:/t/832746</id>
 	<published>2022-02-09T10:05:17Z</published>
 	<updated>2022-02-09T11:45:53Z</updated>
@@ -897,175 +1115,6 @@ cherry-pick 大概率是不行的，把 v1-patch 的新 commit 导出.patch 文�
 <p>检查发现多了一个 div</p>
 <pre><code class="language-html">&lt;div id="rhs" class="TQc1id hSOk2e rhstc4"&gt;&lt;/div&gt;
 </code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] aws ec2 主机 ssh 连上去，无响应是为什么，必须要重新 ssh 登录才行</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832745#reply4" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832745</id>
-	<published>2022-02-09T09:58:43Z</published>
-	<updated>2022-02-09T11:59:03Z</updated>
-	<author>
-		<name>proxytoworld</name>
-		<uri>https://www.v2ex.com/member/proxytoworld</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>使用 ssh 证书登录白嫖的 aws ec2 主机，过段时间不操作，ssh 终端无响应，必须要重新连接才行，有大佬知道为什么吗</p>
-<p>如下图 输入回车无反应...</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/kwBBIyf.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] m1 升级 macOS 12.3 beta 遇到打不开 chrome 和 electron app 的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832744#reply2" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832744</id>
-	<published>2022-02-09T09:53:59Z</published>
-	<updated>2022-02-09T10:17:13Z</updated>
-	<author>
-		<name>hstdt</name>
-		<uri>https://www.v2ex.com/member/hstdt</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<div>
- 解决方案
- <br/>勾选 使用 Rosetta 打开
- <br/>如果 electron app 是 apple 版本的，可能要去官网下载 intel 版本的再勾选吧🐶
-</div>
-	]]></content>
-</entry><entry>
-	<title>[投资] 钱少，几万块，短期流动性较大，偏向保守型投资理财，现在疫情的原因，实业被嚯嚯的厉害，实业都不景气了投资理财不就风险更大了，想入又不想入，这还能推荐吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832743#reply18" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832743</id>
-	<published>2022-02-09T09:52:38Z</published>
-	<updated>2022-02-09T16:04:05Z</updated>
-	<author>
-		<name>chichux</name>
-		<uri>https://www.v2ex.com/member/chichux</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[macOS] M1 小火箭可以让终端也走代理，但是为啥 Git 推代码会 Connection closed</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832742#reply8" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832742</id>
-	<published>2022-02-09T09:47:49Z</published>
-	<updated>2022-02-08T17:40:55Z</updated>
-	<author>
-		<name>john6lq</name>
-		<uri>https://www.v2ex.com/member/john6lq</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>之前用 ClashX ，后来发现 ShadowRocket 可以直接在 M1 上用。</p>
-<p>切到 ShadowRocket 用了一段时间后，今天推代码突然不行了，url 是 ssh 。</p>
-<pre><code>kex_exchange_identification: Connection closed by remote host
-Connection closed by 240.0.0.30 port 22
-fatal: 无法读取远程仓库。
-</code></pre>
-<p>关了代理马上就可以；</p>
-<p>然后我测试在 Shell 中<code>ping <a href="http://www.google.com" rel="nofollow">www.google.com</a></code>居然直接能 ping 通。</p>
-<p>猜测 ShadowRocket 把 ssh 的验证请求也代理了，然后被服务器拒绝了。</p>
-<p>所以问题是：</p>
-<ol>
-<li>为啥 ClashX 不能代理终端？</li>
-<li>为啥 Git 推代码会被拒绝？</li>
-<li>为啥我之前没发现这个问题，难道跟节点有关系？</li>
-</ol>
-
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [南京] [国企] [证券头部][30~60k] 求 C++和 Java 简历</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832741#reply2" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832741</id>
-	<published>2022-02-09T09:47:14Z</published>
-	<updated>2022-02-09T11:36:52Z</updated>
-	<author>
-		<name>diegozhu</name>
-		<uri>https://www.v2ex.com/member/diegozhu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>team 缺人，领导安排指标了，求 C++和 Java 简历。</p>
-<p>C++：
-工作内容：
-1. 负责公司云原生微服务平台（包括基于 SDK 的微服务体系和 Service Mesh 体系）的开发与架构设计和落地，参与开发过程管理、核心代码编写和组织技术攻关；
-2. 为业务团队提供微服务平台产品的使用规范和最佳实践，帮助业务团队解决相关技术问题；
-3. 负责规划和落地微服务平台的架构演进；
-4. 负责对开发团队进行技术培训，持续提升团队技术水平。</p>
-<p>任职要求：
-1. 计算机相关专业，硕士研究生及以上学历，3 年以上软件开发经验；
-2. 具有扎实的 C++/Golang 编程基础以及计算机基础理论知识；
-3. 熟悉 Kubernetes 、Istio 、Envoy 等云原生相关技术，并具有生产落地与微服务平滑演进经验者优先；
-4. 具备较强的学习能力和解决问题的能力，具备强烈的责任心和团队合作的精神。</p>
-<p>Java：
-暂时没有 jd ，加分点 Flink ，es ，ELK ，Skywalking 这些。
-硕士研究生及以上学历 或者 211 本科也行。</p>
-<p>年包不负责任推测 50w~70w</p>
-<p>邮箱：emh1aGFpeWFuZ0BodHNjLmNvbQ==
-wechat：emh1aGFpeWFuZzIwMzA=</p>
-
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [内推][晶泰科技][深圳/上海] AI+生物医药独角兽 IT/产品/机械/电子/运营 大量岗位在招</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832740#reply0" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832740</id>
-	<published>2022-02-09T09:46:41Z</published>
-	<updated>2022-02-09T09:46:41Z</updated>
-	<author>
-		<name>workwonder</name>
-		<uri>https://www.v2ex.com/member/workwonder</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.xtalpi.com/zh-hans/" rel="nofollow">晶泰科技</a>（优质赛道  AI + 生物医药双风口  行业独角兽  临近上市 已获得腾讯、谷歌、软银、红杉资本投资 ），总部深圳  分支覆盖北京 /上海 /波士顿。</p>
-<p>公司主要从事医药研发领域，技术驱动、重视创新、氛围开放。团队成员横跨学术界、IT 、医药产业界，技术和学术氛围浓厚。</p>
-<p>公司提供具有行业竞争力的薪酬+年底双薪+年终奖+年度调薪，六险一金全额缴纳、年度高端福利体检、水果下午茶、节日礼品、每周运动健身福利。弹性工作时间，周末双休，7 天起步带薪年假。<strong>没有加班制度！</strong></p>
-<p>目前大量岗位在招，欢迎找我内推：</p>
-<ul>
-<li><code>wx: workwonder</code></li>
-<li><code>email: wanchao.zhang(at)<a href="http://xtalpi.com" rel="nofollow">xtalpi.com</a></code></li>
-</ul>
-<p><img alt="Jobs" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/02/09/1mvQfqIreWZ5FYs.png"/></p>
-<p><img alt="Ref QR Code" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/02/09/lYu8qrQBmtjhbTW.png"/>
-（限微信内访问）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] Kindle iOS App 即使切换成英文也还是只能登录国区亚马逊账号</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832739#reply2" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832739</id>
-	<published>2022-02-09T09:26:51Z</published>
-	<updated>2022-02-09T10:40:05Z</updated>
-	<author>
-		<name>hatcloud</name>
-		<uri>https://www.v2ex.com/member/hatcloud</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	问题如题，有人碰到过这种情况吗？总能看到下面微信账号的提示信息，输入了 <a target="_blank" href="http://amazon.com" rel="nofollow noopener">amazon.com</a> 的账号密码后会提示账号不存在。<br />我尝试了全局挂美国代理，切换回中文再切换成英文都不行。不太清楚亚马逊这个锁区的逻辑的。
-	]]></content>
-</entry><entry>
-	<title>[智能家电] 热泵热水器/太阳能热水器</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832738#reply2" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832738</id>
-	<published>2022-02-09T09:26:35Z</published>
-	<updated>2022-02-09T09:26:35Z</updated>
-	<author>
-		<name>SIGEV13</name>
-		<uri>https://www.v2ex.com/member/SIGEV13</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	迫于电费连年上涨，家中老迈的 200 升电热水器使用成本越来越高，临近设计寿命的终点，欲更换节能的热水器。现有两种选择在考虑中：<br />1. 热泵热水器。 <br />2. 太阳能热水器。 <br /><br />空气到水的热泵比较贵，不知热泵寿命如何，噪音多大，压缩机到水箱的管线长度是否能超过 10 米，全生命期内使用成本是否比电热水器低？<br />太阳能热水器效率如何，需要多大面积可供六人每日淋浴使用，阴天应该如何加热？(安装地点气温区间在 0-35 度，晴天每年 300 天左右)<br /><br />哪些智能控制系统可以用在热水器上？ 比如控制加热时间，有限夜晚电费优惠期加热， 监控水温和水量等。
-	]]></content>
-</entry><entry>
-	<title>[职场话题] 有没有在外企的 v 友，分享下你们工作的情况，很好奇外企的工作？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/832737#reply12" />
-	<id>tag:www.v2ex.com,2022-02-09:/t/832737</id>
-	<published>2022-02-09T09:25:59Z</published>
-	<updated>2022-02-09T11:24:20Z</updated>
-	<author>
-		<name>liufude66</name>
-		<uri>https://www.v2ex.com/member/liufude66</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最近一年，一直强迫自己在工作中尽量可能多的接触和使用英文。比如：查资料要求自己去英文官网查，而不是选择百度了事。感觉自己读英文的能力不断提高，认识的单词也越来越多，编程思维也有了提高。所以，萌生了去外企的想法。现在有两个问题：一是自己的英文能力能不能达到外企的要求；二是外企的工作是什么样的，和中企有啥不同。</p>
 
 	]]></content>
 </entry>
