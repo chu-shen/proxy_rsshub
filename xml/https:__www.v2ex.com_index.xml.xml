@@ -8,10 +8,439 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-03-17T16:19:06Z</updated>
+<updated>2022-03-18T01:04:34Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[宽带症候群] 新发布的 Redmi 5400 路由器怎么样</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841175#reply0" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841175</id>
+	<published>2022-03-18T01:05:34Z</published>
+	<updated>2022-03-18T01:04:34Z</updated>
+	<author>
+		<name>Davic1</name>
+		<uri>https://www.v2ex.com/member/Davic1</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>有没有懂得兄弟说说. 现在在小米有品预售, 有必要入一个吗</p>
+
+	]]></content>
+</entry><entry>
+	<title>[服务器] [求助]要托管一台 1U 服务器到机房，有性价比高的机房推荐吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841174#reply1" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841174</id>
+	<published>2022-03-18T00:51:02Z</published>
+	<updated>2022-03-18T00:56:35Z</updated>
+	<author>
+		<name>inSpring</name>
+		<uri>https://www.v2ex.com/member/inSpring</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	个人要托管一台 1U 服务器到机房。<br />1U 服务器。需要 20+MB 带宽，1 个 IP 。<br /><br /><br />也可加我 V：kiterunner321  (备注: 机房托管)<br />非诚勿扰。感谢！
+	]]></content>
+</entry><entry>
+	<title>[服务器] 你们的阿里云还好吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841173#reply0" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841173</id>
+	<published>2022-03-18T00:50:35Z</published>
+	<updated>2022-03-18T00:49:35Z</updated>
+	<author>
+		<name>yyf1234</name>
+		<uri>https://www.v2ex.com/member/yyf1234</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>刚刚 ssh 无法登录，operation timeout</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请教一条 sql 语句执行完超过一秒的概率很高，该如何优化？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841172#reply2" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841172</id>
+	<published>2022-03-18T00:48:41Z</published>
+	<updated>2022-03-10T00:47:41Z</updated>
+	<author>
+		<name>justrand</name>
+		<uri>https://www.v2ex.com/member/justrand</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>两张表分别 30w 和 40w 的数据量，请教下大神为啥下面的 sql 语句总是执行超过 1s 有时候甚至 3s 往上。<br/>
+1.mysql 执行语句</p>
+<pre><code class="language-mysql">EXPLAIN SELECT t . * , m.icon
+FROM threads t
+LEFT JOIN members m ON t.authorid = m.uid
+WHERE t.fid = '1'
+AND t.ifcheck = '1'
+AND t.topped = '0'
+ORDER BY lastpost DESC
+LIMIT 0 , 40
+</code></pre>
+<p>2.EXPLAIN 分析结果
+<img alt="3243.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/03/18/dPAjo2iN7OgCJbB.png"/></p>
+<p>3.两张表的结构<br/><br/>
+threads 表大概 40w 数据</p>
+<pre><code class="language-mysql">CREATE TABLE IF NOT EXISTS `threads` (
+  `tid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fid` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `icon` tinyint(3) NOT NULL DEFAULT '0',
+  `titlefont` varchar(15) NOT NULL DEFAULT '',
+  `author` varchar(15) NOT NULL DEFAULT '',
+  `authorid` int(10) unsigned NOT NULL DEFAULT '0',
+  `subject` varchar(100) NOT NULL DEFAULT '',
+  `toolinfo` varchar(16) NOT NULL DEFAULT '',
+  `toolfield` varchar(21) NOT NULL DEFAULT '',
+  `ifcheck` tinyint(3) NOT NULL DEFAULT '0',
+  `type` smallint(6) NOT NULL DEFAULT '0',
+  `postdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `lastpost` int(10) unsigned NOT NULL DEFAULT '0',
+  `lastposter` varchar(15) NOT NULL DEFAULT '',
+  `hits` int(10) unsigned NOT NULL DEFAULT '0',
+  `replies` int(10) unsigned NOT NULL DEFAULT '0',
+  `favors` int(10) NOT NULL DEFAULT '0',
+  `modelid` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `shares` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `topped` smallint(6) NOT NULL DEFAULT '0',
+  `locked` tinyint(3) NOT NULL DEFAULT '0',
+  `digest` tinyint(3) NOT NULL DEFAULT '0',
+  `special` tinyint(3) NOT NULL DEFAULT '0',
+  `state` tinyint(3) NOT NULL DEFAULT '0',
+  `ifupload` tinyint(3) NOT NULL DEFAULT '0',
+  `ifmail` tinyint(3) NOT NULL DEFAULT '0',
+  `ifmark` smallint(6) NOT NULL DEFAULT '0',
+  `ifshield` tinyint(3) NOT NULL DEFAULT '0',
+  `anonymous` tinyint(3) NOT NULL DEFAULT '0',
+  `dig` int(10) NOT NULL DEFAULT '0',
+  `fight` int(10) NOT NULL DEFAULT '0',
+  `ptable` tinyint(3) NOT NULL DEFAULT '0',
+  `ifmagic` tinyint(3) NOT NULL DEFAULT '0',
+  `ifhide` tinyint(3) NOT NULL DEFAULT '0',
+  `inspect` varchar(30) NOT NULL DEFAULT '',
+  `tpcstatus` int(10) unsigned NOT NULL DEFAULT '0',
+  `topreplays` smallint(6) NOT NULL DEFAULT '0',
+  `specialsort` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `frommob` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`tid`),
+  KEY `idx_authorid` (`authorid`),
+  KEY `idx_postdate` (`postdate`),
+  KEY `idx_digest` (`digest`),
+  KEY `idx_fid_type_ifcheck` (`fid`,`type`,`ifcheck`),
+  KEY `idx_special` (`special`),
+  KEY `idx_fid_ifcheck_specialsort_lastpost` (`fid`,`ifcheck`,`specialsort`,`lastpost`),
+  KEY `fid` (`fid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk ROW_FORMAT=DYNAMIC AUTO_INCREMENT=1;
+</code></pre>
+<p>members 表大概 30w 条数据</p>
+<pre><code class="language-mysql">CREATE TABLE IF NOT EXISTS `members` (
+  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(40) NOT NULL DEFAULT '',
+  `safecv` varchar(10) NOT NULL DEFAULT '',
+  `email` varchar(60) NOT NULL DEFAULT '',
+  `groupid` tinyint(3) NOT NULL DEFAULT '-1',
+  `memberid` tinyint(3) NOT NULL DEFAULT '0',
+  `groups` varchar(255) NOT NULL DEFAULT '',
+  `icon` varchar(255) NOT NULL DEFAULT '',
+  `gender` tinyint(1) NOT NULL DEFAULT '0',
+  `regdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `signature` text NOT NULL,
+  `introduce` text NOT NULL,
+  `oicq` varchar(12) NOT NULL DEFAULT '',
+  `aliww` varchar(30) NOT NULL,
+  `icq` varchar(12) NOT NULL DEFAULT '',
+  `msn` varchar(35) NOT NULL DEFAULT '',
+  `yahoo` varchar(35) NOT NULL DEFAULT '',
+  `site` varchar(75) NOT NULL DEFAULT '',
+  `location` varchar(36) NOT NULL DEFAULT '',
+  `honor` varchar(100) NOT NULL DEFAULT '',
+  `bday` date NOT NULL DEFAULT '0000-00-00',
+  `lastaddrst` varchar(255) NOT NULL DEFAULT '',
+  `yz` int(10) NOT NULL DEFAULT '1',
+  `timedf` varchar(5) NOT NULL DEFAULT '',
+  `style` varchar(12) NOT NULL DEFAULT '',
+  `datefm` varchar(15) NOT NULL DEFAULT '',
+  `t_num` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `p_num` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `attach` varchar(50) NOT NULL DEFAULT '',
+  `hack` varchar(255) NOT NULL DEFAULT '0',
+  `newpm` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `banpm` text NOT NULL,
+  `msggroups` varchar(255) NOT NULL DEFAULT '',
+  `medals` varchar(255) NOT NULL DEFAULT '',
+  `userstatus` int(10) unsigned NOT NULL DEFAULT '0',
+  `shortcut` varchar(255) NOT NULL DEFAULT '',
+  `salt` char(6) NOT NULL DEFAULT '',
+  `authmobile` char(16) NOT NULL DEFAULT '',
+  `realname` varchar(16) NOT NULL DEFAULT '',
+  `apartment` int(10) unsigned NOT NULL DEFAULT '0',
+  `home` int(10) unsigned NOT NULL DEFAULT '0',
+  `previewimg_flag` int(1) NOT NULL DEFAULT '0',
+  `conisbind` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `idx_username` (`username`),
+  KEY `idx_groupid` (`groupid`),
+  KEY `idx_email` (`email`),
+  KEY `authmobile` (`authmobile`)
+) ENGINE=MyISAM  DEFAULT CHARSET=gbk AUTO_INCREMENT=1 ;
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[酷工作] 西安 央企，真朝九晚五 不加班 机会很不错，待遇 20-80 之间，前端， Java ，测试，虚拟现实， gis，岗位较多。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841171#reply1" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841171</id>
+	<published>2022-03-18T00:47:58Z</published>
+	<updated>2022-03-18T00:46:58Z</updated>
+	<author>
+		<name>Xiancai123</name>
+		<uri>https://www.v2ex.com/member/Xiancai123</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>单位招人：<br/>
+单位：中煤科工西安研究院<br/>
+岗位：<br/>
+1 、三维开发工程师<br/>
+2 、java 后端<br/>
+3 、前端<br/>
+4 、gis 开发工程<br/>
+5 、虚拟现实开发<br/>
+6 、测试工程师<br/>
+7 、激光雷达产品工程师<br/>
+8 、激光雷达软件工程师    </p>
+<p>邮箱：bHBsZWU3ODMwQGdtYWlsLmNvbQ==
+绿色聊天软件：bGlwYzA2MTc=</p>
+<p>学历要求：集团的硬要求，<strong>候选人需要研究生及以上学历</strong>，候选人的 <strong>本科必须是全日制 985!!!</strong> <strong>本科必须是全日制 985!!!</strong> <strong>本科必须是全日制 985!!!</strong><br/>
+待遇：20-80 之间，自己谈，五险两金都是拉满交的。试用期也是全额。<br/>
+加班：基本不加班，朝九晚五，出差较多，出差有补贴。一般都是去各种矿上。和甲方打交道。     </p>
+<p>PS：单位是个好单位，我们是第一次社招，我是头一批进去的，机会确实可以，有意向的可以滴滴我，央企的二级子公司，福利待遇都不错，要求会高些。这你能感受到人文关怀，就是以前的国有企业对职工的那种关怀， 当然每个人都有自己的诉求，我个人还是很喜欢这里的。<br/>
+之前在咱 V 社发的贴，现在更新一下，这边搞的技术相对而言比较前，图形学，雷达，虚拟现实，还是挺好的，</p>
+
+	]]></content>
+</entry><entry>
+	<title>[上海] 如何看待小牛提速被点名？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841169#reply16" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841169</id>
+	<published>2022-03-18T00:39:44Z</published>
+	<updated>2022-03-18T01:05:55Z</updated>
+	<author>
+		<name>zero2me</name>
+		<uri>https://www.v2ex.com/member/zero2me</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>感觉国内这个政策有点扯淡，没有电瓶车不提速的。25km 的限速太慢了，而且据我的体验，小牛的提速算是比较保守的，很多杂牌的电瓶车比我的小牛快多了，经常被秒超。
+说到底还是限速的这个范围不合理，感觉提高到 35 左右差不多。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 淘汰旧款安卓机型如何发挥余热？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841167#reply5" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841167</id>
+	<published>2022-03-18T00:21:13Z</published>
+	<updated>2022-03-18T01:00:02Z</updated>
+	<author>
+		<name>V9NN</name>
+		<uri>https://www.v2ex.com/member/V9NN</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	手持一台美版 pixel 一代。<br />以前一直是拿来备份照片的（一代是永久原画质无限空间），但是现在电池状况实在是不行，国内能够买到的替换电池也几乎没有多少选择。<br />这手机是直接扔抽屉里吃灰，还是有挽救电池的空间？
+	]]></content>
+</entry><entry>
+	<title>[分享发现] Windows 版 CheatSheet，一键显示当前程序快捷键列表</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841165#reply3" />
+	<id>tag:www.v2ex.com,2022-03-18:/t/841165</id>
+	<published>2022-03-18T00:03:06Z</published>
+	<updated>2022-03-17T16:03:06Z</updated>
+	<author>
+		<name>likeunix</name>
+		<uri>https://www.v2ex.com/member/likeunix</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Windows 系统上的各种软件有太多的快捷键，想要记住是几乎不可能的，推荐一个一键显示当前软件快捷键的软件，
+在使用其他程序的时候，只要按下 Ctrl+`就可以理解弹出该软件的所有快捷键列表，还支持收藏功能，非常快速高效。</p>
+<p><strong>下载地址： <a href="http://littletips.redisant.com/" rel="nofollow">http://littletips.redisant.com/</a></strong></p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://pic.imgdb.cn/item/6233cbd65baa1a80abbb7f7a.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] M1 Max 和 Ultrafine 5K 是个好搭配吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841164#reply2" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841164</id>
+	<published>2022-03-17T23:54:26Z</published>
+	<updated>2022-03-18T01:05:44Z</updated>
+	<author>
+		<name>man2vec</name>
+		<uri>https://www.v2ex.com/member/man2vec</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	听说 M1 Max 刚出来的时候和这款显示器一起使用有很多问题，请问这些问题目前都被解决了吗？
+	]]></content>
+</entry><entry>
+	<title>[Apple] Apple Studio Display 测评解禁了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841162#reply9" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841162</id>
+	<published>2022-03-17T22:17:42Z</published>
+	<updated>2022-03-18T00:30:58Z</updated>
+	<author>
+		<name>enzyme</name>
+		<uri>https://www.v2ex.com/member/enzyme</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>The Verge 测评
+<a href="https://www.theverge.com/22981744/apple-studio-display-5k-monitor-webcam-speakers-review" rel="nofollow">https://www.theverge.com/22981744/apple-studio-display-5k-monitor-webcam-speakers-review</a></p>
+<p>貌似和高价格不匹配。The Verge 测评的主要槽点：
+1.摄像头渣
+2.显示面板技术老旧。没 hdr ，没 local dimming ，没可变刷新</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] Ubuntu 这个上传带宽有点大啊……</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841161#reply10" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841161</id>
+	<published>2022-03-17T20:06:56Z</published>
+	<updated>2022-03-18T00:55:27Z</updated>
+	<author>
+		<name>mingl0280</name>
+		<uri>https://www.v2ex.com/member/mingl0280</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>刚刚下了个 18.04 的镜像然后速度飙到了 168MB/s
+<img alt="Img" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://imgur.com/KX1X0WK.png"/></p>
+<p>有点离谱</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 求推荐扩展坞， M1 MBA</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841159#reply3" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841159</id>
+	<published>2022-03-17T19:17:50Z</published>
+	<updated>2022-03-17T21:17:50Z</updated>
+	<author>
+		<name>skywithing</name>
+		<uri>https://www.v2ex.com/member/skywithing</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>现在用显示器自带的 type c 线连接，可以输出 4K144HZ ，但是 USB HUB 被限制只有 2.0 的速率，求推荐款扩展坞，可以稳定实现输出 4K144HZ+USB 3.0HUB+千兆以上有线功能的。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] promql 也强大了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841158#reply0" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841158</id>
+	<published>2022-03-17T19:15:06Z</published>
+	<updated>2022-03-17T17:13:06Z</updated>
+	<author>
+		<name>proxychains</name>
+		<uri>https://www.v2ex.com/member/proxychains</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	把交换机的监控部署完，用了 ifHcOutOctets 感觉也没那么复杂，直到装完 node exporter 要查指标...🤨
+	]]></content>
+</entry><entry>
+	<title>[优惠信息] （原帖改每日一贴）3 月 18 号腾讯云香港新加坡云服务器 约 3 年=33 元-166 元 8 台</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841157#reply3" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841157</id>
+	<published>2022-03-17T19:11:29Z</published>
+	<updated>2022-03-17T03:10:29Z</updated>
+	<author>
+		<name>leomm</name>
+		<uri>https://www.v2ex.com/member/leomm</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	315+抗疫活动 腾讯云香港 2C-2G-1t 约 3 年 33.3-166 元 每天 8 台<br />抗疫期间 拿起键盘撸起来<br />回帖即可参加<br />活动时间: 3 月 18 号 0:00 -3 月 18 号 20:20 结束<br />* * ** * ** * ** * ** * ** * ** * ** * **<br />活动规则<br />* * ** *<br />1 号.前 10 楼内      抽 1 个 166 元  约 3 年香港新加坡云服务器<br />2 号.第 11-20 楼     抽 1 个 166 元  约 3 年香港新加坡云服务器<br />3 号.第 21-30 楼     抽 1 个 166 元  约 3 年香港新加坡云服务器<br />4 号.第 31 楼-60 楼   抽 1 个 155 元  约 3 年香港新加坡云服务器<br />5 号.第 61 楼-90 楼   抽 1 个 155 元  约 3 年香港新加坡云服务器<br />6 号.第 91 楼-133 楼  抽 1 个 133 元  约 3 年香港新加坡云服务器<br />7 号.第 133 楼-333 楼 抽 1 个 66.6 元 约 3 年香港新加坡云服务器<br />8 号.第 333 楼-999 楼 抽 1 个 33.3 元 约 3 年香港新加坡云服务器<br />* * *<br />楼数不够的取消相应名额 一号一天最多回帖一次 一天多次回帖取消其中奖结果<br />* * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * *<br />抽奖结果<br />* * ** *<br />看中国体育彩票官网（ <a target="_blank" href="http://lottery.gov.cn" rel="nofollow noopener">lottery.gov.cn</a> ） 《排列 5 》的当天开奖结果（每天 8.50 官网准时开奖）<br />* * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * ** * **<br />第 1 个数字 代表 1 号 中奖结果<br />第 2 个数字 代表 2 号 中奖结果<br />第 3 个数字 代表 3 号 中奖结果<br />第 1 位数+第 4 位数字 代表 4 号中奖结果 案例 8+3=11 （结果超过楼数是结果为 8+9=17 计算）<br />第 1 位数+第 5 位数字 代表 5 号中奖结果 案例 8+9=89 （结果超过楼数是结果为 8+9=17 计算）<br />第 2 位数+第 5 位数字 代表 6 号中奖结果 案例 5+9=59 （结果超过楼数是结果为 5+9=17 计算）<br />第 1 位数+第 3 位数字+第 5 位数字 代表 7 号中奖结果 案例 8+6+9=869 （结果超过楼数则结果为 8+6+9=23 计算）<br />第 3 位数+第 4 位数字+第 5 位数字 代表 7 号中奖结果 案例 6+3+9=639 （结果超过楼数则结果为 6+3+9=18 计算）<br />* * ** * ** * ** * ** * ** * ** * *<br />（ 中奖者 3 天内没联系 视为自动放弃）<br />****************************<br />历史中奖名单（用户名）<br />sabercoding<br />gunkeepfire<br />up101<br />notgoda <br />bk3251593<br />charslee013 <br />leonardo210001<br />toms0301 <br />itplanes01<br />version<br />cnkinet<br />*********************************************************<br />以上中奖用户参与活动（只要在中奖者的楼上和楼下及可享受中奖待遇） <br />*********************************************************<br />没中的用户可以等明天继续或者选下面常规套餐<br />腾讯云香港日本新加坡硅谷云服务器 约 2 年 166 元 约 3 年 230 元<br /><br />配置可选<br />* * *<br />2 核 2G 30G 硬盘 30M 宽带 1024G 流量 (有效期 31 个月=230)到期可正常续<br />* * *<br />2 核 2G 50G 硬盘 30M 宽带 2048G 流量 (有效期 24 个月=230)到期可正常续<br />* * *<br />2 核 4G 60G 硬盘 30M 宽带 2560G 流量 （可 win 但是配置会变低 ）(有效期 19 个月=230)到期可正常续<br />* * *<br />2 核 4G 80G 硬盘 30M 宽带 3072G 流量 （可 win 但是配置会变低 ）(有效期 15 个月=230)到期可正常续<br />* * *<br />2 核 8G 90G 硬盘 30M 宽带 3584G 流量 （可 win 但是配置会变低 ）(有效期 10 个月=230)到期可正常续<br />*****************************************************************************************<br /><br />联系方式<br />* * *<br />TG <a target="_blank" href="https://t.me/tg988211" rel="nofollow noopener">https://t.me/tg988211</a><br />* * *<br />绿色 leommcn<br />* * *<br />扣扣 593405600
+	]]></content>
+</entry><entry>
+	<title>[奇思妙想] 分享一个小创意：做一款能让人了解手机真实成像能力的 APP</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841156#reply9" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841156</id>
+	<published>2022-03-17T18:20:12Z</published>
+	<updated>2022-03-18T00:41:36Z</updated>
+	<author>
+		<name>beaver0108</name>
+		<uri>https://www.v2ex.com/member/beaver0108</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>一亿像素的手机，真实的成像能力可能还比不上 2000W 的单反。如果有一个能让人了解手机真实成像能力的 APP ，就可以知道自己手机拍照能力到底怎样了，买新手机时也不会再被厂家的吓人参数忽悠了。
+涉及到一些相对专业的摄影光学知识，详细看视频吧：
+<a href="https://youtu.be/cgNiRf7sOEQ" rel="nofollow">https://youtu.be/cgNiRf7sOEQ</a></p>
+<p>如果出现 Video unavailable 错误，点那个页面上的 watch on youtube 就可以了。</p>
+<p>这是个很适合个人开发的小工具。我的另一个平台类创新方案看这里：
+<a href="https://www.v2ex.com/t/840365" rel="nofollow">https://www.v2ex.com/t/840365</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 1Gbps ipv4 对比 5Gbps ipv6 选哪个</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841155#reply4" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841155</id>
+	<published>2022-03-17T18:01:25Z</published>
+	<updated>2022-03-17T19:13:33Z</updated>
+	<author>
+		<name>serafin</name>
+		<uri>https://www.v2ex.com/member/serafin</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>坐标意大利
+目前在用 GPON 下行 1Gbps/上行 200Mbps ，公网 ipv4 。28 欧元(198 RMB)每月
+最近一家新的宽带运营商推出了 EPON 5Gbps/700Mbps ，ipv6 MAP-E 映射 ipv4 。送光口 WiFi5 路由器只有一个 2.5Gbps 口，两个 1Gbps 口（可自己换路由跑满 5Gbps, 有待验证）。16 欧元(113 RMB)每月。</p>
+<p>有点担心 ipv6 MAP-E 映射 ipv4 。求科普。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[MySQL] 求助一个 SQL 表达</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841154#reply6" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841154</id>
+	<published>2022-03-17T17:32:36Z</published>
+	<updated>2022-03-17T19:22:12Z</updated>
+	<author>
+		<name>youthfire</name>
+		<uri>https://www.v2ex.com/member/youthfire</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	名字内的任意部分，不能包含有指定列表里的所有元素。注意是任意部分，而不是整个。<br /><br />假设整个名字的话是<br />select * from nametable where name not in namelist<br /><br />那名字内的任意部分该怎么表达呢？列表里的元素很多，我不能够每个都写一句 name not like %element%<br /><br />求助 V 友！
+	]]></content>
+</entry><entry>
+	<title>[程序员] 关于物联网系统的数据库设计和选型</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841153#reply15" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841153</id>
+	<published>2022-03-17T17:25:03Z</published>
+	<updated>2022-03-18T01:03:38Z</updated>
+	<author>
+		<name>wxt</name>
+		<uri>https://www.v2ex.com/member/wxt</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>之前做能耗监测类的项目，因为有个集中器主控，所以一般一个集中器连接几百块仪表，一个项目也就几十个集中器。当时系统数据库用的 mysql 按月和设备编号分表。也就是一个月一个设备一张数据表。</p>
+<p>最近做了一个项目，但是量大了，可以理解为有一万个集中器了，每个集中器固定有二十多个仪表，沿用原来代码发现 mysql 一个月就要建一万多个数据表，这个很明显不合理了。目前看一个设备一个月也就一百万到四百万条记录吧。</p>
+<p>只有一台 32 核，64g ，19t 硬盘的服务器的话大家有什么更好的方案和技术选型，是不是要放弃 mysql 数据库。</p>
+<p>甲方说年底可能要到三万个设备，明年要五万个。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 图片脑图怎么转 xmind 格式</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841152#reply0" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841152</id>
+	<published>2022-03-17T17:13:42Z</published>
+	<updated>2022-03-17T17:12:42Z</updated>
+	<author>
+		<name>1596384882</name>
+		<uri>https://www.v2ex.com/member/1596384882</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>图片脑图怎么转 xmind 格式
+有经验大手子讲讲便捷方法</p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 多名用户反馈更换过主板的 MacBook Pro 14&#34;和 16&#34;机型升级 macOS 12.3 后变砖无法开机</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841151#reply0" />
+	<id>tag:www.v2ex.com,2022-03-17:/t/841151</id>
+	<published>2022-03-17T16:59:40Z</published>
+	<updated>2022-03-17T16:57:40Z</updated>
+	<author>
+		<name>Pazakui1259</name>
+		<uri>https://www.v2ex.com/member/Pazakui1259</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<a target="_blank" href="https://www.cnbeta.com/articles/tech/1248251.htm" rel="nofollow noopener">https://www.cnbeta.com/articles/tech/1248251.htm</a><br /><br /><a target="_blank" href="https://www.macrumors.com/2022/03/17/macos-monterey-bricking-macs-logic-boards/" rel="nofollow noopener">https://www.macrumors.com/2022/03/17/macos-monterey-bricking-macs-logic-boards/</a>
+	]]></content>
+</entry><entry>
 	<title>[问与答] macOS 上，除了搜狗输入法可以语音输入之外，还有什么输入法可以语音输入的？？（自带的除外）</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841149#reply0" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841149</id>
@@ -39,10 +468,10 @@
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 国内一份工，国外一份工，现实吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841147#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841147#reply3" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841147</id>
 	<published>2022-03-17T16:01:01Z</published>
-	<updated>2022-03-16T16:01:01Z</updated>
+	<updated>2022-03-16T23:08:00Z</updated>
 	<author>
 		<name>reply1988</name>
 		<uri>https://www.v2ex.com/member/reply1988</uri>
@@ -53,10 +482,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 华硕 REDOLBOOK14 AMD 锐龙版开机不认 INTEL SSD</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841145#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841145#reply2" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841145</id>
 	<published>2022-03-17T15:44:26Z</published>
-	<updated>2022-03-17T16:18:39Z</updated>
+	<updated>2022-03-17T20:17:51Z</updated>
 	<author>
 		<name>ukss</name>
 		<uri>https://www.v2ex.com/member/ukss</uri>
@@ -72,10 +501,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 无头骑士 macbook 值得买吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841142#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841142#reply8" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841142</id>
 	<published>2022-03-17T15:32:12Z</published>
-	<updated>2022-03-17T15:59:04Z</updated>
+	<updated>2022-03-18T00:59:27Z</updated>
 	<author>
 		<name>eden0412</name>
 		<uri>https://www.v2ex.com/member/eden0412</uri>
@@ -99,7 +528,7 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] Github 是炸了么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841139#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841139#reply11" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841139</id>
 	<published>2022-03-17T15:17:55Z</published>
 	<updated>2022-03-17T15:48:40Z</updated>
@@ -115,10 +544,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 如果把你关注的主播 (bili or Youtube e.t.c) 全都取关 3~7 天</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841138#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841138#reply6" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841138</id>
 	<published>2022-03-17T15:12:23Z</published>
-	<updated>2022-03-17T16:01:53Z</updated>
+	<updated>2022-03-17T17:07:45Z</updated>
 	<author>
 		<name>zxxufo008</name>
 		<uri>https://www.v2ex.com/member/zxxufo008</uri>
@@ -171,7 +600,7 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 想问问大家有什么好的 it 资源网站</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841134#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841134#reply10" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841134</id>
 	<published>2022-03-17T14:57:59Z</published>
 	<updated>2022-03-17T15:40:12Z</updated>
@@ -243,10 +672,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] PageHelper-Spring-Boot-Starter 所产生的 count 很耗时间，怎么优化？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841129#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841129#reply7" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841129</id>
 	<published>2022-03-17T14:47:46Z</published>
-	<updated>2022-03-17T15:47:24Z</updated>
+	<updated>2022-03-17T16:47:24Z</updated>
 	<author>
 		<name>JasonLaw</name>
 		<uri>https://www.v2ex.com/member/JasonLaw</uri>
@@ -290,10 +719,10 @@ FROM (SELECT u.id,
 	]]></content>
 </entry><entry>
 	<title>[macOS] macOS 貌似不能按分配好的 dhcp 地址获取 v6 后缀</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841128#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841128#reply9" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841128</id>
 	<published>2022-03-17T14:29:58Z</published>
-	<updated>2022-03-17T14:35:10Z</updated>
+	<updated>2022-03-18T00:33:54Z</updated>
 	<author>
 		<name>TwoBall</name>
 		<uri>https://www.v2ex.com/member/TwoBall</uri>
@@ -318,10 +747,10 @@ FROM (SELECT u.id,
 	]]></content>
 </entry><entry>
 	<title>[游戏开发] PC 端游戏，问道</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841126#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841126#reply3" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841126</id>
 	<published>2022-03-17T14:19:02Z</published>
-	<updated>2022-03-17T11:19:02Z</updated>
+	<updated>2022-03-17T12:19:02Z</updated>
 	<author>
 		<name>dogeking</name>
 		<uri>https://www.v2ex.com/member/dogeking</uri>
@@ -332,10 +761,10 @@ FROM (SELECT u.id,
 	]]></content>
 </entry><entry>
 	<title>[程序员] git 有什么办法能 Merge 部分文件夹保留原始 commit 信息吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841125#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841125#reply10" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841125</id>
 	<published>2022-03-17T14:15:03Z</published>
-	<updated>2022-03-17T16:04:32Z</updated>
+	<updated>2022-03-17T16:59:20Z</updated>
 	<author>
 		<name>Elietio</name>
 		<uri>https://www.v2ex.com/member/Elietio</uri>
@@ -374,26 +803,6 @@ Mar 17, 13:46 UTC
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 程序员的水平级别</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841123#reply9" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841123</id>
-	<published>2022-03-17T14:08:10Z</published>
-	<updated>2022-03-17T15:45:07Z</updated>
-	<author>
-		<name>taogen</name>
-		<uri>https://www.v2ex.com/member/taogen</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>Levels of developer</p>
-<ol>
-<li>CRUD boy. API caller. Copy Paste.</li>
-<li>Code design and system design.</li>
-<li>High concurrency, performance, availability.</li>
-<li>Underlying complex functions and algorithms implementation. Making wheels.</li>
-</ol>
-
-	]]></content>
-</entry><entry>
 	<title>[问与答] GitHub 又挂了吧</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841122#reply9" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841122</id>
@@ -409,10 +818,10 @@ Mar 17, 13:46 UTC
 	]]></content>
 </entry><entry>
 	<title>[生活] 如何增加被动的收入</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841121#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841121#reply5" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841121</id>
 	<published>2022-03-17T14:02:35Z</published>
-	<updated>2022-03-17T14:00:35Z</updated>
+	<updated>2022-03-17T18:00:35Z</updated>
 	<author>
 		<name>xuxinglin8888</name>
 		<uri>https://www.v2ex.com/member/xuxinglin8888</uri>
@@ -423,10 +832,10 @@ Mar 17, 13:46 UTC
 	]]></content>
 </entry><entry>
 	<title>[Linux] win 下 xshell 本地为什么不能使用 mv cp 等命令</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841120#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841120#reply14" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841120</id>
 	<published>2022-03-17T14:00:50Z</published>
-	<updated>2022-03-17T15:19:30Z</updated>
+	<updated>2022-03-17T20:47:00Z</updated>
 	<author>
 		<name>sen2</name>
 		<uri>https://www.v2ex.com/member/sen2</uri>
@@ -437,10 +846,10 @@ Mar 17, 13:46 UTC
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 请问各位懂行大哥，女朋友的 offer，电子五所工程师和银行信息/管培岗位哪个好？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841118#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841118#reply7" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841118</id>
 	<published>2022-03-17T13:54:01Z</published>
-	<updated>2022-03-17T15:47:56Z</updated>
+	<updated>2022-03-17T18:54:31Z</updated>
 	<author>
 		<name>xwander</name>
 		<uri>https://www.v2ex.com/member/xwander</uri>
@@ -455,7 +864,7 @@ Mar 17, 13:46 UTC
 	]]></content>
 </entry><entry>
 	<title>[正则表达式] 全书很多空格，求一个正则表达式帮我看看是否行的通？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841117#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841117#reply3" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841117</id>
 	<published>2022-03-17T13:51:32Z</published>
 	<updated>2022-03-17T14:33:00Z</updated>
@@ -472,10 +881,10 @@ Mar 17, 13:46 UTC
 	]]></content>
 </entry><entry>
 	<title>[程序员] 感觉编码不算累，但是和测试打交道真是太累了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841116#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841116#reply21" />
 	<id>tag:www.v2ex.com,2022-03-17:/t/841116</id>
 	<published>2022-03-17T13:47:02Z</published>
-	<updated>2022-03-17T16:23:01Z</updated>
+	<updated>2022-03-18T01:00:55Z</updated>
 	<author>
 		<name>asensio</name>
 		<uri>https://www.v2ex.com/member/asensio</uri>
@@ -529,285 +938,6 @@ ubuntu18.04+PHP Version 7.4.28+Mysql7.4+Apache2
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p>刚刚在医保店买了板蓝根颗粒，刷的医保卡 49.5,回宿舍后上饿了么搜索看了下，同规格厂商，只要 17 元，这是特价，原价 19 元，如果按原价 19 元算，同样规格同样生产企业，医保店 49.5 元和网店 19 元的药品，差价 30 元的智商税在哪！！！坐标魔都</p>
 
-	]]></content>
-</entry><entry>
-	<title>[硬件] 求推荐个电视盒子，要能安装非 TV 版的国内几大视频平台</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841110#reply10" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841110</id>
-	<published>2022-03-17T13:03:16Z</published>
-	<updated>2022-03-17T14:58:09Z</updated>
-	<author>
-		<name>f1ynnv2</name>
-		<uri>https://www.v2ex.com/member/f1ynnv2</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>众所周知，腾讯视频，爱奇艺啥的普通会员只能在电脑，手机和 pad 上用。它们在电视上特意搞了不同的软件，前者叫云视听极光，后者叫什么忘了，反正是不能用普通会员，都要什么超级会员比普通会员贵上一大截。</p>
-<p>本来想买 N1 的盒子，但是发现 N1 盒子装的也是云视听极光，只能用超级会员。</p>
-<p>大家有没有推荐的盒子或者解决方案，可以安装 pad 版的腾讯视频， 爱奇艺啥的，打算用普通会员。
-ps.考虑过用 pad 投屏，但是仍然不方便，不如直接搞个可以用遥控器的盒子方便。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] 更新到了最新 12.3 系统后，出现了 2 次 死机自动重启？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841109#reply2" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841109</id>
-	<published>2022-03-17T12:53:10Z</published>
-	<updated>2022-03-17T15:49:11Z</updated>
-	<author>
-		<name>samzong</name>
-		<uri>https://www.v2ex.com/member/samzong</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ul>
-<li>MacBook Pro (14-inch, 2021)</li>
-<li>12.3 (21E230)</li>
-<li>Apple M1 Max</li>
-</ul>
-<p>其他大佬们有遇到吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有什么游戏推荐？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841108#reply1" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841108</id>
-	<published>2022-03-17T12:52:10Z</published>
-	<updated>2022-03-17T13:05:43Z</updated>
-	<author>
-		<name>MacDows</name>
-		<uri>https://www.v2ex.com/member/MacDows</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	玩过红警 2 ，gta5 ，戴森球计划，文明 6<br />有老哥推荐点吗？
-	]]></content>
-</entry><entry>
-	<title>[macOS] 2 台 Mac 使用 Universal Control (通用控制) 失败</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841107#reply1" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841107</id>
-	<published>2022-03-17T12:46:04Z</published>
-	<updated>2022-03-17T12:43:04Z</updated>
-	<author>
-		<name>henryma1986</name>
-		<uri>https://www.v2ex.com/member/henryma1986</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>该升的都升了，该开的也都开了，但不生效。</p>
-<p>求指点，多谢。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] M1 是 mba 还是 mbp 好</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841106#reply5" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841106</id>
-	<published>2022-03-17T12:41:08Z</published>
-	<updated>2022-03-17T14:41:36Z</updated>
-	<author>
-		<name>tomcats</name>
-		<uri>https://www.v2ex.com/member/tomcats</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>现在用的 mbp 2018 带 bar 的 8g+500g ，今天一看屏幕下面发黑了，估计的散热烧的，强迫症看的难受，但不想去修了，之前屏幕就碎过一次，花了 3k 找人换了个屏幕。请各位给个意见，这 2 款那个好点，我是个小前端。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 首发入了丐版 m1 air，刚刚又买了 8+512 的 m1 mini，好像性能上重复了。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841102#reply0" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841102</id>
-	<published>2022-03-17T12:28:48Z</published>
-	<updated>2022-03-17T08:26:48Z</updated>
-	<author>
-		<name>zhandouji</name>
-		<uri>https://www.v2ex.com/member/zhandouji</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	rt<br />不过 mini 的扩展性好多了。1 是接口多，2 是毕竟放着不动连拓展坞安全多了。
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] Openwrt 做旁路由可以设置 IPTV 嘛</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841101#reply1" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841101</id>
-	<published>2022-03-17T12:26:45Z</published>
-	<updated>2022-03-17T13:41:43Z</updated>
-	<author>
-		<name>zq19890000</name>
-		<uri>https://www.v2ex.com/member/zq19890000</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>光猫桥接到主路由，主路由（关闭 DHCP ）一个口接 4 口旁路由（旁路由开 DHCP：192.168.1.X ），上海电信， 光猫是悦 Me F450G 。</p>
-<p>IPTV 盒子直接插光猫 3-4 口，可以获取内网（光猫的 DHCP：192.168.2.X ）和专网 IP ，但是无法通过互联网认证（应该是因为光猫桥接）。
-IPTV 盒子接主路由可以获取内网（ 192.168.1.X ），但是无法获取专网 IP 。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] [请教个问题] 如果发生经济危机，货币贬值，那我的努力是白费了吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841099#reply17" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841099</id>
-	<published>2022-03-17T12:20:14Z</published>
-	<updated>2022-03-17T16:22:42Z</updated>
-	<author>
-		<name>dongdongdong</name>
-		<uri>https://www.v2ex.com/member/dongdongdong</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>经济学小白，如果货币贬值到 100 快只能买跟葱，那我存钱是不是没有作用了，又没有很多钱买黄金</p>
-
-	]]></content>
-</entry><entry>
-	<title>[MacBook Pro] macbook pro 只有 type c 接口， iPhone /Android 可以把普通数据线用 OTG 转接线连上 macbook 进行调试开发吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841098#reply5" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841098</id>
-	<published>2022-03-17T12:17:25Z</published>
-	<updated>2022-03-17T13:25:38Z</updated>
-	<author>
-		<name>chenqi777</name>
-		<uri>https://www.v2ex.com/member/chenqi777</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[云计算] 送点 15 块钱现金券</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841096#reply0" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841096</id>
-	<published>2022-03-17T12:10:37Z</published>
-	<updated>2022-03-17T12:10:37Z</updated>
-	<author>
-		<name>xiangzi</name>
-		<uri>https://www.v2ex.com/member/xiangzi</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	自己拿去用！美国 2 核 2G 的用了券 6 块钱一个月<br />现金券使用说明<br /><a target="_blank" href="https://www.huocloud.com/help/console/coupon/94.html" rel="nofollow noopener">https://www.huocloud.com/help/console/coupon/94.html</a><br />价格计算器<br /><a target="_blank" href="https://www.huocloud.com/cloud-price/" rel="nofollow noopener">https://www.huocloud.com/cloud-price/</a><br /><br />==========确定用了再兑换=============<br /><br />DJQ90e88dfa503d4f5<br /><br />DJQc6b2ae16a0a44de<br /><br />DJQ020f320bcf3540b<br /><br />DJQ52f150569a27493<br /><br />DJQf05acd02f18d471<br /><br />DJQ805c7ec64ae547b<br /><br /><br />DJQ5b90c4a803e3462<br /><br />DJQ54e36a86991a4ff<br /><br />DJQ55f2b202b7ea466<br /><br />DJQ5d7478c534dc4fb<br /><br />DJQbb47d2405aff48f<br /><br />DJQb84751910eab470<br /><br />DJQ8d4b6278b3f349a<br /><br />DJQ46389c137a18442<br /><br />DJQe3ef94525ef44b6<br /><br />DJQ3030cc27cb00437<br /><br />DJQde8e73463325474<br /><br />DJQf135190461cc4b0<br /><br />DJQ8b2b1ae1d8b64ab<br /><br />DJQf015e7b3e8e848f
-	]]></content>
-</entry><entry>
-	<title>[YouTube] 油管 app 上线了字幕翻译功能</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841095#reply3" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841095</id>
-	<published>2022-03-17T11:48:55Z</published>
-	<updated>2022-03-17T12:54:55Z</updated>
-	<author>
-		<name>mikiko</name>
-		<uri>https://www.v2ex.com/member/mikiko</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	今天刚看到的，而且在简介栏里，有个解说词，显示了完整的每行字幕<br /><br />[![qPiCX8.jpg]( <a target="_blank" href="https://s1.ax1x.com/2022/03/17/qPiCX8.jpg" rel="nofollow noopener">https://s1.ax1x.com/2022/03/17/qPiCX8.jpg</a>)]( <a target="_blank" href="https://imgtu.com/i/qPiCX8" rel="nofollow noopener">https://imgtu.com/i/qPiCX8</a>)<br /><br />[![qPP4YR.jpg]( <a target="_blank" href="https://s1.ax1x.com/2022/03/17/qPP4YR.jpg" rel="nofollow noopener">https://s1.ax1x.com/2022/03/17/qPP4YR.jpg</a>)]( <a target="_blank" href="https://imgtu.com/i/qPP4YR" rel="nofollow noopener">https://imgtu.com/i/qPP4YR</a>)<br /><br />[![qPPqmD.jpg]( <a target="_blank" href="https://s1.ax1x.com/2022/03/17/qPPqmD.jpg" rel="nofollow noopener">https://s1.ax1x.com/2022/03/17/qPPqmD.jpg</a>)]( <a target="_blank" href="https://imgtu.com/i/qPPqmD" rel="nofollow noopener">https://imgtu.com/i/qPPqmD</a>)<br /><br />[![qPi0BD.jpg]( <a target="_blank" href="https://s1.ax1x.com/2022/03/17/qPi0BD.jpg" rel="nofollow noopener">https://s1.ax1x.com/2022/03/17/qPi0BD.jpg</a>)]( <a target="_blank" href="https://imgtu.com/i/qPi0BD" rel="nofollow noopener">https://imgtu.com/i/qPi0BD</a>)
-	]]></content>
-</entry><entry>
-	<title>[问与答] 格式工厂这波弹窗操作</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841094#reply7" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841094</id>
-	<published>2022-03-17T11:27:45Z</published>
-	<updated>2022-03-17T12:57:46Z</updated>
-	<author>
-		<name>tojohnonly</name>
-		<uri>https://www.v2ex.com/member/tojohnonly</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.bmp.ovh/imgs/2022/03/f66349549858f684.png"/></p>
-<p>这相当于同意就是把电脑拿去挖矿吧！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有什么可以替代 windows 内置 VPN 的软件吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841093#reply3" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841093</id>
-	<published>2022-03-17T11:25:38Z</published>
-	<updated>2022-03-17T12:10:25Z</updated>
-	<author>
-		<name>QZFCANBA</name>
-		<uri>https://www.v2ex.com/member/QZFCANBA</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近居家办公，用 win11 自带的 VPN ，配置好连公司的 VPN ，会报“因为算法不同，客户端和服务器无法通信”，问了公司的人说，win10 才能正常使用，不太想换系统，有什么软件是可以替代 windows 自带的 vpn 功能的吗？要支持 SSTP 的。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 求助， b 站上一位 up 曾经收集了大量在线课程，并制作成了表格。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841091#reply0" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841091</id>
-	<published>2022-03-17T11:02:52Z</published>
-	<updated>2022-03-17T07:02:52Z</updated>
-	<author>
-		<name>meetalpha</name>
-		<uri>https://www.v2ex.com/member/meetalpha</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>b 站上一位 up 主曾经收集了大量在线课程，并且制作成了腾讯文档表格，播放点赞量很高。但是我今天尝试了各种关键字，都怎么也搜不到了。
-哪位 v 友能把视频链接发出来，非常感谢！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Python] [外包]找 Python 开发者做个小活</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841090#reply0" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841090</id>
-	<published>2022-03-17T10:58:30Z</published>
-	<updated>2022-03-17T10:58:30Z</updated>
-	<author>
-		<name>inSpring</name>
-		<uri>https://www.v2ex.com/member/inSpring</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	有做过企业微信开发的吗？<br />有个小活找人开发<br /><br /><br />有兴趣加 V 详聊: kiterunner321   备注：企微开发<br />非诚勿扰。感谢！
-	]]></content>
-</entry><entry>
-	<title>[游戏] xbox 上有什么值得深度体验的游戏吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841089#reply6" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841089</id>
-	<published>2022-03-17T10:58:07Z</published>
-	<updated>2022-03-17T13:38:51Z</updated>
-	<author>
-		<name>wherelse</name>
-		<uri>https://www.v2ex.com/member/wherelse</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>入手了一个 xbox series s ，开通了 game pass ，却发现因为太多游戏挑花了眼，现在就只玩了玩地平线 5 。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 关于浏览器硬件加速问题和地图的兼容问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841088#reply2" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841088</id>
-	<published>2022-03-17T10:55:05Z</published>
-	<updated>2022-03-17T14:45:58Z</updated>
-	<author>
-		<name>RedSkipper</name>
-		<uri>https://www.v2ex.com/member/RedSkipper</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	浏览器 chrome<br /><br />打开硬件加速，看谷歌地图（ <a target="_blank" href="http://map.google.com" rel="nofollow noopener">map.google.com</a> ），切卫星图层（ satellite ）会黑屏，关闭硬件加速后正常。<br /><br />打开硬件加速，看高德地图（ <a target="_blank" href="http://ditu.amap.com" rel="nofollow noopener">ditu.amap.com</a> ），正常，关闭硬件加速，会特别卡。<br /><br />现在只能用 edge 看另一个地图，怎么样能解决这个问题，或者求解下这个问题的原因
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 写了两个 Alfred workflow</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841087#reply0" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841087</id>
-	<published>2022-03-17T10:48:11Z</published>
-	<updated>2022-03-17T10:48:11Z</updated>
-	<author>
-		<name>isa</name>
-		<uri>https://www.v2ex.com/member/isa</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最近 macOS 12.3 更新移除了 python2, 导致不少依赖 py2 的 Alfred workflow 无法正常工作, 于是我重写了两个常用的 workflow:</p>
-<ol>
-<li>搜索 SourceTree 仓库的工具 <a href="https://github.com/oe/sourcetree-alfred-workflow" rel="nofollow">https://github.com/oe/sourcetree-alfred-workflow</a></li>
-<li>临时切换 app 语言的工具 <a href="https://github.com/oe/app-lang-switcher-alfred-workflow" rel="nofollow">https://github.com/oe/app-lang-switcher-alfred-workflow</a></li>
-</ol>
-<p>两个工具都是使用 swift 重写, 如果没有安装 xcode 或者开发者命令行工具, 需要使用命令 <code>xcode-select --install</code> 方可正常使用.</p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] 有没有轻量的 CapsLock 重映射工具</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/841086#reply11" />
-	<id>tag:www.v2ex.com,2022-03-17:/t/841086</id>
-	<published>2022-03-17T10:39:24Z</published>
-	<updated>2022-03-17T12:58:56Z</updated>
-	<author>
-		<name>yueqianzhang</name>
-		<uri>https://www.v2ex.com/member/yueqianzhang</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<div>
- 我想改成单键 ESC 组合 CTRL ，有没有简单的工具，kara 太重了，好多服务
- <br/>Windows 类似的是 dual-key-map
- <br/>实在没有就要自己动手丰衣足食了.. 对我来说有点蓝
-</div>
 	]]></content>
 </entry>
 </feed>
