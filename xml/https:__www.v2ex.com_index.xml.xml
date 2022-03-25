@@ -8,15 +8,206 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-03-24T16:11:42Z</updated>
+<updated>2022-03-25T01:02:56Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[分享创造] 10 分钟对公司的 gitlab 代码仓库来一次安全体检</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842763#reply0" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842763</id>
+	<published>2022-03-25T01:02:56Z</published>
+	<updated>2022-03-25T01:02:56Z</updated>
+	<author>
+		<name>ssltest</name>
+		<uri>https://www.v2ex.com/member/ssltest</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<blockquote>
+<p>本文来自用户南瓜投稿</p>
+</blockquote>
+<p>去年 log4j 漏洞爆发时候就已经很痛苦了，当时把所有的线上服务排查了一遍。没想到这都已经过去 3 个月了，上周又遇到了一个服务仍在使用低版本，被外部攻击，有点受伤。
+这件事后，老板让我全量扫一遍我们的代码库，看还有哪些服务还在用老版本的 log4j ，统一推一波修复，防止后续在发生此类事件。</p>
+<h2>方案调研</h2>
+<p><strong>方案一（放弃）</strong>
+当时我第一反应是写个脚本，遍历所有项目，再拉取项目到本地，通过正则匹配的方式识别代码中是否使用了 log4j ，并提取版本，并根据版本号判断是否有漏洞。但后面想了下，这个漏洞检测方式不具备通用性。一是组件判断很麻烦，我们通常说的组件名和配置文件中的组件名根本不是一回事，不是很好对应，二是如果后边再有其他漏洞，还要重新写正则，着实麻烦。
+<strong>方案二（成功）</strong>
+在 github 上搜了下开源项目，看看有没有能对项目做组件扫描的工具，找了半天找到了一个叫 Murphyscan 的开源项目，比较满足我的需求。思路是写个脚本，先通过 gitlab 接口获取项目列表，然后 clone 代码到本地，然后通过 Murphyscan 提供的客户端扫描，处理扫描结果获取目标漏洞组件。</p>
+<h2>脚本流程</h2>
+<p>为寻求便捷、高效，使用 python3 编写脚本，具体流程如下：</p>
+<ol>
+<li>通过 python-gitlab 包，调用 gitlabapi ，获取项目列表及 clone 链接。</li>
+<li>clone 代码到本地</li>
+<li>调用 Murphyscan 客户端，扫描项目</li>
+<li>处理扫描结果（扫描结果为 json 类型），遍历漏洞，发现目标漏洞打印项目名及项目提交者。</li>
+<li>删除 clone 代码</li>
+</ol>
+<h2>进一步，增量检测</h2>
+<p>全量检测搞定，老板交代的任务算是搞完，心情愉悦，但有一个问题，如果哪个程序员手抖，引用组件时候，又引入一个低版本的，那老板岂不是要杀我祭天。怀着忐忑的心情调研了下怎么扫描增量服务。
+经过调研发现，gitlab 有一个叫 webhook 功能。他的功能是，管理员可以指定 push 、merge 等动作触发时，向某个指定接口通知该事件，这样我就可以知道有代码更新或者创建。拿到通知后我就去拉取最新代码，再扫描一次，发现有漏洞后通过机器人提醒我，这样增量检测就搞定了。</p>
+<h2>gitlab 配置</h2>
+<p>进入 Gitlab 平台，点击顶部 [菜单] - [管理员] 进入管理中心</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://murphysec-doc-1257309290.cos.ap-beijing.myqcloud.com/2022/03/24/16481369251088.jpg"/></p>
+<ol>
+<li>选择系统钩子进入 Webhook 设置页面</li>
+<li>URL 处填写 python 起的 webapi 接口地址</li>
+<li>下方触发器中确保 [仓库更新事件] 处于勾选状态</li>
+<li>去掉 [启用 SSL 验证] 的默认勾选</li>
+<li>点击 [添加系统钩子] 完成设置</li>
+</ol>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://murphysec-doc-1257309290.cos.ap-beijing.myqcloud.com/2022/03/24/16481369298127.jpg"/></p>
+<h2>webapi</h2>
+<p>通过 fastapi 起了一个 web 服务，其功能主要是接收 gitlab 的 webhook 事件推送，收到事件后，拉取项目代码，并进行扫描，同样扫描结果会通过飞书机器人将有问题的项目检测结果推送给我。</p>
+<h2>待优化</h2>
+<p>目前代码还有些问题，主要是目前流程还是单线程的，我们公司项目量和代码更新量比较少的情况下还可以，如果代码更新比较频繁，可能会导致使用 webapi 线程过多，服务崩溃。后续会通过任务队列形式，将 webhook 接口和漏洞检测拆开，通过任务队列管理检测任务。</p>
+<h2>项目地址</h2>
+<p>该项目已贡献给 MurphySecurity ，
+项目地址：<a href="https://github.com/murphysecurity/murphysec-gitlab-scanner.git" rel="nofollow">https://github.com/murphysecurity/murphysec-gitlab-scanner.git</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 手机上微信聊天记录如何恢复</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842762#reply0" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842762</id>
+	<published>2022-03-25T01:00:22Z</published>
+	<updated>2022-03-25T00:57:22Z</updated>
+	<author>
+		<name>unt</name>
+		<uri>https://www.v2ex.com/member/unt</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	我和女朋友的聊天记录总共是 10.5G ，之前女朋友手机上不小心清空聊天记录了，但她电脑里有，我手机上有，请问有没有办法恢复她手机上的聊天记录
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 还是忍不住，开源了一个 Java 的 dubbo 网关，在众多网关使用者中寻找知音</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842760#reply0" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842760</id>
+	<published>2022-03-25T00:47:17Z</published>
+	<updated>2022-03-23T00:47:17Z</updated>
+	<author>
+		<name>kalman03</name>
+		<uri>https://www.v2ex.com/member/kalman03</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<a target="_blank" href="https://github.com/jingxiang/dubbo-gateway" rel="nofollow noopener">https://github.com/jingxiang/dubbo-gateway</a>
+	]]></content>
+</entry><entry>
+	<title>[游戏] 想玩游戏，但是没有网络怎么办？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842759#reply6" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842759</id>
+	<published>2022-03-25T00:43:01Z</published>
+	<updated>2022-03-25T01:09:24Z</updated>
+	<author>
+		<name>istevenshen</name>
+		<uri>https://www.v2ex.com/member/istevenshen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>想在下班后在公司附近的悠闲场所玩玩游戏（像 CSGO 之类），但是没有网络怎么办？想过随身 WiFi ，总感觉不稳定，有什么解决方法吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 大家是如何整合 rss、微信收藏、浏览器收藏夹等信息资源的，并将信息转换成知识？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842758#reply3" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842758</id>
+	<published>2022-03-25T00:24:07Z</published>
+	<updated>2022-03-25T01:00:38Z</updated>
+	<author>
+		<name>kqij</name>
+		<uri>https://www.v2ex.com/member/kqij</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>有没有一些工具可以串联上面的信息</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Linux] 如何实现在 kylin 安装的 qemu 上装 Ubuntu 镜像</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842757#reply0" />
+	<id>tag:www.v2ex.com,2022-03-25:/t/842757</id>
+	<published>2022-03-25T00:09:25Z</published>
+	<updated>2022-03-25T00:06:25Z</updated>
+	<author>
+		<name>imp258</name>
+		<uri>https://www.v2ex.com/member/imp258</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我最近在 risc-v 和 qemu 上想实现安装 Ubuntu 镜像来安装软件实现开发，但是在安装中遇到镜像安装不上的问题，请问大佬们有没有指导意见。（没有具体的报错，就是装了之后没反应，还是那种 linux （ none ）的状态）</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 播客分别在 iPad iPhone MacBook 上 都没办法特别好的及时更新和同步</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842756#reply4" />
+	<id>tag:www.v2ex.com,2022-03-24:/t/842756</id>
+	<published>2022-03-24T22:19:13Z</published>
+	<updated>2022-03-25T01:07:29Z</updated>
+	<author>
+		<name>Jememanque</name>
+		<uri>https://www.v2ex.com/member/Jememanque</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	我在 ipad 上听的 ，我用 macbook 打开博客 却不会显示自己之前听过的博客，得要去 iphone 或者 ipad 上面找，大家怎么解决的？
+	]]></content>
+</entry><entry>
+	<title>[V2EX] 能否开发个投票功能？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842755#reply8" />
+	<id>tag:www.v2ex.com,2022-03-24:/t/842755</id>
+	<published>2022-03-24T21:02:30Z</published>
+	<updated>2022-03-25T00:47:35Z</updated>
+	<author>
+		<name>vcfghtyjc</name>
+		<uri>https://www.v2ex.com/member/vcfghtyjc</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>花费应该需要比正常发帖贵一些。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iPhone] iPhone 最近掉电快</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842754#reply3" />
+	<id>tag:www.v2ex.com,2022-03-24:/t/842754</id>
+	<published>2022-03-24T18:12:44Z</published>
+	<updated>2022-03-24T21:11:44Z</updated>
+	<author>
+		<name>gebishushu</name>
+		<uri>https://www.v2ex.com/member/gebishushu</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>为什么我用 usb 插座加普通线充电掉电比用苹果自家的充电器充的电掉电快呢</p>
+
+	]]></content>
+</entry><entry>
+	<title>[OpenWrt] 换软路由了出红米 AX6 已刷 openwrt</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842752#reply0" />
+	<id>tag:www.v2ex.com,2022-03-24:/t/842752</id>
+	<published>2022-03-24T16:56:02Z</published>
+	<updated>2022-03-24T12:55:02Z</updated>
+	<author>
+		<name>SIEMENS</name>
+		<uri>https://www.v2ex.com/member/SIEMENS</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	换软路由了出红米 AX6 已刷 openwrt  原包装在<br />350 顺丰包邮
+	]]></content>
+</entry><entry>
+	<title>[职场话题] 请教一个今天面试中出现的问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842751#reply12" />
+	<id>tag:www.v2ex.com,2022-03-24:/t/842751</id>
+	<published>2022-03-24T16:51:23Z</published>
+	<updated>2022-03-25T00:43:02Z</updated>
+	<author>
+		<name>Zink99</name>
+		<uri>https://www.v2ex.com/member/Zink99</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>面试前端岗</p>
+<p>面试过程中问到了跨域的问题，我讲了几种解决方案，然后说到了 Proxy ，面试官让我讲讲 webpack 怎么做 Proxy ，我说我不知道怎么配，没有实操过，然后补充了 Proxy 的思路，不过他貌似并不买账。</p>
+<p>想问下现在卷到连 webpack 的配置都需要背了吗？</p>
+
+	]]></content>
+</entry><entry>
 	<title>[Vue.js] 同时用过 element-ui 和 ant-design-vue 的能否聊聊感受？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842750#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842750#reply20" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842750</id>
 	<published>2022-03-24T16:14:42Z</published>
-	<updated>2022-03-24T16:11:42Z</updated>
+	<updated>2022-03-25T01:07:53Z</updated>
 	<author>
 		<name>Chism</name>
 		<uri>https://www.v2ex.com/member/Chism</uri>
@@ -26,10 +217,10 @@
 	]]></content>
 </entry><entry>
 	<title>[生活] V 友们有什么好用的大瓶免水洗洗手液可以推荐一下吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842749#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842749#reply3" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842749</id>
 	<published>2022-03-24T16:01:39Z</published>
-	<updated>2022-03-24T15:59:39Z</updated>
+	<updated>2022-03-24T17:52:51Z</updated>
 	<author>
 		<name>theklf4</name>
 		<uri>https://www.v2ex.com/member/theklf4</uri>
@@ -40,10 +231,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 安卓手机丢失了，有哪些办法能找回？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842748#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842748#reply3" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842748</id>
 	<published>2022-03-24T15:51:23Z</published>
-	<updated>2022-03-24T11:51:23Z</updated>
+	<updated>2022-03-24T14:51:23Z</updated>
 	<author>
 		<name>nedu</name>
 		<uri>https://www.v2ex.com/member/nedu</uri>
@@ -61,10 +252,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Linux] Gnome42 已经出山， KDE 还能扛得住吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842747#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842747#reply10" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842747</id>
 	<published>2022-03-24T15:48:48Z</published>
-	<updated>2022-03-24T16:09:20Z</updated>
+	<updated>2022-03-24T02:02:11Z</updated>
 	<author>
 		<name>chzmwfg</name>
 		<uri>https://www.v2ex.com/member/chzmwfg</uri>
@@ -79,10 +270,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有没有什么方法设置剪贴板图片自动插入到 onenote</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842745#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842745#reply2" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842745</id>
 	<published>2022-03-24T15:40:54Z</published>
-	<updated>2022-03-24T15:39:54Z</updated>
+	<updated>2022-03-24T16:57:05Z</updated>
 	<author>
 		<name>whale11</name>
 		<uri>https://www.v2ex.com/member/whale11</uri>
@@ -110,7 +301,7 @@ wx(base64): TEJfMTk0MzE=</p>
 	]]></content>
 </entry><entry>
 	<title>[MySQL] mysql 删除表字段后，表的大小会减小吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842743#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842743#reply1" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842743</id>
 	<published>2022-03-24T15:26:24Z</published>
 	<updated>2022-03-24T15:25:24Z</updated>
@@ -139,10 +330,10 @@ wx(base64): TEJfMTk0MzE=</p>
 	]]></content>
 </entry><entry>
 	<title>[ WATCH] iPhone 关机 apple watch s7 接不了电话吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842741#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842741#reply5" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842741</id>
 	<published>2022-03-24T15:18:30Z</published>
-	<updated>2022-03-24T16:15:31Z</updated>
+	<updated>2022-03-24T19:15:31Z</updated>
 	<author>
 		<name>1234ts</name>
 		<uri>https://www.v2ex.com/member/1234ts</uri>
@@ -153,10 +344,10 @@ wx(base64): TEJfMTk0MzE=</p>
 	]]></content>
 </entry><entry>
 	<title>[Apple] 关于 iMessage 的隐私问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842739#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842739#reply14" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842739</id>
 	<published>2022-03-24T15:04:19Z</published>
-	<updated>2022-03-24T15:30:09Z</updated>
+	<updated>2022-03-24T21:47:28Z</updated>
 	<author>
 		<name>JuicyJ</name>
 		<uri>https://www.v2ex.com/member/JuicyJ</uri>
@@ -170,10 +361,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[macOS] MacBook Pro 2020 intel 更新 Mac OS 12.3 后使用绿联的 Type C 转 HDMI 不稳定</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842738#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842738#reply10" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842738</id>
 	<published>2022-03-24T15:03:14Z</published>
-	<updated>2022-03-24T16:21:08Z</updated>
+	<updated>2022-03-24T18:07:10Z</updated>
 	<author>
 		<name>GaoYibo</name>
 		<uri>https://www.v2ex.com/member/GaoYibo</uri>
@@ -185,7 +376,7 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[优惠信息] 腾讯云香港新加坡云服务器约 3 年 133 元-166 元</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842736#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842736#reply12" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842736</id>
 	<published>2022-03-24T14:52:10Z</published>
 	<updated>2022-03-23T22:51:10Z</updated>
@@ -244,10 +435,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 北京移动宽带光猫改桥接后米家 APP 无法访问</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842731#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842731#reply9" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842731</id>
 	<published>2022-03-24T14:27:18Z</published>
-	<updated>2022-03-24T16:06:20Z</updated>
+	<updated>2022-03-24T17:06:20Z</updated>
 	<author>
 		<name>marcojbk</name>
 		<uri>https://www.v2ex.com/member/marcojbk</uri>
@@ -276,10 +467,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[macOS] 我 out 了，原来 macOS12 的 Safari 也可以直接复制图片内的文字</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842729#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842729#reply5" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842729</id>
 	<published>2022-03-24T14:18:55Z</published>
-	<updated>2022-03-24T12:17:55Z</updated>
+	<updated>2022-03-24T15:17:55Z</updated>
 	<author>
 		<name>philon</name>
 		<uri>https://www.v2ex.com/member/philon</uri>
@@ -303,10 +494,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[职场话题] CodeReview？烂了算了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842727#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842727#reply14" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842727</id>
 	<published>2022-03-24T14:03:23Z</published>
-	<updated>2022-03-24T15:41:28Z</updated>
+	<updated>2022-03-24T18:36:23Z</updated>
 	<author>
 		<name>RiceMarch</name>
 		<uri>https://www.v2ex.com/member/RiceMarch</uri>
@@ -323,10 +514,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[Apple] 紧急求助， macOS 使用恢复模式，卡在激活页面</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842726#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842726#reply9" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842726</id>
 	<published>2022-03-24T13:59:24Z</published>
-	<updated>2022-03-24T13:58:24Z</updated>
+	<updated>2022-03-24T18:37:11Z</updated>
 	<author>
 		<name>ottawa8821</name>
 		<uri>https://www.v2ex.com/member/ottawa8821</uri>
@@ -336,10 +527,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[Vue.js] vue-cli 脚手架有最新好的 教程 吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842725#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842725#reply7" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842725</id>
 	<published>2022-03-24T13:58:53Z</published>
-	<updated>2022-03-24T15:42:19Z</updated>
+	<updated>2022-03-25T00:43:20Z</updated>
 	<author>
 		<name>ling516</name>
 		<uri>https://www.v2ex.com/member/ling516</uri>
@@ -352,10 +543,10 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[OpenWrt] openwrt 上使用 opencIash 的奇葩问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842723#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842723#reply8" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842723</id>
 	<published>2022-03-24T13:56:06Z</published>
-	<updated>2022-03-24T13:54:06Z</updated>
+	<updated>2022-03-24T19:29:30Z</updated>
 	<author>
 		<name>psyer</name>
 		<uri>https://www.v2ex.com/member/psyer</uri>
@@ -369,7 +560,7 @@ A 是美区账号，B 是国区账号（云上贵州），A 、B 都开启了 iC
 	]]></content>
 </entry><entry>
 	<title>[问与答] 如何优化 vite 打包后的文件大小？用的一个库发现不同的 import 姿势打包出来的大小差了近 5 倍</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842722#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842722#reply3" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842722</id>
 	<published>2022-03-24T13:44:30Z</published>
 	<updated>2022-03-24T14:15:12Z</updated>
@@ -498,10 +689,10 @@ document.querySelector('#root')?.appendChild(a);
 	]]></content>
 </entry><entry>
 	<title>[Apple] 为什么 Mac mini 的风扇就没有停过？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842715#reply15" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842715#reply17" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842715</id>
 	<published>2022-03-24T12:49:36Z</published>
-	<updated>2022-03-24T14:59:52Z</updated>
+	<updated>2022-03-24T17:54:01Z</updated>
 	<author>
 		<name>blackcurrant</name>
 		<uri>https://www.v2ex.com/member/blackcurrant</uri>
@@ -546,10 +737,10 @@ document.querySelector('#root')?.appendChild(a);
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 奇葩人接受 Offer 后拖了 28 天然后说不来了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842711#reply80" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842711#reply108" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842711</id>
 	<published>2022-03-24T12:42:22Z</published>
-	<updated>2022-03-24T16:17:27Z</updated>
+	<updated>2022-03-24T19:20:59Z</updated>
 	<author>
 		<name>zagfai</name>
 		<uri>https://www.v2ex.com/member/zagfai</uri>
@@ -574,10 +765,10 @@ document.querySelector('#root')?.appendChild(a);
 	]]></content>
 </entry><entry>
 	<title>[程序员] 建一个 100 个北京 ip 的代理, 成本大概多少?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842709#reply20" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842709#reply28" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842709</id>
 	<published>2022-03-24T12:30:57Z</published>
-	<updated>2022-03-24T15:50:36Z</updated>
+	<updated>2022-03-24T21:14:41Z</updated>
 	<author>
 		<name>niselover</name>
 		<uri>https://www.v2ex.com/member/niselover</uri>
@@ -602,10 +793,10 @@ document.querySelector('#root')?.appendChild(a);
 	]]></content>
 </entry><entry>
 	<title>[全球工单系统] 我早上自己打电话自主冻结了自己的 QQ 号，现在却解冻不了了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842706#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842706#reply13" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842706</id>
 	<published>2022-03-24T12:30:14Z</published>
-	<updated>2022-03-24T16:15:51Z</updated>
+	<updated>2022-03-24T18:38:55Z</updated>
 	<author>
 		<name>HFX3389</name>
 		<uri>https://www.v2ex.com/member/HFX3389</uri>
@@ -696,10 +887,10 @@ document.querySelector('#root')?.appendChild(a);
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 5 年经验， shopee 的 senior engineer 只给 20 出头，这在整个公司都是垫底的吧？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842704#reply14" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842704#reply17" />
 	<id>tag:www.v2ex.com,2022-03-24:/t/842704</id>
 	<published>2022-03-24T12:11:36Z</published>
-	<updated>2022-03-24T15:09:16Z</updated>
+	<updated>2022-03-24T16:44:51Z</updated>
 	<author>
 		<name>Delav</name>
 		<uri>https://www.v2ex.com/member/Delav</uri>
@@ -733,417 +924,6 @@ document.querySelector('#root')?.appendChild(a);
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	我本地访问不到 mongodb ，云服务器的 centos 可以访问到那台 mongodb （ centos 和 mongodb 不是一台机器，但是网络互通），我如何在本地实现通过云服务器 IP+端口，访问 mongodb 呢，在 centos 可以做个端口转发功能吗？
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [远程][Web3][Solidity][NFT] 国际化元宇宙/数字收藏类初创项目，前端/后端/全栈/智能合约/运维/游戏开发/自荐职位（032422 更新岗位信息）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842701#reply0" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842701</id>
-	<published>2022-03-24T12:00:18Z</published>
-	<updated>2022-03-24T12:00:18Z</updated>
-	<author>
-		<name>expexp</name>
-		<uri>https://www.v2ex.com/member/expexp</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h1>关于我们</h1>
-<p>产品 Slogan：一个既能为你带来奖励又能与最喜爱的人物角色亲密接触的数字疆域</p>
-<p>介绍：VIMworld (<a href="http://www.vimworld.com" rel="nofollow">www.vimworld.com</a>) 旨在重塑实体与数字商品的未来转型模式。自 2020 年 8 月以来，我们成功开发出了一个数字收藏品生态。 在这里，用户可以照顾、喂养他们心爱的 VIM ，并伴随它们成⻓，同时还可与其他用户进行交易。平台上所有 VIM 都是由来自世界各地的天才艺术家所创作而成。在疫情期间的短短几个月时间里，我们吸引了全球各地的用户了解、玩耍并深深爱上我们这款革命性产品以及我们的伟大愿景，形成了一个极具黏性的全球社区。</p>
-<h1>前端开发工程师</h1>
-<h2>年薪范围：28W-80W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>配合设计师设计，并且实现优质的前端网页功能来满足去中心化应用（ DAPP ）的需求</li>
-<li>实现跨平台的客户端网页，并能第一时间应对和解决用户的各类问题反馈</li>
-<li>对接后端提供的 API 接口，并且能对 API 设计提出意见、建议以及优化</li>
-<li>与运维人员一起建立和维护内部以及生产版本</li>
-<li>撰写并维护技术文档和技术指南</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>2 年及以上全职前端开发经验，了解所用前端框架的核心原理</li>
-<li>精通 JavaScript/HTML/SCSS, 精通 React ，掌握 Redux</li>
-<li>掌握 ES6 规范；擅长页面布局和重构，浏览器运作原理，浏览器兼容和页面渲染执行效率，Chrome 调试等</li>
-<li>有丰富的响应式设计、跨浏览器、HTML5 和 CSS 开发经验</li>
-<li>有丰富的 Swagger 或者 REST API 对接经验</li>
-<li>有开发前端单元测试经验</li>
-<li>熟练掌握模块管理和打包工具（ Webpack 等）</li>
-<li>具有一定的自我管理能力，能较独立协调、推动功能进展，保证项目的质量和效率</li>
-</ul>
-<h2>加分项：</h2>
-<ul>
-<li>熟悉 styled-component ，或有 material-ui 开发经验</li>
-<li>熟悉 Web3.js/Ethers.js/Truffle/Hardhat ；或者有 Solidity 上线项目开发经验</li>
-<li>开源社区代码贡献经验（欢迎提供 Github 链接）</li>
-<li>去中心化项目开发经验</li>
-<li>对跨国团队（尤其是英语工作环境）充满激情和兴趣</li>
-</ul>
-<h1>后端开发工程师</h1>
-<h2>年薪范围：28W-80W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>设计并实现去中心化数据分析、存储、读取，并实现相关后端 API</li>
-<li>设计并对接多种去中心化公链，实现以及解决跨链数据桥接等挑战</li>
-<li>配合智能合约，读取、执行、验证用户链上操作，并提供 API 给其他内部微服务</li>
-<li>设计和实现支持多客户端（ Web/Mobile/SDK ）的后端 API</li>
-<li>建立和维护生产系统</li>
-<li>撰写并维护技术文档和技术指南</li>
-<li>建立并维护可以运行大规模系统的环境，包括开发，测试和生产环境</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>2 年及以上全职后端开发经验</li>
-<li>精通 Node.js/Typescript 开发语言和相关流行框架，例如 Next.js/NestJS</li>
-<li>熟悉 Go/Python/Java 中至少一门语言，并有高并发后端服务开发经验</li>
-<li>熟悉 MongoDB 、Redis 、PostgreSQL 、MySQL 等常见数据库，至少对一种数据库有生产环境开发和维护经验</li>
-<li>熟悉 Linux/Mac 系统以及开发环境</li>
-<li>有丰富的 Swagger 或者 REST API 设计和搭建经验</li>
-<li>掌握常见的算法和数据结构，并拥有良好的编码能力</li>
-<li>对系统设计和编码充满热情</li>
-<li>具有一定的自我管理能力，能较独立协调、推动功能进展，保证项目的质量和效率</li>
-</ul>
-<h2>加分项：</h2>
-<ul>
-<li>熟悉 Web3.js/Ethers.js/Truffle/Hardhat ；或者有 Solidity 上线项目开发经验</li>
-<li>开源社区代码贡献经验（欢迎提供 Github 链接）</li>
-<li>去中心化项目开发经验</li>
-<li>对跨国团队（尤其是英语工作环境）充满激情和兴趣</li>
-</ul>
-<h1>智能合约开发工程师</h1>
-<h2>年薪范围：28W-80W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>设计、开发、维护去中心化 DApp 的智能合约代码</li>
-<li>开发并解决合约代码以及数据跨链、桥接等挑战，维护 Solidity 代码在不同公链平台上的差异化问题</li>
-<li>熟练使用自动化工具部署、验证、测试、以及生成合约 ABI 中间件给其他内部微服务</li>
-<li>配合团队工程人员设计并实现安全、流畅的去中心应用体验</li>
-<li>开发并维护内部常用脚本以及链上功能调试工具（ GUI 或 CLI ）</li>
-<li>撰写并维护技术文档和技术指南</li>
-<li>建立并维护可以运行大规模系统的环境，包括开发，测试和生产环境</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>1 年及以上 Solidity 智能合约开发经验</li>
-<li>2 年及以上全职软件开发经验</li>
-<li>参与开发至少一个主网上线项目，了解 DApp 的标准开发、测试、发布流程</li>
-<li>熟悉 Web3.js/Ethers.js/Truffle/Hardhat/Remix 等开发工具</li>
-<li>了解 ERC20 ，ERC721 ，ERC1155 等合约标准，熟悉 OpenZeppelin 等第三方安全合约库</li>
-<li>对去中心化技术以及数字资产有一定深度的了解</li>
-<li>熟悉 Linux/Mac 系统以及开发环境</li>
-<li>掌握常见的算法和数据结构，并拥有良好的编码能力</li>
-<li>具有一定的自我管理能力，能较独立协调、推动功能进展，保证项目的质量和效率</li>
-</ul>
-<h2>加分项：</h2>
-<ul>
-<li>开源社区代码贡献经验（欢迎提供 Github 链接）</li>
-<li>对密码学、安全协议、加密算法等有深入经验</li>
-<li>深入了解和掌握 EVM 的原理、机制</li>
-<li>乐于与团队同伴分享、交流去中心化技术以及风向</li>
-<li>对跨国团队（尤其是英语工作环境）充满激情和兴趣</li>
-</ul>
-<h1>DevOps 工程师</h1>
-<h2>年薪范围：28W-80W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>在我们的工程团队中担任关键角色，负责构建、优化和维护我们后端和前端云基础架构的完整性、稳定性、可扩展性和安全性。</li>
-<li>自动化 VIMworld 基础设施的部署、管理和操作，无需人工干预。</li>
-<li>将成为我们项目团队的一员，为 VIMworld 生态系统创建、部署和维护令人兴奋的新产品和功能。</li>
-<li>将使用去中心化行业中最新的智能合约和 NFT 技术。</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>计算机科学或相关领域的学士学位和至​​少 3 年相关技术领域的工作经验，或同等的实践经验</li>
-<li>至少 2 年以上使用 Golang 、Python 、Java 或类似语言自动化生产系统的经验。</li>
-<li>Linux 系统管理专家，包括存储、网络和服务。</li>
-<li>与 AWS 、GCE 或 Heroku 等公共 IaaS 和 PaaS 提供商合作的丰富经验。</li>
-<li>在生产环境中部署和维护 docker 应用程序和 Kubernetes 集群的丰富经验。</li>
-<li>有 Python 、Ruby 脚本和 Serverless 框架知识者优先。</li>
-<li>熟悉至少一种 IaC 工具，例如 Terraform 、Ansible 、AWS CloudFormation 或 Chef 。</li>
-<li>至少了解一个 CI/CD 管道，包括 Gitlab CI 、Github Actions 、Circle CI 或 Jenkins 。</li>
-<li>能够理解 /调整 CDN 配置，包括 Cloudflare 或 Cloudfront 。</li>
-<li>具有使用 NoSQL 数据库（例如 MongoDB 或类似数据库）的经验。</li>
-<li>具有设计、构建和部署基于云的解决方案基础架构的经验。</li>
-<li>具有与产品和项目利益相关者交流技术概念的经验。</li>
-<li>了解区块链技术和智能合约是一个巨大的优势。</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>与产品管理和工程部门的其他利益相关者（后端、前端、移动、QA 、UI/UX 等）合作，规划和设计我们产品的应用程序的性能、安全性、监控要求以及它们在我们的技术堆栈生态系统中的集成。</li>
-<li>制作符合我们内部标准的基础设施 /自动化代码，以适应大规模 Web 环境的风格、可维护性和最佳实践。</li>
-<li>分析和优化应用程序性能，以确保应用程序按照服务水平协议或项目交付规范启动和运行。</li>
-<li>以安全、经过良好测试和高性能的方式支持 VIMworld 产品的功能开发和改进。充当质量代码的看门人，以确保新版本不会内爆或降低整体站点性能。</li>
-<li>通过适当的工具和脚本自动执行任务。能够根据需要为 CronJobs 编写一个自动化脚本。</li>
-<li>与其他工程师一起维护和更新 CI/CD 相关的更改和更新。</li>
-<li>能够使用 AWS 监控工具或其他 3 方工具设置和监控基础设施警报和指标。彻底记录开发阶段并监控系统。</li>
-<li>成为我们在云和区块链基础设施组件的配置、文档、优化和支持方面的主题专家。</li>
-<li>确保软件与最新技术保持同步。</li>
-<li>倡导改进产品质量、安全性和性能。</li>
-<li>参加工作日和周末以及一些晚上，以协助解决产品操作、安全操作和紧急工程问题。</li>
-<li>负责站点的安全结构、治理合规性及其最佳实践。</li>
-<li>为将来的实现构建可重用的代码库。</li>
-<li>负责我们云环境的可扩展性、成本预算和管理。</li>
-</ul>
-<h2>加分项：</h2>
-<ul>
-<li>开源社区代码贡献经验（欢迎提供 Github 链接）</li>
-<li>对密码学、安全协议、加密算法等有深入经验</li>
-<li>深入了解和掌握 EVM 的原理、机制</li>
-<li>乐于与团队同伴分享、交流去中心化技术以及风向</li>
-<li>对跨国团队（尤其是英语工作环境）充满激情和兴趣</li>
-</ul>
-<h1>QA 软件测试工程师</h1>
-<h2>年薪范围：12W-36W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>设计并实现系统化的测试流程，包括集成测试、回归测试、冒烟测试以及压力测试等</li>
-<li>制定并严格执行 QA 策略方案，以及发布流程中的 QA 步骤</li>
-<li>深入了解产品，并且设计、撰写、执行、和维护详细的测试方案，以及生成测试案例报告</li>
-<li>熟练使用 JIRA 软件记录缺陷，并能辅助工程师提供重现步骤或方案</li>
-<li>根据需求，协助客服以及市场部门了解和解决用户产品问题</li>
-<li>辅助开发团队维护技术文档和技术指南</li>
-<li>监控各项指标，并且能给团队提供更多的软件质量改进建议和工具辅助</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>3 年及以上全职软件测试经验</li>
-<li>精通一门脚本语言，例如 Python/Java/Ruby</li>
-<li>了解至少一个 MongoDB 、Redis 、PostgreSQL 、MySQL 等常见数据库的操作语句</li>
-<li>熟悉 Linux/Mac 系统以及开发环境</li>
-<li>有丰富的 Swagger 或者 REST API 测试和案例编写经验</li>
-<li>掌握常见的测试理论，并拥有良好的故障排除和根本问题剖析能力</li>
-<li>具有良好的沟通、写作以及团体协作能力</li>
-<li>具有一定的自我管理能力，能较独立协调、推动测试进展，保证项目的质量和更低的出错率</li>
-</ul>
-<h2>加分项：</h2>
-<ul>
-<li>有自动化脚本测试经验者优先</li>
-<li>熟悉 CI/CD 框架的搭建或者维护</li>
-<li>有优秀的英语读写能力</li>
-<li>开源社区代码贡献经验（欢迎提供 Github 链接）</li>
-<li>去中心化项目开发经验</li>
-<li>对跨国团队（尤其是英语工作环境）充满激情和兴趣</li>
-</ul>
-<h1>游戏后端开发工程师</h1>
-<h2>年薪范围：28W-80W RMB （支持多币种）</h2>
-<h2>工作职责：</h2>
-<ul>
-<li>设计并实现去中心化数据分析、存储、读取，并实现相关后端 API</li>
-<li>负责服务端逻辑模块设计、开发和测试以及优化</li>
-<li>负责服务端框架的稳定性和效率优化</li>
-<li>解决游戏上线运营期间产生的各种故障和问题</li>
-<li>负责技术方案设计、问题跟踪、定位处理</li>
-</ul>
-<h2>岗位要求：</h2>
-<ul>
-<li>2 年以上 Golang 开发经验，有良好的编程习惯，有线上游戏相关项目经验</li>
-<li>有分布式系统设计和开发经验，有高并发、海量用户上线维护经验</li>
-<li>有服务器性能分析、故障分析经验</li>
-<li>熟练掌握 Linux 、Golang 、MySQL 、Redis 、消息队列的使用</li>
-<li>能够准确的理解策划方案，并进行任务细分和工作量预估</li>
-<li>熟练数据结构设计</li>
-<li>了解游戏前后端同步机制，对并发请求处理有实际经验</li>
-<li>熟悉 Linux/Mac 系统以及开发环境</li>
-<li>有丰富的 Swagger 或者 REST API 设计和搭建经验</li>
-<li>掌握常见的算法和数据结构，并拥有良好的编码能力</li>
-<li>对系统设计和编码充满热情</li>
-<li>具有一定的自我管理能力，能较独立协调、推动功能进展，保证项目的质量和效率</li>
-</ul>
-<hr/>
-<h1>联系方式（请注明 V2EX ）：</h1>
-<p>VX: goodluck-buff</p>
-<p>TG: @​​TakaraiHideto</p>
-<p>EMAIL: <a href="mailto:hr.vimworld@protonmail.com">hr.vimworld@protonmail.com</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[NGINX] nginx 反代 bitwarden admin 页面求助</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842699#reply6" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842699</id>
-	<published>2022-03-24T11:55:55Z</published>
-	<updated>2022-03-24T12:29:08Z</updated>
-	<author>
-		<name>Silently</name>
-		<uri>https://www.v2ex.com/member/Silently</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我目前搭建了一个 bitwarden ，但是想将默认的 /admin 管理页面改成 /ad 路径
-代码如下</p>
-<blockquote>
-<p>location /ad {<br/>
-proxy_pass                          <a href="http://127.0.0.1:8000/admin%3B" rel="nofollow">http://127.0.0.1:8000/admin;</a><br/>
-proxy_set_header Upgrade            $http_upgrade;<br/>
-proxy_set_header Connection         "upgrade";<br/>
-proxy_set_header Host               $host;<br/>
-proxy_set_header X-Real-IP          $remote_addr;<br/>
-proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;<br/>
-proxy_set_header X-Forwarded-Proto  $scheme;<br/>
-proxy_set_header X-Forwarded-Host	$host;<br/>
-proxy_set_header X-Forwarded-Port	$server_port;  </p>
-</blockquote>
-<p>目前访问 <a href="http://xxx.com/ad" rel="nofollow">xxx.com/ad</a> 确实能访问到管理页面，但是输入密码后跳转却是跳转到了 <a href="http://xxx.com/admin" rel="nofollow">xxx.com/admin</a> 页面提示 404 ，请教下 该如何配置</p>
-<p>尝试过 <a href="http://127.0.0.1:8000/admin/%E4%BB%A5%E5%8F%8A" rel="nofollow">http://127.0.0.1:8000/admin/以及</a> /ad/ 输入密码均会跳转到 admin 导致 404<br/>
-尝试过添加 proxy_redirect	/ /ad/; 也是跳转 admin</p>
-
-	]]></content>
-</entry><entry>
-	<title>[京东] ros 软路由怎么配置甜糖和京东云呀</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842695#reply0" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842695</id>
-	<published>2022-03-24T11:26:54Z</published>
-	<updated>2022-03-24T11:25:54Z</updated>
-	<author>
-		<name>caicaiwoshishui</name>
-		<uri>https://www.v2ex.com/member/caicaiwoshishui</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<blockquote>
-<p>之前使用“爱快”或者红米路由器的情况下，甜糖和京东云都能有正常的收益，但是在 ros 路由下就有问题</p>
-</blockquote>
-<h3>异常如下</h3>
-<ol>
-<li>甜糖显示网络未配置，ip 地址：192.168.0.100</li>
-<li>京东云每天 10 京豆，ip 地址：192.168.10.200</li>
-<li>ros ip 地址是 192.168.10.253 ，pppoe-out2 拨号</li>
-</ol>
-<h3>配置</h3>
-<ol>
-<li>甜糖暴露的 tcp 和 udp 端口都手动在 ros/ip/firewall/nat 下映射出来了，但是没用</li>
-<li>京东云也做了 nat1 映射，同样没用</li>
-<li>网心云倒是没啥问题</li>
-</ol>
-<p>ros nat 配置如下：</p>
-<ul>
-<li>甜糖的配置</li>
-</ul>
-<pre><code>chain=dstnat action=dst-nat to-addresses=192.168.0.100 in-interface=pppoe-out2 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=9331 protocol=tcp in-interface=pppoe-out2 dst-port=9331 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=4214 protocol=tcp in-interface=pppoe-out2 dst-port=4214 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=9331 protocol=udp in-interface=pppoe-out2 dst-port=9331 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=4214 protocol=udp in-interface=pppoe-out2 dst-port=4214 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=44675 protocol=tcp in-interface=pppoe-out2 dst-port=44675 log=no log-prefix="" 
-chain=dstnat action=dst-nat to-addresses=192.168.0.100 to-ports=17331 protocol=udp in-interface=pppoe-out2 dst-port=17331 log=no log-prefix=""  
-
-</code></pre>
-<ul>
-<li>
-京东云<ul>
-<li>使用自带的 upnp 映射</li>
-</ul>
-</li>
-</ul>
-<p>求大佬们指导下，感谢！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] Gitee 仓库做图床渡劫失败，寻求解决方案</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842694#reply21" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842694</id>
-	<published>2022-03-24T11:16:08Z</published>
-	<updated>2022-03-24T15:51:41Z</updated>
-	<author>
-		<name>cpf</name>
-		<uri>https://www.v2ex.com/member/cpf</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题描述，之前一直白嫖 Gitee 的那 5 个 g 的仓库容量，结果被检测出来了，然后给我屏蔽了，一时间不知道该用啥，v 友们有啥好的解决办法。</p>
-<p>目前使用的是 picgo 做图片上传工具</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Vercel] 大家 vercel 用什么银行的卡支付？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842693#reply1" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842693</id>
-	<published>2022-03-24T10:56:52Z</published>
-	<updated>2022-03-24T10:59:41Z</updated>
-	<author>
-		<name>wbxl2000</name>
-		<uri>https://www.v2ex.com/member/wbxl2000</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>以前用的好好的，刚才用工商、邮政等国内的卡试了下，已经显示不支持该银行了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] paypal 开发者网站登录不了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842692#reply1" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842692</id>
-	<published>2022-03-24T10:52:54Z</published>
-	<updated>2022-03-24T10:50:54Z</updated>
-	<author>
-		<name>shanghai1943</name>
-		<uri>https://www.v2ex.com/member/shanghai1943</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://imgtu.com/i/qJmAKS" rel="nofollow"><img alt="qJmAKS.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/03/24/qJmAKS.png"/></a></p>
-<p><a href="https://developer.paypal.com/home" rel="nofollow">https://developer.paypal.com/home</a></p>
-<p>谷歌浏览器直接访问不了，看 network 发现一大堆请求 403 的，Safari 可以访问，但是无法登录到后台。。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 国内有没有类似 CodeSandbox、StackBlitz 或者 CodePen 这样的可以在线写代码实时预览网站？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842691#reply0" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842691</id>
-	<published>2022-03-24T10:52:04Z</published>
-	<updated>2022-03-24T11:48:24Z</updated>
-	<author>
-		<name>Cbdy</name>
-		<uri>https://www.v2ex.com/member/Cbdy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>国内访问快一点的</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 国内有没有制作“时间线（Timeline）”的 app 或者网站？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842690#reply0" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842690</id>
-	<published>2022-03-24T10:51:38Z</published>
-	<updated>2022-03-22T10:48:38Z</updated>
-	<author>
-		<name>advancejar</name>
-		<uri>https://www.v2ex.com/member/advancejar</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	因为要做历史发生事件序列，现在用的是外国的 Timeline 网站<br />https://time.graphics/<br />不知道国内有没有类似的？
-	]]></content>
-</entry><entry>
-	<title>[游戏开发] 有没有比较好上手的可以做主机游戏平台的工具，类似橙光那样的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842689#reply1" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842689</id>
-	<published>2022-03-24T10:47:59Z</published>
-	<updated>2022-03-23T18:47:59Z</updated>
-	<author>
-		<name>taobibi</name>
-		<uri>https://www.v2ex.com/member/taobibi</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>目前只知道 unity3d 可以跨平台，先找个简单点的工具</p>
-
-	]]></content>
-</entry><entry>
-	<title>[软件] 感觉有被百度网盘冒犯到了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842688#reply18" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842688</id>
-	<published>2022-03-24T10:46:58Z</published>
-	<updated>2022-03-24T14:35:26Z</updated>
-	<author>
-		<name>145431</name>
-		<uri>https://www.v2ex.com/member/145431</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	收藏了 70 多 G 的电子书资源，虽然.... 但是....<br /><br />今天下载的时候提示很多内容已经不存在了（问题是本来就在我网盘里），最终只剩下 20G 了。对百度网盘仅存的一点信任已经没有了。。。。。。<br /><br />看来还是多买几块硬盘保险。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请问有什么背单词 APP 可以在看不到单词时多次发音该词吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/842687#reply1" />
-	<id>tag:www.v2ex.com,2022-03-24:/t/842687</id>
-	<published>2022-03-24T10:41:17Z</published>
-	<updated>2022-03-16T10:41:17Z</updated>
-	<author>
-		<name>Newyorkcity</name>
-		<uri>https://www.v2ex.com/member/Newyorkcity</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	现在在用这个背单词 APP ，不能设置翻面前朗读单词，想要它朗读必须手动点，但单词本身已经显示在正面了（翻面是单词释义），去点就必然看到。<br /><br />我想搞个单词 APP 先把什么四级三千词做好听写，听到就能想到是什么。不知道有没有好的 APP 推荐？<br /><br />谢谢
 	]]></content>
 </entry>
 </feed>
