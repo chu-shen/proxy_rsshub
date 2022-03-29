@@ -8,15 +8,371 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-03-28T16:23:59Z</updated>
+<updated>2022-03-28T00:56:33Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[问与答] 多重 if 判断怎么优化？排序规则：等级从高到低，相同等级比较拥有同等级的数量，所有等级数量相等最后以得分进行比较</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843530#reply1" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843530</id>
+	<published>2022-03-29T00:56:33Z</published>
+	<updated>2022-03-28T00:56:33Z</updated>
+	<author>
+		<name>bober0728</name>
+		<uri>https://www.v2ex.com/member/bober0728</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	if(map2.get("unitLevel") != null &amp;&amp; map1.get("unitLevel") !=null) {<br />    int flag =  compareLevel(map2.get("unitLevel").toString(), map1.get("unitLevel").toString());<br />    if(flag &gt; 0)  {return flag;}<br />    if(flag == 0) {<br />        int flag2 = compareLevelCount((Integer)map2.get("countAA"),(Integer)map1.get("countAA"));<br />        if(flag2 &gt;0) {return flag2;}<br />        if(flag2 == 0){<br />            int flag3 = compareLevelCount((Integer)map2.get("countA"),(Integer)map1.get("countA"));<br />            if(flag3 &gt;0) {return flag3;}<br />            if(flag3 == 0){<br />                int flag4 = compareLevelCount((Integer)map2.get("countB"),(Integer)map1.get("countB"));<br />                if(flag4 &gt;0) {return flag4;}<br />                if(flag4 == 0){<br />                    int flag5 = compareLevelCount((Integer)map2.get("countC"),(Integer)map1.get("countC"));<br />                    if(flag5 &gt;0) {return flag5;}<br />                    if(flag5 == 0){<br />                        int flag6 = compareLevelCount((Integer)map2.get("countD"),(Integer)map1.get("countD"));<br />                        if(flag6 &gt;0) {return flag6;}<br />                        if(flag6 == 0){<br />                            return Double.valueOf((Double) map2.get("unitScore")).compareTo(Double.valueOf((Double) map1.get("unitScore")));<br /><br />                        }else{<br />                            return flag6;<br />                        }<br /><br />                    }else{<br />                        return flag5;<br />                    }<br />                }else{<br />                    return flag4;<br />                }<br />            }else{<br />                return flag3;<br />            }<br /><br />        }else{<br />            return flag2;<br />        }<br />    } else {<br />        return flag;<br />    }<br /><br />}
+	]]></content>
+</entry><entry>
+	<title>[程序员] 快疯了怎么办，想变成一只甲壳虫</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843529#reply9" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843529</id>
+	<published>2022-03-29T00:55:37Z</published>
+	<updated>2022-03-29T01:14:47Z</updated>
+	<author>
+		<name>mkdir</name>
+		<uri>https://www.v2ex.com/member/mkdir</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[问与答] 在现代生活和职场中，高情商是不是很重要？要什么办法是提升呢</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843528#reply0" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843528</id>
+	<published>2022-03-29T00:54:51Z</published>
+	<updated>2022-03-29T00:54:51Z</updated>
+	<author>
+		<name>kqij</name>
+		<uri>https://www.v2ex.com/member/kqij</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 重温比记录更重要--谈谈我心里一款书摘应用的理想态</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843527#reply3" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843527</id>
+	<published>2022-03-29T00:30:59Z</published>
+	<updated>2022-03-29T01:09:08Z</updated>
+	<author>
+		<name>zy5a59</name>
+		<uri>https://www.v2ex.com/member/zy5a59</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近终于完成了「叶子书摘」的第一版，算是我对个人理念的一次尝试。</p>
+<p>在我看来，一款好的书摘应用，应该具备三个条件：<strong>快速记录、方便回忆、快速检索</strong>。</p>
+<h4>快速记录</h4>
+<p>读书其实伴随着思路的流转，进入心流状态以后，最好不要长时间中断。<br/>
+所以做笔记最好的方式，就是一支笔直接勾画。<br/>
+但是这种方式只适用纸质书，并且勾画的内容没法电子化。<br/>
+所以对于一款好的书摘，要尽可能的减少心流的打断时间，要能快速记录。<br/>
+其实我内心最好的记录方式，可能是印象笔记的电子笔，如果后面有能力，我觉得这是未来的发展方向。</p>
+<h4>方便回忆</h4>
+<p>做了很多书摘以后，我发现一个问题，这些书摘只是记录了，并没有真正变成我自己的东西。<br/>
+既然如此，记与不记有什么区别呢？<br/>
+所以要能让用户更多的去重温，最终变成自己大脑里的东西。<br/>
+在读书的过程中，第一遍往往是新奇的，再次重温会枯燥一些，所以如果能让重温的过程也有一些趣味，那更好不过了。     </p>
+<h4>快速检索</h4>
+<p>在记录了大量书摘以后，快速检索也是一个关键。<br/>
+如何能检索的快，检索的准，其实是很难的。<br/>
+理想的状态应该是我脑海中有一个念头，但是我不知道具体在哪一本书、哪一段话里。我可以仅凭这个念头检索出来。     </p>
+<hr/>
+<p>市面上大部分书摘应用，可能更多关注的是记录书籍本身，阅读时间，书摘内容本身关注较少。<br/>
+基于此，我开发了叶子书摘。<br/>
+当然做的还远远不够。<br/>
+只能说粗糙的实现了一小部分功能，距离理想态还很远，但是也算初具雏形了。<br/>
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://zylab.oss-cn-beijing.aliyuncs.com/chunshen/publicity/main.png"/><br/>
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://zylab.oss-cn-beijing.aliyuncs.com/chunshen/publicity/ramble.png"/><br/>
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://zylab.oss-cn-beijing.aliyuncs.com/chunshen/publicity/input.png"/> </p>
+<hr/>
+<p>大家可以体验看看~<br/>
+Bug 可能有点多，大家随意报，我能承受得住。<br/>
+主页： <a href="https://yezishuzhai.com/" rel="nofollow">https://yezishuzhai.com/</a><br/>
+Android： <a href="https://www.coolapk.com/apk/com.yezi.cs" rel="nofollow">https://www.coolapk.com/apk/com.yezi.cs</a><br/>
+iOS： <a href="https://apps.apple.com/cn/app/%E5%8F%B6%E5%AD%90%E4%B9%A6%E6%91%98/id1614131666" rel="nofollow">https://apps.apple.com/cn/app/%E5%8F%B6%E5%AD%90%E4%B9%A6%E6%91%98/id1614131666</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 为团队引入「代码规范」的建议与心得</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843526#reply4" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843526</id>
+	<published>2022-03-29T00:28:06Z</published>
+	<updated>2022-03-29T01:05:31Z</updated>
+	<author>
+		<name>shot</name>
+		<uri>https://www.v2ex.com/member/shot</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h1>为团队引入「代码规范」的建议与心得</h1>
+<h2>建议步骤</h2>
+<ol>
+<li>了解业界主流的代码规范（如 <a href="https://google.github.io/styleguide/" rel="nofollow">google style</a>），结合团队痛点仔细分析比对</li>
+<li>了解支持规范检测的自动化工具（ linter 、compiler 、test ）</li>
+<li>选取小部分支持自动化工具检测的规则，工具引入开发环境，配置纳入项目源代码管理</li>
+<li>修改工具检测出的问题，签入主分支</li>
+<li>向团队宣贯规范条文（开源工具文档 or 简化的内部规范文档）、培训使用方法，要求一周内学习应用</li>
+<li>一周后，在持续集成环境中增加代码规范检测步骤，CI 不通过不做 code review 不合并到主分支</li>
+<li>[长期]根据团队状况，持续增加规范条目，同步更新工具、配置、文档</li>
+</ol>
+<h2>背景 （ battle with 大学同学量化金融巨子 L ）</h2>
+<blockquote>
+<p>L：有没有关于 C++/python 函数、变量命名规范的，比较 general 的简约的一套标准</p>
+<p>L：麻烦分享下实用或入门的帖子</p>
+<p>L：主要是项目合作，还是要稍微共识规范一点</p>
+<p>I：（贴 Google 搜索 "google c++ style" 截图）</p>
+<p>I：搜索引擎这么好，你为什么不用？</p>
+<p>L：你的这个过于宽泛，我不需要这么系统的</p>
+<p>L：我需要的就是个入门的</p>
+<p>L：而且我之前看到的 c++ 和 python 规范还不一样</p>
+<p>I：根据你们团队情况裁剪定制呀</p>
+<p>L：那我等于先要成专家啊</p>
+<p>L：我就是这里找专家，高屋建瓴给指条小路的</p>
+<p>I：不然你想一天速成？</p>
+<p>I：那就花钱找专家呗</p>
+<p><em>（敲上文所述「建议步骤」中）</em> </p>
+<p>你被 L 移出群聊</p>
+</blockquote>
+<h2>心得</h2>
+<ul>
+<li>代码规范非常重要，能保障团队的代码质量在一个 <strong>明确设定的水平线</strong> 上。</li>
+<li>代码规范属于 <strong>软件工程化体系</strong> 的重要组成部分，需要与团队组织、知识传递、工具集成、开发流程等其它各部分密切配合，才能充分发挥作用，切实提高项目质量。</li>
+<li>代码规范是 <strong>最佳实践</strong> 不是行业标准，没有放之四海皆准的办法；需结合语言特性、行业共识、团队能力水平、项目质量要求等定制切入。</li>
+<li>引入代码规范不是一个轻松的过程，如果团队认知不足甚至会在开始阶段抵触，不要期望一蹴而就。</li>
+<li>能使用自动化工具检测的规范才是好规范，才能快速宣贯应用，平缓学习曲线，避免高成本人肉检测。</li>
+<li>Java 的工程化工具非常丰富（ checkstyle 、spotbugs 、pmd 、compiler 、archunit 、sonarqube ），希望别的主流语言也能赶上。</li>
+<li>主流语言都有业界公认的通用规范，不要闭门造车，可以有选择裁剪组合，持续增强。</li>
+<li>没有自动化工具支持的规范，个人认为没必要纳入规范，因为没办法检测量化，且应该不是业界普遍痛点。</li>
+<li>（接上条）如果确实很痛很痛，那就想办法自己写一个工具 /脚本，实现自动化检测（夸一下 java 的 archunit ）。</li>
+<li>自动化检测工具需要支持本地化运行，最好有 IDE 插件实时检测；如果只支持云端检查非常影响开发效率和体验。</li>
+<li>自动化代码检测很有用，但不能检查业务盲点和逻辑错误，也不能避免小众错误；需要和 unit test 及 code review 配合。</li>
+</ul>
+<h2>亲身案例一： 加入前公司 A 启动新项目</h2>
+<ol>
+<li>启动阶段直接在项目框架中配齐 checkstyle 、spotbugs 、pmd ，纳入 CI 。</li>
+<li>每个新成员入职时，介绍代码规范和工具。</li>
+<li>在其第一第二周碰到问题时，帮助分析解决。</li>
+<li>两周后，均能熟练掌握规范和工具，提交代码符合规范要求。</li>
+</ol>
+<h2>亲身案例二：加入前公司 B 重构（ sh*t mountain ）老项目</h2>
+<ol>
+<li>引入 spotbugs ，与团队做知识分享，重点介绍其检测出的安全隐患与性能隐患。</li>
+<li>搭建 jenkins 环境，配置项目 pipeline ，spotbugs 报错不阻塞。</li>
+<li>全面修改 spotbugs 问题，签入主分支。</li>
+<li>第一周持续关注新引入 spotbugs 问题，一对一帮扶。</li>
+<li>修改 jenkins pipeline 配置，报错阻塞构建。</li>
+<li>逐步增加规则，并引入配套的 checkstyle 、pmd 、sonarqube 等工具。</li>
+<li>引入代码规范后，择期分析统计生产环境出现的与代码质量不佳相关的缺陷数，比较引入规范前的指标情况，向团队 /上级 /合作部门 /客户展示汇报，体现其价值。</li>
+</ol>
+<h2>亲身案例三：前公司 C （大厂）推广<del>自研</del> CI 服务</h2>
+<ol>
+<li>公司某团队魔改 jenkins 和 sonarqube ，作为内部标准要求所有项目启用。</li>
+<li>魔改 jenkins 提供的基础 docker 镜像非常有限，无一支持我团队项目的 C++ 运行时；反复沟通后该团队手工添加基础镜像解决，但后继每次镜像升级仍需人工操作。</li>
+<li>魔改 sonarqube 规则，且不提供开发环境相应工具 /配置 /脚本；只能每次代码提交后等云端执行结果，每次耗时 &gt; 4 minutes ，有时一次功能代码要修改提交三四次才能通过检测。</li>
+</ol>
+<h2>blog 原文</h2>
+<p><a href="https://github.com/HuangJian/blog.howtimeflies.io/blob/master/blog/introduce-code-style-to-a-team.md" rel="nofollow">为团队引入「代码规范」的建议与心得</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 2022 年了， PHP 开发环境有什么推荐</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843525#reply17" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843525</id>
+	<published>2022-03-29T00:17:48Z</published>
+	<updated>2022-03-29T01:14:07Z</updated>
+	<author>
+		<name>Ashore</name>
+		<uri>https://www.v2ex.com/member/Ashore</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>RT,以前一直用 phpstudy2018 ，但是这个老版本有问题，php 版本太老了，有很多 composer 的插件要求都是 7.4 以上。现在想不动之前环境的情况下重新搭建一个新的环境。不知各位有什么推荐呢?</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] [webdav-aliyundriver](https://github.com/zxbu/webdav-aliyundriver)已删库，目前仍有其他 webdav-ali 的项目可用</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843524#reply4" />
+	<id>tag:www.v2ex.com,2022-03-29:/t/843524</id>
+	<published>2022-03-29T00:00:06Z</published>
+	<updated>2022-03-29T01:13:19Z</updated>
+	<author>
+		<name>tengxunkuku</name>
+		<uri>https://www.v2ex.com/member/tengxunkuku</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[程序员] DecoHack #007 - 独立开发者的灵感周刊</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843523#reply3" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843523</id>
+	<published>2022-03-28T23:34:54Z</published>
+	<updated>2022-03-29T00:30:38Z</updated>
+	<author>
+		<name>ViggoZ</name>
+		<uri>https://www.v2ex.com/member/ViggoZ</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<blockquote>本周内容准时来了，如果没有关注的小伙伴可以在 <a href="https://www.decohack.com/" rel="nofollow">DecoHack</a> 官网订阅这个周刊。每周一发布，支持邮箱，微信，RSS 订阅。感谢 1000 多个小伙伴的订阅！也可以关注我的 <a href="https://twitter.com/viggo_z" rel="nofollow">Twitter</a> 有空我会在推上发一些很有意思的产品发现，最近比较活跃。</blockquote>
+<img alt="maxresdefault" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/maxresdefault.jpg" title="maxresdefault"/>
+<h2>新闻资讯</h2>
+1.<a href="https://www.techdigest.tv/2022/03/internet-penetration-worldwide-reaches-66-in-2022.html" rel="nofollow">这篇</a>文章说到，截止 2022 年第一季度末，全球互联网普及率将达到 66%。<strong>亚洲的互联网普及率为 64.1%</strong>。低于世界平均水平，非洲的互联网普及率最低，只有 43.1% 的人口可以访问万维网。国内互联网增长停滞了，但是互联网出海其实还有很多机会。
+<p>2.2022 年第一季度，<a href="https://techcrunch.com/2022/03/24/app-ecosystem-growth-continued-in-q1-with-37b-downloads-new-high-of-33b-in-consumer-spending/" rel="nofollow">全球 iOS 和 Google Play 应用下载量达到 370 亿次</a>，同比增长 11% 。<a href="http://data.ai" rel="nofollow">data.ai</a> （前身为 App Annie ）表示，本季度应用下载量最大的市场是印度、美国和巴西，而<strong>墨西哥、土耳其和巴西</strong>的季度环比<strong>增长</strong>最大。</p>
+<p>3.Google 正在桌面 Chrome 中推出新的<a href="https://9to5google.com/2022/03/25/google-chrome-side-panel/" rel="nofollow">侧面板 UI</a>，可让您快速访问您的书签和阅读列表。这种浏览书签的方式还是挺好的。</p>
+<img alt="508d5efa1c2da8399424e18bc662157c" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/508d5efa1c2da8399424e18bc662157c.png" title="508d5efa1c2da8399424e18bc662157c"/>
+<h2></h2>
+<h2>产品推荐</h2>
+1.<a href="https://apps.apple.com/me/app/mindmix-social-journal/id1601025363" rel="nofollow">MindMix: Social Journal</a> - 这也算是一个心情<strong>日记类</strong>的 APP ，界面做的很好看，有 ClubHouse 的风格。免费的，很不错。
+<img alt="2781247fce1389b5f426aeb3b8553465" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/2781247fce1389b5f426aeb3b8553465.png" title="2781247fce1389b5f426aeb3b8553465"/>
+<p>2.<a href="https://play.google.com/store/apps/details?id=com.sleep" rel="nofollow">Sleept - Alarm Clock App</a> - 是一款<strong>闹钟</strong>应用程序，可通过轻柔的<strong>音乐</strong>和唤醒灯帮助您更轻松、更放松地醒来。界面非常简洁，只有 Android 端，好看，上周刚上线。</p>
+<img alt="dae3b9e0acc183821b8e3e05da2f4e7e" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/dae3b9e0acc183821b8e3e05da2f4e7e.png" title="dae3b9e0acc183821b8e3e05da2f4e7e"/>
+<p>3.<span><a href="https://apps.apple.com/app/dream-by-wombo/id1586366816?platform=iphone" rel="nofollow">Dream by WOMBO</a> 这个 app 做的真的优秀，也是在 <a href="https://twitter.com/viggo_z/status/1506778103749652483?s=20&amp;t=kajx_cn51XAQMTf7Xeat1w" rel="nofollow">Twitter</a> 上推荐过，这类基于<strong>机器学习</strong>训练出来的图像处理算法。我找了张拍的照片试了一下效果真的很不错，</span><span>看上去这个公司是通过打印生成的艺术品来盈利，APP<strong>完全免费</strong>。</span></p>
+<img alt="c0ae727ecc6e531e2ed04fe26c02e886" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/c0ae727ecc6e531e2ed04fe26c02e886.png" title="c0ae727ecc6e531e2ed04fe26c02e886"/>
+<p>4.<a href="http://lofi.co" rel="nofollow">lofi.co</a> <span>是一个网络收音机，上周我在 <a href="https://twitter.com/viggo_z/status/1507513057810927621?s=20&amp;t=kajx_cn51XAQMTf7Xeat1w" rel="nofollow">Twitter</a> 上推荐的一个产品，很多人都喜欢，可以在工作的时候听，最有意思的是可以<strong>切换场景</strong>，模拟在书店，咖啡厅，户外居然还有 Van Life 的场景！<strong>插画</strong>非常棒！ 有三种音乐类型切换：chill, jazzy or sleepy ，还可以添加<strong>白噪音</strong>（车流，下雨声，键盘声）</span></p>
+<img alt="FOvBDU8VEAAkySA" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/FOvBDU8VEAAkySA.jpg" title="FOvBDU8VEAAkySA"/>
+<p>5.<a href="https://www.stir.com/" rel="nofollow">Stir</a> - 约会应用巨头<a href="https://mtch.com/" rel="nofollow">Match Group</a>已经拥有 <strong>Tinder</strong>、Match 、OkCupid 、Hinge 等公司，今天将推出其约会服务系列的最新成员<a href="https://www.stir.com/" rel="nofollow">Stir</a>，这是一款专为<strong>单亲父母</strong>设计的应用程序。</p>
+<img alt="cdda4ab9b0150f84efc01bc58037cb97" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/cdda4ab9b0150f84efc01bc58037cb97.png" title="cdda4ab9b0150f84efc01bc58037cb97"/>
+<p>6. <a href="https://apps.apple.com/app/id1520402017" rel="nofollow">Film Logbook</a> - iOS 的 APP ，可以记录胶卷、<strong>相机设置</strong>和 ISO/ASA 等详细信息。界面做的很干净，功能比较<strong>小众</strong>，但是有需求。上周有限免。</p>
+<img alt="a17aa33b8a44ea962d54f86b23e53782" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/a17aa33b8a44ea962d54f86b23e53782.png" title="a17aa33b8a44ea962d54f86b23e53782"/>
+<p>7.<a href="https://play.google.com/store/apps/details?id=com.foschia.tondokeyboard" rel="nofollow">tOndO keyboard</a> - 一个非常奇怪的<strong>输入法</strong>APP ，据说是可以提高英文的输入速度（我表示怀疑）。</p>
+<img alt="5_apps_week_12_2022_tondo_keyboard-w782" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/5_apps_week_12_2022_tondo_keyboard-w782.png" title="5_apps_week_12_2022_tondo_keyboard-w782"/>
+<p>8.<a href="https://furrynomad.io/" rel="nofollow">Furry Nomad</a> - 一个税务跟踪软件，可以用来收集整理<strong>税务信息</strong>，产品插画和界面挺好看的，简洁，产品还在内测中，这个产品在国内可能不适用，主要针对的也是海外用户。没有仔细研究，是一个比较细分的产品类型。</p>
+<img alt="7c7acff7777f673896b8d6f23f9d9568" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/7c7acff7777f673896b8d6f23f9d9568.png" title="7c7acff7777f673896b8d6f23f9d9568"/>
+<p>9.<a href="https://play.google.com/store/apps/details?id=com.fonlow.VAC" rel="nofollow">醒目视力表</a> - 这是一个<strong>测视力</strong>的 APP ，这类产品也是非常细分的领域，也有一定的专业性，我没有查国内这种产品有没有，如果有这方面研究也可以做，是一个比较小众的工具。这个产品交互视觉做的不是很好，但是专业性看上去还是有的。</p>
+<p>10.<a href="https://www.logotouse.com/" rel="nofollow">logotouse</a> - 这个网站有超过 1.2 亿个<strong>免费 LOGO</strong>，可以下载源文件修改，不知道 LOGO 怎么设计的可以找找灵感，这里的 LOGO 都是可以免费商用的。没有版权问题。</p>
+<p>11.<a href="https://www.magiceraser.io/" rel="nofollow">magiceraser </a> - 一个快速<strong>去除污点</strong>的工具，免费的，在几秒钟内从图像中删除不需要的东西。</p>
+<p>12.<a href="https://vidgrid.tk.gg/" rel="nofollow">vidgrid</a> - 可以在一个页面同时看<strong>很多 YouTube 视频</strong>的网站，我不知道哪种使用场景可以用的到</p>
+<p>13.<a href="https://tweetlet.net/" rel="nofollow">Tweetlet</a> - 生成推文的分享图像。和 <a href="https://poet.so/" rel="nofollow">poet.so</a> 不能说很像，只能说<strong>完全一样</strong>。</p>
+<p>14.<a href="https://cryptofonts.com/index.php" rel="nofollow">cryptofonts</a> - 免费的<strong>加密货币</strong>字体和图标。拥有超过 1500 个 CSS 和 SVG 图标。</p>
+<p>15.<a href="https://apps.apple.com/us/app/skate-tricks/id1478881964?platform=iphone" rel="nofollow">滑板技巧指南</a> - 一个<strong>学习滑板</strong>的 APP ，界面设计的惨不忍睹，但是这种 APP 也是小众领域，内容做得好的话还是挺不错的方向。</p>
+<p>16.<a href="https://www.ilovefreesoftware.com/17/social/search-in-liked-tweets-of-any-twitter-user-free-website.html?utm_source=feedly&amp;utm_medium=rss&amp;utm_campaign=search-in-liked-tweets-of-any-twitter-user-free-website" rel="nofollow">Twittermarks</a> - 允许 Twitter 用户找到“特定 <strong>Twitter</strong> 用户喜欢”的推文。显示该用户最近喜欢的 5000 个列表。</p>
+<h2>随便看看</h2>
+1.<span>开发者 </span><span><a href="https://twitter.com/codewithsadee" rel="nofollow">@codewithsadee</a> </span>开源了 <a href="https://codewithsadee.github.io/vcard-personal-portfolio/" rel="nofollow">个人作品集网站</a>，不得不说很好看。网站也是完全<strong> <a href="https://github.com/codewithsadee/vcard-personal-portfolio" rel="nofollow">开源</a></strong> 的，他还在 <a href="https://www.youtube.com/watch?v=SoxmIlgf2zM" rel="nofollow">YouTube</a> 上录制了整个开发过程。我去看了他其他 YouTube 视频，都是直接写代码的视频，没有解说，只有键盘声，话说这声音打开当作背景<strong>白噪音</strong>也是不错。
+<img alt="desktop" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/desktop.png" title="desktop"/>
+<p>2.<a href="https://www.yuque.com/docs/share/ead0211d-dfb1-4a91-a443-5ef9715d3e94" rel="nofollow">独立开发者公司资质与税务工作</a></p>
+<p>什么情况下需要公司资质？有哪些身份可以选？缴税案例分析，作为个人如何开公司，只是一个比较完整的总结。</p>
+<p>3.<a href="https://www.youtube.com/playlist?list=PLVNXAaej57W61wW9vtPNYPIuDnVQLP5TH" rel="nofollow">Second Brain Summit 2022</a></p>
+<p>在这个 <a href="https://youtube.com/playlist?list=PLVNXAaej57W61wW9vtPNYPIuDnVQLP5TH" rel="nofollow">YouTube 播放列表</a> 可以重播看 Tiago Forte 的第二次大脑峰会。这次<a href="https://www.buildingasecondbrain.com/course" rel="nofollow">峰会</a>有超过一万人参加， 去看看就知道，讲的是如何将系统的思维方式运用到生活和工作中去。内容很多，不只是工具的使用，更多的是一些思维方式的分享。干货满满。</p>
+<p>4.<a href="https://notionv5.vyshnav.xyz/" rel="nofollow">notion icons.v5</a></p>
+<p>可以直接用在 Notion 里的图标，直接拷贝图标 SVG ，粘贴到 Notion 的 Emoji Link 里面就行了。风格统一。</p>
+<p>5.<a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247492262&amp;idx=1&amp;sn=00ebd4d01d42d45669b72fa41078717f" rel="nofollow">一文读懂现代 Android 开发最佳实践</a></p>
+<p>这篇文章是字节跳动技术团队的文章，内容是在讲一个很火的娱乐类型的 APP ，我之前也做过这种 Face 产品，这种产品有很强的娱乐性和传播性，这两种特性一个能够让用户愿意付费，一个能够让产品快速增长，这类产品如果想做好是有一定的门槛的，技术要求很高，另外强烈关注的公众号，很活跃。</p>
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/27150816457.png"/>
+<p>6.<a href="https://9to5google.com/2022/03/24/spotify-test-drive-car-mode/" rel="nofollow">Spotify 测试新版 Car Mode 功能</a></p>
+<p>在去年底停用汽车模式后，Spotify 正在开发一个新界面，用于在驾驶时收听其播放列表。为部分用户在 Android 上进行测试。</p>
+<img alt="67b73b093806d2ed7987c134cb738e48" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://www.decohack.com/wp-content/uploads/2022/03/67b73b093806d2ed7987c134cb738e48.png" title="67b73b093806d2ed7987c134cb738e48"/>
+<p>7.<a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247492137&amp;idx=1&amp;sn=3d537d433309d7f9951ce1615c9af325" rel="nofollow">Android 系统 Bar 沉浸式完美兼容方案</a></p>
+<p>又是一篇字节跳动技术团队的文章，这个文章可以收藏，用到的时候可以看看，国内手机太多了，这些细节能让产品有更好的体验。</p>
+<p>8.<a href="https://www.v2ex.com/t/834180" rel="nofollow">自学了 SwiftUI 7 天，上架了第一款 iOS APP</a></p>
+<p>v2ex 上的一个帖子，评论里说的：自学七天就能出成果，非常有执行力了。产品设计的也挺好看，都是用苹果官方的组件来开发。另外作者推荐的两个学习 iOS 的渠道挺好的，<a href="https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger" rel="nofollow">Apple 官方开发者教程</a> 还有 <a href="https://cs193p.sites.stanford.edu/" rel="nofollow">斯坦福公开课</a> 。</p>
+<p>9.<a href="https://www.youtube.com/c/tundsdev/videos" rel="nofollow">tundsdev 的 SwiftUl iOS Development Videos</a></p>
+<p>这个 YouTuber 发布了很多 iOS 开发的视频教程，完全免费，时间也不是很长，可以看看。另外 <a href="https://www.youtube.com/channel/UCOWdR4sFkmolWkU2fg669Gg" rel="nofollow">Stewart Lynch</a> 的视频也不错。很活跃。</p>
+<p>10.<a href="https://threejs-journey.com/" rel="nofollow">threejs-journe</a></p>
+<p><span><span>这个课程是 </span></span><a href="https://bruno-simon.com/" rel="nofollow"><span><span>Bruno Simon</span></span></a> 做的使用 Three.js 学习 WebGL 的在线课程。大概 400RMB ，45 小时的视频课程。做的很完整。他最近做的 <a href="https://www.fromscout.com/" rel="nofollow">fromscout </a>这个网站很好看。</p>
+<p>11.<a href="https://www.growthfyi.com/" rel="nofollow">growthfyi</a> - 增长营销内容合集的网站，很多营销资源，SEO ，增长之类的内容。</p>
+<p>12.<a href="https://www.youtube.com/channel/UCPKgOkL5T1HiWpdp8de0U4g" rel="nofollow">圣罗兰的秀场</a> - 最近朋友推荐了这个圣罗兰的秀场 <a href="https://www.youtube.com/watch?v=ELOW5lHywvI" rel="nofollow">SAINT LAURENT - WOMEN'S WINTER 22 SHOW</a> 有很多有意思的秀，突然有个想法：关于国人审美教育这个东西，真的很弱，看这些比刷抖音里的小姐姐有用多了。我不反对看小姐姐，人都喜欢看吸引眼球的内容，只是一定要有自己的判断，不能完全被动地被引导去看一些东西。其实审美这个不在于看什么类型的内容，即便是做互联网的设计，你去看一些不是和互联网相关的东西也是能够提升审美的。</p>
+<p><a href="https://www.youtube.com/watch?v=ELOW5lHywvI" rel="nofollow">https://www.youtube.com/watch?v=ELOW5lHywvI</a></p>
+<blockquote>本期到这，如果没有关注的小伙伴可以在 <a href="https://www.decohack.com/" rel="nofollow">DecoHack</a> 官网订阅这个周刊。如果觉得周刊有用可以<strong>推荐</strong>给你的朋友们，更多的人关注我也会有更足的动力继续写周刊，感谢<strong>1000</strong>多个小伙伴的订阅！
+<p>这个周看支持邮箱，微信，RSS 订阅。也可以关注我的 <a href="https://twitter.com/viggo_z" rel="nofollow">Twitter</a> 有空我会在推上发一些很有意思的产品发现。</p></blockquote><p></p>
+
+	]]></content>
+</entry><entry>
+	<title>[信息安全] Windows 凭据管理器是如何做到利用 FIDO / U2F 来加密数据的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843521#reply2" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843521</id>
+	<published>2022-03-28T20:34:23Z</published>
+	<updated>2022-03-28T21:12:53Z</updated>
+	<author>
+		<name>theklf4</name>
+		<uri>https://www.v2ex.com/member/theklf4</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	手上的 YubiKey Bio FIDO （只有 FIDO / U2F 功能，只能用于鉴权，不能加解密）竟然可以作为智能卡通过 Windows Hello 解密 Windows 凭据管理器。而如果在 Ubuntu 中使用 `<a target="_blank" href="http://pam_u2f.so" rel="nofollow noopener">pam_u2f.so</a>` 登录，打开浏览器则提示必须使用密码解锁 keyring 。这是不是说明 Windows 的凭据管理器根本没有加密存储数据？<br /><br />（半夜睡不着，半梦半醒发的帖，可能表达的不是很清楚）
+	]]></content>
+</entry><entry>
+	<title>[Apple] 询问一下 Appstore 订阅问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843520#reply2" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843520</id>
+	<published>2022-03-28T19:05:55Z</published>
+	<updated>2022-03-28T21:04:55Z</updated>
+	<author>
+		<name>MooRider</name>
+		<uri>https://www.v2ex.com/member/MooRider</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我的 Dropbox 是 Plus 套餐, 还有 2 个月过期, 刚刚使用了土耳其区的 Appstore 续费了 Pro 套餐, 但我的 dropbox 上面并没有显示有来自 appstore 的账单, 询问客服也一直说没收到订单, 那么是需要等到我的上一个套餐过期了 Apple 才会给 Dropbox 发送订单嘛?</p>
+<p><img alt="image" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/uig7fWJ.png"/></p>
+<p>Goole 了一圈发现很多这种问题, 客服都让你 Restore purchases, 但我 Restore purchases 后也没有任何作用.</p>
+
+	]]></content>
+</entry><entry>
+	<title>[信息安全] 服务商允许用户在旧版系统密码输入框中同时输入 [密码]+[随机验证码] 完成身份验证，是否意味着服务商明文保存或传输了用户的密码？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843518#reply17" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843518</id>
+	<published>2022-03-28T18:07:27Z</published>
+	<updated>2022-03-29T01:16:22Z</updated>
+	<author>
+		<name>dLvsYgJ8fiP8TGYU</name>
+		<uri>https://www.v2ex.com/member/dLvsYgJ8fiP8TGYU</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>看到 <a href="https://v2ex.com/t/843372" rel="nofollow">https://v2ex.com/t/843372</a> ，有个疑问：
+假设服务端只有 <code>[密码] 的 hash 值</code>，也知道 <code>[随机验证码]</code> 的明文，如何在没有明文密码的情况下，验证 <code>[密码]+[随机验证码] 整体的 hash 值</code>符合预期？</p>
+<p>还可能是服务端通过 UA 或其他方式判断这是旧版系统，于是把用户输入值的后几位数裁掉，认为是验证码。但这也意味着客户端发送的不是 <code>[密码]+[随机验证码] 整体的 hash 值</code>，而是这段信息的明文？在实践中这样做，是不是把数据安全完全依赖于 HTTPS 的安全性，面对 MITM 就全泄漏了？</p>
+<p>是否存在一种 hash 算法，支持通过客户端发送过来的 <code>hash('password'+'2fa')</code> 的结果，和服务端已知的 <code>2fa</code> 这段明文，推算出 <code>hash('password')</code> （用户密码的 hash 值），进而与数据库中存储的密码 hash 值进行比对？这样就不存在明文保存或传输用户密码的问题了。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[算法] 倒排索引生成共现矩阵有什么快速算法吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843517#reply0" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843517</id>
+	<published>2022-03-28T17:55:57Z</published>
+	<updated>2022-03-28T17:54:57Z</updated>
+	<author>
+		<name>LeeReamond</name>
+		<uri>https://www.v2ex.com/member/LeeReamond</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h4>需求：</h4>
+<p>简易的根据用户行为分析商品关联性的系统。</p>
+<h4>实现方式：</h4>
+<p>原始数据记录了每个用户访问过哪些项目，记录为如下形式：</p>
+<pre><code class="language-json">{
+  A 用户:['项目 1', '项目 2', '项目 3', '项目 4', '项目 5'],
+  B 用户:['项目 2', '项目 3', '项目 4', '项目 5', '项目 6'],
+  C 用户:['项目 1', '项目 3', '项目 5', '项目 7'] 
+}
+</code></pre>
+<p>然后生成倒排索引，再生成共现矩阵，再取皮尔逊相关数，使用时取矩阵第 m 列×[1]得与第 m 项目关联的所有其他项目的关联性。</p>
+<h4>疑问：</h4>
+<p>倒排索引生成共现矩阵的实现过程中产生了质疑，目前的做法是遍历所有的，第 m 项目与第 n 项目的索引队列相似成分有哪些（进行交集运算），假设共有 n 个项目，则最少总共需要进行(n^2)/2 次交集运算，感觉复杂度有点略高，本身交集运算就是成本比较大的操作，又加上 on2 复杂度，随着项目数量增加运算成本有些爆炸，比如如果有十万个项目那么每次生成共现矩阵需要算好久好久。</p>
+<p>想问一下有没有比硬写更快的算法，毕竟理论上像视频网站或淘宝这类需求，总项目数可能在亿级数量级甚至更多，如果构建一个如此基础的关联性分析都要这么大的运算量的话，这些推荐系统该如何自处呢？谢谢</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iPad] 选哪一款 iPad 纠结中。。。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843514#reply8" />
+	<id>tag:www.v2ex.com,2022-03-28:/t/843514</id>
+	<published>2022-03-28T16:38:20Z</published>
+	<updated>2022-03-28T19:49:29Z</updated>
+	<author>
+		<name>xiaohantx</name>
+		<uri>https://www.v2ex.com/member/xiaohantx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>3739 64GB iPad Air5</li>
+<li>4674 256GB iPadAir5</li>
+<li>和加 500 升 128GB 的 2021 iPad Pro 选哪个[Hurt]</li>
+</ul>
+
+	]]></content>
+</entry><entry>
 	<title>[问与答] IDEA 的 terminal 不支持显示 Emoji，有什么解决办法吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843512#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843512#reply1" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843512</id>
 	<published>2022-03-28T16:23:59Z</published>
-	<updated>2022-03-28T16:23:59Z</updated>
+	<updated>2022-03-28T16:39:39Z</updated>
 	<author>
 		<name>mashirozx</name>
 		<uri>https://www.v2ex.com/member/mashirozx</uri>
@@ -29,10 +385,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 最近 FaceTime 不好用了吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843511#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843511#reply15" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843511</id>
 	<published>2022-03-28T16:18:45Z</published>
-	<updated>2022-03-28T16:18:45Z</updated>
+	<updated>2022-03-29T00:54:31Z</updated>
 	<author>
 		<name>superlc</name>
 		<uri>https://www.v2ex.com/member/superlc</uri>
@@ -41,11 +397,11 @@
 	别人给我打 facetime 我接不到；我用 ios15.4 的手机给别人打，对方接不到；用 ios15.0 的手机给别人打，对方有振铃提示但无法连接。感觉似乎是 15.4 的问题？
 	]]></content>
 </entry><entry>
-	<title>[问与答] 今天面试了一个工作 12 年的前端，把我整的有点怀疑人生</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843510#reply0" />
+	<title>[职场话题] 今天面试了一个工作 12 年的前端，把我整的有点怀疑人生</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843510#reply31" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843510</id>
 	<published>2022-03-28T16:13:43Z</published>
-	<updated>2022-03-28T12:13:43Z</updated>
+	<updated>2022-03-29T01:15:07Z</updated>
 	<author>
 		<name>bojun</name>
 		<uri>https://www.v2ex.com/member/bojun</uri>
@@ -56,10 +412,10 @@
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 兄弟们，删库跑路了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843509#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843509#reply4" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843509</id>
 	<published>2022-03-28T16:04:49Z</published>
-	<updated>2022-03-28T14:03:49Z</updated>
+	<updated>2022-03-28T18:03:49Z</updated>
 	<author>
 		<name>rophie123</name>
 		<uri>https://www.v2ex.com/member/rophie123</uri>
@@ -221,10 +577,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Redis] 请大佬指点一下， redis 模糊匹配 key 查询缓慢问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843504#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843504#reply12" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843504</id>
 	<published>2022-03-28T15:27:45Z</published>
-	<updated>2022-03-28T16:07:45Z</updated>
+	<updated>2022-03-28T19:42:37Z</updated>
 	<author>
 		<name>yoloMiss</name>
 		<uri>https://www.v2ex.com/member/yoloMiss</uri>
@@ -286,10 +642,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 求一份软考中级软件设计师的备考资料</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843498#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843498#reply4" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843498</id>
 	<published>2022-03-28T15:03:10Z</published>
-	<updated>2022-03-28T15:52:40Z</updated>
+	<updated>2022-03-28T16:52:40Z</updated>
 	<author>
 		<name>cpf</name>
 		<uri>https://www.v2ex.com/member/cpf</uri>
@@ -330,10 +686,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 惠普 800G1 开机无法进入系统风扇狂转</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843493#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843493#reply1" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843493</id>
 	<published>2022-03-28T14:43:51Z</published>
-	<updated>2022-03-28T14:42:51Z</updated>
+	<updated>2022-03-28T15:42:51Z</updated>
 	<author>
 		<name>873792861</name>
 		<uri>https://www.v2ex.com/member/873792861</uri>
@@ -343,10 +699,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 做 E2EE 的文件分享服务，主动屏蔽国内 IP 后还有法律风险吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843492#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843492#reply7" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843492</id>
 	<published>2022-03-28T14:42:19Z</published>
-	<updated>2022-03-28T14:40:19Z</updated>
+	<updated>2022-03-28T21:55:06Z</updated>
 	<author>
 		<name>theklf4</name>
 		<uri>https://www.v2ex.com/member/theklf4</uri>
@@ -359,10 +715,10 @@
 	]]></content>
 </entry><entry>
 	<title>[成都] 听说这里找前端岗位挺快，实习崽求收留</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843491#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843491#reply1" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843491</id>
 	<published>2022-03-28T14:41:48Z</published>
-	<updated>2022-03-28T14:38:48Z</updated>
+	<updated>2022-03-28T15:38:48Z</updated>
 	<author>
 		<name>wordx</name>
 		<uri>https://www.v2ex.com/member/wordx</uri>
@@ -380,10 +736,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] MacBook 12 配 M1 或者 M2 处理器：我的梦想电脑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843490#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843490#reply9" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843490</id>
 	<published>2022-03-28T14:28:01Z</published>
-	<updated>2022-03-28T14:30:52Z</updated>
+	<updated>2022-03-28T17:30:52Z</updated>
 	<author>
 		<name>YRInc</name>
 		<uri>https://www.v2ex.com/member/YRInc</uri>
@@ -395,7 +751,7 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有朋友碰到过用 Chrome 无法登录 V2EX 的问题吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843488#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843488#reply2" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843488</id>
 	<published>2022-03-28T14:26:23Z</published>
 	<updated>2022-03-28T14:31:22Z</updated>
@@ -412,10 +768,10 @@
 	]]></content>
 </entry><entry>
 	<title>[阅读] 为什么纸质书近百年都不改进一下？老难翻页和固定了。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843487#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843487#reply12" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843487</id>
 	<published>2022-03-28T14:03:44Z</published>
-	<updated>2022-03-28T16:16:23Z</updated>
+	<updated>2022-03-28T18:26:33Z</updated>
 	<author>
 		<name>mikywei</name>
 		<uri>https://www.v2ex.com/member/mikywei</uri>
@@ -464,10 +820,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 路由器开 clash，电脑开加速器玩游戏会有影响吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843485#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843485#reply4" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843485</id>
 	<published>2022-03-28T13:44:00Z</published>
-	<updated>2022-03-28T14:29:19Z</updated>
+	<updated>2022-03-28T22:20:54Z</updated>
 	<author>
 		<name>ainyyy</name>
 		<uri>https://www.v2ex.com/member/ainyyy</uri>
@@ -477,10 +833,10 @@
 	]]></content>
 </entry><entry>
 	<title>[酷工作] [上海]字节跳动-抖音安全团队、客服团队，前后端都来， HC 不限</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843484#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843484#reply2" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843484</id>
 	<published>2022-03-28T13:31:04Z</published>
-	<updated>2022-03-28T14:31:39Z</updated>
+	<updated>2022-03-28T15:31:39Z</updated>
 	<author>
 		<name>littleomz</name>
 		<uri>https://www.v2ex.com/member/littleomz</uri>
@@ -536,10 +892,10 @@
 	]]></content>
 </entry><entry>
 	<title>[KVM] PVE 用 qm 命令导入的虚拟机如何扩容？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843482#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843482#reply2" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843482</id>
 	<published>2022-03-28T13:25:36Z</published>
-	<updated>2022-03-28T13:59:36Z</updated>
+	<updated>2022-03-28T14:59:36Z</updated>
 	<author>
 		<name>dunhanson</name>
 		<uri>https://www.v2ex.com/member/dunhanson</uri>
@@ -560,10 +916,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 长沙 中兴 vs 博世 ,前者待遇高 4w，怎么选</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843480#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843480#reply6" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843480</id>
 	<published>2022-03-28T13:18:25Z</published>
-	<updated>2022-03-28T14:28:27Z</updated>
+	<updated>2022-03-28T16:28:27Z</updated>
 	<author>
 		<name>eksx</name>
 		<uri>https://www.v2ex.com/member/eksx</uri>
@@ -596,10 +952,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 试了一下在 windows 掌机上玩 switch 模拟器，效果居然还不错。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843478#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843478#reply8" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843478</id>
 	<published>2022-03-28T13:11:53Z</published>
-	<updated>2022-03-28T16:04:23Z</updated>
+	<updated>2022-03-28T16:45:15Z</updated>
 	<author>
 		<name>DiamondYuan</name>
 		<uri>https://www.v2ex.com/member/DiamondYuan</uri>
@@ -669,10 +1025,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[V2EX] 请问仿 V2EX 风格写个后台系统可以吗？ hh</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843474#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843474#reply1" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843474</id>
 	<published>2022-03-28T13:00:45Z</published>
-	<updated>2022-03-28T12:57:45Z</updated>
+	<updated>2022-03-28T13:57:45Z</updated>
 	<author>
 		<name>sciel</name>
 		<uri>https://www.v2ex.com/member/sciel</uri>
@@ -696,10 +1052,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[Apple] [置换] 2018 mac mini 高配+低价置换低配 mini</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843472#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843472#reply9" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843472</id>
 	<published>2022-03-28T12:49:50Z</published>
-	<updated>2022-03-28T16:11:21Z</updated>
+	<updated>2022-03-28T16:30:11Z</updated>
 	<author>
 		<name>nacosboy</name>
 		<uri>https://www.v2ex.com/member/nacosboy</uri>
@@ -712,10 +1068,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[问与答] 都 2022 年了，请问微软的 iis 最新版性能如何？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843470#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843470#reply9" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843470</id>
 	<published>2022-03-28T12:47:10Z</published>
-	<updated>2022-03-28T15:42:46Z</updated>
+	<updated>2022-03-28T16:42:46Z</updated>
 	<author>
 		<name>gebishushu</name>
 		<uri>https://www.v2ex.com/member/gebishushu</uri>
@@ -726,10 +1082,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[iPhone] 大家最近 Safari 书签同步正常吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843469#reply9" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843469#reply12" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843469</id>
 	<published>2022-03-28T12:43:00Z</published>
-	<updated>2022-03-28T15:46:25Z</updated>
+	<updated>2022-03-28T18:54:02Z</updated>
 	<author>
 		<name>Sting</name>
 		<uri>https://www.v2ex.com/member/Sting</uri>
@@ -770,10 +1126,10 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 要饿死了？分享简易 Complete Foods 食谱</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843466#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843466#reply3" />
 	<id>tag:www.v2ex.com,2022-03-28:/t/843466</id>
 	<published>2022-03-28T12:24:39Z</published>
-	<updated>2022-03-28T13:38:37Z</updated>
+	<updated>2022-03-28T14:38:37Z</updated>
 	<author>
 		<name>ArtherMH</name>
 		<uri>https://www.v2ex.com/member/ArtherMH</uri>
@@ -789,259 +1145,6 @@ qm importdisk 100 /data/qcow2/debian-11-generic-amd64-20220310-944.qcow2 extend
 （如果有条件的话 在加上一点鱼油 菜籽油，还有大概 1g 左右的盐） </p>
 <p>按照上面的配方每天分成 3-4 餐食用 大概能够保证 7-14 天的相对健康生存  </p>
 <p>对于营养要求更高的可以查找更加详尽的 Complete Foods 食谱</p>
-
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [广州/深圳] 字节跳动飞书急招前后端开发工程师</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843465#reply0" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843465</id>
-	<published>2022-03-28T12:12:30Z</published>
-	<updated>2022-03-28T12:12:30Z</updated>
-	<author>
-		<name>com314159</name>
-		<uri>https://www.v2ex.com/member/com314159</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>字节跳动飞书文档团队招聘前端、后端相关方向的工程师，1-10 年工作经验，初级、中级、高级都有。目前广州深圳 base 地可选，感兴趣欢迎私聊</p>
-<h2>我们的业务：</h2>
-<p>目前飞书文档在字节跳动属于非常重视的一块业务，过去 1 年已经拿下了小米、小鹏、理想等重大客户，在优质客户上取得不错的成绩，先进企业，先用飞书。飞书文档用过的同学都非常推荐，非常好用。目前飞书文档业务正在快速成长中，有大量的客户需求、品质优化需求、架构升级的工作需要优秀的你加入。</p>
-<h2>招聘岗位</h2>
-<ul>
-<li>前端开发工程师 30-60K * 15 薪</li>
-<li>后端开发工程师 30-60K * 15 薪，主要是 golang ，不限技术栈</li>
-</ul>
-<p>各级别，1-10 年都有开放 HC</p>
-<h2>福利</h2>
-<p>首先是免费三餐+下午茶，有员工调侃：一入字节深似海，从此减肥是路人。</p>
-<p>其次还有住房补贴，每月 1500 元，虽说不多，但却能减少不小租房压力了。</p>
-<p>最后是年终奖，3-100 个月不等，看自己的能力和绩效了</p>
-<h2>办公地点</h2>
-<ul>
-<li>深圳  来福士广场</li>
-<li>广州  赫基大厦</li>
-</ul>
-<h3>联系方式</h3>
-<p>可以<a href="https://www.feishu.cn/invitation/page/add_contact/?token=2d0o349b-4a2b-41a0-b0da-96f171f82a25&amp;unique_id=-h6V88syRf-zcs8Lw6LlKA==" rel="nofollow">飞书联系我</a></p>
-<p>或者简历发邮箱  <a href="mailto:guozhicheng.0@bytedance.com">guozhicheng.0@bytedance.com</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 请教双 ISP 下载叠加问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843463#reply3" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843463</id>
-	<published>2022-03-28T11:54:06Z</published>
-	<updated>2022-03-28T12:57:06Z</updated>
-	<author>
-		<name>asdgsdg98</name>
-		<uri>https://www.v2ex.com/member/asdgsdg98</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	一条电信百兆+一条华数百兆，P2P 和下载走双线，其余走电信。<br /><br />使用过的方案<br /><br />1 爱快：效果不佳，在应用分流里设置下载双 WAN 后流量还是全跑在电信上，极少数时候能跑到华数上，但完全跑不满，放弃。<br /><br />2 高恪：主辅模式+应用分流，叠加效果完美，但有时会出现网页打开缓慢的情况。<br /><br />3OPENWRT：MWAN3 完全看不明白，放弃了……<br /><br />请问有没有更完美的方案？最好是别加设备的解法，已经没地方放了……<br /><br />还有个问题、、分流的时候要不要避开 80 和 443 端口？据说 443 端口分流会影响网页打开速度。但我试了试感觉差不多
-	]]></content>
-</entry><entry>
-	<title>[iPhone] 家里人去世了， iPhone 不知道密码怎么解锁，在线等</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843462#reply59" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843462</id>
-	<published>2022-03-28T11:53:38Z</published>
-	<updated>2022-03-27T22:09:24Z</updated>
-	<author>
-		<name>MrTLJH</name>
-		<uri>https://www.v2ex.com/member/MrTLJH</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>家里人去世了，iPhone 不知道密码怎么解锁，在线等
-现在需要证据</p>
-
-	]]></content>
-</entry><entry>
-	<title>[奇思妙想] 伪需求还是好想法？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843461#reply15" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843461</id>
-	<published>2022-03-28T11:51:47Z</published>
-	<updated>2022-03-27T20:28:03Z</updated>
-	<author>
-		<name>hard2reg</name>
-		<uri>https://www.v2ex.com/member/hard2reg</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>经常看到 xx 百度云泄露，原因无非是账号密码泄露，并且文件在服务器并没有加密储存，任何人下载下来都能直接查看。百度云由于大文件的存在和巨大的用户量，要提供这个功能也不太现实。</p>
-<p>于是就有人私人网盘。但是搭建私人网盘多数人应该都不会选择自己造轮子。linux 上都会安装一些家喻户晓的软件，即使服务器所有者把安全做的再好，一旦这些闭源开源软件出现了高危漏洞，那网盘下的文件也在劫难逃。</p>
-<p>于是我想到用户上传文件后，服务器先将文件加密。当用户需要下载加密文件时提供解密 key ，程序用 key 解密文件，返回给客户端。</p>
-<p>不知道有没有已有的解决办法，或者说我这个是伪需求？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[上海] 上海的朋友你们好吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843460#reply28" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843460</id>
-	<published>2022-03-28T11:43:39Z</published>
-	<updated>2022-03-28T15:52:00Z</updated>
-	<author>
-		<name>sniper1211</name>
-		<uri>https://www.v2ex.com/member/sniper1211</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>足不出户？还是自由行动？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 如何像贝壳 vr 一样实现 根据二比一全景图自动生成全景模型</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843459#reply6" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843459</id>
-	<published>2022-03-28T11:38:24Z</published>
-	<updated>2022-03-28T12:37:54Z</updated>
-	<author>
-		<name>hhxiaolei</name>
-		<uri>https://www.v2ex.com/member/hhxiaolei</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	可参考贝壳 vr 展示效果
-	]]></content>
-</entry><entry>
-	<title>[问与答] 社交白痴要被隔离请问如何维稳舍友?或者我是否要提出补偿?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843458#reply1" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843458</id>
-	<published>2022-03-28T11:30:01Z</published>
-	<updated>2022-03-25T11:29:01Z</updated>
-	<author>
-		<name>TomVista</name>
-		<uri>https://www.v2ex.com/member/TomVista</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	* 60 岁的老夫妻,开便利店<br />* 应该跟我差不多大的外卖小哥<br /><br />目前要安装电子锁(监控开门情况,不是封门),后面居家隔离几天(未知),等集中隔离通知下来,去集中隔离<br /><br />居家隔离这几天,怎么和室友交代啊.<br /><br />我特地把两家室友年纪点职业出来,是因为前几天就知道会隔离(已居家 4 天), 两家的反应完全不一样,<br />外卖小哥没啥大反应, 老夫妻则是让我感到了很大的压力,<br /><br />我是还想在这继续住,,,有什么好的方案吗? 最好不要太贵..每天 200 能打住..
-	]]></content>
-</entry><entry>
-	<title>[硬件] 黑群晖 2.5G 网卡 内网迷之降速的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843457#reply0" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843457</id>
-	<published>2022-03-28T11:21:29Z</published>
-	<updated>2022-03-28T11:20:29Z</updated>
-	<author>
-		<name>EdmondGUO</name>
-		<uri>https://www.v2ex.com/member/EdmondGUO</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>NAS：G4560 + TPLink 家 421 网卡 黑群
-台式：win10 + TPLink 家 421 网卡
-软路由：J4125 + i225 四口 2.5G 网卡 物理机 openwrt</p>
-<p>症状：</p>
-<ul>
-<li>台式机测速群晖上 speedtest ，之前一直都能 2400Mbps 左右，忽然有一天发现拷贝东西很慢，一测试只有 500Mbps 左右了，期间还有 200Mbps 的速度。总之速度不稳定，并且很低。担心 speedtest 不靠谱，又用 iperf3 测试了下，峰值不过 500Mbps</li>
-<li>降速后重启了全部设备又换了网口，好像短暂的正常过。然后重启群晖不会解决问题，软路由每天 4 点都会重启，但是白天问题好像依旧</li>
-<li>担心是软路由的问题，所以软路由上 docker 搭了一个 speedtest ，电脑测依旧可以 2400Mbps+</li>
-<li>openwrt 里接口显示握手的是 2500Mbps ，群晖的网络界面也是 2500Mbps 全双工。</li>
-</ul>
-<p>可能的变更：</p>
-<ul>
-<li>群晖 622 升级 623 ，操作了一下半洗白，为了能用 moments</li>
-<li>软路由改了桥接拨号配置了端口转发，（但是这个时间对不上，好像搞这个之前就掉速了）</li>
-</ul>
-<p>后续准备再试下重启全部设备是不是有效（之前领导在家办公 ，不敢搞幺蛾子）
-然后台式直接连群晖试下正不正常。看下群晖 bios 里有没有节能什么的选项</p>
-<p>大佬们看看还有什么可以排出问题方法</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 分享[开源]一个旅游攻略 APP/H5（Django+Uniapp）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843456#reply0" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843456</id>
-	<published>2022-03-28T11:15:22Z</published>
-	<updated>2022-03-28T11:13:22Z</updated>
-	<author>
-		<name>isSamle</name>
-		<uri>https://www.v2ex.com/member/isSamle</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h1>分享一套 APP 代码！</h1>
-<p>因为入坑 Flutter 、写一个商品管理的应用<a href="https://gitee.com/CZJpython/mf-shop-erp" rel="nofollow">MF-ERP</a> [有兴趣可以一起，加我 wx Base64:Q3pqX1N1cGVyTA==] 。</p>
-<p>没有时间精力填 Uniapp 的坑了，所以决定把这个个人项目分享出来：<a href="https://gitee.com/CZJpython/traveler-open" rel="nofollow"><strong>Traveler</strong></a></p>
-<h2>介绍一下项目</h2>
-<p>Traveler 是一款旅行分享应用，用户能够自主的创建景点词条信息，创建行程关联多个景点形成攻略，也可以发布图文博客来关联攻略或者景点，让我们的旅行变得更加的简单。</p>
-<ul>
-<li><a href="https://gitee.com/CZJpython/traveler-open" rel="nofollow"><strong>Traveler 开源地址</strong></a></li>
-<li><a href="https://www.eatqionline.top:9702/" rel="nofollow">H5 演示地址，选择腾讯云服务器后台</a></li>
-<li><a href="https://samle.top:8065/static/traveler1.2.0.apk" rel="nofollow">安卓 APP 下载地址，选择服务器之后要退出重新进入才生效，坑没有解决</a></li>
-</ul>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 家用监控器摄像头有没有好的推荐？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843455#reply8" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843455</id>
-	<published>2022-03-28T11:15:15Z</published>
-	<updated>2022-03-28T15:48:12Z</updated>
-	<author>
-		<name>Erdong</name>
-		<uri>https://www.v2ex.com/member/Erdong</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有没有好的监控摄像头推荐的，性价比高一点的，有使用过的帮忙推荐一下，谢谢。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Java] 如何用 Java 实现自动化运维</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843450#reply1" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843450</id>
-	<published>2022-03-28T10:42:48Z</published>
-	<updated>2022-03-28T07:42:48Z</updated>
-	<author>
-		<name>scottcheng</name>
-		<uri>https://www.v2ex.com/member/scottcheng</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ol>
-<li>关于使用 java 实现自动化运维有什么好的建议，如调用 ansible 脚本等等</li>
-<li>有什么好的开源项目，方便推荐一波</li>
-<li>关于自动化运维，诸君有何看法与建议</li>
-</ol>
-
-	]]></content>
-</entry><entry>
-	<title>[DNS] 国内 IPv6 DNS</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843449#reply2" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843449</id>
-	<published>2022-03-28T10:35:46Z</published>
-	<updated>2022-03-28T11:13:14Z</updated>
-	<author>
-		<name>veSir</name>
-		<uri>https://www.v2ex.com/member/veSir</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>话说，国内的 IPv6 DNS 为什么还不支持，这种写法：
-https://[2400:3200::1]/dns-query</p>
-<p>是技术原因吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[推广] Hubstudio 设置浏览器指纹解决账号关联问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/843448#reply1" />
-	<id>tag:www.v2ex.com,2022-03-28:/t/843448</id>
-	<published>2022-03-28T10:29:10Z</published>
-	<updated>2022-03-28T07:29:10Z</updated>
-	<author>
-		<name>Hubstudio</name>
-		<uri>https://www.v2ex.com/member/Hubstudio</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>指纹浏览器是什么?</p>
-<p>指纹浏览器可以根据我们的需要，对浏览器指纹进行修改。因此我们统称这一类的浏览器为指纹浏览器。</p>
-<p>为什么指纹浏览器可以批量注册账号?</p>
-<p>这里我们以 Hubstudio 指纹浏览器为例给大家做一个简单的讲解。</p>
-<p>平时我们如果在同一个浏览器上注册多个账号，一个不可避免的问题就是这些账号的浏览器指纹是相同的。而多个账号的浏览器指纹相同，就意味着一旦平台对这些账号进行关联检测，这批账号就会出现问题。</p>
-<p>为什么指纹浏览器可以批量注册呢?因为指纹浏览器生成的每一个浏览器配置文件都是不同的，会对浏览器指纹进行定向修改。平台在检测账号的浏览器指纹时，每个账号的指纹都是不同的，就不会认为这些账号是有关系的。</p>
-<p>Ssl 安全通讯端层</p>
-<p>UA</p>
-<p>FLASH</p>
-<p>Resolution</p>
-<p>DNT</p>
-<p>Localstorage</p>
-<p>Audio</p>
-<p>Timezone</p>
-<p>指纹浏览器还有其他功能吗?</p>
-<p>(1)防止指纹追踪</p>
-<p>因为生成的所有浏览器都具有不同的指纹，就好像你每次出门都带上具有不同指纹的手套一样，是不会留下真实的指纹的。因此网站无法通过浏览器指纹对我们进行指纹追踪。</p>
-<p>(2)防关联</p>
-<p>这一点比较适合跨境电商用户，无论是注册买家账号，还是卖家账号，都需要注意账号关联问题。买家账号可以用来做测评，卖家账号可以用来开“分店”。</p>
 
 	]]></content>
 </entry>
