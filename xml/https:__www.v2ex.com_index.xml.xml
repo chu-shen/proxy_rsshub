@@ -8,15 +8,316 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-05-01T16:17:06Z</updated>
+<updated>2022-05-02T01:40:07Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[问与答] 小白请教大佬 namecheap 域名 DNS 配置问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850461#reply0" />
+	<id>tag:www.v2ex.com,2022-05-02:/t/850461</id>
+	<published>2022-05-02T01:40:07Z</published>
+	<updated>2022-05-02T01:40:07Z</updated>
+	<author>
+		<name>Vincent103</name>
+		<uri>https://www.v2ex.com/member/Vincent103</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	1.开始我打算绑定域名到免费空间 byethost ，结果发现在 namecheap 的 Advanced DNS 添加 byethost 的 NS Record ，一直查询不到添加记录，而采用 Domain——Custom DNS 就可以查询到。<br /><br />2.如果采用 Domain——Custom DNS 添加 NS ，我配置免费邮箱 zoho 就不知道到哪里添加 Txt Record ，我猜是免费空间，不支持这种操作，但是在 namecheap 内也找不到添加入口。<br /><br />3.后续我又采用 <a target="_blank" href="http://github.io" rel="nofollow noopener">github.io</a> 绑定自定义域名，结果又发现在 namecheap CNAME <a target="_blank" href="http://github.io" rel="nofollow noopener">github.io</a> 、同时在 <a target="_blank" href="http://github.io" rel="nofollow noopener">github.io</a> 添加 Custom domain 是可以成功的，但是在 namecheap 添加 Txt Record 验证 zoho 邮箱又是查询不到记录。<br /><br />补充一下，我修改信息后，有些是等了两三天也没反应<br /><br />以上问题，很是纳闷，期待各位大佬的专业解答，或者有类似知识可以分享一下我去参考下，感激不尽
+	]]></content>
+</entry><entry>
+	<title>[Apple] 6 月出 macbook air 的可能性大吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850460#reply0" />
+	<id>tag:www.v2ex.com,2022-05-02:/t/850460</id>
+	<published>2022-05-02T01:37:02Z</published>
+	<updated>2022-05-02T01:36:02Z</updated>
+	<author>
+		<name>manyfreebug</name>
+		<uri>https://www.v2ex.com/member/manyfreebug</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>14 寸的 macbook pro 太贵。买前两年的 macbook air 或 macbook pro 又不划算。</p>
+<p>要是有 14 寸的 macbook air 就好了。
+价格大概在什么范围</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iCloud] IOS 日区 App Store 内不能单独购买 必须登录 iCloud 了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850455#reply0" />
+	<id>tag:www.v2ex.com,2022-05-02:/t/850455</id>
+	<published>2022-05-02T00:16:52Z</published>
+	<updated>2022-05-02T00:16:52Z</updated>
+	<author>
+		<name>riceathome</name>
+		<uri>https://www.v2ex.com/member/riceathome</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[Rust] Rust 生命周期的学习过程中，感觉总是道理讲得很多，但例子很少</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850454#reply0" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850454</id>
+	<published>2022-05-01T23:42:55Z</published>
+	<updated>2022-05-01T23:40:55Z</updated>
+	<author>
+		<name>Richard14</name>
+		<uri>https://www.v2ex.com/member/Richard14</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>网上有很多教学，包括 rust course 里对引用生命周期的各种自动添加规则讲了很多，但是看起来总让人感觉云里雾里，感觉总是告诉你说某某情况会编译报错，但只知道会错，教学也并未提供一种推荐的解决方案，导致最终解决问题的时候要不然是无脑注释'a 让编译器过了，要不然就是到处 copy()，重复着低水平代码。</p>
+<p>像以下描述一个最简场景</p>
+<pre><code class="language-rust">use std::collections::HashMap;
+
+fn index_t_words(sentence: &amp;String) -&gt; HashMap&lt;&amp;str, usize&gt; {
+    let mut result: HashMap&lt;&amp;str, usize&gt; = HashMap::new();
+    for (idx, word) in sentence.split(' ').enumerate() {
+        if word.chars().nth(0).unwrap() == 't' {
+            result.insert(word, idx);
+        }
+    }; result
+}
+
+fn main() {
+    let sentence: String = String::from("magic happens in the test statement");
+    println!("{:?}", index_t_words(&amp;sentence))
+}
+</code></pre>
+<p>它实现一个非常简单的需求，输入字符串"magic happens in the test statement"，查找其中以 t 开头的单词的位置（理论返回结果 {"the": 3, "test": 4}），上述代码编译器能通过，倒是没什么难理解的地方。但是如果再加入一个引用作为函数的参数，不参与任何逻辑执行，仅改变函数签名，此时按照经验编译器就会报错了，因为无法应用自动生命周期标注的规则，提示你需要人工解决。</p>
+<p>实际生产中总是不可避免地出现这种情况，我们不可能总是保证函数或方法只有单一输入。</p>
+<pre><code class="language-rust">use std::collections::HashMap;
+
+fn index_t_words(sentence: &amp;String, bias: &amp;str) -&gt; HashMap&lt;&amp;str, usize&gt; {
+    let mut result: HashMap&lt;&amp;str, usize&gt; = HashMap::new();
+    for (idx, word) in sentence.split(' ').enumerate() {
+        if word.chars().nth(0).unwrap() == 't' {
+            result.insert(word, idx);
+        }
+    }; result
+}
+
+fn main() {
+    let sentence: String = String::from("magic happens in the test statement");
+    let bias = "spoiler";
+    println!("{:?}", index_t_words(&amp;sentence, &amp;bias))
+}
+</code></pre>
+<p>此时如果给函数签名无脑全标'a 就又能编译通过，</p>
+<pre><code class="language-rust">fn index_t_words&lt;'a&gt;(sentence: &amp;'a String, bias: &amp;'a str) -&gt; HashMap&lt;&amp;'a str, usize&gt; {}
+</code></pre>
+<p>说实话看完 rust course 也搞不太清楚发生了什么，理论上标注和资源释放不发生任何联系，为什么这么手动标了一下编译器就过了？</p>
+<p>以至于再进阶一种情况，如果需要返回的变量所有权在函数内部，比如下面这种情况，在生产中也不少见，有时不可避免地资源的所有权在被调用的函数内部产生。因为函数结束时要释放资源，引用当然是无法带到函数外面的，会报错可以理解，一般来说解决方案也是通过 copy 把所有权转移出去。但是如果我们需要面临输出到多个位置（比如函数签名不光输出一个 HashMap ，还有另一个 Vec ，也同样引用&amp;str ），如果不想每输出到一个结构就新拷贝一份的话，应该采用什么样的解决方案呢？</p>
+<pre><code class="language-rust">fn index_t_words() -&gt; HashMap&lt;&amp;str, usize&gt; {
+    let sentence: String = String::from("magic happens in the test statement");
+    let mut result: HashMap&lt;&amp;str, usize&gt; = HashMap::new();
+    for (idx, word) in sentence.split(' ').enumerate() {
+        if word.chars().nth(0).unwrap() == 't' {
+            result.insert(word, idx);
+        }
+    }; result
+}
+
+fn main() { println!("{:?}", index_t_words()) }
+</code></pre>
+<p>最后吐槽一下都说 rust 学习曲线比较陡峭，刚开始特别难，后面慢慢变简单。我个人体验上倒是感觉刚开始特别简单，越看感觉越难。。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] [macOS] Dock 無法預覽檔案</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850453#reply0" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850453</id>
+	<published>2022-05-01T23:38:59Z</published>
+	<updated>2022-05-01T23:36:59Z</updated>
+	<author>
+		<name>bs10081</name>
+		<uri>https://www.v2ex.com/member/bs10081</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如圖👇🏻</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/lq5V2HN.jpg"/></p>
+<p>這個問題除了重開機之外，還有什麼好方法呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Windows] 2022 了 windows 还需要装驱动吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850452#reply8" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850452</id>
+	<published>2022-05-01T19:08:03Z</published>
+	<updated>2022-05-01T20:01:55Z</updated>
+	<author>
+		<name>haoyh1</name>
+		<uri>https://www.v2ex.com/member/haoyh1</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	比如 win11 经常听说 AMD 平台有什么 bug ，缓存延迟，电源管理之类，最终都是 AMD 官方升级芯片组驱动解决<br />那这个芯片组驱动在 win11 里是默认是什么版本？如何查询默认版本？是否跟随 windows 更新而更新？<br />具体什么机制，对这些东西一直很困惑
+	]]></content>
+</entry><entry>
+	<title>[硬件] 16:10 的显示器撸码体验如何？ 看中了 U3023e，有在用的 V 友吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850451#reply3" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850451</id>
+	<published>2022-05-01T18:31:53Z</published>
+	<updated>2022-05-01T21:31:53Z</updated>
+	<author>
+		<name>pppguest3962</name>
+		<uri>https://www.v2ex.com/member/pppguest3962</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>只撸码，看网页和文书，CAD 画图，要做的图也和颜色没多大关系<br/>
+原来的 u2719dc 碎屏后，在小作坊店现场换了屏，用了半年很明显感觉，不能要了...，<br/>
+过去一直不爽 1440 的垂直分辨率，扭 90 度后，顶部又仰望得累，现在机会来了，打算换 16:10 ，   </p>
+<p>1 、打算用回 DELL 的初衷，只是因为双屏是 DP 菊花链（ DELL 叫 MMS 技术吧？）串起来的，我不清楚其它，比如三星，或者 LG 的，如果它们支持 DP 菊花串，是否能不同品牌串起来？</p>
+<p>2 、是否有更好的 16:10 显示器推荐？  预算比起 U3023e 贵一点点也行，不过看 16:10 的显示器，在某东上，也就只有 U3023e 了。。。</p>
+<p>3 、在某东上能搭个碎屏险，在 DELL 官方下单，能便宜 400 块钱左右，DELL 官方有碎屏险不？  他有个 3 年，5 年的高级面板服务，怎么理解的？  就是上门换屏，工料费怎么算？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[奇思妙想] 有对 GeoGebra 感兴趣的不，一起做做课件？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850449#reply1" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850449</id>
+	<published>2022-05-01T17:45:32Z</published>
+	<updated>2022-05-01T17:57:53Z</updated>
+	<author>
+		<name>yunser</name>
+		<uri>https://www.v2ex.com/member/yunser</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>很久之前就了解过 GeoGebra ，但最近才开始去学习它。</p>
+<p>在 B 站搜教程学习，发现很多要关注公众号才给代码。还有一些是卖课或卖 GeoGebra 课件的，关注了也没用。</p>
+<p>毕竟别人也是花时间制作的，售卖也无可非议。不过售价也不便宜。我看了一下，很多课件还是很有趣的。</p>
+<p>我的设想是，制作一套质量较高的，涉及小学到高中，甚至大学的课件，以数学为主，可能会涉及其他学科。</p>
+<p>我今天尝试了一下，发现入门没那么容易，但我想也难不到哪去。慢慢来的话，总体上花的时间是可控的。</p>
+<p>如果做成开源，或许可以改善一下国内的 GeoGebra 生态，就当做贡献了。</p>
+<p>如果做商业的，可以做成大部分免费，部分收费的方式，就和上面的公众号差不多，前期靠录制演示视频、教程和关注公众号获取免费资源在 B 站等平台获取流量。甚至可以购买别人的资源偷师。</p>
+<p>不过市场怎样，我不太了解，不知道有人熟悉不？</p>
+<p>欢迎提出建议，感兴趣的可以在下面评论或私我。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 线上突然出 bug 怎么找？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850448#reply7" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850448</id>
+	<published>2022-05-01T17:32:12Z</published>
+	<updated>2022-05-01T21:21:30Z</updated>
+	<author>
+		<name>christin</name>
+		<uri>https://www.v2ex.com/member/christin</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>求传授一点经验<br/>昨晚 10 点多线上出 bug 了，忙到现在 1 点半了。还是我们组长帮我一起看才找到问题了。<br/>碰到 bug 就很慌，担心影响线上业务，束手无策。求大佬指点一下。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iDev] 程式师应该要放心大胆地用 Swift 重写 C++ 的东西</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850447#reply2" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850447</id>
+	<published>2022-05-01T17:24:41Z</published>
+	<updated>2022-05-01T14:24:41Z</updated>
+	<author>
+		<name>ShikiSuen</name>
+		<uri>https://www.v2ex.com/member/ShikiSuen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Swift 5.x 以及 SwiftUI 在全球 Cocoa Devs 群体掀起了一阵旋风，这股旋风也吹到了台澎金马的技术社群里头。</p>
+<p>我们所敬爱的业界前辈保哥，就在 GitHub 上利用了他的宝贵时间，将某农作物注音输入法内充满类型安全问题的 ObjC 部分用 Swift 重写了一半。之后，还给这款输入法引入了状态管理架构，还强调了 Swift 的类型安全性有多重要。</p>
+<p>威注音专案为了要厚颜无耻地蹭保哥的热度，在此给出了实际表率：自己分离出来成为独立的专案，将保哥没有完成的那部分 ObjC++ 也几乎用 Swift 重写殆尽、甚至将语言模型模组也全都用 Swift 重写了。威注音主张：一款专案，无论内部的 C++ 模组多么机巧高深，都要尝试用 Swift 去重写、而不是在那里沉浸于「一定要膜拜那些擅长玩弄记忆体指针的 C++ 大佬们」的那种政治气氛。如果一款产品的开发参与者们将彼此之间的表面上的礼仪关系看得比产品品质还要远远更重要的话，那这基本就是 product quality ensurance 的大敌。</p>
+<p>(这假掰文写不下去了，我学不来这种文风[1]。)</p>
+<p>1^ 杨维中《工程师应该要放心大胆地不写文档》 <a href="https://p5d12000.medium.com/543c11062cd6" rel="nofollow">https://p5d12000.medium.com/543c11062cd6</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 上海联通教育宽带最后有几个人办了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850446#reply3" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850446</id>
+	<published>2022-05-01T17:15:49Z</published>
+	<updated>2022-05-01T21:18:46Z</updated>
+	<author>
+		<name>lly8666</name>
+		<uri>https://www.v2ex.com/member/lly8666</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>之前我在某个提上行的帖子里委婉提到过。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[服务器] 什么卡可以过 IBM CLOUD？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850445#reply1" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850445</id>
+	<published>2022-05-01T17:05:52Z</published>
+	<updated>2022-04-30T17:05:52Z</updated>
+	<author>
+		<name>cpluscc</name>
+		<uri>https://www.v2ex.com/member/cpluscc</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题，想用下 ibm cloud ，不知道哪种卡能过</p>
+
+	]]></content>
+</entry><entry>
+	<title>[装修] 家居装修中的照明设计，无主灯还是有主灯？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850444#reply10" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850444</id>
+	<published>2022-05-01T16:46:50Z</published>
+	<updated>2022-05-02T01:06:17Z</updated>
+	<author>
+		<name>Tumblr</name>
+		<uri>https://www.v2ex.com/member/Tumblr</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>正在准备装修的事情，其中的一个点是照明设计。<br/>
+我目前倾向于无主灯的设计，用灯条 /灯带做基础照明，重点照明用射灯、台灯等补充。<br/>
+太太倾向于传统照明，觉得弄个大大的吊灯比较好看。</p>
+<p>想请教一下 V 友们，关于家居装修中的照明，有什么建议呢？</p>
+<p>P.S 不想用筒灯 /射灯做基础照明，不想把家里搞得和办公室一样。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[微信] 各位用 Wechat 的小伙伴最近有消息延迟的情况吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850443#reply4" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850443</id>
+	<published>2022-05-01T16:45:29Z</published>
+	<updated>2022-05-01T19:09:04Z</updated>
+	<author>
+		<name>andyliu24</name>
+		<uri>https://www.v2ex.com/member/andyliu24</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近感觉 Wechat 消息发送比平时要卡很多，尤其是到了晚高峰的时候，转圈几秒钟甚至半分钟是常用的事情。请问下有人遇到这个问题吗，还是我自己的问题？</p>
+<p><img alt="https://wx3.sinaimg.cn/large/8c43b45dly1h1tdqvs27gj207i03cglm.jpg" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://wx3.sinaimg.cn/large/8c43b45dly1h1tdqvs27gj207i03cglm.jpg"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请教一个颜文字问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850442#reply2" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850442</id>
+	<published>2022-05-01T16:30:49Z</published>
+	<updated>2022-05-01T16:30:49Z</updated>
+	<author>
+		<name>tyit</name>
+		<uri>https://www.v2ex.com/member/tyit</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>ʕ•̫͡•ʔ </p>
+<p>以前看到过，忘记复制下来了。然后找了几天找不到。类似图案颜文字就是中间两个点去掉了，下面用特殊符号类似下划线包起来。这个颜文字怎么打？或者有现成的嘛</p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 大家是怎样用 nas 做下载机的</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850441#reply5" />
+	<id>tag:www.v2ex.com,2022-05-01:/t/850441</id>
+	<published>2022-05-01T16:29:36Z</published>
+	<updated>2022-05-01T19:26:36Z</updated>
+	<author>
+		<name>fengchen0vr</name>
+		<uri>https://www.v2ex.com/member/fengchen0vr</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	新组了台式机，想着是不是可以不挂机械盘了<br />因为有台 debian 机做代理，是不是方便用它做下载机<br />又或者，阿里云能长期 webdav 的话，都很少下片了
+	]]></content>
+</entry><entry>
 	<title>[iOS] ios 分应用代理最好的方案是什么</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850440#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850440#reply6" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850440</id>
 	<published>2022-05-01T16:13:38Z</published>
-	<updated>2022-05-01T16:17:06Z</updated>
+	<updated>2022-05-01T18:48:22Z</updated>
 	<author>
 		<name>fengmengqiu</name>
 		<uri>https://www.v2ex.com/member/fengmengqiu</uri>
@@ -53,10 +354,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 美西线路是不是炸了啊</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850436#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850436#reply6" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850436</id>
 	<published>2022-05-01T15:06:11Z</published>
-	<updated>2022-05-01T12:06:11Z</updated>
+	<updated>2022-05-01T13:06:11Z</updated>
 	<author>
 		<name>cloudsigma</name>
 		<uri>https://www.v2ex.com/member/cloudsigma</uri>
@@ -69,7 +370,7 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 不懂我就问 uuplugin 开启后为什么我下载文件时 uuplugin 负载很高</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850435#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850435#reply2" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850435</id>
 	<published>2022-05-01T15:04:31Z</published>
 	<updated>2022-05-01T15:26:40Z</updated>
@@ -83,10 +384,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 旧文重读，博主鱼炒饭的病床回忆日记</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850434#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850434#reply6" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850434</id>
 	<published>2022-05-01T15:04:30Z</published>
-	<updated>2022-05-01T15:38:28Z</updated>
+	<updated>2022-05-01T18:22:35Z</updated>
 	<author>
 		<name>maweihao999</name>
 		<uri>https://www.v2ex.com/member/maweihao999</uri>
@@ -113,10 +414,10 @@
 	]]></content>
 </entry><entry>
 	<title>[路由器] 路由器上配置了 ssr, 电脑端/手机端和 Apple tv 端的 YouTube 速度一个天上一个地底下</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850431#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850431#reply9" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850431</id>
 	<published>2022-05-01T14:52:07Z</published>
-	<updated>2022-05-01T15:23:15Z</updated>
+	<updated>2022-05-01T20:21:43Z</updated>
 	<author>
 		<name>nuistzhou</name>
 		<uri>https://www.v2ex.com/member/nuistzhou</uri>
@@ -146,10 +447,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Python] Pycon 新项目： Pyscript</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850428#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850428#reply15" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850428</id>
 	<published>2022-05-01T13:49:00Z</published>
-	<updated>2022-05-01T15:27:34Z</updated>
+	<updated>2022-05-01T20:30:36Z</updated>
 	<author>
 		<name>qwerzl</name>
 		<uri>https://www.v2ex.com/member/qwerzl</uri>
@@ -161,7 +462,7 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 做了一个隧道软件，叫做 Termtunnel，邀请大家体验</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850426#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850426#reply1" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850426</id>
 	<published>2022-05-01T13:46:16Z</published>
 	<updated>2022-05-01T13:46:16Z</updated>
@@ -181,10 +482,10 @@
 	]]></content>
 </entry><entry>
 	<title>[硬件] 求教：大麦盒子 dm1016 如何刷 Linux 系统？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850425#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850425#reply1" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850425</id>
 	<published>2022-05-01T13:40:36Z</published>
-	<updated>2022-05-01T13:39:36Z</updated>
+	<updated>2022-05-01T14:39:36Z</updated>
 	<author>
 		<name>yafoo</name>
 		<uri>https://www.v2ex.com/member/yafoo</uri>
@@ -195,10 +496,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 关于在电视盒子上看 B 站港澳台番剧的一些实践</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850424#reply13" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850424#reply15" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850424</id>
 	<published>2022-05-01T13:40:31Z</published>
-	<updated>2022-05-01T16:04:52Z</updated>
+	<updated>2022-05-01T17:06:45Z</updated>
 	<author>
 		<name>lenghonglin</name>
 		<uri>https://www.v2ex.com/member/lenghonglin</uri>
@@ -214,10 +515,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 学习一门技术看文档怎么才能最快看懂</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850423#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850423#reply10" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850423</id>
 	<published>2022-05-01T13:39:25Z</published>
-	<updated>2022-05-01T15:02:28Z</updated>
+	<updated>2022-05-01T18:56:08Z</updated>
 	<author>
 		<name>ha2ha</name>
 		<uri>https://www.v2ex.com/member/ha2ha</uri>
@@ -249,10 +550,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 为什么深色模式/黑夜模式的推广这么慢，各种 iOS/Win/Mac/Android 平台或者 Chrome/Edge 等浏览器，没有建议的标准或者模块吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850420#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850420#reply5" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850420</id>
 	<published>2022-05-01T13:29:50Z</published>
-	<updated>2022-05-01T13:40:01Z</updated>
+	<updated>2022-05-01T16:40:01Z</updated>
 	<author>
 		<name>cusuanan</name>
 		<uri>https://www.v2ex.com/member/cusuanan</uri>
@@ -263,7 +564,7 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 给大学生的建议 OR 职场人给应届生的真实建议（过来人的经验）,V2exr 来畅聊</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850419#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850419#reply9" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850419</id>
 	<published>2022-05-01T13:24:29Z</published>
 	<updated>2022-05-01T16:16:44Z</updated>
@@ -305,7 +606,7 @@
 	]]></content>
 </entry><entry>
 	<title>[奇思妙想] 基于蓝牙的系统级 app 是否可以部分取代各种各样的健康🐎吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850414#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850414#reply12" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850414</id>
 	<published>2022-05-01T12:33:04Z</published>
 	<updated>2022-05-01T14:00:12Z</updated>
@@ -342,10 +643,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] [技术|原创|首发] Deno 反代加速任意网站 实现 CDN 加速效果</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850412#reply19" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850412#reply26" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850412</id>
 	<published>2022-05-01T12:21:30Z</published>
-	<updated>2022-05-01T16:09:21Z</updated>
+	<updated>2022-05-01T19:24:48Z</updated>
 	<author>
 		<name>lizhiqing</name>
 		<uri>https://www.v2ex.com/member/lizhiqing</uri>
@@ -369,10 +670,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有没有什么知识库/笔记整理心得的文章或者博客？最近想学习一下</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850409#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850409#reply5" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850409</id>
 	<published>2022-05-01T12:02:41Z</published>
-	<updated>2022-05-01T14:39:48Z</updated>
+	<updated>2022-05-01T15:39:48Z</updated>
 	<author>
 		<name>cusuanan</name>
 		<uri>https://www.v2ex.com/member/cusuanan</uri>
@@ -384,10 +685,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 西数 WD40EJRX 和 WD42EJRX 如何选择？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850408#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850408#reply5" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850408</id>
 	<published>2022-05-01T11:57:17Z</published>
-	<updated>2022-05-01T13:58:50Z</updated>
+	<updated>2022-05-01T14:58:50Z</updated>
 	<author>
 		<name>saki22oimo</name>
 		<uri>https://www.v2ex.com/member/saki22oimo</uri>
@@ -426,10 +727,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 讨论一下大家职业变现能力是怎样的呢，我想个体的变现能力也会影响到个人的收入情况。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850403#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850403#reply3" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850403</id>
 	<published>2022-05-01T11:20:52Z</published>
-	<updated>2022-05-01T11:52:22Z</updated>
+	<updated>2022-05-01T12:52:22Z</updated>
 	<author>
 		<name>ljlljl0</name>
 		<uri>https://www.v2ex.com/member/ljlljl0</uri>
@@ -476,10 +777,10 @@
 	]]></content>
 </entry><entry>
 	<title>[求职] [求职][杭州]Java6 年，会日语</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850400#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850400#reply7" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850400</id>
 	<published>2022-05-01T10:41:51Z</published>
-	<updated>2022-05-01T15:25:46Z</updated>
+	<updated>2022-05-01T16:25:46Z</updated>
 	<author>
 		<name>koizju</name>
 		<uri>https://www.v2ex.com/member/koizju</uri>
@@ -507,7 +808,7 @@
 	]]></content>
 </entry><entry>
 	<title>[北京] 朝阳公园南门附近寻一散步小友，男女皆可</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850398#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850398#reply11" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850398</id>
 	<published>2022-05-01T10:32:44Z</published>
 	<updated>2022-05-01T12:38:18Z</updated>
@@ -543,7 +844,7 @@
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850396#reply2" />
 	<id>tag:www.v2ex.com,2022-05-01:/t/850396</id>
 	<published>2022-05-01T09:58:35Z</published>
-	<updated>2022-05-01T07:57:35Z</updated>
+	<updated>2022-04-30T07:57:35Z</updated>
 	<author>
 		<name>roundRobin</name>
 		<uri>https://www.v2ex.com/member/roundRobin</uri>
@@ -603,269 +904,6 @@ class Node:
 <pre><code>[null,false]
 </code></pre>
 
-	]]></content>
-</entry><entry>
-	<title>[Apple] 求推荐华强北的 Airpods Pro 的充电盒，用于充 Apple 官方的耳机</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850395#reply6" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850395</id>
-	<published>2022-05-01T09:51:54Z</published>
-	<updated>2022-05-01T16:06:00Z</updated>
-	<author>
-		<name>mejee</name>
-		<uri>https://www.v2ex.com/member/mejee</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题，求推荐，迫于穷，不考虑官方的盒子</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Telegram] Telegram 上有哪些有意思的群组可以加入？黄的不要</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850394#reply10" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850394</id>
-	<published>2022-05-01T09:50:31Z</published>
-	<updated>2022-05-01T12:04:31Z</updated>
-	<author>
-		<name>SonivelY</name>
-		<uri>https://www.v2ex.com/member/SonivelY</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[数学] 未来 565 天付两次利息，年化内部收益率怎么计算？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850393#reply0" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850393</id>
-	<published>2022-05-01T09:44:34Z</published>
-	<updated>2022-04-30T17:42:34Z</updated>
-	<author>
-		<name>huzhikuizainali</name>
-		<uri>https://www.v2ex.com/member/huzhikuizainali</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>常见计算内部收益率的例子都是整年为单位进行计算，在此不赘述。但是如果遇到付款期限不是整年，那么如何计算年化内部收益率呢？例如 现在用 100 元购买了一个债券，200 天后支付 5 元利息。565 天后支付 105 元。那么“年化”的内部收益率 x 等于多少呢？我觉得应该是解下面这个方程来求 x ，不知道对不对！(假设全年计息天数是 365 天)</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.bmp.ovh/imgs/2022/05/01/f1da5f57eec3ef3d.png"/></p>
-<p>如果上面的计算方法是正确的。那么 excel matlab 是否有针对上述情况的 irr 函数呢？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 最近香港都是 3 网 CMI？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850392#reply7" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850392</id>
-	<published>2022-05-01T09:44:16Z</published>
-	<updated>2022-05-01T13:59:30Z</updated>
-	<author>
-		<name>liliass</name>
-		<uri>https://www.v2ex.com/member/liliass</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题， 感觉最近卖得 VPS 全是香港三网 CMI (除了 GIA)
-之前的 HKT,WTT 怎么了？ </p>
-<p>这样的话，CMI 又要玩坏了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 开源一款运行在腾讯云开发的 Todo App</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850391#reply8" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850391</id>
-	<published>2022-05-01T09:44:02Z</published>
-	<updated>2022-05-01T15:29:07Z</updated>
-	<author>
-		<name>vacker</name>
-		<uri>https://www.v2ex.com/member/vacker</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>前几年学习 vue 课程做的实践项目，自己一直用到今天，基于框架 quasar 开发，可以打包成 Spa 网页，ios ，macOS ，android App ，用户认证和数据库均使用腾讯云开发，这种项目一般都是自用，流量很小，使用腾讯云开发几乎无使用成本。都是老 V 友了，喜欢的别忘 star 哈哈哈</p>
-<p>开源地址： <a href="https://github.com/vochina/todo-cloudbase" rel="nofollow">https://github.com/vochina/todo-cloudbase</a></p>
-<h3>项目部分截图：</h3>
-<p><img alt="1" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://github.com/vochina/todo-cloudbase/raw/main/sample-images/1.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[站长] 静态网站，选择哪个好呢？ Vuepress\docsify\Hexo\GitBook\Docute</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850390#reply1" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850390</id>
-	<published>2022-05-01T09:27:05Z</published>
-	<updated>2022-05-01T09:25:05Z</updated>
-	<author>
-		<name>klausyao</name>
-		<uri>https://www.v2ex.com/member/klausyao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如上几个，有没有支持侧边栏导航到 h5 甚至 h6 的？
-不知道各位体验如何。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[ WATCH] Apple Watch 的绿色的“锻炼”圆环，具有一定强度的健身运动这个需要多强？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850389#reply1" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850389</id>
-	<published>2022-05-01T09:26:45Z</published>
-	<updated>2022-05-01T01:26:45Z</updated>
-	<author>
-		<name>lxr760</name>
-		<uri>https://www.v2ex.com/member/lxr760</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>这个绿色的圆环      一定强度是指啥啊？       </p>
-<p>我看我快走的时候，有时候算时间，有时候又不算。但又不是根据步伐快慢来。</p>
-<p>所以，哪位知道这个数据的记录标准是什么</p>
-<p><a href="https://imgtu.com/i/OC9z11" rel="nofollow"><img alt="OC9z11.jpg" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/05/01/OC9z11.jpg"/></a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[Markdown] 请教在 Obsidian 中删除文件的便捷方法</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850388#reply1" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850388</id>
-	<published>2022-05-01T09:18:33Z</published>
-	<updated>2022-05-01T06:18:33Z</updated>
-	<author>
-		<name>kossery</name>
-		<uri>https://www.v2ex.com/member/kossery</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>在这里了解了 obsidian ，刚开始用，感觉蛮不错的。只是删除文件的时候感觉不大顺手，不知道大家有没有更好的操作：</p>
-<ol>
-<li>是否有办法在左侧的文件栏里用快捷键删除文件（比如 delete ）</li>
-<li>是否有办法在文件栏里选中多个文件一起删除 </li>
-<li>删除文件后是否有办法用快捷键恢复（比如 ctrl+z ）。</li>
-</ol>
-<p>感谢可能的解答。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[投资] 个人的出口业务因扩大规模，招股募资，筹资 200 万左右，单笔毛利润 13%，年利润率 80%~120%</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850387#reply3" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850387</id>
-	<published>2022-05-01T08:59:55Z</published>
-	<updated>2022-05-01T00:58:55Z</updated>
-	<author>
-		<name>shinodajmk</name>
-		<uri>https://www.v2ex.com/member/shinodajmk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题，请赐留 email or wechat</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有什么方式可以操作 PC Wechat？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850386#reply2" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850386</id>
-	<published>2022-05-01T08:50:50Z</published>
-	<updated>2022-05-01T08:50:50Z</updated>
-	<author>
-		<name>zzWinD</name>
-		<uri>https://www.v2ex.com/member/zzWinD</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<a target="_blank" href="https://wkzqn.gitee.io/2021/04/15/appium%E4%B8%8Ewinappdriver%E5%AF%B9%E5%BE%AE%E4%BF%A1%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="nofollow noopener">https://wkzqn.gitee.io/2021/04/15/appium%E4%B8%8Ewinappdriver%E5%AF%B9%E5%BE%AE%E4%BF%A1%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/</a><br /><br />参操这种方式，操作微信，第 60 行代码会获取不到微信的句柄。是因为微信的版本升级造成的吗？<br /><br />除了通过 HOOK 的方式，还有什么更好的方式去“自动化”的操作微信 PC ？貌似这方面的资料很少~
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 2022 移动宽带可以冲了吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850385#reply35" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850385</id>
-	<published>2022-05-01T08:43:51Z</published>
-	<updated>2022-05-01T15:37:39Z</updated>
-	<author>
-		<name>GCP</name>
-		<uri>https://www.v2ex.com/member/GCP</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>现在用电信相对而言有点贵，想着换个便宜的</p>
-<ul>
-<li>联通 39/月，300 兆宽带，20GB+700 分钟</li>
-<li>移动 25/月，1000 兆宽带</li>
-</ul>
-<p>不玩游戏，平时看看国内外平台视频算是最大的流量，移动价格很诱人，想冲</p>
-
-	]]></content>
-</entry><entry>
-	<title>[C] 现代化 C 使用体验</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850384#reply18" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850384</id>
-	<published>2022-05-01T08:35:35Z</published>
-	<updated>2022-05-01T14:55:54Z</updated>
-	<author>
-		<name>lcj2class</name>
-		<uri>https://www.v2ex.com/member/lcj2class</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ul>
-<li><a href="https://liujiacai.net/blog/2022/04/30/modern-c/" rel="nofollow">https://liujiacai.net/blog/2022/04/30/modern-c/</a></li>
-</ul>
-<p>自己一些粗浅的使用体验，欢迎大家批评指正。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 第一次尝试多架构镜像构建，做了一个适用于 Linux arm64 和 amd64 的兰空图床镜像</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850383#reply2" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850383</id>
-	<published>2022-05-01T08:33:11Z</published>
-	<updated>2022-05-01T10:57:48Z</updated>
-	<author>
-		<name>AllenHua</name>
-		<uri>https://www.v2ex.com/member/AllenHua</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="20220501152943" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://pic.dogimg.com/2022/05/01/626e36ed1918b.png"/></p>
-<p>之前写了一个这个图床的 PicGo 图片上传插件: <a href="https://github.com/hellodk34/picgo-plugin-lankong" rel="nofollow">https://github.com/hellodk34/picgo-plugin-lankong</a></p>
-<p>创建了一个 repo 记录构建过程: <a href="https://github.com/hellodk34/lsky-pro-docker" rel="nofollow">https://github.com/hellodk34/lsky-pro-docker</a></p>
-<p>docker hub 地址: <a href="https://hub.docker.com/r/dko0/lsky-pro" rel="nofollow">https://hub.docker.com/r/dko0/lsky-pro</a></p>
-<p>镜像使用</p>
-<pre><code># 拉取镜像
-# docker pull dko0/lsky-pro:2.0.4
-
-# 启动容器
-# docker run -d --name=lsky-pro --restart=always -v /path/to/mount/lsky-pro-data:/var/www/html -p 7791:80 dko0/lsky-pro:2.0.4
-</code></pre>
-<p>找遍了全网也没有人给这个图床做 arm64 架构的 docker 镜像，于是我就自己动手了。使用 N1 跑起来还是非常流畅的。个人感觉这个图床搭配俺写的 PicGo 图片上传插件，写作流程 faster and faster （王婆卖瓜</p>
-<p>欢迎大家使用。：）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] matlab 和 mathmatica 这种专业软件能解这种题目吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850382#reply4" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850382</id>
-	<published>2022-05-01T08:24:30Z</published>
-	<updated>2022-05-01T09:49:34Z</updated>
-	<author>
-		<name>zxCoder</name>
-		<uri>https://www.v2ex.com/member/zxCoder</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>实际公式很复杂，但是结构就是这样的</p>
-<pre><code>A(0.5)=1 // 就是有递归边界，这里的数字只是演示
-A(x)=\sum_i \sum_j \sum_k (对 A 积分，参数和积分区间为 i,j,k 等的相关运算结果)
-</code></pre>
-<p>自己用 python 写了一下，算出来结果和预期不太一致，不知道是代码写错还是公式推错</p>
-<p>想问下有没有专业软件可以直接输入这样的公式，然后直接能算出结果（我不太记得数学里这叫什么了，隐函数还是什么，只记得编程的递归了。。。）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 发现 iPhone 计算器的一个秘密</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850381#reply34" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850381</id>
-	<published>2022-05-01T08:21:50Z</published>
-	<updated>2022-05-01T16:09:15Z</updated>
-	<author>
-		<name>yoyoyoyolol</name>
-		<uri>https://www.v2ex.com/member/yoyoyoyolol</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>iPhone 在未锁定屏幕方向的情况下，横屏计算器有计算器的高级功能，我说以前怎么感觉 iPhone 计算器功能那么简单呢……</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 在农村准备建立个别墅，大家给点建议，尤其是已经建过的，快来说说感受，给我点启迪。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/850379#reply56" />
-	<id>tag:www.v2ex.com,2022-05-01:/t/850379</id>
-	<published>2022-05-01T08:17:53Z</published>
-	<updated>2022-05-01T16:24:55Z</updated>
-	<author>
-		<name>DavidXs</name>
-		<uri>https://www.v2ex.com/member/DavidXs</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	回国后，<br /><br />到老家村村里，我们祖宅，还有长满草的小院和漏天的房，准备推了建个别墅了，大家有没有推荐的？<br /><br />建个别墅，用轻钢好还是重钢好？还是混泥土比较好？<br /><br />尤其是那些已经建立了别墅的，希望大家都说说建议吧
 	]]></content>
 </entry>
 </feed>
