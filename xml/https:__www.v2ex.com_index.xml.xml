@@ -8,10 +8,487 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-06-25T16:09:28Z</updated>
+<updated>2022-06-26T01:49:58Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[Linux] Manjaro 能不能设置开机自动连接 wifi ?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862244#reply0" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862244</id>
+	<published>2022-06-26T01:49:58Z</published>
+	<updated>2022-06-26T01:49:58Z</updated>
+	<author>
+		<name>jeesk</name>
+		<uri>https://www.v2ex.com/member/jeesk</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	安装 manjaro 后，重启机器， 不登录桌面， 远程设置没发用 ssh 登录， 有什么解决的办法
+	]]></content>
+</entry><entry>
+	<title>[程序员] 怎么控制右手小指实现盲打</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862243#reply1" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862243</id>
+	<published>2022-06-26T01:42:53Z</published>
+	<updated>2022-06-26T01:50:01Z</updated>
+	<author>
+		<name>brucmao</name>
+		<uri>https://www.v2ex.com/member/brucmao</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>在 <a href="http://keybr.com" rel="nofollow">keybr.com</a> 练习打字的时候，发现纯英文打字的时候盲打没问题，但是平时写代码时遇到特殊符号，感觉盲打比较困难，主要时感觉右手小指要控制的区域太多了， 右手小指要移动区域太大了。参照这张图
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://f000.backblazeb2.com/file/files-share/%E9%94%AE%E4%BD%8D.jpg"/></p>
+<p>生成一些包含特殊符号字符串练习，感觉实现盲打很困难
+<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.bmp.ovh/imgs/2022/06/26/16bc7daef099628e.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[MacBook Pro] 聊聊 intel MacBook Pro 的散热和孱弱的 WiFi 性能</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862242#reply1" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862242</id>
+	<published>2022-06-26T01:41:57Z</published>
+	<updated>2022-06-26T01:46:12Z</updated>
+	<author>
+		<name>AllenHua</name>
+		<uri>https://www.v2ex.com/member/AllenHua</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>本篇针对老 intel macbook pro, M1/M2 用户可以偷着乐了 :doge</p>
+<p>我的是 19 款 MacBook Pro 16 寸乞丐版（ 16+512 ），当前系统是 10.15.4 ，如下</p>
+<p><img alt="20220619141410.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://image.940304.xyz/i/2022/06/19/62aebeb317594.png"/></p>
+<p>我做了个简单的对比测试。</p>
+<h2>场景 1</h2>
+<ul>
+<li>室温 29.6℃ （来自米家温湿度计 Pro ）</li>
+<li>mbp 合上盖子，放在通风情况良好的窗边，使用 4 个瓶盖垫起了机身增大进风量</li>
+<li>ping <a href="http://baidu.com" rel="nofollow">baidu.com</a> 500 个 packet</li>
+</ul>
+<p>结果如下</p>
+<pre><code>--- baidu.com ping statistics ---
+500 packets transmitted, 500 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 31.960/40.688/205.793/17.821 ms
+</code></pre>
+<h2>场景 2</h2>
+<ul>
+<li>室温 29.7℃</li>
+<li>使用我的 i3-10105f Windows 10 台式机，机箱位置通风条件实际上不如场景 1 中的窗边</li>
+<li>由于没有无线网卡，使用的板载普通千兆有线网卡</li>
+<li>ping <a href="http://baidu.com" rel="nofollow">baidu.com</a> 500 个 packet</li>
+</ul>
+<p>结果如下</p>
+<pre><code>Ping statistics for 220.181.38.251:
+    Packets: Sent = 500, Received = 500, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 28ms, Maximum = 53ms, Average = 28ms
+</code></pre>
+<p><strong>高下立判，mbp(可能也包括 m1/m2) 的 wifi 性能是真弱🐓️</strong></p>
+<h2>场景 3</h2>
+<ul>
+<li>室温 29.9℃ (越来越接近中午所以室温渐渐升高)</li>
+<li>打开 mbp ，取消合盖状态，使用一个铝合金支架架高 mbp ，机器进风条件比场景 1 更有优势</li>
+<li>同样 ping <a href="http://baidu.com" rel="nofollow">baidu.com</a> 500 个 packet</li>
+</ul>
+<p>结果如下</p>
+<pre><code>--- baidu.com ping statistics ---
+500 packets transmitted, 499 packets received, 0.2% packet loss
+round-trip min/avg/max/stddev = 31.426/39.894/183.501/15.077 ms
+</code></pre>
+<h2>试图推论</h2>
+<ul>
+<li>打开盖子散热条件更好了，average round-trip time 稍微变小了一点点，从 40.688ms 降低到了 39.894ms</li>
+<li>可能因为室温增加或者一些偶然性原因，打开盖子时出现了一个丢包</li>
+<li>室温升高了，但是平均延迟还降低了，说明是否打开盖子对 mbp 散热真的有影响，打开更有利于散热，而且散热对 mbp wifi 性能影响蛮大的（丢包的那个不算，忽略</li>
+<li>很明显，台式机散热更优，实际表现也更优，最大延迟 53ms 平均也才 28ms （胜之不武，因为用的有线网卡，但条件有限没有好的无线网卡）</li>
+</ul>
+<p>对于 mbp 的散热（针对老 intel mac 用户）大家有什么新奇的方法吗？</p>
+<p>我没有 m1 mac ，想看看 m1 mac 的测试结果，欢迎大家贴上你的 mbp 的表现 👀️。</p>
+<p>ps: 上文 mac 用的支架是这样的，铝合金的还蛮好用。用瓶盖或者色子🎲️ 垫上四个脚也不是不行</p>
+<p><img alt="20220626093430" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://image.940304.xyz/i/2022/06/26/62b7b7a837afb.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 自己使用，有没有必要从 esxi 转到 pve？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862240#reply2" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862240</id>
+	<published>2022-06-26T01:31:18Z</published>
+	<updated>2022-06-26T01:31:18Z</updated>
+	<author>
+		<name>sjmcefc2</name>
+		<uri>https://www.v2ex.com/member/sjmcefc2</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>以前使用 esxi 做了三个从物理机迁移到虚拟平台的机器，大概运行了 2 到 3 年，突然 esxi 平台挂了，无法登录，console 也没有反应，原因不明但幸好数据无恙。后面就把虚拟机转成物理机用了一段时间，</p>
+<p>现在想把虚拟机转到 pve 上，追求一个稳定运行和低耗能，初步看了下 pve 涉及的东西还是比 esxi 复杂，想请教一般家用，能够高效率低能耗运行几个从物理机转移过来的系统，都需要开启和设置哪些功能呢？硬件直通？除了 vmdk 格式导入 qve 之外，qve 是否有专门的 p2v 工具呢？或者还有哪些工具可以完成 p2v 的工作，然后哪里有设置这种从物理机到虚拟机的教程呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[前端开发] 开箱即用的渐进式前端开发框架 dagger.js</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862239#reply0" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862239</id>
+	<published>2022-06-26T01:31:09Z</published>
+	<updated>2022-06-26T01:29:09Z</updated>
+	<author>
+		<name>dagger8224</name>
+		<uri>https://www.v2ex.com/member/dagger8224</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>向大家推荐一个轻量完备的描述式开源前端框架<a href="https://daggerjs.org" rel="nofollow">dagger.js</a></p>
+<p>与 React/Vue 等主流框架相比，dagger.js 提供了更加简单易用的代码组织方式：指令是业务代码的唯一调用入口（指令中可以使用作用域和模块回调参数）。
+使用 dagger.js ，您将不再需要：</p>
+<h4><del>构建和包管理工具依赖</del></h4>
+<p>dagger.js 工作在浏览器运行时环境当中，无需编译构建过程。通过 script 标签引入框架脚本即可轻松完成应用程序创建。dagger.js 实现了一个运行时模块管理器，按需动态加载解析<a href="https://daggerjs.org/#/module/introduction" rel="nofollow">模块</a>。为您的应用做极限瘦身。<a href="https://codepen.io/dagger8224/pen/ZErWBpB?editors=1000" rel="nofollow">demo</a> </p>
+<h4><del>运行时第三方核心代码依赖</del></h4>
+<p>dagger.js 内置了基于 hash 的路由管理逻辑。您无需为开发单页应用引入额外的路由管理类库。<a href="https://codepen.io/dagger8224/pen/PoQBovd?editors=1010" rel="nofollow">demo</a> </p>
+<h4><del>状态管理</del></h4>
+<p>dagger.js 倡导数据即状态的技术理念。有别于 React/Vue 单向数据流模型 state(data)/prop 的区分定义，在 dagger.js 中，数据作用域独立于页面组件定义，并具有全域视图响应性。指令作为数据的消费者，可以自由读写其声明位置上可见的作用域字段，您无需再为组件间数据状态同步而劳心费神。<a href="https://codepen.io/dagger8224/pen/YzeNmRz" rel="nofollow">demo</a></p>
+<h4><del>api 调用</del></h4>
+<p>dagger.js 是去组件化的（ componentless ），并非基于传统的 MVVM 设计模式实现。对于使用者来说，数据（ Model ）通过指令声明方式直接与上下文视图（ View ）建立动态关联。在大多数场景下您无需调用任何 api 即可完成业务开发工作。<a href="https://codepen.io/dagger8224/pen/QWQVYGN" rel="nofollow">demo</a> </p>
+<p>更多介绍请参见<a href="https://daggerjs.org" rel="nofollow">官方文档</a>。</p>
+<p>Talk is cheap, let's see the code😄:</p>
+<p><a href="https://codepen.io/dagger8224/pen/ZErWBpB?editors=1000" rel="nofollow">empty entry</a><br/>
+<a href="https://codepen.io/dagger8224/pen/abqNQre" rel="nofollow">Hello dagger</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzeNmRz" rel="nofollow">scope demo animation</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzedbwQ" rel="nofollow">communication between isolate $scope</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzeGqbJ" rel="nofollow">lifeCycle directives</a><br/>
+<a href="https://codepen.io/dagger8224/pen/vYdZKgx" rel="nofollow">html directive</a><br/>
+<a href="https://codepen.io/dagger8224/pen/ZErjzwm" rel="nofollow">add tags</a><br/>
+<a href="https://codepen.io/dagger8224/pen/QWQVYGN" rel="nofollow">to do list</a><br/>
+<a href="https://codepen.io/dagger8224/pen/MWQGZBE" rel="nofollow">Tic Tac Toe</a><br/>
+<a href="https://codepen.io/dagger8224/pen/zYRpYpa" rel="nofollow">module</a><br/>
+<a href="https://codepen.io/dagger8224/pen/PoQBovd?editors=1010" rel="nofollow">router</a><br/>
+<a href="https://codepen.io/dagger8224/pen/zYRQrwP" rel="nofollow">router view toggle</a>
+<a href="https://codepen.io/dagger8224/pen/xxYvoMG?editors=1100" rel="nofollow">each</a> </p>
+<p>欢迎大家体验试用 dagger.js ，提出宝贵意见和建议。您的支持和帮助是对我莫大的鼓励！！</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 出国，是中年程序员的解药吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862238#reply2" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862238</id>
+	<published>2022-06-26T01:19:44Z</published>
+	<updated>2022-06-25T09:18:44Z</updated>
+	<author>
+		<name>leafre</name>
+		<uri>https://www.v2ex.com/member/leafre</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>一批不想被淘汰的大龄程序员，开始考虑出国找机会。</p>
+<p>周岩就是其中之一。他现在还是一家互联网公司的算法工程师，今年刚过 32 岁，虽然公司裁员还未降临到自己身上，但长期超负荷工作和互联网公司隐含的 35 岁求职卡位，让他不得不提前规划未来。</p>
+<p>妻子是同事，在他看来，互联网公司对女性的晋升更不友好。为了两人有一个更好的工作环境，更长远的职业发展，他已经和妻子达成协议，去国外看看机会，目前已经锁定地点。</p>
+<p>尽管程序员在薪资和就业前景上，超过其他岗位，但 996 、35 岁危机，依然是不少程序员们的烦恼。</p>
+<p>据中国网络信息中心发布的《 2021 年中国程序员薪资和生活现状调查报告》显示，25 岁-29 岁的程序员占比最多，达 42.5%，而 35 岁-39 岁以上的程序员仅占 7.7%，40 岁以上的更是仅有 1.7%。随着年龄增加，大龄程序员也将面临被优化的局面。</p>
+<p>“被裁之后，就去送外卖算了”，程序员陈晓说，自己今年 34 岁，马上要到传说中会被优化的年龄，他和程序员同事经常这样调侃。但他知道，很多人并不甘心就此转行。</p>
+<p>而随着 Web3.0 的兴起，不少科技公司在新加坡设立了区域总部和发展中心，程序员们的求职目的地，开始瞄准新加坡；美国硅谷一直是科技公司的聚集地，这也是大龄程序员们的重要选择地；一些北欧国家在薪资、福利待遇、职场环境等综合条件上有优势，也吸引着国内的程序员们。</p>
+<p>为缓解职场焦虑，一些大龄程序员正在进行一场海外迁徙。</p>
+<h4>逃离 996 和年龄焦虑</h4>
+<p>今年 5 月，85 后沈玉在新加坡成功入职了一家金融公司，岗位是开发工程师。</p>
+<p>她在互联网工作了十来年，做过敲代码的程序员，中途短暂地做过产品经理，趁着移动互联网的大势，又转做了开发。</p>
+<p>她在国内互联网大厂，尽管已经升到小主管，但工作更“卷”，常常 996 ，因为带小组，还额外增加了不少会议。</p>
+<p>去年公司陷入危机，她负责的业务线被暂停，身边一些同事被裁，一些跳槽，一些离职回老家，部门分崩离析，她一直很信任的领导，则选择彻底离开互联网行业。被国内互联网红利见顶的声音围绕，她开始重新思考工作带给她的意义。</p>
+<p>“我现在更想要 work life banlance”，她说。年轻时，可以把工作当作全部，只要工作需要随叫随到。现在，自己已经有一定的经济基础，更想留出时间去生活，或许换个环境能解决这些困扰。</p>
+<p>需要注意的是，程序员之所以能顺利出国就业，一方面是，求职者并不担心切换到其他国家后，工作技能无法匹配当地的岗位需求。“计算机技术能全球通用，只要技术过硬，找工作不会成为阻碍”，曾在日本工作过的技术人员谭小可介绍。</p>
+<p>另一方面是，国外很多岗位没有年龄界限，“目前东南亚、北欧、北美、日韩等地区也缺计算机方面的人才”，他表示。</p>
+<p>谭小可是 85 后，经一位在日本工作的朋友介绍，仅学了一个月的日语，他就义无反顾地去了日本工作。</p>
+<p>他是在国内读的本科和硕士，毕业去了一家大型手机公司，做无线研发，在工作四年后，越发觉得这一岗位的技术性不算强，干起来无聊，在公司晋升的天花板也较低。</p>
+<p>其次，他厌倦国内一些职场需要维护的人际关系。他介绍，在国内的老东家是一家非常看重绩效的公司。同职级的员工，因为绩效不同，年薪差距可以达十几万。这会导致职场竞争激烈，而又因为组长能直接给下属打考评，影响绩效结果，加大了人际关系的紧张程度。</p>
+<p>“如果你和组长走得近一些，关系好点，他在分活的时候，会把一些有亮点的，容易出绩效的活分给你，年终奖也会多一些，岗位提升的机会更大一些”，他说，当时的自己不屑于维护这种人际关系。</p>
+<p>他表示，去日本后，在绩效打分上，会相对公平，人际关系会平淡、简单很多。在工作压力上，“如果国内互联网公司的节奏和强度是 100 分，日本就是 70 分到 75 分”，他表示。国内老东家有明确的加班制度，一般都得加班到晚上 9 点之后。而在日本，无论是富士通、三菱等大公司，还是小型创业公司，大部分上班时间是九个小时，晚上 7 点就能准时下班。</p>
+<p>并且他没有感受到职场中有 35 岁的年龄焦虑。他出国时是 28 岁，和他同时应聘的还有一位 37 岁的中国人。“即便是 37 岁，在日本也还属于年轻人”，他说。他所在的团队，50 多岁的程序员并不鲜见。</p>
+<h4>找工作容易，融入当地难</h4>
+<p>2020 年，沈玉的丈夫因工作派遣去了新加坡。她离职后，跟随丈夫去新加坡生活了一年，两人才决定都搬到新加坡。</p>
+<p>由于本硕毕业于国内前 TOP2 名校，有多家互联网大厂经验，沈玉到新加坡之后，面试很顺利。不过，她并没有选择高薪工作，而是结合当地薪资水准，离开互联网行业去了一家银行做开发，拿到的薪资低于同资历的同行。“现在的工作状态是朝九晚五，我非常满意”，她说。</p>
+<p>不过烦恼也是有的。</p>
+<p>“在新加坡租到合适的房子很难”，沈玉表示。她搬到新加坡后，和丈夫租住的这一套 50 平米公寓，是托朋友留意，同时每天和中介保持联系，一旦有适合的房源就赶紧预定，才抢到的。这里的租房并不比国内一线城市便宜，他们的月租金折合人民币 1 万多元，想要租住得好，花费还会更高。加上每月 1 万多元的开销，生活成本并不低。</p>
+<p>更重要的是，对他们来说，找一份工作虽然不难，但让人满意的工作仍然是少数。</p>
+<p>谭小可是在国内办理工作签证后前往的日本，去到当地后，忙碌了一个月多，他只面试上了一家小型游戏公司。这和过往经验和能力有关。</p>
+<p>“我不是在日本留学，之前也没接触过日本外包项目，没有太多优势”，他表示，凭自己当时的能力，只能面试上那家公司，职位和国内工作时一样，只是初级水平的测试岗。现在看来，他觉得入职那家小游戏公司，并不是一个很好的决定。
+脱离了工作，生活中遇到的麻烦事也不少。</p>
+<p>因为只会一些简单的日语，程序员又是一份偏技术型的工作，在工作中使用一些限定专业名词，谭小可还能和同事做基础的交流，但想要正常社交，融入当地文化，则难度不小。</p>
+<p>他提到，无论在职场还是生活中，依然有一种“日本人和日本人玩”的隔阂。</p>
+<p>“公司下班后，晚上有活动的话，一般不会叫我们”，他说。去超市买东西，吃饭点餐，他能用一些简单的日语交流，但想和当地人深入交流，甚至聊一些文化和历史话题，会很困难。他表示，自己的性格还算活泼，周末会组局踢足球，但日本的同事很难约出来。</p>
+<p>“如果你没有成家来到这里，想找一个日本的异性朋友，是比较难的”，谭小可表示。在他看来，最终能留下来的，一类是在日本留学或者语言交流无障碍的职场人。另一类是已经成家，全家搬迁到日本的人。</p>
+<p>那些直接去工作的人，想要适应当地的生活，并不容易。</p>
+<h4>有人留下，有人离开</h4>
+<p>短期来看，在国外，求职者能缓解年龄焦虑和职场压力，但从长期来看，他们在国外与本地人竞争中，在职场晋升、个人发展等方面，依然困难重重。</p>
+<p>程序员出国，很多人选择了新加坡，因为地理位置近，且办理工作签证不难。</p>
+<p>不过，知乎网友桑龙提到，他选择了离开新加坡转向美国硅谷，一个很重要的原因是，他觉得新加坡现在不适合中国码农。虽然很多科技公司的总部在新加坡，但很多研发岗不在新加坡，或者很多国内公司在新加坡设分部，但总部才是公司主体。新加坡人才有限，支撑不了一个大机构。</p>
+<p>他还提到，国内去的人在新加坡最多只能做到一个区域的 leader ，很难实现宏伟抱负。与国外互联网平台有过交流的职场人也表示，一些国内互联网大厂的人去到新加坡，更像是利用在国内大平台积累的经验，去降维打击。</p>
+<p>如果去到一些文化差异大的国家，谭小可表示，除了非常出色的少数人，华人在国外很难晋升到管理层。这也就意味着，一些人在国外职场能发挥的空间也有限。</p>
+<p>这对那些出国想要追求“躺平”的程序员来说不是很大问题，但如果是想要追求一番事业，就需要慎重抉择了。</p>
+<p>已经 36 岁的刘洋，是在一家创业型公司工作的“大龄码农”。近几年，身边的同事、朋友也都陆续出国，他依然不为所动。他解释，很大一部分原因是他还想做一些“创新性”工作。</p>
+<p>对人才的匹配上，国内外也存在差异。</p>
+<p>“国内的公司更喜欢把程序员看作螺丝钉，尽量把工作细化，每个人都在做重复的工作。产品、运营、设计、程序员的分界线也非常明确，几乎不会一人饰多角”，一位知乎网友说，国外更注重全栈工程师，能兼顾产品、设计、代码是最好的。</p>
+<p>目前，谭小可已经从日本回到了家乡西安。他说，待了两年，还是觉得自己更适合在国内生活。在日本，他也去了不同城市旅游，但大部分时间就是在公司、出租房两点一线，生活有点无聊。“像程序员这类和电脑打交道的人，融入日本的程度不如那些在日本开饭店、从事服务业的人”，他表示。</p>
+<p>考虑到工作能力、职业方向，以及自身的长期发展，他觉得还是国内更合适。他提到，原来在国内没有跳槽的同事发展得都不错，有的人在西安年薪能达到一百多万，他觉得，就没必要往国外跑了。</p>
+<p>他如今已经成家立业，也有了小孩。“现在行业内倡导‘专精特新’，我在职场平台上看到过一些专业、新颖的中小企业。想过几年稳定的生活，积蓄能量，再出发”，他说。</p>
+<p>周岩和妻子正在为去美国做准备，每天下班会刷算法题和学习英语，对即将到来的国外生活充满了期待。</p>
+<p>出国到底是不是中年程序员最好的出路，每个人答案都不一样。</p>
+<p>作者：宛其</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 如何限制 go 代码引用模块的目录？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862236#reply3" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862236</id>
+	<published>2022-06-26T00:55:27Z</published>
+	<updated>2022-06-26T01:47:49Z</updated>
+	<author>
+		<name>sadfQED2</name>
+		<uri>https://www.v2ex.com/member/sadfQED2</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	一个 mvc 结构的 go 语言项目，正常情况下应该是 controller 层调用 service ，service 调用 model<br /><br /><br /><br />但是，总有一些屌毛，可能由于紧急情况，可能是懒，在偶尔周末加班等没人 CR 的时候，controller 层调其他 controller 里面的方法，controller 也在调 model 方法。偶尔还他妈 model 调 contrller 代码。刚开始可能就一两处这样写，但是后续的人改这种代码，也只能接着这样写。最终项目崩塌，成为真正的屎山。<br /><br /><br /><br />很多年前，我在另外一家公司写 php 的时候，我记得当时项目是对代码引用做了限制，如果写出上面这样乱引用代码，提交的时候直接被拒。想请问一下 go 语言里面能否加这种配置呢？在哪加？知道的麻烦给个关键词吧
+	]]></content>
+</entry><entry>
+	<title>[开源软件] [项目推广] 开箱即用的渐进式前端框架 dagger.js</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862235#reply2" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862235</id>
+	<published>2022-06-26T00:43:52Z</published>
+	<updated>2022-06-26T01:00:38Z</updated>
+	<author>
+		<name>dagger8224</name>
+		<uri>https://www.v2ex.com/member/dagger8224</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>向大家推荐一个轻量完备的描述式开源前端框架<a href="https://daggerjs.org" rel="nofollow">dagger.js</a></p>
+<p>与 React/Vue 等主流框架相比，dagger.js 提供了更加简单易用的代码组织方式：指令是业务代码的唯一调用入口（指令中可以使用作用域和模块回调参数）。
+使用 dagger.js ，您将不再需要：</p>
+<h4><del>构建和包管理工具依赖</del></h4>
+<p>dagger.js 工作在浏览器运行时环境当中，无需编译构建过程。通过 script 标签引入框架脚本即可轻松完成应用程序创建。dagger.js 实现了一个运行时模块管理器，按需动态加载模块。为您的应用做极限瘦身。</p>
+<h4><del>第三方核心代码依赖</del></h4>
+<p>dagger.js 内置了基于 hash 的路由管理逻辑。您无需为开发单页应用引入额外的路由管理类库。</p>
+<h4><del>状态管理工具依赖</del></h4>
+<p>dagger.js 倡导数据即状态的技术理念。有别于 React/Vue 单向数据流模型对 state(data)/prop 的定义，在 dagger.js 中，数据作用域独立于页面组件定义，并具有全域视图响应性。指令作为数据的消费者，可以自由读写其声明位置上可见的作用域字段，您无需再为组件间数据状态同步而劳心费神。</p>
+<p>更多介绍请参见<a href="https://daggerjs.org" rel="nofollow">官方文档</a>。</p>
+<p>Talk is cheap, let's see the code😄:</p>
+<p><a href="https://codepen.io/dagger8224/pen/ZErWBpB?editors=1000" rel="nofollow">empty page</a><br/>
+<a href="https://codepen.io/dagger8224/pen/abqNQre" rel="nofollow">Hello dagger</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzeNmRz" rel="nofollow">scope demo animation</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzedbwQ" rel="nofollow">communication between isolate $scope</a><br/>
+<a href="https://codepen.io/dagger8224/pen/YzeGqbJ" rel="nofollow">lifeCycle directives</a><br/>
+<a href="https://codepen.io/dagger8224/pen/vYdZKgx" rel="nofollow">html directive</a><br/>
+<a href="https://codepen.io/dagger8224/pen/ZErjzwm" rel="nofollow">add tags</a><br/>
+<a href="https://codepen.io/dagger8224/pen/QWQVYGN" rel="nofollow">to do list</a><br/>
+<a href="https://codepen.io/dagger8224/pen/MWQGZBE" rel="nofollow">Tic Tac Toe</a><br/>
+<a href="https://codepen.io/dagger8224/pen/zYRpYpa" rel="nofollow">module</a><br/>
+<a href="https://codepen.io/dagger8224/pen/PoQBovd?editors=1010" rel="nofollow">router</a><br/>
+<a href="https://codepen.io/dagger8224/pen/qBxzLgY?editors=1010" rel="nofollow">Form</a><br/>
+<a href="https://codepen.io/dagger8224/pen/xxYvoMG?editors=1100" rel="nofollow">each</a> </p>
+<p>欢迎大家体验试用 dagger.js ，提出宝贵意见和建议。您的支持和帮助是对我莫大的鼓励!!</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 抛砖引玉交流下, 有啥共享存储方案, 客户端可以搞成本地磁盘那种</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862233#reply9" />
+	<id>tag:www.v2ex.com,2022-06-26:/t/862233</id>
+	<published>2022-06-26T00:18:03Z</published>
+	<updated>2022-06-26T01:32:42Z</updated>
+	<author>
+		<name>eudemonwind</name>
+		<uri>https://www.v2ex.com/member/eudemonwind</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>要求:
+服务器系统不限
+客户端是 win
+目前试了以下几种</p>
+<p>1 --- 祖传 smb, win server to win client, 只是这种方案在 win 系统里只能搞成网络磁盘, 个别程序有兼容问题.
+2 --- iscsi, 我是 win server 2016 开的 iscsi 服务端, 其他 win 连进来. 不过貌似这个不是共享存储, 有时候客户端 A 写了某文件, 客户端 B 要等好久才能看到. 不是实时同步的.
+3 --- rclone+sftp 这个我搞成了, 软件兼容目前没发现太大问题. 就是设置太麻烦.... 性能还有待测试...
+4 --- rclone+webdav( https) 这个我还没测.... 估计设置难度也不低...</p>
+<p>好像客户端限定成 win 又是本地磁盘的话,除了 rclone 没啥别的能替代的... 各位大佬有啥更好的方案吗?</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 我悟了，折腾什么桌面，最简洁的就是直接放一个 MacBook</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862230#reply11" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862230</id>
+	<published>2022-06-25T21:17:52Z</published>
+	<updated>2022-06-26T01:39:56Z</updated>
+	<author>
+		<name>Lionad</name>
+		<uri>https://www.v2ex.com/member/Lionad</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>现在我的配置是：</p>
+<ol>
+<li>升降桌</li>
+<li>脚下台式机，主要打游戏</li>
+<li>32 寸 4k LG ERGO 显示器</li>
+<li>可拆卸的键盘抽屉，里面放着 realforce R3 和 Mx master 2</li>
+<li>桌上放着工作用 MacBook pro intel 2020 用 USB C 连显示器</li>
+</ol>
+<p>由于键盘鼠标都可以切换蓝牙，所以平常可以在工作和娱乐之间切换。</p>
+<p>现在有几个不满的点：</p>
+<ol>
+<li>桌上东西已经不多，但用久了放点其他杂物觉得还是有些乱</li>
+<li>MacBook pro 接 4k 总感觉发热降频，不如直接用内置屏幕，然后插个电源</li>
+<li>用蓝牙键盘鼠标只能坐直或往后靠，不能趴桌上，因为放键盘的托盘要前后移动还吃不住力。一天下来老腰有点受不了。键盘鼠标如果摆桌上就觉得乱</li>
+<li>感觉什么外接屏幕（除了苹果自己的）都没有 MacBook 内置的好，色温和亮度不用操心。我这个要经常根据环境调亮度对比度才不闪瞎眼。调色温太麻烦，直接放弃了，所以会感觉偏冷，眼睛不舒服，尤其是接 PC 时。</li>
+<li>32 寸看时间长了，觉得看电影时还是有点小，想念大电视。</li>
+</ol>
+<p>今天我突然悟了，妈的搞这么多干嘛，不如：</p>
+<ol>
+<li>把除了升降桌之外所有东西都去掉，就搞个 16 寸 MacBook 。这样极致简洁，屏幕又好，坐姿随便，想换地方随时就换。</li>
+<li>配个大电视加游戏主机（ ps5 或 xbox x ），解决其他所有影音游戏需求。</li>
+</ol>
+<p>想想就很爽啊。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Surge] 130 出两个 surge V4 mac 永久授权</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862229#reply0" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862229</id>
+	<published>2022-06-25T18:20:58Z</published>
+	<updated>2022-06-25T14:20:58Z</updated>
+	<author>
+		<name>kkekhorosho</name>
+		<uri>https://www.v2ex.com/member/kkekhorosho</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	TG: QGFzdGVyVGF0YXJpY3Vz (base64)
+	]]></content>
+</entry><entry>
+	<title>[Linux] 你们的 Linux 系统会使用 apt upgrade 或其它发行版同类命令批量更新软件包吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862228#reply17" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862228</id>
+	<published>2022-06-25T17:44:58Z</published>
+	<updated>2022-06-26T01:49:29Z</updated>
+	<author>
+		<name>dfgxcvbcv</name>
+		<uri>https://www.v2ex.com/member/dfgxcvbcv</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	先说说我的情况，我是只有某个软件出现安全问题或新版本有非常吸引我的功能才会手动通过 apt install 更新，出于稳定性考虑从不使用 apt upgrade 批量更新软件。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 研究生选择 直博 or 申研？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862226#reply6" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862226</id>
+	<published>2022-06-25T16:57:42Z</published>
+	<updated>2022-06-26T01:47:55Z</updated>
+	<author>
+		<name>yyy134341</name>
+		<uri>https://www.v2ex.com/member/yyy134341</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>目前在南方某 985 本科，有直博名额、<strong>不能保硕</strong>，顺利毕业的话本+博共 8 年。</p>
+<p>个人感觉以后还是想挣钱养家糊口 搞工程，感觉对学术很难提起兴趣，我是那种经典对电子设备感兴趣但对 CS 不感兴趣但的同学，喜欢折腾各种设备但暂时还没发现喜欢科研……</p>
+<p>家人支持出国留学（读硕士），让我土博 /申研自己选。如果是出国留学的话，打算在外工作一段时间后回国。</p>
+<p>最近听到几个信息 不知准确与否，来问下大家对这几点什么意见</p>
+<ol>
+<li>
+<p>博士难毕业 …… </p>
+<p>我们实验室要求博士 4 年 1 篇 A 区 2 篇 B 区 做人工智能 /数据挖掘 对这个没什么概念 不知道大家身边的有没有对这个目标有什么看法</p>
+</li>
+<li>
+<p>博士毕业出就业方向变窄，去科研机构 /学校较多，做工程工作可能和本科生相当</p>
+<p>如果属实，博士毕业搞工程的话是亏了多少</p>
+</li>
+<li>
+<p>出国留学硕士毕业在国外工作比国内相当水平的工作工资高</p>
+<p>不知道是否属实，如果是，想知道大家觉得 3 年后的形势依然是这样吗</p>
+</li>
+<li>
+<p>土博在读期间有出国交流的机会</p>
+<p>如果属实，想知道有方法可以留在国外工作待一段时间再回国吗</p>
+</li>
+<li>
+<p>如果在外工作一段时间后回国会更容易进外企吗…</p>
+</li>
+<li>
+<p>大家都说互联网寒冬，对于工业界来说，是手握海研硕士有用还是 985 博士比较吃香？</p>
+</li>
+</ol>
+<p>目前有以上的困惑，已经纠结了一个月了，不知道如何抉择，球球大家指条明路，谢谢！</p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 请教 m1 的 mbp16 安装虚拟机的正确姿势</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862225#reply2" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862225</id>
+	<published>2022-06-25T16:56:31Z</published>
+	<updated>2022-06-25T14:56:31Z</updated>
+	<author>
+		<name>makeitwork</name>
+		<uri>https://www.v2ex.com/member/makeitwork</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>刚发了一帖吐槽 mac 的 office 太卡
+有朋友建议安装 win11 使用 office
+折腾了 2 个小时
+终于下载了个 arm 的 pd16 ，安装还要 win11 arm 。。。
+好不容易下齐了 win11 arm ，安装有提示找不到安装盘。。。
+好难搞啊，求各位推荐一个正确安装姿势</p>
+<p>目前还没花钱，如果有必要，花钱支持是可以的</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] PayPal-15%活动， Switch 日服任亏券约 425 元，新老用户都可以。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862224#reply5" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862224</id>
+	<published>2022-06-25T16:55:53Z</published>
+	<updated>2022-06-25T22:23:19Z</updated>
+	<author>
+		<name>Cagliostro</name>
+		<uri>https://www.v2ex.com/member/Cagliostro</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>PayPal 跟银联搞活动绑定银联卡并确认报名，使用 PayPal 并通过银联卡完成海淘交易，满额享 15%立减。</p>
+<p>其他用途不清楚，但用来充值 Switch 日服的余额不错，正好如今日元汇率低，似乎可以先充值余额留着，等想玩的游戏出了再购买任亏券，今年以确定的任天堂第一方游戏，喷射战士 3 和异度之刃 3 就很值得，也可以留一张等明年的塞尔达 2😂</p>
+<p>报名网址： <a href="https://www.paypal.com/c2/webapps/mpp/campaigns/nna/202205upicampaign" rel="nofollow">https://www.paypal.com/c2/webapps/mpp/campaigns/nna/202205upicampaign</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 看到一篇讨论 5G 的帖子，联想到 8K 视频</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862223#reply21" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862223</id>
+	<published>2022-06-25T16:51:05Z</published>
+	<updated>2022-06-26T01:40:20Z</updated>
+	<author>
+		<name>ZFLBZTG</name>
+		<uri>https://www.v2ex.com/member/ZFLBZTG</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<div>
+<div>
+   8K 视频的意义何在？ 
+  <br/>
+<br/>我们普通显示屏连 4K 的都很少，更是很难见到 8K 的，连电视也很少有 8K 显示屏 
+  <br/>
+<br/>人眼也不太能分辨 8K 与 4K 的区别 
+  <br/>
+<br/>电影码率最高也就 4K ，我从来没见过 8K 的资源 
+  <br/>
+<br/>实际上 4K 视频就已经能满足 99.9%的需求
+  <br/>极少有 8K 的流媒体服务 
+  <br/>
+<br/>8K 占用的资源极大，包括但不限于宽带、硬件解码等各种配置要求 
+  <br/>
+<br/>YouTube 、B 站上的 8K 视频又意义何在呢？只是单纯的为了科技进步？ 
+  <br/>
+<br/>我认为 8K 分辨率对于我们普通用户群体来说毫无意义 
+  <br/>
+<br/>欢迎发散补充 
+  <br/>
+<br/>*标题中提到的 5G 帖子链接 
+  <a href="https://www.v2ex.com/t/861419" rel="nofollow">https://www.v2ex.com/t/861419</a>
+</div>
+</div>
+	]]></content>
+</entry><entry>
+	<title>[Spotify] 日本 Spotify 车位</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862222#reply1" />
+	<id>tag:www.v2ex.com,2022-06-25:/t/862222</id>
+	<published>2022-06-25T16:33:57Z</published>
+	<updated>2022-06-25T08:32:57Z</updated>
+	<author>
+		<name>zhouweiluan</name>
+		<uri>https://www.v2ex.com/member/zhouweiluan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	月付 13 ，可季可年。<br />主页 Telegram 联系～
+	]]></content>
+</entry><entry>
 	<title>[JavaScript] dagger.js 使用示例[6] $each 指令的基本使用方法</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862221#reply0" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862221</id>
@@ -59,10 +536,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[远程工作] 大家觉得这个时间点买什么小主机比较好？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862218#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862218#reply6" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862218</id>
 	<published>2022-06-25T15:59:15Z</published>
-	<updated>2022-06-25T16:14:32Z</updated>
+	<updated>2022-06-25T17:59:41Z</updated>
 	<author>
 		<name>HansZimmer</name>
 		<uri>https://www.v2ex.com/member/HansZimmer</uri>
@@ -110,10 +587,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 光纤入室（FTTR）怎么走的是传统网线？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862215#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862215#reply6" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862215</id>
 	<published>2022-06-25T15:44:23Z</published>
-	<updated>2022-06-25T15:44:23Z</updated>
+	<updated>2022-06-25T19:44:23Z</updated>
 	<author>
 		<name>Sauman</name>
 		<uri>https://www.v2ex.com/member/Sauman</uri>
@@ -123,10 +600,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[问与答] Swift 新出的 Regex builder DSL 挺有意思的，其他语言有类似的东西吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862211#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862211#reply2" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862211</id>
 	<published>2022-06-25T15:05:24Z</published>
-	<updated>2022-06-25T15:03:24Z</updated>
+	<updated>2022-06-25T17:51:55Z</updated>
 	<author>
 		<name>TWorldIsNButThis</name>
 		<uri>https://www.v2ex.com/member/TWorldIsNButThis</uri>
@@ -168,10 +645,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[问与答] 如何优雅的欺骗游戏加速器？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862209#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862209#reply8" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862209</id>
 	<published>2022-06-25T15:02:02Z</published>
-	<updated>2022-06-25T16:20:03Z</updated>
+	<updated>2022-06-25T17:19:16Z</updated>
 	<author>
 		<name>Joshuahui</name>
 		<uri>https://www.v2ex.com/member/Joshuahui</uri>
@@ -194,10 +671,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[程序员] 实习有一次转正机会，想问一下各位前辈的意见？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862207#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862207#reply10" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862207</id>
 	<published>2022-06-25T14:53:42Z</published>
-	<updated>2022-06-25T15:44:06Z</updated>
+	<updated>2022-06-25T19:11:41Z</updated>
 	<author>
 		<name>lllluka1</name>
 		<uri>https://www.v2ex.com/member/lllluka1</uri>
@@ -225,10 +702,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[iPhone] Face ID 起死回生</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862205#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862205#reply1" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862205</id>
 	<published>2022-06-25T14:44:30Z</published>
-	<updated>2022-06-25T14:43:30Z</updated>
+	<updated>2022-06-25T15:43:30Z</updated>
 	<author>
 		<name>365473321</name>
 		<uri>https://www.v2ex.com/member/365473321</uri>
@@ -238,7 +715,7 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[酷工作] 米哈游内推，欢迎骚扰</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862204#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862204#reply2" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862204</id>
 	<published>2022-06-25T14:34:29Z</published>
 	<updated>2022-06-25T15:05:15Z</updated>
@@ -251,10 +728,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] i225 网卡全双工速度？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862203#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862203#reply2" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862203</id>
 	<published>2022-06-25T14:26:49Z</published>
-	<updated>2022-06-25T14:26:49Z</updated>
+	<updated>2022-06-25T15:26:49Z</updated>
 	<author>
 		<name>LionelK</name>
 		<uri>https://www.v2ex.com/member/LionelK</uri>
@@ -267,10 +744,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[NAS] TrueNAS core (FreeNas)对比群晖使用起来怎么样</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862202#reply12" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862202#reply15" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862202</id>
 	<published>2022-06-25T14:22:16Z</published>
-	<updated>2022-06-25T15:44:50Z</updated>
+	<updated>2022-06-25T17:44:50Z</updated>
 	<author>
 		<name>YongXMan</name>
 		<uri>https://www.v2ex.com/member/YongXMan</uri>
@@ -294,10 +771,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[Neovim] 求推荐 nvim 配置主题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862200#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862200#reply3" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862200</id>
 	<published>2022-06-25T14:15:58Z</published>
-	<updated>2022-06-25T15:31:37Z</updated>
+	<updated>2022-06-25T20:20:28Z</updated>
 	<author>
 		<name>soberzml</name>
 		<uri>https://www.v2ex.com/member/soberzml</uri>
@@ -308,10 +785,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[OpenWrt] openwrt 启用 ipv6 以后，网络下行变慢是什么原理</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862199#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862199#reply4" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862199</id>
 	<published>2022-06-25T14:12:04Z</published>
-	<updated>2022-06-25T15:01:46Z</updated>
+	<updated>2022-06-25T17:01:46Z</updated>
 	<author>
 		<name>kinboy</name>
 		<uri>https://www.v2ex.com/member/kinboy</uri>
@@ -321,10 +798,10 @@ iOS 16 添加同一个键盘的时候，会显示键盘输入 pin 码，有显�
 	]]></content>
 </entry><entry>
 	<title>[Android] lineageos OS 下大家用什么方法实现微信双开呀？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862197#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862197#reply1" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862197</id>
 	<published>2022-06-25T14:05:12Z</published>
-	<updated>2022-06-23T14:05:12Z</updated>
+	<updated>2022-06-24T04:52:33Z</updated>
 	<author>
 		<name>yanyuechuixue</name>
 		<uri>https://www.v2ex.com/member/yanyuechuixue</uri>
@@ -377,10 +854,10 @@ addEventListener('fetch', event =&gt; {
 	]]></content>
 </entry><entry>
 	<title>[git] 在使用 git 时的一些尴尬场景里的修复方案</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862191#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862191#reply11" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862191</id>
 	<published>2022-06-25T13:24:59Z</published>
-	<updated>2022-06-25T16:10:48Z</updated>
+	<updated>2022-06-25T23:43:49Z</updated>
 	<author>
 		<name>Livid</name>
 		<uri>https://www.v2ex.com/member/Livid</uri>
@@ -405,7 +882,7 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[程序员] 奇了怪</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862189#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862189#reply2" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862189</id>
 	<published>2022-06-25T12:46:00Z</published>
 	<updated>2022-06-25T04:46:00Z</updated>
@@ -422,7 +899,7 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 基于自己的 PHP 后台框架制作了一个菜鸟学习的好网站！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862187#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862187#reply9" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862187</id>
 	<published>2022-06-25T12:43:23Z</published>
 	<updated>2022-06-25T15:50:47Z</updated>
@@ -462,10 +939,10 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[Windows] Win11 系统和 Edge 出了个诡异的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862183#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862183#reply8" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862183</id>
 	<published>2022-06-25T12:32:52Z</published>
-	<updated>2022-06-25T14:01:28Z</updated>
+	<updated>2022-06-25T16:01:28Z</updated>
 	<author>
 		<name>EliteOtaku</name>
 		<uri>https://www.v2ex.com/member/EliteOtaku</uri>
@@ -484,10 +961,10 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 话说现在内地的地上波信号是由哪个部门管理的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862182#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862182#reply9" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862182</id>
 	<published>2022-06-25T12:30:33Z</published>
-	<updated>2022-06-25T15:05:11Z</updated>
+	<updated>2022-06-25T17:05:11Z</updated>
 	<author>
 		<name>LOVOQ</name>
 		<uri>https://www.v2ex.com/member/LOVOQ</uri>
@@ -514,10 +991,10 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[问与答] 万能的 V2，河南考生，理科 619 分，排名 7480，想去南方城市读大学，求指导</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862179#reply19" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862179#reply43" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862179</id>
 	<published>2022-06-25T12:18:56Z</published>
-	<updated>2022-06-25T16:08:03Z</updated>
+	<updated>2022-06-26T01:48:27Z</updated>
 	<author>
 		<name>southerly</name>
 		<uri>https://www.v2ex.com/member/southerly</uri>
@@ -555,10 +1032,10 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[Apple] 2019 intel mbp 顶配接两个显示器就卡到怀疑人生？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862176#reply12" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862176#reply15" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862176</id>
 	<published>2022-06-25T12:10:40Z</published>
-	<updated>2022-06-25T16:09:05Z</updated>
+	<updated>2022-06-25T18:32:00Z</updated>
 	<author>
 		<name>dusu</name>
 		<uri>https://www.v2ex.com/member/dusu</uri>
@@ -568,262 +1045,16 @@ apple watch 有点贵，而且据说续航不大行？所以目前考虑安卓�
 	]]></content>
 </entry><entry>
 	<title>[YouTube] 请问大家一个关于 YouTube 会员的问题，加入了家庭组会员，但是不能使用会员。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862175#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862175#reply8" />
 	<id>tag:www.v2ex.com,2022-06-25:/t/862175</id>
 	<published>2022-06-25T12:06:11Z</published>
-	<updated>2022-06-25T16:13:18Z</updated>
+	<updated>2022-06-25T17:28:52Z</updated>
 	<author>
 		<name>lixiangyang9b319</name>
 		<uri>https://www.v2ex.com/member/lixiangyang9b319</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	iOS 的 YouTube 客户端，在设置-&gt;购买内容和会员资格中显示，有一个无效会员，请问这个问题怎么解决？？？<br />有知道的大哥吗？？？
-	]]></content>
-</entry><entry>
-	<title>[问与答] V 友们，请问下这个配置的主机可以卖多少钱？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862174#reply0" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862174</id>
-	<published>2022-06-25T12:04:54Z</published>
-	<updated>2022-06-25T12:02:54Z</updated>
-	<author>
-		<name>funnytree</name>
-		<uri>https://www.v2ex.com/member/funnytree</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	CPU    AMD 3950X<br />主板    ROG X570E<br />显卡    GTX 2080Ti 猛禽<br />电源    海韵 1000W 钛金<br />内存    芝奇 16G*4 3600 C16-16-16-36 焰光戟<br />固态硬盘    三星 980 Pro 1T<br />水冷 /风冷    NZXT Kraken 海妖 X73<br />机箱    NZXT H710i 黑色<br />风扇支撑架    酷冷至尊<br />风扇    海盗船 RGB<br />集线分接器    恩杰 IU03 Internal USB Hub USB2.0<br />键盘    罗技 G913 TKL<br /><br />配置感觉还算均衡？去年 3 、4 月份配的，其中 CPU 和显卡是朋友直接从加拿大过海关寄给我的，其他都是自己买的全新的配件，装机一次点亮，运行至今没出过问题。过了这么久平时也只打打 LOL ，太浪费了点，所以想出掉，不知道整机方不方便出，价格方面也不是很了解行情，所以来这里问问。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 想用油猴脚本调用页面上的函数，请问怎么做？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862173#reply3" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862173</id>
-	<published>2022-06-25T12:01:20Z</published>
-	<updated>2022-06-25T13:07:29Z</updated>
-	<author>
-		<name>nowheretoseek</name>
-		<uri>https://www.v2ex.com/member/nowheretoseek</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>比如在知乎问答页加一个图标，点击时可以载入评论。</p>
-<p>遇到两个问题：</p>
-<p>1.脚本不在沙盒中运行的话，是不是可以直接调用页面 js 对外暴露的函数？</p>
-<p>2.现在 js 对外暴露很少，看 initator 很长一串调用栈，从相关 xhr 请求点到 initator ，也难以发现该怎么直接调用，也很难确定哪个是核心函数，就是发起请求并实现页面更新的那个函数，不知有没有什么好办法呢？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] M 系列的 Mac 如何做定功耗的性能测试？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862172#reply1" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862172</id>
-	<published>2022-06-25T11:40:08Z</published>
-	<updated>2022-06-25T11:50:54Z</updated>
-	<author>
-		<name>HanashirodotETH</name>
-		<uri>https://www.v2ex.com/member/HanashirodotETH</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>目的是为了确定目前工作负载在不同笔记本电脑的续航表现，同时也对 M2 相比 M1 的同功耗性能提升好奇，想做测试。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[微信] 有没有跑分的微信小程序?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862171#reply1" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862171</id>
-	<published>2022-06-25T11:22:45Z</published>
-	<updated>2022-06-22T11:22:45Z</updated>
-	<author>
-		<name>404neko</name>
-		<uri>https://www.v2ex.com/member/404neko</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近有一些测试微信小程序平台性能的需求, 但是搜索了下没有现成的微信小程序<br /><br />类似<br /><a target="_blank" href="https://browserbench.org/Speedometer2.0/" rel="nofollow noopener">https://browserbench.org/Speedometer2.0/</a><br /><br />或者<br /><br /><a target="_blank" href="https://browserbench.org/MotionMark1.2/" rel="nofollow noopener">https://browserbench.org/MotionMark1.2/</a><br /><br />这种
-	]]></content>
-</entry><entry>
-	<title>[信息安全] 想看看你们的密码软件里面的分类</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862169#reply19" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862169</id>
-	<published>2022-06-25T10:55:22Z</published>
-	<updated>2022-06-25T15:04:12Z</updated>
-	<author>
-		<name>A1pine</name>
-		<uri>https://www.v2ex.com/member/A1pine</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	使用自己搭建的 bitwarden 里管理所有密码有一段时间了，但是所有的密码都扔在默认目录下，现在有 160 多个了，看上去不太美观，也不太方便查找，所以想看看使用密码管理软件的各位是怎么对密码进行分类的。
-	]]></content>
-</entry><entry>
-	<title>[京东] 深圳面交京东自营换新硬盘 SN570 SN770</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862168#reply0" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862168</id>
-	<published>2022-06-25T10:50:48Z</published>
-	<updated>2022-06-25T10:48:48Z</updated>
-	<author>
-		<name>hzxxx</name>
-		<uri>https://www.v2ex.com/member/hzxxx</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	京东自营<br />容量都是 500g 1t 的<br />换新的硬盘，全部未拆封<br />！！！面交，深圳宝安坪洲地铁附近面交，不邮只面交，可验机<br />按秒杀价的八折出售<br />可加 v 18126404241
-	]]></content>
-</entry><entry>
-	<title>[问与答] 怎么爬 vk.com？ Python 出现 429 错误，普通浏览器不会</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862167#reply0" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862167</id>
-	<published>2022-06-25T10:48:29Z</published>
-	<updated>2022-06-23T10:45:29Z</updated>
-	<author>
-		<name>advancejar</name>
-		<uri>https://www.v2ex.com/member/advancejar</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	一直爬 <a target="_blank" href="http://vk.com" rel="nofollow noopener">vk.com</a> 好好的，昨天出现了 429 错误（不是真 429 错误，应该是某些值没有就出现这个），但是用普通浏览器不会<br />示例连接： <a target="_blank" href="https://vk.com/the.wall.street.journal" rel="nofollow noopener">https://vk.com/the.wall.street.journal</a><br /><br />用浏览器好好的，用 python 不行。<br /><br />暂时的解决方案：Selenium<br /><br />想问问正确的直接 python 爬取姿势？
-	]]></content>
-</entry><entry>
-	<title>[全球工单系统] B 站的推广|广告去不掉</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862166#reply7" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862166</id>
-	<published>2022-06-25T10:28:52Z</published>
-	<updated>2022-06-25T14:10:38Z</updated>
-	<author>
-		<name>oneisall8955</name>
-		<uri>https://www.v2ex.com/member/oneisall8955</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	这次真的好烦。某同学的平行世界推广视频，频繁出现在首页，我点了不下 5 次不敢兴趣，只要重启 APP 就会出现。<br /><br /><br /><br /><a target="_blank" href="https://s3.bmp.ovh/imgs/2022/06/25/9a52e57e2c1fd1d9.jpg" rel="nofollow noopener">https://s3.bmp.ovh/imgs/2022/06/25/9a52e57e2c1fd1d9.jpg</a>
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 和朋友远程一起看视频的工具。全平台兼容，支持全流媒体，本地视频</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862165#reply5" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862165</id>
-	<published>2022-06-25T10:27:22Z</published>
-	<updated>2022-06-25T15:13:38Z</updated>
-	<author>
-		<name>maggch97</name>
-		<uri>https://www.v2ex.com/member/maggch97</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>在 V2EX 看到过好几条求助如何远程一起看视频的帖子。正好我也有这个需求所以做了这个浏览器插件。</p>
-<p>不说废话，项目地址以及安装使用说明： <a href="https://github.com/maggch97/VideoTogether" rel="nofollow">https://github.com/maggch97/VideoTogether</a></p>
-<p>目前插件会自动同步视频链接，播放进度，暂停播放状态，播放倍速。</p>
-<p>具体使用截图欢迎点击项目链接观看</p>
-<p>目前电脑兼容 Edge ，Chrome ，手机兼容 Alook ，Via 浏览器。其他支持 JS 插件的浏览器理论上应该都支持，列出的是已经测试过的</p>
-<p>流媒体平台 bilibili 和 youtube 测试支持，其他平台还没测试，不支持的平台理论上只需要写一些小的兼容代码即可，欢迎反馈不兼容的平台。</p>
-<p>支持同步本地视频的播放。</p>
-<p>插件还处于开发中，目前界面，功能还存在一些 BUG 。也欢迎大家使用反馈问题或者需求。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[职场话题] 全日制大专软件技术毕业，自考本科非计算机专业对未来跳槽有帮助吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862164#reply1" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862164</id>
-	<published>2022-06-25T10:21:56Z</published>
-	<updated>2022-06-25T07:20:56Z</updated>
-	<author>
-		<name>lcq</name>
-		<uri>https://www.v2ex.com/member/lcq</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[Apple] 月经贴：如何批量下载 icloud 里的照片</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862162#reply12" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862162</id>
-	<published>2022-06-25T10:16:05Z</published>
-	<updated>2022-06-25T15:47:23Z</updated>
-	<author>
-		<name>YOKAMIA</name>
-		<uri>https://www.v2ex.com/member/YOKAMIA</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题，我基本脱离了苹果生态，只剩下了一个 iphone5c 当做 mp3 ，昨天发现 icloud 续费忘记关了，于是想把 icloud 里的图片都导出到 win 上。尴尬的地方来了，icloud 里有 4k 张图片，<a target="_blank" href="http://icloud.com" rel="nofollow noopener">icloud.com</a> 上只能一张张下载（据说 2020 年 icloud 就抽风不能打包下载照片了），问问各位 v 友有啥好办法能够在没有苹果设备的情况下导出 icloud 照片
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请问有什么网站能发掘你内心真正喜欢得东西么</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862161#reply6" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862161</id>
-	<published>2022-06-25T10:10:08Z</published>
-	<updated>2022-06-25T14:55:09Z</updated>
-	<author>
-		<name>dearmymy</name>
-		<uri>https://www.v2ex.com/member/dearmymy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	类似程序不断问问题，最后能得出你可能真心喜欢得东西，领域。<br />感觉很多人一辈子也不知道自己真心喜欢什么
-	]]></content>
-</entry><entry>
-	<title>[Apple] 第一次用 M1 max，活动监视器这个磁盘读写情况正常么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862160#reply0" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862160</id>
-	<published>2022-06-25T10:07:03Z</published>
-	<updated>2022-06-25T10:07:03Z</updated>
-	<author>
-		<name>Hosing</name>
-		<uri>https://www.v2ex.com/member/Hosing</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	事情是这样的，上周到手官翻的 14 M1 Max 10+32+64gb+1tb ，前面几天因为忙没怎么折腾，这两天把旧电脑的资料传了过来前后大概有 300 多 gb 这样。<br /><br />原本一直用 onedrive 作为同步盘（这部分内容大概 70+g ），安装好并且同步完成后，发现资料无法正常使用，原本定义的文件夹被转移到了 /Users/hosing/Library/用户名 /Cloudstorage 这个地方。就是 Monteray 版的 onedrive 有很严重的负优化 BUG ，最开始安装的是 appstore 版，尝试过卸载重装网站下载的单文件版也一样的情况。<br /><br />经过查阅网上内容发现不少人都遇到类似的问题，<a target="_blank" href="http://support.microsoft.com" rel="nofollow noopener">support.microsoft.com</a> 官方直言：从 macOS 12.1 开始，文件按需是 macOS 的一部分，无法关。奇怪的是朋友的黑苹果 Monteray 却能正常使用 onedrive 不会出现我这样的无法关闭文件随选以及下载下来的文件也无法使用的情况。<br /><br />折腾了两三天，决定抛弃 365 下车了，考虑半天，决定把从 onedrive 跳到 iCloud ，下午的时候把 icloud 上的 ipad 和 iphone 备份文件整理了一下，排除了几个原先因为偷懒备份多余的 app ，然后先把平时存储图片素材的 eagle 的资源库（大小 35gb 左右）丢到了 iCloud 下（其他的文件打算后续慢慢放进去，先把最难的解决，因为按 eagle 的特性每张图片会生成一个单独的.json 文件，我存储的图片文件数量大概是 110780 张，整个资源库文件数量可以说会翻倍。之前用 onedrive 同步这块最麻烦）<br /><br />丢完之后我还在照片 app 里开启了“将原片下载到此 mac”，想着把之前在 ipad 和 iphone 的照片都下载到本地，这部分文件大概有 45gb 左右。<br /><br />上面是前情提要！重点来了，昨晚睡觉前，无意中发现活动监视器里磁盘这页显示的读写很活跃，偶尔也能看到状态栏的网速<br /><br />查了一下磁盘读写量大概在 2 、3T 左右<br /><br />现在有两个疑问，<br /><br />1 、这个读写量，一个星期不知道算不算正常呢？？（按我前面说的从旧电脑转来的资料有 3 、400gb 左右，加上新下载的软件和日常使用，一个星期的使用时间，我感觉似乎应该算正常吧）<br /><br />2 、活动监视器里这个磁盘活动正常么？<br /><br />经过一晚上的同步，目前看照片 app 应该已经把照片都同步下来了，转移到 icloud 的 eagle 资源库应该也上传完了，但是重启以后发现活动监视器里的磁盘活动依旧保持着 30mb 的读取量，但是看网速是没有在上传下载的。<br /><br />主要担心的是问题 2 ，毕竟我现在什么都没做，这个时刻保持接近 30mb 的读写数据，实在有点害怕啊😨。。。<br /><br /><br />关闭优化 mac 存储空间，将原片下载到此 mac 后照片 app 一直这样：<br /> <a target="_blank" href="https://imgur.com/weAUXq9" rel="nofollow noopener">https://imgur.com/weAUXq9</a> <br /> <a target="_blank" href="https://imgur.com/jNCtZp6" rel="nofollow noopener">https://imgur.com/jNCtZp6</a> <br /><br />我的 eagle 资源库：<br /> <a target="_blank" href="https://imgur.com/Xpy03zW" rel="nofollow noopener">https://imgur.com/Xpy03zW</a> <br /><br />昨晚看到的活动监视器情况：<br /> <a target="_blank" href="https://imgur.com/P2YYuXq" rel="nofollow noopener">https://imgur.com/P2YYuXq</a> <br /> <a target="_blank" href="https://imgur.com/cgmGOCR" rel="nofollow noopener">https://imgur.com/cgmGOCR</a> <br /><br />今天下午起床后重启电脑的活动监视器情况：<br /> <a target="_blank" href="https://imgur.com/ly8a8OX" rel="nofollow noopener">https://imgur.com/ly8a8OX</a> <br /><br />现在只是浏览网页没开启什么特殊进程的的活动监视器情况：<br /> <a target="_blank" href="https://imgur.com/Ejs3Vhx" rel="nofollow noopener">https://imgur.com/Ejs3Vhx</a> <br /><br />按网速资料查询到的硬盘读写情况：<br /> <a target="_blank" href="https://imgur.com/F12xV9s" rel="nofollow noopener">https://imgur.com/F12xV9s</a> <br /><br /><br /><br />第一次尝试用 imgur 发图片失败……
-	]]></content>
-</entry><entry>
-	<title>[问与答] 现在还有免费的可自定义域名的邮箱可以用吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862159#reply20" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862159</id>
-	<published>2022-06-25T09:58:13Z</published>
-	<updated>2022-06-25T15:28:27Z</updated>
-	<author>
-		<name>jackyin</name>
-		<uri>https://www.v2ex.com/member/jackyin</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	以前用的腾讯企业邮，很方便，后来跟企业微信整合到一起了，不好用了，还有其它地方可以用吗？
-	]]></content>
-</entry><entry>
-	<title>[Apple] 有没有尝试过 M1 Pro 通过雷电 Dock 实现双屏 4K60Hz + 4K144hz 的老哥</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862158#reply9" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862158</id>
-	<published>2022-06-25T09:57:08Z</published>
-	<updated>2022-06-25T15:32:00Z</updated>
-	<author>
-		<name>cnasing</name>
-		<uri>https://www.v2ex.com/member/cnasing</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>上班会把 MBP 带走，<br/>
-所以家里放了一个雷电 3 的 HP G2 Dock ，连接两台 4K60Hz 的显示器，<br/>
-macOS 的扩展坞坑很多大家都知道，MST 啥的都不想说了，目前这套用着还算 OK ，<br/>
-具体连接情况如图：<br/>
-<img alt="截屏 2022-06-25 17.53.23" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://tvax3.sinaimg.cn/large/97ff8989ly1h3kn13v87wj212q0n00wm.jpg"/>
-最近看 4K144Hz 的价格下来了，所以想把其中一台换掉，体验一下高刷，<br/>
-但是网上搜了一下基本都是显示器直连电脑，很少有加扩展坞的资料，<br/>
-所以问下有没有已经吃过螃蟹的老哥指点一下；  </p>
-<p>还有我看 4K144Hz 有些是 DP1.4 DSC 的，但现在很多显示器都支持了满血 HDMI2.1 ，<br/>
-是不是 M1Pro 目前还实现不了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[游戏] 周末通关了潜伏之赤途，这个游戏应该进中学政治教材</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862157#reply8" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862157</id>
-	<published>2022-06-25T09:40:07Z</published>
-	<updated>2022-06-25T14:16:54Z</updated>
-	<author>
-		<name>Cbdy</name>
-		<uri>https://www.v2ex.com/member/Cbdy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>这个链接可以直接在线玩</p>
-<p><a href="https://alchemy-works.github.io/qfzct-66rpg/" rel="nofollow">https://alchemy-works.github.io/qfzct-66rpg/</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 分享两款免费一键分发内容到各自媒体平台的软件/插件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/862156#reply1" />
-	<id>tag:www.v2ex.com,2022-06-25:/t/862156</id>
-	<published>2022-06-25T09:33:10Z</published>
-	<updated>2022-06-25T10:08:42Z</updated>
-	<author>
-		<name>ggvm</name>
-		<uri>https://www.v2ex.com/member/ggvm</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	1 文章同步助手<br /><br />网址 <a target="_blank" href="https://www.wechatsync.com/" rel="nofollow noopener">https://www.wechatsync.com/</a><br /><br />亮点：在网上看到文章，可以鼠标邮件点击“提取文章并同步”，可以发送到浏览器上所有登陆好的自媒体平台，包括知乎、简书、哔哩哔哩、头条等主要平台。<br /><br />代码在 github 开源<br /><br />另外提供了在线 markdown <a target="_blank" href="https://www.wechatsync.com/md/?utm_source=homebtn#/" rel="nofollow noopener">https://www.wechatsync.com/md/?utm_source=homebtn#/</a><br /><br />2 Markdown Nice<br /><br />官网： <a target="_blank" href="https://product.mdnice.com/" rel="nofollow noopener">https://product.mdnice.com/</a><br /><br />功能和文章同步助手类似，也支持多平台一键分发。<br /><br />不同之处是他还提供了 windows 、mac 系统的软件，方便更加复杂的操作<br /><br />markdown nice 的浏览器插件超过 7000 用户<br /><br /><br />总的来说，两个工具都是免费的，体验不输一些小公司的付费产品。两个软件的自媒体用户都发展到一定的数量，值得入手。<br /><br />更多开源软件 /资源情报可以访问 up 主博客( <a target="_blank" href="http://link.zhihu.com/?target=https%3A//zhuji188.com/" rel="nofollow noopener">http://link.zhihu.com/?target=https%3A//zhuji188.com/</a>)
 	]]></content>
 </entry>
 </feed>
