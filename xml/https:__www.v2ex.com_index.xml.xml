@@ -8,839 +8,941 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-07-08T01:45:26Z</updated>
+<updated>2022-07-08T16:10:17Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
-	<title>[macOS] 苦于 Chrome 全屏时顶部空白，求助</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864830#reply1" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864830</id>
-	<published>2022-07-08T01:47:26Z</published>
-	<updated>2022-07-08T01:45:26Z</updated>
+	<title>[Python] 最近写的一个基于 Raft 算法定义的分布式运维软件</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865032#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865032</id>
+	<published>2022-07-08T16:10:17Z</published>
+	<updated>2022-07-08T16:10:17Z</updated>
 	<author>
-		<name>quainter</name>
-		<uri>https://www.v2ex.com/member/quainter</uri>
+		<name>firejoke</name>
+		<uri>https://www.v2ex.com/member/firejoke</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如图<br/>
-<img alt="picture" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://imgur.com/TEqdAKh"/><br/>
-每次开启 chrome 时大概率出现，一般取消全屏，再次全屏可解决。但是有点烦啊，有没有彻底的方法？</p>
+	<h1>keeper</h1>
+<ul>
+<li><a href="https://zh.m.wikipedia.org/zh-cn/Raft" rel="nofollow">维基上关于 Raft 算法的定义</a></li>
+<li><a href="http://thesecretlivesofdata.com/raft/#home" rel="nofollow">一个描述 Raft 算法工作原理的演示动画</a></li>
+<li>基于 Raft 算法定义的分布式的自动运维脚本管理工具，可用于维护类似于 galera 集群这类分布式系统，可根据所有节点信息在所有节点进行维护。  </li>
+<li><a href="https://github.com/firejoke/keeper/blob/main/README.md" rel="nofollow">代码</a></li>
+</ul>
+<h3>SRkv</h3>
+<ol>
+<li>使用 zerorpc 对外暴露和节点选举以及存取键值对有关的方法。</li>
+<li>使用 gevent 生成集群角色维护的事件循环和数据事务执行的事件循环（还包括一个 zerorpc 自己的事件循环）。</li>
+<li>因为 zerorpc 原生不支持使用 kwargs 形参，并且是明文传输，增加对传参和返回的修饰。</li>
+</ol>
+<h3>manager</h3>
+<ol>
+<li>从配置文件读取需要运行的运维脚本的配置（ keeper-procs)。</li>
+<li>从工作目录下导入需要运行的脚本，并生成子进程运行该脚本的 proc 方法。</li>
+<li>根据脚本配置的 require 参数决定脚本的加载顺序，根据 reload_max 参数决定在脚本运行失败后的重启次数。</li>
+<li>SRkv 为默认运行脚本。</li>
+</ol>
 
 	]]></content>
 </entry><entry>
-	<title>[Apple] 明天要把 mbp 送去 apple store 维修了，送去之前除了做 time machine 备份以外，还有别的需要注意的么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864829#reply0" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864829</id>
-	<published>2022-07-08T01:45:16Z</published>
-	<updated>2022-07-08T01:44:16Z</updated>
+	<title>[程序员] ［讨论帖］为什么会出现“一边公司招人难，一边求职者找工作难”的问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865031#reply3" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865031</id>
+	<published>2022-07-08T16:03:55Z</published>
+	<updated>2022-07-08T16:12:30Z</updated>
 	<author>
-		<name>justNoBody</name>
-		<uri>https://www.v2ex.com/member/justNoBody</uri>
+		<name>unt</name>
+		<uri>https://www.v2ex.com/member/unt</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
+	到底怎么了，坐标杭州
 	]]></content>
 </entry><entry>
-	<title>[问与答] 现在腾讯出行服务小程序打车是不是默认不给额外调度费就打不到车？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864828#reply0" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864828</id>
-	<published>2022-07-08T01:42:59Z</published>
-	<updated>2022-07-08T01:42:59Z</updated>
+	<title>[游戏] NS 的斯普拉遁 3（喷射战士 3）会有国行版吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865030#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865030</id>
+	<published>2022-07-08T16:01:45Z</published>
+	<updated>2022-07-08T16:01:45Z</updated>
 	<author>
-		<name>frozenway</name>
-		<uri>https://www.v2ex.com/member/frozenway</uri>
+		<name>sdjl</name>
+		<uri>https://www.v2ex.com/member/sdjl</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>早上用腾讯出行服务小程序打车，是如琪出行那个车。点击呼叫车辆时，先是 120 秒的等待，然后提示我是否要额外打赏调度费以呼叫更远的车。我没有额外给，结果打了差不多 30 分钟都没给我派车。我那地方不偏僻，平时也用这个小程序打车，基本一分钟就有司机接单。那个调度费有 3 元 5 元 10 元，好像。还有试了一下给 3 元调度费，也打不到车，期间有差不多 5~6 辆如琪出行的车从我身边经过。</p>
+	<p>拜托大家不要在这个帖子里喷国行了，单纯的讨论一下这个游戏会不会有国行版本。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[Apple] M1 Mac 侧载没上架的 iOS 软件会被开发者检测到封号吗?王者荣耀都会检测封号. Mac 运行 iOS 软件的运行环境是第三代的 iPad Pro,开发者能获得接口检测?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864826#reply0" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864826</id>
-	<published>2022-07-08T01:36:17Z</published>
-	<updated>2022-07-07T01:36:17Z</updated>
+	<title>[Docker] 请教 docker 挂载目录文件不同步的问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865029#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865029</id>
+	<published>2022-07-08T16:00:12Z</published>
+	<updated>2022-07-08T15:57:12Z</updated>
 	<author>
-		<name>technet</name>
-		<uri>https://www.v2ex.com/member/technet</uri>
+		<name>Askiz</name>
+		<uri>https://www.v2ex.com/member/Askiz</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
+	我用的 docker 平台是 MacOS 版本的 docker desktop ，<br />有个需求是将宿主机的程序日志通过 docker -v 挂载到 docker 内部实现 docker 内部与宿主机文件同步，比如下面这个简单的程序<br /><a target="_blank" href="https://i.imgur.com/nMBCgf6.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/nMBCgf6.png" class="embedded_image" rel="noreferrer"></a><br />发现运行这个程序后，宿主机查看 test.log 有发生变化，但是 docker 内部的映射文件夹的文件并没有同步，但是在 ctrl+C 退出程序后，文件就马上同步到 docker 内部了。查阅了相关资料说可能是文件 inode 的问题，但是运行前后 inode 并没有发生变化，chmod 777 test.log 也未能解决该问题。<br />所以请问这是什么问题，该怎么解决程序运行时 docker 挂载目录文件不同步的问题呢？
 	]]></content>
 </entry><entry>
-	<title>[问与答] 有大佬在服务器上做前端开发的吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864824#reply7" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864824</id>
-	<published>2022-07-08T01:34:02Z</published>
-	<updated>2022-07-08T01:48:17Z</updated>
+	<title>[问与答] 没产品没 ui 需求不明确都是怎么开发的</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865028#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865028</id>
+	<published>2022-07-08T15:56:54Z</published>
+	<updated>2022-07-08T07:53:54Z</updated>
 	<author>
-		<name>christin</name>
-		<uri>https://www.v2ex.com/member/christin</uri>
+		<name>vue666</name>
+		<uri>https://www.v2ex.com/member/vue666</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	由于不想背电脑，想在自己的服务器上搭建一套开发环境。现在碰到一个问题，前端项目启动之后访问不到页面。<br />服务器防火墙已经打开了，nginx 卸载了。前端项目启动在 8000 端口，我直接访问我的服务器公网 ip+端口号访问不到。<br />有大佬做过这方面工作吗？感谢赐教。
+	我一个小前端，公司可以说前后端不分离，用的是 jq ，后端写得前端代码说实话很不规范，还有样式 style ，各种类覆盖，一个后端可以说是组长吧，带几个人，功能就靠他说，感觉他自己都不明确，说完让我做，写完，就说这个页面怎么这么丑，这里颜色不应该这么用，改好了，他又给领导看，领导又觉得这样不行，又改，需求又变，这该怎么提高开发效率
 	]]></content>
 </entry><entry>
-	<title>[Apple] 简中 Xcode 什么时候能用 SPM?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864822#reply3" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864822</id>
-	<published>2022-07-08T01:32:04Z</published>
-	<updated>2022-07-08T01:39:03Z</updated>
+	<title>[宽带症候群] V 友们，怎么样投诉才能取消长城宽带合约并退款呢？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865027#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865027</id>
+	<published>2022-07-08T15:46:36Z</published>
+	<updated>2022-07-08T16:17:14Z</updated>
 	<author>
-		<name>andyJado</name>
-		<uri>https://www.v2ex.com/member/andyJado</uri>
+		<name>thqw0925</name>
+		<uri>https://www.v2ex.com/member/thqw0925</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://forums.swift.org/t/when-will-spm-work-in-chinas-xcode/58767" rel="nofollow">​
-When will SPM work in China’s Xcode?</a></p>
-<p>不会 2022 了我还去学 java js 吧?</p>
+	<p>话说本人最近回老家，听闻老爹又贪小便宜续费了两年的长城 /鹏博士 的“100M 宽带”，（著名的学霸宽带，拜此所赐本人万幸没有成为学渣）。。。本来老爹家里的长城宽带这个月就要到期了，没办法，只能看看能不能投诉退款了</p>
+<p>在这跪求 V 友看看能不能帮忙再想些投诉理由</p>
+<p>投诉理由 1：100M 宽带速度不达标 打开 B 站的 8K 视频，缓冲速度不达标，码率根本没到 100M 的也不能播放</p>
+<p>投诉理由 2：劫持 DNS 我实测劫持了 53 端口，改所有 DNS 全都没用</p>
+<p>但愿能退款吧，不然以后回家游戏都没得玩，本人现在当学霸也没用了</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] TCP/UDP socket 有获取 recv buff 的容量和当前缓存数据长度的方法吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864821#reply1" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864821</id>
-	<published>2022-07-08T01:20:44Z</published>
-	<updated>2022-07-07T22:19:44Z</updated>
+	<title>[Apple] 这是个什么沙雕公司？ 广州爱奇旅信息科技有限公司，</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865024#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865024</id>
+	<published>2022-07-08T15:18:59Z</published>
+	<updated>2022-07-08T15:15:59Z</updated>
 	<author>
-		<name>lysS</name>
-		<uri>https://www.v2ex.com/member/lysS</uri>
+		<name>knockdown</name>
+		<uri>https://www.v2ex.com/member/knockdown</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[Spotify] 有没有 Spotify 美区车，拉我一个😅</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864820#reply0" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864820</id>
-	<published>2022-07-08T01:18:27Z</published>
-	<updated>2022-07-08T01:17:27Z</updated>
-	<author>
-		<name>JasonLaw</name>
-		<uri>https://www.v2ex.com/member/JasonLaw</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>WeChat: Kzg2MTg1ODg1NDMyNjA=</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 有没有一种没有乱七八糟权限的安卓手机？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864819#reply18" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864819</id>
-	<published>2022-07-08T01:10:52Z</published>
-	<updated>2022-07-08T01:49:31Z</updated>
-	<author>
-		<name>liuidetmks</name>
-		<uri>https://www.v2ex.com/member/liuidetmks</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>所有权限设置对标 iOS 就行。
-不准悬浮到桌面，不能添加图标，不能覆盖锁屏。 </p>
-<p>手机 rom 直接把这些功能裁剪掉</p>
-<p>现在用安卓，挺累的，尤其是老人</p>
+	<p>天天不干正事儿投诉我的应用，我这款应用同类里上架最早的，这 tm. 恶心
+Dear Sir or Madam,</p>
+<p><strong>Please include APP162694-C in the subject line of any future correspondence on this matter.</strong></p>
+<p>On 5/20/2022, Apple received a notice from 广州爱奇旅信息科技有限公司 (Guangzhou Aiqilv Information Technology Co., Ltd.) (“Complainant’) that it believes the following app infringes its trademark.</p>
+<h2>App Title: 足迹 - 每日轨迹·记录一生轨迹
+Apple ID: 1406242369</h2>
+<p>Apple 已通知您该索赔，以及您有责任直接与投诉人解决问题，否则您的应用程序将面临从 App Store 下架的风险。我们对未能友好解决争端感到遗憾。因此，您的应用会因侵犯知识产权而从 App Store 下架。</p>
+<p>提醒一下，侵犯第三方权利的内容不符合 Apple 开发者计划协议（“协议”）： <a href="https://developer.apple.com/support/terms/%E3%80%82" rel="nofollow">https://developer.apple.com/support/terms/。</a>  特别是，根据协议的附表 1 第 6.3 节、附表 2 第 7.3 节或附表 3 第 7.3 节（如适用），如果 Apple 合理地认为第三方知识产权可能受到侵犯，Apple 可以将您的应用程序从销售中移除。</p>
+<p>请就此事直接联系投诉人。投诉人提供了以下联系方式：Sunny Xu （邮箱： <a href="mailto:sunny@aiqilv.com">sunny@aiqilv.com</a> ）。如有任何技术问题，您可以联系 App Store Connect： <a href="https://developer.apple.com/contact/%E3%80%82" rel="nofollow">https://developer.apple.com/contact/。</a></p>
+<p>此致</p>
+<p>Barry</p>
+<p> Apple 法律 | 苹果 | 苹果公园路一号库比蒂诺，CA 95014 | 邮箱： <a href="mailto:AppStoreNotices@apple.com">AppStoreNotices@apple.com</a>
+此电子邮件中的信息和任何附件仅用于指定收件人的个人和机密用途。此消息可能是受特权保护的律师-客户通信。如果您不是预期的收件人，则不得查看、使用、复制、转发或以其他方式传播此消息。请通过回复电子邮件通知我们传输错误，并从您的系统中删除该消息的所有副本和任何附件。根据任何适用的法律，在此消息中使用发件人的姓名并非旨在作为电子签名。谢谢你。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] v2ex 插件求助</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864818#reply2" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864818</id>
-	<published>2022-07-08T01:06:47Z</published>
-	<updated>2022-07-08T01:22:36Z</updated>
+	<title>[全球工单系统] QQ 被盗号发黄图，真给我“长脸”了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865022#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865022</id>
+	<published>2022-07-08T14:58:57Z</published>
+	<updated>2022-07-08T14:58:57Z</updated>
 	<author>
-		<name>yumenawei</name>
-		<uri>https://www.v2ex.com/member/yumenawei</uri>
+		<name>changnet</name>
+		<uri>https://www.v2ex.com/member/changnet</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	我记得 V2EX 之前有个插件，可以高亮显示帖子上次浏览之后的新回复。<br />找了一圈没找到，各位大佬还有吗？<br />求下链接。
+	<p>今天下午 15:15 左右，同事、家人、好友突然在微信、钉钉、内部 IM 上疯狂通知我 QQ 被盗号，我一脸懵逼地拿出手机，打开 TIM ，发现提示我登录已过期，然后输入密码无论如何也登录不了，提示密码错误，随后通过手机号找回密码重新设置密码。重新登录时，居然提示我这 QQ 号在新设备上登录，需要验证手机号？？？</p>
+<p>进入 QQ 后，发现在同一时间（ 15:05 ）时，我这 QQ 向所有的群、好友都发了同一个黄图链接，包括公司群、家人群。现在好了，大家都认得我了。作为一个程序员，我还是有一定的安全意识的，结果腾讯这次真给我“长脸”。</p>
+<p>虽然我知道 6-26 日有规模 QQ 盗号问题，但当时并未过多留意。腾讯给出的原因是：主要原因系用户扫描过不法分子伪造的游戏登录二维码并授权登录，该登录行为被黑产团伙劫持并记录，随后被不法分子利用发送不良图片广告</p>
+<p>根据 QQ 安全中心的日志，我的号在 07-07 21:37 有两次安全提醒，提示帐号有异常操作。我怀疑一次是登录，一次是修改密码。但是这个提示是在 QQ 里显示的啊，别人登录我的号的时候我的 QQ 已下线，提醒了个寂寞</p>
+<p>然后另一次提醒是今天 14:44 ，应该是登录我的号开始批量发黄图了</p>
+<p>从我的角度讲</p>
+<ol>
+<li>这 QQ 我基本不用了，处于备用状态，几乎没去打开过，所以手机上 QQ 下线了我也不知道</li>
+<li>这几个月我并没有玩游戏，也并没有使用 QQ 扫描什么游戏或者其他 app 的二维码</li>
+<li>我用的不是 QQ 软件，而是 TIM</li>
+<li>我 QQ 密码在我所有的密码里是唯一的，不存在撞库</li>
+<li>我的手机没有收到腾讯改密码的提醒或者验证码</li>
+<li>我的电脑（公司和家里的）都没有安装 QQ 或者 TIM ，只有手机上有安装</li>
+<li>我没有用我的手机装什么乱七八糟的软件，因为我有一个平板，软件大部分都装在上面，扫二维码也用的微信。手机上就只有微信、网银等一些常用的软件。我的手机上次充电，到现在为止 1 天 16 小时还有 49%的电，所以我很少用手机</li>
+</ol>
+<p>所以到现在为止，我都没找出来我号被盗，是因为我做错了啥？</p>
+<p>更令人气愤的是，QQ 的安全限制是比其他软件要高的，比银行软件都高，因为 618 的时候我换了新手机。旧手机我装的也是 TIM ，当我在新手机上登录的时候，它提示当前是在新设备登录，需要用旧设备扫描登录。我拿旧手机的 TIM 一扫，TIM 提示不支持该功能，但 TIM 没有提供其他登录认证选项？？？于是我又在旧手机里下了一个 QQ ，好家伙，他也提示新设备登录，需要用旧设备扫。不过 QQ 提供了另一个选项，通过好友申诉登录</p>
+<p>但是这 QQ 我很久都不用了，找好友申诉太麻烦。于是我直接到微信找 QQ 客服，大约一个钟后，客服处理完成，我可以修改密码登录了，但需要手机号验证</p>
+<p>所以这次盗号，我本身找不出原因就算了。就假如对方实在很牛逼，拿到了我的密码，但对方是如何在新设备登录，并且我的手机没有收到相关信息。而我自己要在新设备登录或者改密码时，就无法绕过</p>
+<p>所以这安全措施到底是防了什么？所以就像别人说的那样：QQ 就是自己改密码不行，自己换设备登录不行，别人盗号反而一直很方便</p>
+
 	]]></content>
 </entry><entry>
-	<title>[优惠信息] 网易云音乐 黑胶 7 天 5 张 7 月的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864817#reply14" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864817</id>
-	<published>2022-07-08T01:03:52Z</published>
-	<updated>2022-07-08T01:48:56Z</updated>
+	<title>[酷工作] 远程工作，自研公司非外包，我直招！ Vue+Node！</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865020#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865020</id>
+	<published>2022-07-08T14:54:49Z</published>
+	<updated>2022-07-08T14:51:49Z</updated>
 	<author>
-		<name>Baozige</name>
-		<uri>https://www.v2ex.com/member/Baozige</uri>
+		<name>god830</name>
+		<uri>https://www.v2ex.com/member/god830</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://music.163.com/prime/m/gift-receive?d=9arBWzPKwME7pDiYKBDpBA&amp;p=wipsB6YpuOtKSHP1lna_r597wiPcjbTN3_-WWtdqspu8zGLEPUXznoFlCXd_HgR8T4CtZ4x6y6igg6qrQva3ty8AepPgkwbpu3Is4mOXO5g&amp;userid=63619548&amp;app_version=8.7.80&amp;dlt=0846" rel="nofollow">https://music.163.com/prime/m/gift-receive?d=9arBWzPKwME7pDiYKBDpBA&amp;p=wipsB6YpuOtKSHP1lna_r597wiPcjbTN3_-WWtdqspu8zGLEPUXznoFlCXd_HgR8T4CtZ4x6y6igg6qrQva3ty8AepPgkwbpu3Is4mOXO5g&amp;userid=63619548&amp;app_version=8.7.80&amp;dlt=0846</a> (@网易云音乐)</p>
+	<p>公司基础技术需求就是 Vue+Node ，前后 Fullstack 都招。
+要求：一本+3 年经验+英语还不错
+工作时间：需要稍微熬夜，可以下午（晚上）开始工作，到晚上 2 点左右，忙的时候可能要 3 点
+工作地点：银河系
+待遇：已知同级别&gt;涂鸦，公司不搞什么 14 薪 16 薪，直接年薪 /12 发
+我的经历流水账： <a href="https://juejin.cn/post/7078490070281355294" rel="nofollow">https://juejin.cn/post/7078490070281355294</a>
+联系方式：qq 群 114785208</p>
 
 	]]></content>
 </entry><entry>
-	<title>[TypeScript] 谁能解释一下为什么这条 TypeScript 离谱地没有报错？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864816#reply1" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864816</id>
-	<published>2022-07-08T01:00:57Z</published>
-	<updated>2022-07-08T01:29:25Z</updated>
+	<title>[职场话题] 即将转正却在试用期打算辞退了，好气！</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865019#reply5" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865019</id>
+	<published>2022-07-08T14:39:48Z</published>
+	<updated>2022-07-08T12:37:48Z</updated>
 	<author>
-		<name>makelove</name>
-		<uri>https://www.v2ex.com/member/makelove</uri>
+		<name>psyer</name>
+		<uri>https://www.v2ex.com/member/psyer</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<pre><code class="language-js">declare type KeyGetter = (obj: unknown) =&gt; string
+	即将转正，领导和我约谈，说在试用期内我态度不好、不负责等不符合转正 /录用条件，准备辞退我。说不直接辞退也可以，延长我的试用期。<br /><br />正在气头，不想多说，气死我了。
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 旁软路由添加 IPV6</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865018#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865018</id>
+	<published>2022-07-08T14:33:49Z</published>
+	<updated>2022-07-08T14:30:49Z</updated>
+	<author>
+		<name>linzhilin88</name>
+		<uri>https://www.v2ex.com/member/linzhilin88</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>旁路由添加 IPV6 打开网站有时候会出现异常（甚至打不开），是不是只有旁路由才会出现这样的问题？</p>
 
-// 取自 lodash
-declare const identity: {
-  &lt;T&gt;(value: T): T
-  (): undefined
-}
+	]]></content>
+</entry><entry>
+	<title>[程序员] breakpad 怎么调试带有动态链接库的程序</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865017#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865017</id>
+	<published>2022-07-08T14:30:22Z</published>
+	<updated>2022-07-08T14:30:22Z</updated>
+	<author>
+		<name>huangya</name>
+		<uri>https://www.v2ex.com/member/huangya</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	初次接触 breakpad.目前通过 dump_syms 抓到程序的符号表，然后也有 minidump 文件。然后通过 minidump_stackwalk 得到 backtrace 文件。发现程序 crash 在它调用的一个动态链接库中。我有这个<br /><a target="_blank" href="http://库的源代码和编译出来.so" rel="nofollow noopener">库的源代码和编译出来.so</a> 文件（ linux 平台），请问一下如何精确得到 crash 的具体点呢，比如在这个库的哪个函数和哪一行。
+	]]></content>
+</entry><entry>
+	<title>[问与答] Python smtp 协议发送邮件贼鸡儿慢</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865016#reply3" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865016</id>
+	<published>2022-07-08T14:26:19Z</published>
+	<updated>2022-07-08T14:38:36Z</updated>
+	<author>
+		<name>nihaorz</name>
+		<uri>https://www.v2ex.com/member/nihaorz</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>小弟日常撸 java ，最近上手摸了一下 python ，搞搞自动 docker save 镜像、压缩上传、然后发送邮件通知</p>
+<p>到最后一步发送邮件了，用的 smtp 协议，结果发现发送邮件贼鸡儿慢，基本上 35 秒左右，但是我用 java 撸了一发，发现很快啊，5 秒内完事儿</p>
+<p>下面是我的代码：</p>
+<pre><code class="language-python">#!/usr/bin/python3
 
-declare const identity2: {
-  &lt;T&gt;(value: T): T
-}
+import smtplib
+import traceback
+from email.mime.text import MIMEText
+from email.header import Header
 
-declare const identity3: {
-  (): undefined
-}
+def send_html_email(smtp_host, smtp_port, use_ssl, from_addr, from_name, password, to_addrs, cc_addrs, subject, content):
+    try:
+        msg = MIMEText(content, _subtype='html', _charset='utf-8')
+        msg['Subject'] = Header(subject, 'utf-8')
+        msg['From'] = "{}&lt;{}&gt;".format(from_name, from_addr)
+        msg['To'] = ",".join(to_addrs)
+        msg['Cc'] = ",".join(cc_addrs)
+        if use_ssl:
+            smtp = smtplib.SMTP_SSL()
+        else:
+            smtp = smtplib.SMTP()
+        smtp.connect(smtp_host, smtp_port)
+        smtp.login(from_addr, password)
+        smtp.sendmail(from_addr, to_addrs, msg.as_string())
+    except:
+        print("邮件发送失败")
+        traceback.print_exc()
+    finally:
+        smtp.quit()
 
-let a: KeyGetter = identity // 为啥没报错?!类型不安全了吧
-let b : KeyGetter = identity2 // 正常报错
-let c: KeyGetter = identity3 // 正常报错
+
+if __name__ == '__main__':
+
+    smtp_host = "mail.xxx.com.cn"
+    smtp_port = 25
+    from_addr = "xxx@xxx.com.cn"
+    from_name = "xxx"
+    password = "xxx"
+    to_addrs = ["xxx1@xxx.com.cn"]
+    cc_addrs = ["xxx2@xxx.com.cn", "xxx3@xxx.com.cn"]
+    subject = "python SMTP 测试邮件"
+    content = '&lt;a target="_blank" href="http://192.168.200.128"&gt;测试链接&lt;/a&gt;'
+
+    send_html_email(smtp_host, smtp_port, False, from_addr, from_name, password, to_addrs, cc_addrs, subject, content)
+
 </code></pre>
-<p>第一个 identity 类型是什么意思？不是一个重载吗？</p>
-<p><a href="https://www.typescriptlang.org/play?#code/CYUwxgNghgTiAEAXAngBwQaRMg4iRiIM8AvPABQD2ARgFYBc8ArgHYDWLlA7iwJSkA+eAGdEMAJYsA5gCgZAennxAa8qArwPgRKwKMIAWM0JFgIwlFqPjjQLROJSMA3jPjwAPABUB5AG5QITEEZ3XiDnChDmFlAAM0kQYBkAXzlDaDh4U3NES2tbFAAmRzCPL19-QPhg0OSDcDSTMwsrEBs7ZABmIpdyCNYYuISaiHx4KEYsXHxCYjJm1pR4RXhALjlAU1VAQptAUqNATFSAfgBCGWHs6nhx7DwCIlIclrzkfMWlHaORsHPJq5nb+Y6n+BeQA" rel="nofollow">PlayGround 链接</a></p>
+<p>用 126 邮箱、qq 邮箱、公司自己的邮箱发都一样的，35 秒左右，对比 java 5 秒左右，简直无地自容啊，各位彦祖指导一下，问题何在啊？先行谢过了</p>
+<p>说错了，代码打印了一下，java 是 500 毫秒左右，之前估算的，应该主观上加了编译的时间</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 请问，未交房的房子，房屋渗水有什么好的维权措施</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864815#reply16" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864815</id>
-	<published>2022-07-08T00:57:30Z</published>
-	<updated>2022-07-08T01:42:06Z</updated>
+	<title>[职场话题] 大家愿意付费模拟 FB/Amazon/Google 家的面试吗？（Mock Interview）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865015#reply9" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865015</id>
+	<published>2022-07-08T14:16:54Z</published>
+	<updated>2022-07-08T16:25:53Z</updated>
 	<author>
-		<name>Izumi1991</name>
-		<uri>https://www.v2ex.com/member/Izumi1991</uri>
+		<name>ElegantHedgehog</name>
+		<uri>https://www.v2ex.com/member/ElegantHedgehog</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>今天看到另一个 Topic 里面，看到有人问大家的建议“要不要出国”？结果评论里面基本清一色建议去。</p>
+<p>既然大家都想去，那么有人愿意找这些公司曾经的面试官付费做 Mock Interview 吗？
+如果愿意的话，多少钱一个小时（一场面试的时间）合适？</p>
+<p>另外，我看很多程序员普遍有职业焦虑，如果你有这样的情况，愿意付费找 Mentor 吗？
+找 Mentor 是一个解决自身困惑的很高效的方式。我在之前工作过的公司找过 mentor 也当过 mentor 。</p>
+<p>最后，本人在国外的 A 工作过，当过面试官，也当过 mentor ，有什么问题留言问我吧。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[求职] 现在还有公司找 Java 后端吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865014#reply2" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865014</id>
+	<published>2022-07-08T13:54:51Z</published>
+	<updated>2022-07-08T14:06:49Z</updated>
+	<author>
+		<name>Mgzsnothing</name>
+		<uri>https://www.v2ex.com/member/Mgzsnothing</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>无经验，无实习，在家灵活就业了
+在招聘软件上投了不少简历，都说不招了</p>
+<p>春招面过一些，都没啥成果
+之前试过一个外企，面试官人挺好，聊了不少，但回头就拒了
+最近又面华为 OD ，倒在综面了</p>
+<p>还有华为 OD 为什么有这么多 HR ？打开招聘软件每次都好多华为 OD 找过来，特别是 Boss ，每天 10 个左右，都已经参加过了还不停的来刷屏，我都看不到自己想要的消息了</p>
+
+	]]></content>
+</entry><entry>
+	<title>[机器学习] 最近很火的那个中文语音合成器被 Hugging Face 的 CTO + 联合创始人关注了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865013#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865013</id>
+	<published>2022-07-08T13:50:25Z</published>
+	<updated>2022-07-08T13:50:25Z</updated>
+	<author>
+		<name>DTCPSS</name>
+		<uri>https://www.v2ex.com/member/DTCPSS</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>离谱</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/8LUR8RV.jpg"/></p>
+<p>Likes 里除了几个 Hugging Face 的布道师，我还看到了立党老师…</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] OCR 竖排文字（尤其是竖排日语）有什么好的解决方案吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865012#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865012</id>
+	<published>2022-07-08T13:44:42Z</published>
+	<updated>2022-07-08T13:52:27Z</updated>
+	<author>
+		<name>fox</name>
+		<uri>https://www.v2ex.com/member/fox</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	
 	]]></content>
 </entry><entry>
-	<title>[Apple] [火星] Bilibili 国际版已上架美区 App store</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864812#reply28" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864812</id>
-	<published>2022-07-08T00:49:55Z</published>
-	<updated>2022-07-08T01:46:58Z</updated>
+	<title>[生活] 闲鱼/PDD 上的 Macbook 扩展坞 A2119， 150~200 就能买到是真的假的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865010#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865010</id>
+	<published>2022-07-08T13:34:30Z</published>
+	<updated>2022-07-08T14:38:19Z</updated>
 	<author>
-		<name>cynthiatxdwalla</name>
-		<uri>https://www.v2ex.com/member/cynthiatxdwalla</uri>
+		<name>yanjieee</name>
+		<uri>https://www.v2ex.com/member/yanjieee</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	悄无声息的就上了，还是在刷微博评论的时候偶然发现的，又少了一个换区和换 Android 的理由<br /><br />- 版权内容为港澳台版，分流规则需要调整后正常观看<br />- 仅适配 iPhone ，无适配 iPad 版本<br /><br />基本上只看 UGC 内容，也没有大会员，所以第一条影响不大。<br />国际版自从推出以来就只有 iPhone 版本，和 instagram 在 iPad 上一个别扭的适配效果。
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 工具站升级！增加 Go Struct 和 JSON 互相转换</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864810#reply0" />
-	<id>tag:www.v2ex.com,2022-07-08:/t/864810</id>
-	<published>2022-07-08T00:00:21Z</published>
-	<updated>2022-07-07T16:00:21Z</updated>
-	<author>
-		<name>licoycn</name>
-		<uri>https://www.v2ex.com/member/licoycn</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>新增功能</h2>
-<h3><a href="https://utils.fun/go-struct-json" rel="nofollow">✨ Go Struct 转 JSON</a></h3>
-<blockquote>
-<p>💡 之前在网上找了很久都没有此类工具，有个 goland 插件<a href="https://plugins.jetbrains.com/plugin/17523-go-struct-to-json" rel="nofollow">go-struct-to-json</a>不过只支持一级属性，内嵌结构体就不支持了，于是就自己造轮子。</p>
-</blockquote>
-<ul>
-<li>支持内嵌结构体</li>
-<li>支持用<code>Tag</code>进行 JSON 字段名自定义及忽略，例如<code>json:"name"</code>或<code>json:"-"</code></li>
-</ul>
-<h3><a href="https://utils.fun/go-struct-json" rel="nofollow">✨ JSON 转 Go Struct</a></h3>
-<p>😊 这个很多工具站都有，就不做过多描述</p>
-<h3><a href="https://utils.fun/less2css" rel="nofollow">✨ Less 转为 CSS</a></h3>
-<p>😊 同样也有很多工具站有，不做过多描述</p>
-<h2>🚩 计划支持</h2>
-<ul>
-<li>支持 websocket 与 xtermjs 的结合，让调试 web-ssh 更简单</li>
-<li>常用查询表，例如 gitmoji/emoji 等</li>
-<li><strong>你的建议</strong></li>
-</ul>
-<h2>🧑‍💻 地址</h2>
-<p><a href="https://utils.fun/" rel="nofollow">油条工具箱</a></p>
+	<p>最近想买一个官方的扩展坞，官方售价是 485 ，闲鱼和 PDD 上很多只要 200 左右就能买到全新未拆封的，有没有哪位同学买过没翻车或者买过翻车的？</p>
 
 	]]></content>
 </entry><entry>
-	<title>[生活] 这是不是诈骗啊（doge</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864808#reply15" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864808</id>
-	<published>2022-07-07T22:41:48Z</published>
-	<updated>2022-07-08T01:03:12Z</updated>
+	<title>[iPad] 持 iPad mini6 蜂窝版的进</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865009#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865009</id>
+	<published>2022-07-08T13:10:16Z</published>
+	<updated>2022-07-06T13:10:16Z</updated>
 	<author>
-		<name>Turkestan</name>
-		<uri>https://www.v2ex.com/member/Turkestan</uri>
+		<name>Cyshall</name>
+		<uri>https://www.v2ex.com/member/Cyshall</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<a target="_blank" href="https://i.imgur.com/HvN8FI2.jpg" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/HvN8FI2.jpg" class="embedded_image" rel="noreferrer"></a><br /><br /><br />这位小盆友 22 周岁了，初中学历，是不是有点过分了，我每个月会给我姐姐和妹妹打钱，有时候一千，有时候两千，她们两位也在上班，不过加起来也没我的高，所以我会给点补贴，这位小盆友我一直都没过问，心里有些许愧疚，现在看来我好像有点自我感动了<br /><br />这不是第一次了，其他的事太多了，被人打不敢回家，被人带着偷东西被抓，他也不知道跑，当地派出所的常客，我一度怀疑他智商是不是出了什么问题，那个环境成长下来的多少有点人格畸形了<br /><br />问题当然出在家庭教育上了，小学四年级开始就跟着我爸妈去新疆读书了，那地方懂得都懂。但是成年了要改变一下好像只能靠自己了。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 怎麽阻止 app 獲取設備信息(手機型號什麽的)</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864807#reply7" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864807</id>
-	<published>2022-07-07T20:23:21Z</published>
-	<updated>2022-07-08T00:36:17Z</updated>
-	<author>
-		<name>Constantping</name>
-		<uri>https://www.v2ex.com/member/Constantping</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	使用 VirtualXposed+XPrivacyLua 可以做到嗎？
-	]]></content>
-</entry><entry>
-	<title>[React] # 做一套 TS 全栈工程师的体系教程</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864806#reply2" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864806</id>
-	<published>2022-07-07T20:09:15Z</published>
-	<updated>2022-07-07T17:04:15Z</updated>
-	<author>
-		<name>lichnow</name>
-		<uri>https://www.v2ex.com/member/lichnow</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>TS 全栈工程师能做的</h2>
-<p>我列出了以下一些 TS 目前可做的东西</p>
-<blockquote>
-<p>以下也是一个 TS 全栈开发者应该可以做的</p>
-</blockquote>
-<ul>
-<li>RN 开发移动端</li>
-<li>React 开发 SPA ，中后台等</li>
-<li>Nextjs,Remix 开发 SSR 网站</li>
-<li>Taro 开发跨平台小程序</li>
-<li>Electron 开发桌面软件</li>
-<li>Fastify,Nestjs 开发后端</li>
-<li>Yargs 与周边一些工具可构建强大的 CLI</li>
-<li>还有，微服务，爬虫，区跨链等等,Node 都是一把好手</li>
-</ul>
-<p>如果 TS 工程师配合上 Golang 用于补足 Node 性能的不足，那么就是一名真正的无懈可击的全栈工程师了</p>
-<p><strong>优点：</strong></p>
-<ul>
-<li>目前来说，可以通过 Stackoverflow 排名可知，无论在待遇和受欢迎程度来说，TS/JS 全栈都是非常不错的，比某些流行语言会好许多。</li>
-<li>最最重要的是国内岗位很多，薪资整体也偏高，竞争力却不是很大，并不是很卷。</li>
-<li>做为自由职业的选择也是非常不多的，因为一个全栈就是一个工作室</li>
-</ul>
-<h2>我是如何入手 TS 的</h2>
-<p>从自我介绍开始。本人从 07 年开始学习编程，一开始接触的 Delphi ，做一些当年比较流行的远程控制类的软件。从 08 年进入大学接触 DZ 论坛系统开始就入了 PHP 的坑。一直挺喜欢 PHP 的，从 CI+Smarty 到自己开发的框架，到后来一直使用 Symfony 框架，使用了十几年 PHP ，她一直是本人心中的白月光。然而有些现实必须面对，这里略过一些事情，反正由于一些个人经历的缘故转向了 TS(typescript)编程。</p>
-<p>一开始接触 TS 是因为 17 年的时候原来的公司购买了一套 Angular2 开发的系统，无从入手，不得不硬着头皮先啃 ES6 ，再啃当时还不是很好用的 TS 。然后一套操作下来，Angular2 是学了个半会不会，却把另一个前端框架 React 给学会了。可能也是因为 React 简洁明了，一切靠社区的模式很像 PHP 吧。然后过了半年就全职入坑 React ，并换了份前端的工作。</p>
-<p>自从使用 React 开始，发觉当年认为的 Jquery 操作界面就是前端的想法真让人可笑。因为本身我还会个“后端”语言 PHP ，所以后来很多时候一直在兼职自己接单做所谓的全栈。慢慢的发现 React 可以做的不仅仅只是中后台系统，随着大前端的发展，我开始尝试用 React 的 Nextjs 框架构建 SSR 网站，也开始为客户制作一些 React+Electron 性能无关的桌面软件，后来开始尝试为自己公司的移动项目引入 React Native 。这几年各种好的 React 生态层出不穷，比如 Taro 可以用来构建跨平台的小程序。</p>
-<p>接触 React 后简直就一直在其生态里打转，业余就去找各种库玩，比如 React-DND,React-Spring 等。但是却忘了 TS 的另一个杀手锏，Nodejs 。后来经过朋友的推荐，开始接触 Nestjs 框架，发觉与 Symfony 非常相似，可直接上手，于是慢慢的正式工作和副业的项目通通开始使用 Nestjs 来代替 PHP 。后来又发现了 Lerna 和 pnpm workspace 之类的神器，用于构建 monorepo 的项目组织结构。同时，又发现了 Yargs 这个无敌的命令行工具，用来写 cli 非常给力。</p>
-<p>经过长时间的打磨，开始习惯于一个 TS 语言跨任何端的开发状态，其舒适度真的非常丝滑。</p>
-<h2>我想干什么</h2>
-<p>重点来了。因为我个人虽然年龄比较超标，但一直处于开发第一线，对编程技术非常执着，想趁着自己还记得住的时候把自己学到的技术，淌过得坑，分享出来，一则可以布道自己喜欢的技术，让更多的朋友在求职时有更多的选择，从事自由职业时有更好的傍身技能，二则也能为自己获取一份额外的小收入，何乐而不为呢？最重要的是目前所在公司比较空闲，竟然让我有时间开始做开源项目，比如开发了<a href="https://github/toomejs/toome" rel="nofollow">这个 React+TS+Zustand+React-DND</a>的中后台，又比如构建了一套基于 Docusuarus<a href="https://github.com/rowfishjs/rowfish" rel="nofollow">rowfish</a>等等。然后觉得我应该可以利用更多的空余时间来进行<strong>TS 全栈开发的教学</strong></p>
-<p>目前已经在做的工作包括构建了一个专门发布全栈开发的技术博客和文档翻译的博客<a href="https://pincman.com" rel="nofollow">平克小站</a>以及一个<a href="https://v.pincman.com" rel="nofollow">教授 TS 全栈开发的视频教程网站</a>,这个视频网站里我已经在做的有《 React18 最佳实践》，《 Nestjs 最佳实践》等教程，我会长期不间断的更新里面的视频教程。</p>
-<p>如果有兴趣的朋友可以加我 QQ 一起探讨交流哦，QQ：1849600177 ，网址: <a href="https://v.pincman.com" rel="nofollow">https://v.pincman.com</a> / <a href="https://pincman.com" rel="nofollow">https://pincman.com</a></p>
+	<p>同一 Wi-Fi 下，一台 mini6 Wi-Fi 版，一台蜂窝版，Wi-Fi 版英雄联盟手游全程稳 ping ，蜂窝版则平凡跳 ping ，就是玩起来一卡一卡的，请问各位也是这样吗？</p>
 
 	]]></content>
 </entry><entry>
-	<title>[分享创造] 笔记池已全面优化界面，修复 BUG</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864805#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864805</id>
-	<published>2022-07-07T19:22:16Z</published>
-	<updated>2022-07-07T19:20:16Z</updated>
+	<title>[问与答] 怎么看待一款数据库用 春秋对比法 进行性能对比的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865008#reply8" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865008</id>
+	<published>2022-07-08T13:07:29Z</published>
+	<updated>2022-07-08T14:37:25Z</updated>
 	<author>
-		<name>yitalin</name>
-		<uri>https://www.v2ex.com/member/yitalin</uri>
+		<name>iikebug</name>
+		<uri>https://www.v2ex.com/member/iikebug</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>笔记池</h2>
-<p><a href="https://biji.ci/" rel="nofollow">https://biji.ci/</a></p>
-<p><strong>笔记池是一个支持传文件的在线云笔记储存网站</strong></p>
-<ul>
-<li>支持预览 /Markdown ，链接自动转换</li>
-<li>支持上传文件，文件链接自动舔加</li>
-<li>支持选择是否允许无密码只读查看</li>
-<li>支持一键生成笔记链接二维码</li>
-<li>支持显示上次保存笔记的时间</li>
-<li>支持一键下载 /复制笔记内容</li>
-<li>支持一键删除笔记</li>
-<li>支持设置密码访问</li>
-</ul>
-<p><img alt="图 1" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://file.biji.ci/08NIfMkp"/> </p>
-<p><img alt="图 2" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://file.biji.ci/2uBwDBDS"/></p>
+	<p>[<a href="https://www.bilibili.com/video/BV1JV4y1n7Mh" rel="nofollow">https://www.bilibili.com/video/BV1JV4y1n7Mh</a>] </p>
+<p>[ StoneDB ] 这个新出来的数据库，做了这么一个对比视频出来，是不是纯属看不起人，还是单纯恶心人的？</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 国内 top3 高校计算机硕士，不想写代码了，而立之年，还有哪些人生方向可以选择？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864804#reply25" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864804</id>
-	<published>2022-07-07T18:57:49Z</published>
-	<updated>2022-07-08T01:45:13Z</updated>
+	<title>[MacBook Pro] mini LED 可以让“高亮文本”真正“高亮”</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865007#reply2" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865007</id>
+	<published>2022-07-08T13:06:46Z</published>
+	<updated>2022-07-08T14:53:59Z</updated>
 	<author>
-		<name>leewi9coder</name>
-		<uri>https://www.v2ex.com/member/leewi9coder</uri>
+		<name>supergi</name>
+		<uri>https://www.v2ex.com/member/supergi</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>请大佬们指点一下吧</p>
+	<p>锤子的 HandShaker 在创建闪念胶囊的时候，闪念胶囊的那一小块居然是 HDR 的，特别亮，我笑疯了。
+不过，由此，想象一下：比如在网页中搜索文字，不是传统的让不匹配部分暗下去以让匹配部分“高亮”，而是让匹配部分真正高亮，1600nit 那种……
+就是可能比较晃眼睛😂</p>
 
 	]]></content>
 </entry><entry>
-	<title>[分享发现] 刚发现微信 CallKit 功能还能知道来电微信的原始 ID</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864803#reply2" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864803</id>
-	<published>2022-07-07T18:33:41Z</published>
-	<updated>2022-07-07T19:33:41Z</updated>
+	<title>[Apple] M2 MacBook Air，大家抢到了吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865006#reply9" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865006</id>
+	<published>2022-07-08T12:59:50Z</published>
+	<updated>2022-07-08T15:55:47Z</updated>
 	<author>
-		<name>Ettup</name>
-		<uri>https://www.v2ex.com/member/Ettup</uri>
+		<name>vipzhanghe</name>
+		<uri>https://www.v2ex.com/member/vipzhanghe</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>CallKit 通话会被记录在 iOS 最近通话里，然后点进去就会有一个「个人社交资料」，里面就是微信的原始 ID</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.bmp.ovh/imgs/2022/07/08/e4ce913646c81527.png"/></p>
+	<p>总算抢到了，第一次付款居然不成功，这个到货时间算早吗。
+<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.bmp.ovh/imgs/2022/07/08/854067c4c2ba1041.jpg"/>
+<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.bmp.ovh/imgs/2022/07/08/82d1f019e2b86c64.jpg"/></p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 我已经完全是 recurse 的形状了, 有老哥 Clojure 玩的比较六的么?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864802#reply10" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864802</id>
-	<published>2022-07-07T18:19:11Z</published>
-	<updated>2022-07-08T01:42:57Z</updated>
+	<title>[微信] WeChat 又被风控冻结登出了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865005#reply10" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865005</id>
+	<published>2022-07-08T12:54:34Z</published>
+	<updated>2022-07-08T15:51:02Z</updated>
 	<author>
-		<name>ca1123</name>
-		<uri>https://www.v2ex.com/member/ca1123</uri>
+		<name>mu2er</name>
+		<uri>https://www.v2ex.com/member/mu2er</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>希望能有偿咨询一下, 虽然这是我写的最顺的语言, 但还是有很多问题. 希望找人交流一下.</p>
+	<p>真是无语了无语🙄。
+用自己另一个帐号辅助解冻，那边显示成功了，这边登录依然没法登录。
+以为是那个帐号最近换绑了手机号的缘故。
+就又找了另一个朋友帮忙，嘿，又是一样的结局，还是没法登录。
+可去你张小龙妈的吧。</p>
+<p><a href="https://imgur.com/BYWXug3" rel="nofollow">https://imgur.com/BYWXug3</a></p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] word 写标书，复制粘贴时总是会卡死</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864801#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864801</id>
-	<published>2022-07-07T16:38:31Z</published>
-	<updated>2022-07-06T06:40:32Z</updated>
+	<title>[硬件] 准备入 1080p 360hz 显示器，是不是只要带宽不超 dp spec 就行了，会不会显卡有隐藏限制</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865004#reply7" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865004</id>
+	<published>2022-07-08T12:51:56Z</published>
+	<updated>2022-07-08T14:45:59Z</updated>
 	<author>
-		<name>wty95</name>
-		<uri>https://www.v2ex.com/member/wty95</uri>
+		<name>haoyh1</name>
+		<uri>https://www.v2ex.com/member/haoyh1</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题，一个标书大小 60-200m ，只要复制粘贴大量文字图片就会卡死，怎么办？
+	手上的 GTX760 就是，明明 dp1.2 上限是 17.28G ，理论上可以支持到 4K 80 ，但是只能上到 60<br />如果只看带宽的话，随便一个 dp1.4 的卡就可以了，就怕厂商弄些隐藏限制恶心你<br />最靠谱的还是实际测试，所以请问有人用过 360hz 显示器吗？
 	]]></content>
 </entry><entry>
-	<title>[问与答] 求教大佬们，怎么判断电脑卡死到底是哪里出了问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864800#reply17" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864800</id>
-	<published>2022-07-07T16:27:23Z</published>
-	<updated>2022-07-08T01:48:26Z</updated>
+	<title>[Apple] 大家 M2 的 Air 发货时间多久啊?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865001#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865001</id>
+	<published>2022-07-08T12:13:22Z</published>
+	<updated>2022-07-08T12:13:22Z</updated>
 	<author>
-		<name>jadehare</name>
-		<uri>https://www.v2ex.com/member/jadehare</uri>
+		<name>Rsl</name>
+		<uri>https://www.v2ex.com/member/Rsl</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	一段时间随机卡死，画面完全不动。有的时候刚开机卡死，有的时候玩一会才卡死。刚重装完系统过了大概两三个小时才卡死，第一次卡死后后面就很频繁了。进入 bios 后放一会也会卡死，pe 暂时没发现卡死，但是加载 pe 的过程中有可能卡死。换过显卡，拔插过内存条，插单根换卡槽都试过，两根一块坏的概率很低吧。系统盘也换过重装系统。所以现在猜测是主板或者 cpu 的问题，有没有什么方法能确定是这俩哪个的问题（没有更多的 cpu 和主板了，而且换主板太麻烦了真的懒得换，要是能确认是 cpu 的问题可就太好了）
-	]]></content>
-</entry><entry>
-	<title>[问与答] tg 的红鼻子机器人 sgk 拉闸关门大吉了，腾讯数据安全线被毕业，最近是怎么了？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864799#reply0" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864799</id>
-	<published>2022-07-07T16:24:59Z</published>
-	<updated>2022-06-29T16:23:59Z</updated>
-	<author>
-		<name>godblessumilk</name>
-		<uri>https://www.v2ex.com/member/godblessumilk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	10 亿公民个人数据是怎么流出去的？（纯技术探讨）
-	]]></content>
-</entry><entry>
-	<title>[生活] 深受蟑螂困扰！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864798#reply31" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864798</id>
-	<published>2022-07-07T15:46:22Z</published>
-	<updated>2022-07-08T01:48:04Z</updated>
-	<author>
-		<name>gordon96</name>
-		<uri>https://www.v2ex.com/member/gordon96</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>人在广东，住在高层，也不知道蟑螂从哪出现的，每隔一段时间都会出现一两只！！！
-很困扰，出现位置大多都是在卫生间！！！但是我实在想不通蟑螂能一直爬这么高吗？？
-求一个靠谱的消除蟑螂的方法！！！</p>
+	<p>我的午夜色, 8+10, 16g, 512g, 7 月 27-8 月 3 号发</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 请问 hugo 博客框架必须部署到 GitHub 吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864796#reply7" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864796</id>
-	<published>2022-07-07T15:26:56Z</published>
-	<updated>2022-07-07T18:53:52Z</updated>
-	<author>
-		<name>Amagatarai</name>
-		<uri>https://www.v2ex.com/member/Amagatarai</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近准备自己搞个 blog 玩玩，决定用 hugo 框架，买好了域名，买好了服务器，结果发现网上的教程几乎全是部署到 GitHub 仓库里的<br /><br />由于个人不太喜欢部署到 GitHub 上这个方式，想直接放在自己的服务器上然后使用购买的域名进行访问<br /><br />目前我想到一个非常粗暴的方法，是用 NGINX 直接反向代理 localhost ，但这样 hugo 则是一直以本地预览的形式运行，不像是一个正确的博客运行方式<br /><br />所以请问各位是否有更好的解决方案，刚刚接触这一块，谢谢大家为我详细解答
-	]]></content>
-</entry><entry>
-	<title>[Apple] 第二次免费更换碟式键盘 顺带电池焕然一新 给天才吧好评</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864791#reply21" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864791</id>
-	<published>2022-07-07T14:44:08Z</published>
-	<updated>2022-07-08T01:48:36Z</updated>
-	<author>
-		<name>Licsber</name>
-		<uri>https://www.v2ex.com/member/Licsber</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>第一次更换贴: <a href="https://v2ex.com/t/687392" rel="nofollow">https://v2ex.com/t/687392</a></p>
-<h3>说明</h3>
-<p>问题: 2018MBP 常见的键盘连按<br/>
-自上一次换新以来拿它做了毕业设计 期间算是中高强度使用(指风扇没低于过 1500 转<br/>
-电池健康已经掉到 79 了 循环忘了看 应该有 100 多次  </p>
-<h3>维修估价</h3>
-<pre><code>项目编号	说明	价格	应付金额	顾客 KBB  
-CH661-13159	Top Case, with Battery, ANSI, Space Gray, Chinese Simplified	RMB 0	RMB 0	N  
-S1490LL/A	HARDWARE REPAIR-LEVEL 1	RMB 299	RMB 0	  
-SEAA2LL/A	FLAT RATE,RETAIL,TOPCASE,MBP13 TB,MBP14	RMB 3,528	RMB 0	  
-增值税		RMB 0  
-共计	RMB 3,827	RMB 0  
-</code></pre>
-<h3>维修估价图</h3>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/OI2c4EGt.jpeg"/></p>
-<p>碟式键盘的服务计划应该是四年期限内一直可用的 不限定次数<br/>
-这次电池没鼓包 纯粹是苹果只支持更换整个 C 面 一起换掉了</p>
-<p>顺带一提 这是我第三次通过天才吧维修产品<br/>
-首发买了个 13Mini 无保护使用一个多月之后摔碎<br/>
-188 元给我直接更换了一部新的 旧手机直接收回去了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] idea 的 配置同步功能 是不是有问题啊？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864790#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864790</id>
-	<published>2022-07-07T14:43:01Z</published>
-	<updated>2022-07-07T14:40:01Z</updated>
-	<author>
-		<name>xboxv</name>
-		<uri>https://www.v2ex.com/member/xboxv</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>windows 电脑和 mac 电脑使用同一个 JB 账户。</p>
-<p>首先 windows 有一套 快捷键 叫做  windowsCopy ，mac 上也有一套快捷键 叫做 macoscopy.</p>
-<p>然后我到另外一台 mac-B 电脑上就看不到   macoscopy 这套快捷键。  确认过 windows mac 都已经开启了自动同步配置</p>
-
-	]]></content>
-</entry><entry>
-	<title>[MacBook Air] air m1 7 核 gpu 带 4k 性能足够吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864789#reply16" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864789</id>
-	<published>2022-07-07T14:30:26Z</published>
-	<updated>2022-07-07T21:08:35Z</updated>
-	<author>
-		<name>Nerv</name>
-		<uri>https://www.v2ex.com/member/Nerv</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	一时冲动，在官网下单了官翻 Macbook air m1 7 核版本，看到 8 核心只要加 300 ，现在有点动摇。个人对显卡要求不高，只求带 4k 日常敲代码看文档绝对流畅，现在 4800u 的 vega 8 偶尔掉帧，风扇也不消停，体验有点糟心。
-	]]></content>
-</entry><entry>
-	<title>[Apple] 救救孩子，屏幕使用时间密码忘记了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864788#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864788</id>
-	<published>2022-07-07T14:27:48Z</published>
-	<updated>2022-07-07T13:26:48Z</updated>
-	<author>
-		<name>rophie123</name>
-		<uri>https://www.v2ex.com/member/rophie123</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>之前 iPad 给孩子上网课，注册了一个儿童账号，开启了屏幕时间密码和 app 限额，和孩子斗智斗勇密码经常改的稀奇古怪，后来就不怎么用了</p>
-<p>这几天拿来工作用，想解除这个密码，但是发现密码忘记了，输入十几遍都不对，实在是没辙了。</p>
-<p>iPad 是儿童账号，在 iPad 上设置了屏幕使用时间密码，没有开启 [在设备之间共享] ，但是儿童账号加入了家庭共享</p>
-<p>由于儿童账号没有忘记密码功能，按照官网说明，在 iPhone 和 Mac 的家庭成员上直接修改和关闭屏幕使用时间密码，无效，iPad 还是要求输入密码。</p>
-<p>最后想抹掉 iPad 重新来过，还是让输入密码。</p>
-<p>截图： <a href="https://imgur.com/a/wGQtxK4" rel="nofollow">https://imgur.com/a/wGQtxK4</a></p>
-<p>各位大神，这种情况应该咋办？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Docker] 问问大家一个关于 docker exec 进到容器执行命令之前和执行完命令后退出都要卡 10s 以上的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864787#reply9" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864787</id>
-	<published>2022-07-07T14:24:49Z</published>
-	<updated>2022-07-07T20:59:31Z</updated>
-	<author>
-		<name>zhoudaiyu</name>
-		<uri>https://www.v2ex.com/member/zhoudaiyu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	先说一下环境：容器集群版本 Openshift Container Platform 3.11 ，Kubelet 1.12 ，docker 1.13.1 。每台 node 约运行 60 个 pod （约 120 个 docker 容器），运行一段时间后（几天到几个月不确定），通过 docker exec 进到容器执行命令，就得在执行前等 10 秒以上才能进去，执行命令很快，退出时，还得等 10 秒才能退出，就像卡住了一样，ctrl-c 也停不下来。exec 命令执行期间，docker 没有任何异常日志。现在已经通过 nsenter 进到进程命名空间（ nsenter ）和通过 docker API 直接和 dockerd 通信（均正常）排除了一部分干扰因素。唯一解决方法就是重启 dockerd ，别无他法。求大家给个排查的思路（或者解决方案），谢谢！
-	]]></content>
-</entry><entry>
-	<title>[macOS] MacOS Montery 上就没有好用的抓包工具吗……</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864785#reply16" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864785</id>
-	<published>2022-07-07T14:17:40Z</published>
-	<updated>2022-07-07T21:00:24Z</updated>
-	<author>
-		<name>neochen13</name>
-		<uri>https://www.v2ex.com/member/neochen13</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>用了一圈都不大理想，唯一一个好一点的是 proxyman……</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] win 版本的 Tim，群聊记录在哪里看？怎么找不到了？谷歌了也搜不到</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864784#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864784</id>
-	<published>2022-07-07T14:11:11Z</published>
-	<updated>2022-07-07T14:39:11Z</updated>
-	<author>
-		<name>y4ung</name>
-		<uri>https://www.v2ex.com/member/y4ung</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[问与答] shareX 上传文件(非图片)的时候可以保留原始名字作为前缀嘛?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864783#reply2" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864783</id>
-	<published>2022-07-07T14:10:42Z</published>
-	<updated>2022-07-07T15:10:42Z</updated>
-	<author>
-		<name>jsjcjsjc</name>
-		<uri>https://www.v2ex.com/member/jsjcjsjc</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>打开这个选项的好处文件不会因为重名而覆盖,但是上传后压根不认识它了哈~~</p>
-<p>所以 shareX 上传文件(非图片)的时候可以保留原始名字作为前缀嘛?
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="http://2ge.pics/i/2022/07/07/62c6e90a7bd0c.jpg"/></p>
-<p>感谢</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 为什么我写的代码能跑起来能正确返回但是过不去 leetcode 呢</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864782#reply7" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864782</id>
-	<published>2022-07-07T14:04:49Z</published>
-	<updated>2022-07-07T17:11:50Z</updated>
-	<author>
-		<name>LxnChan</name>
-		<uri>https://www.v2ex.com/member/LxnChan</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://flow.lxnchan.cn/files/pic/pic20220707b.png"/></p>
-<p>才学 GoLang 三天，不知道为啥过不去。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[哔哩哔哩] 疑似 Bilibili 两亿用户数据泄露</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864781#reply3" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864781</id>
-	<published>2022-07-07T14:03:43Z</published>
-	<updated>2022-07-07T02:03:43Z</updated>
-	<author>
-		<name>agagega</name>
-		<uri>https://www.v2ex.com/member/agagega</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.163.com/dy/article/HBM20DDE05129QAF.html" rel="nofollow">https://www.163.com/dy/article/HBM20DDE05129QAF.html</a></p>
-<blockquote>
-<p>7 月 6 日，一张在暗网叫卖 2.2 亿余条 B 站用户信息的截图在网上流传，泄露数据疑似包括用户账号（ UID ）和手机号，价格为 0.5 比特币或 17.72 以太币。截至发稿，B 站尚未对此作出回应。</p>
-</blockquote>
-<blockquote>
-<p>帖子发布于 7 月 6 日凌晨，帖主称“中国 youtube  [哔哩哔哩] 数据泄露 2.3MM”，数量具体为 221,223,698 条，包括 UID 和手机号。除了在帖子里展示的少量数据，帖主还提供了总计超过 50 万行的样本数据。</p>
-</blockquote>
-
-	]]></content>
-</entry><entry>
-	<title>[Go 编程语言] fmt.Sprintf 方法的%q 是否可以防止 mysql 注入？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864780#reply8" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864780</id>
-	<published>2022-07-07T13:56:09Z</published>
-	<updated>2022-07-07T15:53:39Z</updated>
-	<author>
-		<name>vvhhaaattt</name>
-		<uri>https://www.v2ex.com/member/vvhhaaattt</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	sql 防止注入最安全的方法，就我知道的是参数化查询<br />让 mysql 将 sql 解析跟数据传递分开，不过这种一般会多一次与 mysql 的交互。<br />我知道 go mysql driver 有参数可在 driver 层做相关过滤，但似乎对部分编码不是很友好？<br />%s 进行 sql 拼接很容易被注入没什么疑问。<br />%q 会将字符串 进行一定的安全处理，之前有看到用%q 开拼接 sql 的，是否安全？个人感觉有风险，但想不出什么情况下会被注入。<br />有哪位研究过的么？之前很少看到用%q 的
-	]]></content>
-</entry><entry>
-	<title>[Apple] 解决 macOS 上 Apple Music 及某些系统 App 本地化问题的一个可能办法（与切换多区账户或 App Store 切区有关）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864779#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864779</id>
-	<published>2022-07-07T13:55:39Z</published>
-	<updated>2022-07-07T14:54:39Z</updated>
-	<author>
-		<name>wydinhk</name>
-		<uri>https://www.v2ex.com/member/wydinhk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近又出现了 Apple Music 中随机歌曲歌手中文变英文的问题，一直以为是 Apple Music 的 bug ，尝试重新登录、授权；用 ProFind 找到所有和 <a target="_blank" href="http://Music.app" rel="nofollow noopener">Music.app</a> 相关的数据、缓存、plist 文件等并删除（甚至发现了音乐资料库的一部分真正缓存竟然不是~/Library 里的，而在 /private/var/folders/ 里……），再次登录不久依然问题复发。<br /><br />今天进入 <a target="_blank" href="http://Books.app" rel="nofollow noopener">Books.app</a> 突然发现主页信息简繁体混杂，甚至还出现了港区 iTunes Book Store 相关内容，点击书籍还能访问详细内容……而实际上此时 Books 登陆的是国区账号，也没有任何网络代理操作。<br /><br />进资源监视器发现 Books 载入了“AppleMediaServices”的相关内容，忽然灵机一动，Apple Music 、Books 和 App Store 好像都要经过它，而自己偶尔在国区 /港区账号间切换，或者快捷指令切区，很可能就是它的问题。<br /><br />于是又用 ProFind 找到了与媒体服务相关的文件，本来还想排除法看看到底是谁起作用的，结果只删除了以下两个目录就有效果了：<br /><br />~/Library/AppleMediaServices<br />~/Library/Caches/com.apple.AppleMediaServices<br /><br />删除后，Apple Music 提示媒体服务过期需要重新登录，登录后等待一会，所有失常的歌曲信息全部恢复正常，Books 那边也变成正常国区的样子了。<br /><br />以上希望可以帮助到有相同问题的朋友们。<br /><br />最后还是要吐槽一下 macOS ，记得 Apple Music 专辑分裂 /歌曲信息失常就是在 Catalina 那会重新开发 <a target="_blank" href="http://Music.app" rel="nofollow noopener">Music.app</a> 替代 iTunes 的时候出现的。当时还出现了严重的封面丢失问题，出问题的那些专辑在我的资料库里一直到今天还是依旧，试过打开 <a target="_blank" href="http://music.apple.com" rel="nofollow noopener">music.apple.com</a> ，竟然和 macOS 版一致，添加到资料库的专辑和 Apple Music 服务器的曲库就像是完全没有关系的两个版本，很是令人费解。作为对比，切换账户 /切区的类似操作在 iOS 上从未出过影响到 Apple Music 的问题，而当年丢失的封面中一大部分在 iOS 中可以正常显示。
-	]]></content>
-</entry><entry>
-	<title>[Apple] ios 杀后台</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864778#reply15" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864778</id>
-	<published>2022-07-07T13:44:10Z</published>
-	<updated>2022-07-08T01:47:30Z</updated>
-	<author>
-		<name>Binb</name>
-		<uri>https://www.v2ex.com/member/Binb</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	发现支付宝杀后台严重，不到一两分钟就被杀了；抖音半个小时一小时都没事儿。不知为什么，怎么差别这么大
-	]]></content>
-</entry><entry>
-	<title>[macOS] macOS 12.4 AirDrop 的偶发 bug，有人遇到吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864777#reply8" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864777</id>
-	<published>2022-07-07T13:40:48Z</published>
-	<updated>2022-07-07T18:12:53Z</updated>
-	<author>
-		<name>CRH</name>
-		<uri>https://www.v2ex.com/member/CRH</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>复现方式：</p>
-<ul>
-<li>
-<p>偶发，大概有 50%的几率会遇到</p>
-</li>
-<li>
-<p>发送方（ MacBook Pro ，macOS 12.4 ）与接收方（ iPhone ，iOS 15.5 ）连接至了同一个 Wi-Fi SSID</p>
-</li>
-<li>
-<p>在选择接收方的对话框中，可以看到接收方的头像</p>
-</li>
-<li>
-<p><strong>点击接收方头像，界面无反应。点击对话框右下角的取消按钮也无反应，但按 ESC 键可关闭对话框</strong></p>
-</li>
-<li>
-<p>重启发送方软件可恢复正常。比如在 Finder 中触发了此 bug ，option-右击 Finder 图标，点击 Relaunch 即可恢复正常</p>
-</li>
-</ul>
-<p>没有装 ADGuard ，应该不是这个 bug：
-<a href="https://www.v2ex.com/t/820502" rel="nofollow">https://www.v2ex.com/t/820502</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] mac 的教育优惠免息最低额一直是 12k 吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864776#reply5" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864776</id>
-	<published>2022-07-07T13:39:11Z</published>
-	<updated>2022-07-07T15:58:15Z</updated>
+	<title>[Apple] 你的 M2 Air 预计什么时间送达？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865000#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/865000</id>
+	<published>2022-07-08T12:10:25Z</published>
+	<updated>2022-07-08T12:09:25Z</updated>
 	<author>
 		<name>rimutuyuan</name>
 		<uri>https://www.v2ex.com/member/rimutuyuan</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>准备买 Air ，今天发现 12000+才免息了</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/07/07/kXmQIaM7niBspyx.png"/></p>
+	<p>坐标成都，选择商品页面丐版 7.15 ，10+8+512 7.16-7.23</p>
+<p>点进详情页后丐版和定制都是 7.26-8.2 了</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 德国香肠有没有在国内能买到的比较接近德国本土口味的牌子？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864775#reply1" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864775</id>
-	<published>2022-07-07T13:38:06Z</published>
-	<updated>2022-07-07T05:37:06Z</updated>
+	<title>[职场话题] 现在是不是没有居民社保了？只有灵活就业？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864999#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864999</id>
+	<published>2022-07-08T11:49:10Z</published>
+	<updated>2022-07-08T11:49:10Z</updated>
 	<author>
-		<name>dxgfalcongbit</name>
-		<uri>https://www.v2ex.com/member/dxgfalcongbit</uri>
+		<name>julyclyde</name>
+		<uri>https://www.v2ex.com/member/julyclyde</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想尝尝德国的白肠，在淘宝搜了下都是国产的，不知道和德国本土口味有多大差别？</p>
+	<p>as title</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 2022 年 7 月,如今还有什么 PC 客户端可以实现电脑上用自己的手机号发短信的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864773#reply8" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864773</id>
-	<published>2022-07-07T13:25:39Z</published>
-	<updated>2022-07-07T15:52:34Z</updated>
+	<title>[分享创造] 淘宝上的绕线画大家有了解过吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864998#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864998</id>
+	<published>2022-07-08T11:43:24Z</published>
+	<updated>2022-07-08T12:18:26Z</updated>
 	<author>
-		<name>fox1751</name>
-		<uri>https://www.v2ex.com/member/fox1751</uri>
+		<name>jieke0205</name>
+		<uri>https://www.v2ex.com/member/jieke0205</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>不知道大家逛淘宝的时候有没有遇到过这样的东西<br/>
+<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/MwKFotx.jpg"/></p>
+<p>我看到的时候就很好奇他们是怎样去计算出缠绕的顺序。
+我尝试着用相对简单的启发式算法实现了一下，感兴趣的同学可以瞧一瞧。
+<a href="https://github.com/jiang1997/image2seq" rel="nofollow">https://github.com/jiang1997/image2seq</a></p>
+<p>不知道大家有什么其他的方法或者思路可以分享一下。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] openwrt 是要在 wolfssl 这棵树上吊死啊。。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864996#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864996</id>
+	<published>2022-07-08T11:35:53Z</published>
+	<updated>2022-07-08T11:35:53Z</updated>
+	<author>
+		<name>Damn</name>
+		<uri>https://www.v2ex.com/member/Damn</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>以前 2 个 openwrt 和 1 个 padavan 用 wireguard 互联，padavan 那个老是失联。<br/>
+最近终于找到机会把 padavan 换掉了，wireguard 是稳如老狗了，但是签到脚本又挂了。。。<br/>
+仔细检查最后发现是 curl 的问题。<br/>
+某些非常正常的 url 就是处理不了，报错<br/>
+<code>SSL_connect failed with error -313: received alert fatal error</code><br/>
+上网一搜，原来 openwrt 从 21 开始，curl 从以前的 mbedtls 切换到 wolfssl 上了。
+<a href="https://forum.openwrt.org/t/106691" rel="nofollow">https://forum.openwrt.org/t/106691</a><br/>
+现在已经 22rc5 了，马上都要正式版了还是这个问题。<br/>
+系统组件比如 wpad 、hostapd 、eapol 什么的也都切换到 wolfssl 了，这是要 wolfssl 一条路上走到黑啊。  </p>
+<p>还好原版兼容性不错，新系统使用 19 的包，安装 mbedtls 的 curl 也能用。。。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 从来没见过这种网页，差点上当了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864995#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864995</id>
+	<published>2022-07-08T11:24:23Z</published>
+	<updated>2022-07-08T11:31:08Z</updated>
+	<author>
+		<name>yf1205204316</name>
+		<uri>https://www.v2ex.com/member/yf1205204316</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	起因，想看个油管频道会员视频，于是 google 看有没有破解办法，于是搜到这个网址：<br /><br /><a target="_blank" href="https://9aps3.edition-eltern.com/cloud/youtube+%E9%A0%BB%E9%81%93%E6%9C%83%E5%93%A1%E7%A0%B4%E8%A7%A3" rel="nofollow noopener">https://9aps3.edition-eltern.com/cloud/youtube+%E9%A0%BB%E9%81%93%E6%9C%83%E5%93%A1%E7%A0%B4%E8%A7%A3</a><br /><br />打开来是国外的一个什么论坛，关键词也是“youtube 频道会员破解”之类的，我还有点奇怪，明明是国外的论坛，为什么会讲中文，不过这种情况也可以理解，毕竟在外华人也不少。<br /><br />于是继续搜索，更奇怪的来了，再搜出来的网页上会有一个灰色的透明层，上面一个大大的箭头指着下载按钮，同时地址栏显示一个拦截通知。<br /><br />由于浏览器安装了 ublock origin+油猴的一些去广告脚本，已经很久没有见到过这种生硬的广告，于是第一时间想到，是不是今天安装的一个 chrome 插件（记录页面浏览进度 scrollmark ）里面有脏东西。<br /><br />于是第一时间禁用，再刷新页面，还是如此。<br /><br />然后奇怪的来了。<br /><br />这个页面的样式由一个国外的论坛，变成了国内的“搜狗问问”，但是网址却一点都没变。<br /><br />于是我再刷新，又变成了“百度知道”，再刷新变成“espocrm 开源 crm 支持论坛。”<br /><br />这时候我才知道，这是网页的问题。<br /><br />此时想到几分钟前，差点下载帖子里面那几个回答网友提供的“频道会员破解.rar”，“频道会员破解.zip","频道会员破解.pdf”，手心直冒冷汗。<br /><br />连网页骗术都么高明，下载下来的木马肯定也差不到哪里去。
+	]]></content>
+</entry><entry>
+	<title>[DNS] Cloudflare 要干啥</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864994#reply12" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864994</id>
+	<published>2022-07-08T11:14:15Z</published>
+	<updated>2022-07-08T16:09:39Z</updated>
+	<author>
+		<name>damngoto</name>
+		<uri>https://www.v2ex.com/member/damngoto</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>之前的域名绑定到了 Cf ，存储桶用的是腾讯云。
+在 Cf 的 DNS 配置里面把加速域名 <a href="http://cdn.ex.com" rel="nofollow">cdn.ex.com</a> CNAME 到腾讯云分配的 CDN 节点地址。
+通过 Cf 代理静态资源，这样的话流量钱就省了很多，只需要花一点点存储钱。
+但是昨天突然不行了，大概意思如下：</p>
+<p>Cloudflare generally does not allow customers to use CNAME records to point from their domain to a domain on another Cloudflare account, which is why you are seeing the Error 1014. Domains that are on the same Cloudflare account are not affected by this security check. However, if having both domains on the same account is not possible, you can make use of self-service SSL for SaaS product.</p>
+<p>有遇到相似问题的大佬吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] vercel 账号被封了，怎么办？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864993#reply3" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864993</id>
+	<published>2022-07-08T11:10:23Z</published>
+	<updated>2022-07-08T13:28:37Z</updated>
+	<author>
+		<name>muzihuaner</name>
+		<uri>https://www.v2ex.com/member/muzihuaner</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://gcore.jsdelivr.net/gh/muzihuaner/huancdn/img/202207081907855.jpg"/>
+今天下午，有人说网站不能访问了，我看了一下居然 vercel 账号被封了，也不知道是什么原因，那两天还用的好好的，这个要怎么解决呢</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] JDK 的 String 类的 UID 数字值是什么定义出来的？随便敲出来的？还是有什么生成规则吗？ serialVersionUID = -6849794470754667710L</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864992#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864992</id>
+	<published>2022-07-08T11:08:59Z</published>
+	<updated>2022-07-08T13:03:07Z</updated>
+	<author>
+		<name>xiaoyanbot</name>
+		<uri>https://www.v2ex.com/member/xiaoyanbot</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	
 	]]></content>
 </entry><entry>
-	<title>[微信] 2022 年开发微信小程序后端，选什么框架？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864772#reply12" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864772</id>
-	<published>2022-07-07T13:23:17Z</published>
-	<updated>2022-07-07T19:44:39Z</updated>
+	<title>[Python] pyqt5 textedit 重写点击事件后无法选中文本</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864991#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864991</id>
+	<published>2022-07-08T11:07:15Z</published>
+	<updated>2022-07-08T07:07:15Z</updated>
 	<author>
-		<name>androids</name>
-		<uri>https://www.v2ex.com/member/androids</uri>
+		<name>ferencz</name>
+		<uri>https://www.v2ex.com/member/ferencz</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>开发微信小程序，主要用来上传图片，用户也不多，后端想用 python 或者 node.js 。看了一圈，一大堆框架，看得眼花缭乱，不知道怎么选了。</p>
+	<pre><code class="language-python">import sys
+from PyQt5 import QtCore, QtWidgets
+
+def text_change():
+    print("change ok")
+def text_click(event):
+    print("clicked ok ")
+
+app = QtWidgets.QApplication(sys.argv)
+textEdit = QtWidgets.QTextEdit()
+textEdit.setGeometry(QtCore.QRect(30, 20, 351, 51))
+textEdit.setObjectName("textEdit")
+textEdit.mousePressEvent = text_click
+textEdit.textChanged.connect(text_change)
+textEdit.show()
+sys.exit(app.exec_())
+</code></pre>
+<p>重写点击事件后，无法选中文本框中的文本 怎么解决呢大佬 是不是覆盖了选中文本的事件？ 因为都有一个点击事件？感谢大佬</p>
 
 	]]></content>
 </entry><entry>
-	<title>[随想] 25 岁要不要回家种地</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864771#reply24" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864771</id>
-	<published>2022-07-07T13:20:28Z</published>
-	<updated>2022-07-07T02:17:36Z</updated>
+	<title>[Apple] 有 Mac 下图形化图像数据标注 App 推荐吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864989#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864989</id>
+	<published>2022-07-08T10:52:29Z</published>
+	<updated>2022-07-08T10:51:29Z</updated>
 	<author>
-		<name>xigua007</name>
-		<uri>https://www.v2ex.com/member/xigua007</uri>
+		<name>outtime</name>
+		<uri>https://www.v2ex.com/member/outtime</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	先交代下背景吧，江苏三线城市，产自农村生活在市区，直接距离 150 公里左右吧，<br /><br />在市区工作，内容通俗的讲就是做家装效果图的，早 9 晚 6 单休没社保坐室内薪资 5K ，我不理解为什么双休那么难普及，单休让我感觉没有个人生活，睁眼闭眼都是工作，精神比较紧绷。<br /><br />种地我有想过，家里的一亩地租出去给人种藕了，亲戚的地都荒着，加起来也有个二三亩左右，分的比较散，租地的话一年五百，但少的不租，要是能种起来会考虑承包几亩。<br />	我想种草莓，9 、10 月种，1 、2 月收； 3 、4 月换成西瓜，6 、7 月收，时间充分利用起来，<br />	效益问题：温室大棚、化肥、种子，没有深入了解，2 亩地加起来算一万的投入吧。<br />    草莓亩产 2000-3000 斤，15/斤  ≈30000 元<br />    西瓜亩产 6000-8000 斤，1.5/斤 ≈9000 元<br />    烈日下地的苦上学时每年都会体验到，真正的苦应该是回村后的寂寞，不知道能不能顶住！<br />打工稳定一年 6 个 W ，种地可能比这高，可能颗粒无收。<br /><br />大专学历，最近在准备自考，选的行政管理，都说这个专业容易考过就选了，最最最最后的打算就是考编考公，英语真难。
+	之前体验过用 YoloV5+Roboflow 训练了个模型玩，不过感觉门槛还是稍微有点高，想带一个计算机兴趣的朋友试玩一下。<br />在 Xcode 里面发现了 CreateML ，真的很友好，但是图像对象识别的训练数据还是要自己导入，且没有自带标注的 App ，在网上一顿搜发现一个 App： <a target="_blank" href="https://makeml.app" rel="nofollow noopener">https://makeml.app</a> 看了视频感觉蛮符合需要的，不过似乎仅限美区下载，而且看价格介绍好像只能免费导出三次数据？<br />Web 版的话发现一个 heartexlabs/label-studio 可以本地 Docker 部署，功能倒是蛮丰富，可惜没有中文。就不太考虑带着朋友学习，语言障碍带来的学习成本较高，再一个大部分需要科学。<br /><br />就来问问万能的 V 友有没有自己正在使用值得推荐的，优先好看的 App ，再一个如果有条件，可以体验一下 MakeML 这个 App ，如果导出是不限制的话帮忙上传一个 .app 供下载。谢谢各位
 	]]></content>
 </entry><entry>
-	<title>[酷工作] 字节跳动校招内推，帮忙指导简历</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864770#reply0" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864770</id>
-	<published>2022-07-07T13:12:01Z</published>
-	<updated>2022-07-07T13:12:01Z</updated>
+	<title>[问与答] 如何获取游戏盾的真实 IP，有没有什么方法或者思路？求大神指点。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864987#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864987</id>
+	<published>2022-07-08T10:37:09Z</published>
+	<updated>2022-07-08T06:37:09Z</updated>
 	<author>
-		<name>songwenju</name>
-		<uri>https://www.v2ex.com/member/songwenju</uri>
+		<name>ynaa</name>
+		<uri>https://www.v2ex.com/member/ynaa</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>字节校招内推，帮忙指导简历，发送到 <a href="mailto:songwenju@bytedance.com">songwenju@bytedance.com</a> 。内推码：R7HJMPZ 或点击链接： <a href="https://jobs.bytedance.com/campus/position?referral_code=R7HJMPZ" rel="nofollow">https://jobs.bytedance.com/campus/position?referral_code=R7HJMPZ</a> 内推时间：2022 年 7 月 7 日-7 月 31 日 招聘对象：2022 年 9 月-2023 年 8 月期间毕业且最高学历毕业后无全职工作经验。研发类应届生岗位，部分岗位仅在提前批开放，笔试全免，机会加一提前批结果不影响秋招。</p>
+	<p>如何获取游戏盾的真实 IP ，有没有什么方法或者思路？求大神指点。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 圈 X 如果没有节点，可以单纯用来去广告吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864768#reply4" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864768</id>
-	<published>2022-07-07T12:52:57Z</published>
-	<updated>2022-07-07T15:53:30Z</updated>
+	<title>[微信] Play 版本微信修复打开小程序一直更新中？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864986#reply2" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864986</id>
+	<published>2022-07-08T10:26:41Z</published>
+	<updated>2022-07-08T10:37:52Z</updated>
 	<author>
-		<name>Rrrrrr</name>
-		<uri>https://www.v2ex.com/member/Rrrrrr</uri>
+		<name>alexlee0728</name>
+		<uri>https://www.v2ex.com/member/alexlee0728</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题..
+	Play 版本微信修复打开小程序一直更新中？更新版本后似乎正常了，之前打开小程序经常会一直更新中，得退出重新进。
 	]]></content>
 </entry><entry>
-	<title>[酷工作] [字节跳动-23 届秋招提前批来啦🎉]</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864767#reply7" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864767</id>
-	<published>2022-07-07T12:35:36Z</published>
-	<updated>2022-07-07T13:41:07Z</updated>
+	<title>[问与答] 优质的儿童 动画片 环境如何创造？关键字：奈飞 迪士尼</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864985#reply13" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864985</id>
+	<published>2022-07-08T10:15:59Z</published>
+	<updated>2022-07-08T11:06:06Z</updated>
 	<author>
-		<name>kwanwo</name>
-		<uri>https://www.v2ex.com/member/kwanwo</uri>
+		<name>Barnard</name>
+		<uri>https://www.v2ex.com/member/Barnard</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	 [为什么选择提前批] <br />笔试全免：所有岗位无笔试，少闯一关，直通面试<br /><br />机会加一：多一次投递机会，提前批结果不影响秋招<br /><br />流程加速：投递到 Offer 平均时间比正式批快一周<br /><br />快人一步：最早 7 月拿 Offer ，提前锁定心仪岗位<br /><br />限时上新：部分岗位仅在提前批开放，瞄准机会别错过<br /><br />字节跳动校招内推码: E7QW11D <br />投递链接: <a target="_blank" href="https://jobs.toutiao.com/s/YKs9Jsk" rel="nofollow noopener">https://jobs.toutiao.com/s/YKs9Jsk</a>
+	<h2>一、现状</h2>
+<p>笔者家里用的是小米电视，娃刚满周岁，家中两老人，家里老人基本不喜欢看电视（喜欢麻将），媳妇偶尔看芒果综艺，我经常出差，偶尔电脑上看看优质电影，总结：电视可能只有放给小孩看。</p>
+<h2>二、痛点</h2>
+<p>国内的电视、影视 APP 个人感觉有点不太健康，尤其是儿童动画片，小孩子最容易模仿动画片里面的动作、语言甚至是文化，笔者个人经历和邻居、亲戚小孩都可以看的出来，所以家里一直都不充值电视会员，并且也尽量不想让小孩被这些文化侵入，等到幼儿园、小学那些环境的影响，没办法也没办法了。</p>
+<h2>三、想法</h2>
+<p>为了营造好一些的儿童动画片环境，给他一个更加健康、友好氛围、甚至有英语环境的影视环境，笔者有以下计划：</p>
+<p>1.小米电视刷水滴 rom ，去掉官方的影视，变成无内容的显示器（有待验证）；</p>
+<p>2.在群晖 NAS 上下载迪士尼动画片、国内较好的动画片、国外动画片，搭配电视海报墙，通过盒子或者小米电视直接播放，只能看下载过着挂载阿里云盘的视频（相当于自己审核过的吧）；</p>
+<p>3.通过购买奈飞 /迪士尼会员，使用小米盒子国际版直接观看奈飞 /迪士尼的儿童频道；</p>
+<p>4.家里大人的手机，不让小孩看抖音、西瓜视频等 APP ，要看视频，只给奈飞，或者其他。</p>
+<h2>四、讨论</h2>
+<p>1.大家觉得如何 ？
+2.一些优质的动画片 不知哪里的渠道下载比较好？ 在淘宝上找过，要么质量比较差，要么就没有，可能也是版权问题</p>
+
 	]]></content>
 </entry><entry>
-	<title>[分享发现] 海鲜市场华强北内存试水</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864766#reply2" />
-	<id>tag:www.v2ex.com,2022-07-07:/t/864766</id>
-	<published>2022-07-07T12:25:54Z</published>
-	<updated>2022-07-07T10:24:54Z</updated>
+	<title>[深圳] 摇了 12 期，今天终于摇中了粤 b</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864984#reply0" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864984</id>
+	<published>2022-07-08T10:15:01Z</published>
+	<updated>2022-07-08T06:15:01Z</updated>
 	<author>
-		<name>dyf991645</name>
-		<uri>https://www.v2ex.com/member/dyf991645</uri>
+		<name>masker</name>
+		<uri>https://www.v2ex.com/member/masker</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>频率对不上，管我机器支不支持；
-说颗粒肯定原厂的，我说不是原厂的你也造不出来，笑死。
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2-cdn.oneitfarm.com/FjmcWZlzoiewwk6wfJsln79KwfhK"/></p>
+	<p>但听说要买 30 万的以上的燃油车？ 但问了卖车的销售，说的又是摇了 60 期以上的专项摇号才是买 30 万的</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Mac mini] 现在买 mac mini 是个好时机吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864983#reply1" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864983</id>
+	<published>2022-07-08T10:12:13Z</published>
+	<updated>2022-07-08T11:12:13Z</updated>
+	<author>
+		<name>leoli</name>
+		<uri>https://www.v2ex.com/member/leoli</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	平时很少关注苹果发布新品之类的事件，所以不太清楚什么时候买比较合适，目前的需求：<br /><br />- 想买个 mac mini M1 16G+1T 的配置，替换掉自己的黑苹果。<br /><br />想请教大家的：<br /><br />1. 这个时间点买是否合适，会不会刚买了马上降价？<br />2. 我打算拼多多买，这个配置我看价格是 8699 （预售），不会有坑吧，或者有没有更好的渠道？
+	]]></content>
+</entry><entry>
+	<title>[程序员] 如果你感兴趣，可以来看看我对公司产品网络的优化</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864982#reply8" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864982</id>
+	<published>2022-07-08T10:07:26Z</published>
+	<updated>2022-07-08T12:38:12Z</updated>
+	<author>
+		<name>isno</name>
+		<uri>https://www.v2ex.com/member/isno</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>公众号地址： </p>
+<p><a href="https://mp.weixin.qq.com/s/o9pGAcczkJocstpEBYEdvA" rel="nofollow">https://mp.weixin.qq.com/s/o9pGAcczkJocstpEBYEdvA</a></p>
+<p>如果你感兴趣，点个赞，我继续写下一篇 https 的优化实践。</p>
+<p><img alt="thebyte 公众号" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://assets.iyoudian.cn/uploads/WechatIMG98.jpeg"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[硬件] hhkb 在 m1 pro 上的 f 键怎么按？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864981#reply4" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864981</id>
+	<published>2022-07-08T10:00:03Z</published>
+	<updated>2022-07-08T16:28:39Z</updated>
+	<author>
+		<name>frank1256</name>
+		<uri>https://www.v2ex.com/member/frank1256</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题</p>
+<p>m1pro,上 fn+数字键，不是 f 键了。变成功能键，例如 fn+12 是放大音量，那 f12 怎么按哇</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Rust] VSCode 里咋弄折行？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864980#reply6" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864980</id>
+	<published>2022-07-08T09:52:46Z</published>
+	<updated>2022-07-08T12:42:44Z</updated>
+	<author>
+		<name>ecloud</name>
+		<uri>https://www.v2ex.com/member/ecloud</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>rust 真的是能写出一行非常非常非常长的代码...</p>
+<pre><code>let _ = cfg.insert("redis_addr", "redis://".to_string() + config_file.get_str("redis_addr").expect("&lt;Config error&gt; ").as_ref() + ":" + config_file.get_str("redis_port").expect("&lt;Config error&gt; ").as_ref());
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 使用其他程序完全相同数据库字段、结构，只进行逻辑层开发，是否侵 权</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864979#reply4" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864979</id>
+	<published>2022-07-08T09:51:59Z</published>
+	<updated>2022-07-08T10:48:59Z</updated>
+	<author>
+		<name>Zerek</name>
+		<uri>https://www.v2ex.com/member/Zerek</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如果是，那么在自己设计的数据库结构下，“兼容”/“导入”其他程序的数据库是否属于侵 quan</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] Windows 下有没有类似 Mac Thor 或者 Snap 等可以使用快捷键切换应用的开源软件？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864978#reply8" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864978</id>
+	<published>2022-07-08T09:51:43Z</published>
+	<updated>2022-07-08T14:50:19Z</updated>
+	<author>
+		<name>cocong</name>
+		<uri>https://www.v2ex.com/member/cocong</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>在网上找了老半天，每一个好用的。</p>
+<p>公司网络安全高，不是开源的最好也不要用，而且很多也被限制无法下载。</p>
+<p>我就想找一个给应用设置快捷键，然后用快捷键切换应用，怎么就这么难呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 请教 App Store 如何在有余额的情况下优先使用支付宝扣款</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864977#reply2" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864977</id>
+	<published>2022-07-08T09:49:15Z</published>
+	<updated>2022-07-08T10:41:16Z</updated>
+	<author>
+		<name>yohole</name>
+		<uri>https://www.v2ex.com/member/yohole</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>支付宝每周五都会搞 App Store 相关的活动，最近从活动中领取了不少可以直接抵扣的金额。</p>
+<p>但是发现在 App Store 有余额的前提，无法设置优先支付宝扣款</p>
+<p>暂时不确定是不能设置还是没有找到对的设置路径，虚心请教</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Visual Studio Code] Visual Studio Code Python - 2022 年 7 月更新 - 嵌入类型提示和 Jupyter 设置体验升级</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864976#reply2" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864976</id>
+	<published>2022-07-08T09:42:02Z</published>
+	<updated>2022-07-08T10:26:24Z</updated>
+	<author>
+		<name>winffee</name>
+		<uri>https://www.v2ex.com/member/winffee</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我们很高兴地宣布，2022 年 7 月发布的 Visual Studio Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" rel="nofollow">Python</a>和<a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter" rel="nofollow">Jupyter</a>扩展现已推出。</p>
+<p>此版本包括 <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance" rel="nofollow">Pylance</a> 的嵌入类型提示和 Jupyter 笔记本设置体验的改进。如果您有兴趣，可以在我们的日志中查看<a href="https://github.com/Microsoft/vscode-python/blob/master/CHANGELOG.md" rel="nofollow">Python</a>、<a href="https://github.com/microsoft/vscode-jupyter/blob/main/CHANGELOG.md" rel="nofollow">Jupyter</a>和<a href="https://github.com/microsoft/pylance-release/blob/main/CHANGELOG.md" rel="nofollow">Pylance</a>扩展的完整更新内容。</p>
+<p><strong>嵌入类型提示</strong></p>
+<p>嵌入提示在编辑器中将内联信息添加到您的代码中，可以帮助您一目了然地理解变量或函数的含义。</p>
+<p>在这个版本中，我们在使用<a href="https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance" rel="nofollow">Pylance</a>时添加了两种类型的嵌入提示：变量类型和返回类型。</p>
+<p>返回类型嵌入提示会显示没有进行显式注释的函数的返回类型。要启用它，您可以在 settings.json 中添加以下设置 (<strong>Preferences: Open Settings (JSON)</strong>) ：</p>
+<pre><code class="language-json">"python.analysis.inlayHints.functionReturnTypes"：ture
+</code></pre>
+<p>同样，变量类型嵌入提示会显示没有进行显式类型注释的变量类型。您可以通过以下设置来启用它：</p>
+<pre><code class="language-json">"python.analysis.inlayHints.variableTypes"：true
+</code></pre>
+<p><a href="https://devblogs.microsoft.com/python/wp-content/uploads/sites/12/2022/07/July2022-InlayHints2-1-1024x639.png" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://devblogs.microsoft.com/python/wp-content/uploads/sites/12/2022/07/July2022-InlayHints2-1-1024x639.png"/></a></p>
+<p><em>主题：</em><a href="https://marketplace.visualstudio.com/items?itemName=LanceWilhelm.horizon-extended" rel="nofollow"><em>Horizon Extended</em></a></p>
+<p>值得注意的是，这些提示不会更改代码，它们只会将信息显示在编码界面。与此同时，我们正在努力增加对代码<a href="https://github.com/microsoft/pylance-release/issues/2970" rel="nofollow">添加建议注释</a>的功能，敬请期待！</p>
+<p><strong>改进 Jupyter 笔记本的设置体验</strong></p>
+<p>我们改进了 Jupyter 中的扩展推荐流程，以帮助改善未安装 Python 或 Jupyter 扩展时的入门体验。在 VS Code 中打开 Jupyter  Notebook 后，当您尝试运行单元或选择内核时，您将看到"install suggested extensions"选项：</p>
+<p><a href="https://devblogs.microsoft.com/python/wp-content/uploads/sites/12/2022/07/July2022-InstallJupyterPythonSuggestions-1024x144.png" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://devblogs.microsoft.com/python/wp-content/uploads/sites/12/2022/07/July2022-InstallJupyterPythonSuggestions-1024x144.png"/></a></p>
+<p>这个更改极大简化了在 VS Code 中运行第一个笔记本单元的步骤。</p>
+<p><strong>其他更改和增强</strong></p>
+<p>我们还添加了一些小的增强功能并修复了用户请求的问题，这些功能应该可以改善您在 Visual Studio Code 中使用 Python 和 Jupyter Notebooks 的体验。一些显著的变化包括：</p>
+<ul>
+<li>
+<p>在 conda env 缺少具有有效 python 二进制文件的解释器时，我们为其添加了一个警告指示，(<a href="https://github.com/microsoft/vscode-python/issues/18934" rel="nofollow">vscode-python#18934</a>)。</p>
+</li>
+<li>
+<p>在虚拟环境中安装工具时不再使用 –user 标志（<a href="https://github.com/microsoft/vscode-python/issues/14327" rel="nofollow">vscode-python#14327</a>）。</p>
+</li>
+<li>
+<p>我们解决了一些与 Jupyter 扩展中的资源（图像、脚本等）加载相关的 IPyWidget 问题，改进了对 <a href="https://github.com/vegafusion/vegafusion" rel="nofollow">VegaFusion</a>、  <a href="https://ipyleaflet.readthedocs.io/en/latest/index.html" rel="nofollow">ipyleaflet</a>、  <a href="https://github.com/lab-cosmo/chemiscope" rel="nofollow">Chemiscope</a>、  <a href="https://github.com/takluyver/mobilechelonian" rel="nofollow">mobilechelonian</a>和 <a href="https://github.com/gkvoelkl/ipython-turtle-widget" rel="nofollow">ipyturtle</a>等小部件的支持(<a href="https://github.com/microsoft/vscode-jupyter/pull/10459" rel="nofollow">vscode-jupyter#10459</a>)。</p>
+</li>
+<li>
+<p>我们为<a href="https://marketplace.visualstudio.com/itemdetails?itemName=ms-toolsai.jupyter" rel="nofollow">Jupyter</a>扩展的 Web 版本添加了新功能 ：</p>
+<ul>
+<li>导出交互式窗口( <a href="https://github.com/Microsoft/vscode-jupyter/issues/10291" rel="nofollow">vscode-jupyter#10291</a> )</li>
+<li>调试交互窗口</li>
+<li>交互式窗口中的可折叠单元格( <a href="https://github.com/Microsoft/vscode-jupyter/issues/10524" rel="nofollow">vscode-jupyter#10524</a> )</li>
+</ul>
+</li>
+</ul>
+<p>我们要特别感谢本月的贡献者：</p>
+<ul>
+<li><a href="https://github.com/Lakshmikanth2001" rel="nofollow">Lakshmikanth2001</a> ：为 django-html 和 django-txt 添加断点支持（<a href="https://github.com/microsoft/vscode-python/pull/19288" rel="nofollow">vscode-python#19288</a>）。</li>
+<li><a href="https://github.com/ksy7588" rel="nofollow">ksy7588</a>：使用实验组件修复单元测试发现问题（<a href="https://github.com/microsoft/vscode-python/pull/19324" rel="nofollow">vscode-python#19324</a>）。</li>
+<li><a href="https://github.com/usta" rel="nofollow">usta</a>：修复 flake8Path 描述的变量名称（<a href="https://github.com/microsoft/vscode-python/pull/19313" rel="nofollow">vscode-python#19313</a>）。</li>
+<li><a href="https://github.com/ChaseKnowlden" rel="nofollow">ChaseKnowlden</a>：修复自述文件中不一致的链接（<a href="https://github.com/Microsoft/vscode-jupyter/issues/10396" rel="nofollow">vscode-jupyter#10396</a>）。</li>
+<li><a href="https://github.com/kilacoda" rel="nofollow">kilacoda</a>：从重新启动内核模式中删除额外的按钮（<a href="https://github.com/Microsoft/vscode-jupyter/issues/10539" rel="nofollow">vscode-jupyter#10539</a>）。</li>
+<li><a href="https://github.com/afeld" rel="nofollow">afeld</a>：在 README 中围绕扩展添加更多上下文内容( <a href="https://github.com/microsoft/vscode-black-formatter/issues/82" rel="nofollow">vscode-black-formatter#82</a> )。</li>
+</ul>
+<p>通过从 Marketplace 下载 <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" rel="nofollow">Python</a> 扩展 和 <a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter" rel="nofollow">Jupyter</a> 扩展来尝试这些新改进，或者直接从 Visual Studio Code 中的扩展视图安装它们（ Ctrl + Shift + X 或 ⌘  +  ⇧  + X ）。您可以在文档中了解有关 <a href="https://code.visualstudio.com/docs/python/python-tutorial" rel="nofollow">VS Code Python</a> 的更多信息。如果您遇到任何问题或想提出建议， 请在 <a href="https://github.com/Microsoft/vscode-python" rel="nofollow">GitHub</a> 页面上<a href="https://github.com/microsoft/vscode-python/issues/new/choose" rel="nofollow">提出问题</a>。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 服务端有什么难的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864975#reply36" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864975</id>
+	<published>2022-07-08T09:33:41Z</published>
+	<updated>2022-07-08T15:57:02Z</updated>
+	<author>
+		<name>IssacTomatoTan</name>
+		<uri>https://www.v2ex.com/member/IssacTomatoTan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>服务端有什么难的？感觉就是写一下逻辑，最多业务逻辑复杂点。好像也没什么。说访问量大吧，大的话就加机器常规操作，而且更多的程序人写的都是虾 78 的业务东西而已。指明个方向？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[酷工作] [北京] 九州风神招聘 Electron 客户端工程师</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864974#reply14" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864974</id>
+	<published>2022-07-08T09:32:17Z</published>
+	<updated>2022-07-08T15:52:27Z</updated>
+	<author>
+		<name>Boyang</name>
+		<uri>https://www.v2ex.com/member/Boyang</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	对！我们就是那个做 CPU 散热器的九州风神！<br />实际上我们不光做散热器，我们还做很多与计算机相关的设备。比如：机箱、电源、笔记本散热垫、鼠标、键盘、风扇、电竞椅等等等等。<br />现在我们需要一个电脑端的软件，把我们所有的设备都链接起来，让他们能够更好的工作，让用户能够更好的享受这些装备所带来的乐趣。<br />于是乎我们需要招聘对这个行业感兴趣，同时可以与我们一起完成我们的设想，构建庞大硬件帝国的伙伴！<br /><br />职位描述：<br />1. 负责商业软件开发能力的持续构建，主动提升软件性能、稳定性与易用性；<br />2. 负责上位机控制软件的设计与开发；<br />3. 与产品经理、硬件工程师等合作，深度参与产品需求分析和方案设计；<br />4. 负责新的技术方向调研和技术难点攻坚；<br /><br />职位要求：<br />1. 计算机、软件等相关专业本科及以上学历，具有 2 年以上相关工作经验，或同等在校实践经历；<br />2. 熟悉掌握 HTML 、CSS 、JavaScript 等编程语言，熟练掌握常用 Web 前端框架；<br />3. 熟悉 Node.js 、Electron 等后端及应用程序开发框架、数据库应用；<br /><br /><br />加分项<br />了解 Electron 与 windows DLL 之间的调用关系；<br />掌握串口、USBHID 、Socket 通信技术，有通讯协议、外设连接控制、串口通信等相关开发经验；<br /><br />有疑问和感兴趣的同志们都可以找我聊天哟！<br />微信：boyangim<br />邮箱： boyang@deepcool.com
+	]]></content>
+</entry><entry>
+	<title>[C] 求大哥帮忙解析下 makefile 文件里的参数</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/864973#reply3" />
+	<id>tag:www.v2ex.com,2022-07-08:/t/864973</id>
+	<published>2022-07-08T09:31:54Z</published>
+	<updated>2022-07-08T10:38:28Z</updated>
+	<author>
+		<name>hhhhhh123</name>
+		<uri>https://www.v2ex.com/member/hhhhhh123</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>下面是 makefile 文件代码， 生成的是.exe ，我想改成 dll 文件，但是不知道改什么。 看网上的一些例子，但是没有找到关键点。 希望有大佬帮忙分析下 1. 每行是什么意思。2.怎么改参数生成为 dll 文件</p>
+<p>CC=gcc</p>
+<p>all: five seven  </p>
+<p>five: test/five.o src/evaluator5.o src/hash.o src/hashtable.o src/hashtable5.o src/hashtable7.o src/dptables.o<br/>
+${CC} ${CFLAGS} $^ -o $@</p>
+<p>seven: test/seven.o src/evaluator7.o src/hash.o src/hashtable.o src/hashtable5.o src/hashtable7.o src/dptables.o<br/>
+${CC} ${CFLAGS} $^ -o $@</p>
+<p>%.o: %.c<br/>
+${CC} -c ${CFLAGS} $&lt; -o $@</p>
+<p>clean:<br/>
+rm -f src/<em>.o test/</em>.o *.o five seven</p>
 
 	]]></content>
 </entry>
