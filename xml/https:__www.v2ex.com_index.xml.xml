@@ -8,10 +8,1707 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-07-09T15:45:22Z</updated>
+<updated>2022-07-09T21:45:39Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[Node.js] Nestjs 最佳实践教程:4 排序,分页与过滤</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865211#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865211</id>
+	<published>2022-07-10T01:45:39Z</published>
+	<updated>2022-07-09T21:45:39Z</updated>
+	<author>
+		<name>lichnow</name>
+		<uri>https://www.v2ex.com/member/lichnow</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>教程地址: <a href="https://v.pincman.com/courses/64.html" rel="nofollow">https://v.pincman.com/courses/64.html</a></li>
+<li>视频地址: <a href="https://www.bilibili.com/video/BV1DZ4y1Y78S?spm_id_from=333.999.0.0&amp;vd_source=6ed9f449094fe5d35bc09c3feee1c8e2" rel="nofollow">https://www.bilibili.com/video/BV1DZ4y1Y78S?spm_id_from=333.999.0.0&amp;vd_source=6ed9f449094fe5d35bc09c3feee1c8e2</a></li>
+<li>qq: 1849600177</li>
+<li>qq 群: 455820533</li>
+</ul>
+<blockquote>
+<p>另，本人在找工作中，希望能有远程工作匹配(无法去外地)，有需要的老板可以看一下我的个人介绍： <a href="https://pincman.com/about" rel="nofollow">https://pincman.com/about</a></p>
+</blockquote>
+<h2>学习目标</h2>
+<ul>
+<li>重载 TreeRepository 自带方法来对树形结构的数据进行扁平化处理</li>
+<li>对 Typeorm 查询出的数据列表进行分页处理</li>
+<li>通过请求中的 query 查询对数据进行筛选处理,比如排序,过滤等</li>
+<li>实现发布文章和取消发布的功能</li>
+<li>Typeorm 模型事件和 Subscriber(订阅者)的使用</li>
+<li>使用<code>sanitize-html</code>对文章内容进行防注入攻击处理</li>
+</ul>
+<h2>预装依赖</h2>
+<ul>
+<li><a href="https://github.com/nestjsx/nestjs-typeorm-paginate" rel="nofollow">nestjs-typeorm-paginate</a>实现分页</li>
+<li><a href="https://github.com/apostrophecms/sanitize-html" rel="nofollow">sanitize-html</a>过滤<code>html</code>标签,防注入攻击</li>
+<li><a href="https://github.com/TehShrike/deepmerge" rel="nofollow">deepmerge</a>深度合并对象</li>
+</ul>
+<pre><code class="language-shell">~ pnpm add nestjs-typeorm-paginate sanitize-html deepmerge &amp;&amp; pnpm add @types/sanitize-html -D
+</code></pre>
+<h2>文件结构</h2>
+<p>创建文件</p>
+<pre><code class="language-shell">cd src/modules/content &amp;&amp; \
+mkdir subscribers &amp;&amp; \
+touch dtos/query-category.dto.ts \
+dtos/query-post.dto.ts \
+subscribers/post.subscriber.ts \
+subscribers/index.ts \
+services/sanitize.service.ts \
+&amp;&amp; cd ../../../
+</code></pre>
+<p>与上一节一样,这一节的新增和修改集中于<code>ContentModule</code></p>
+<pre><code>src/modules/content
+├── constants.ts
+├── content.module.ts
+├── controllers
+│   ├── category.controller.ts
+│   ├── comment.controller.ts
+│   ├── index.ts
+│   └── post.controller.ts
+├── dtos
+│   ├── create-category.dto.ts
+│   ├── create-comment.dto.ts
+│   ├── create-post.dto.ts
+│   ├── index.ts
+│   ├── query-category.dto.ts
+│   ├── query-post.dto.ts
+│   ├── update-category.dto.ts
+│   └── update-post.dto.ts
+├── entities
+│   ├── category.entity.ts
+│   ├── comment.entity.ts
+│   ├── index.ts
+│   └── post.entity.ts
+├── repositories
+│   ├── category.repository.ts
+│   ├── comment.repository.ts
+│   ├── index.ts
+│   └── post.repository.ts
+├── services
+│   ├── category.service.ts
+│   ├── comment.service.ts
+│   ├── index.ts
+│   ├── post.service.ts
+│   └── sanitize.service.ts
+└── subscribers
+    ├── index.ts
+    └── post.subscriber.ts
+</code></pre>
+<h2>应用编码</h2>
+<p>这节多了一个新的概念,即<code>subscriber</code>,具体请查阅<code>typeorm</code>文档,当然你也可以在模型中使用事件处理函数,效果没差别</p>
+<h3>模型</h3>
+<h4><code>CategoryEntity</code></h4>
+<p><em>代码:src/modules/content/entities/category.entity.ts</em></p>
+<ul>
+<li>添加<code>order</code>字段用于排序</li>
+<li>添加<code>level</code>属性(虚拟字段)用于在打平树形数据的时候添加当前项的等级</li>
+</ul>
+<h4>PostEntity</h4>
+<p><em>代码: src/modules/content/entities/post.entity.ts</em></p>
+<p><code>type</code>字段的类型用<code>enum</code>枚举来设置,首先需要定义一个<code>PostBodyType</code>的<code>enum</code>类型,可以添加一个<code>constants.ts</code>文件来统一定义这些<code>enum</code>和常量</p>
+<ul>
+<li>添加<code>publishedAt</code>字段用于控制发布时间和发布状态</li>
+<li>添加<code> type</code>字段用于设置发布类型</li>
+<li>添加<code>customOrder</code>字段用于自定义排序</li>
+</ul>
+<h3>存储类</h3>
+<h4><code>CategoryRepository</code></h4>
+<p><em>代码: src/modules/content/repositories/category.repository.ts</em></p>
+<p>因为<code>CategoryRepository</code>继承自<code>TreeRepository</code>,所以我们在<code>typeorm</code>源码中找到这个类,并对部分方法进行覆盖,如此我们就可以对树形分类进行排序,覆盖的方法如下</p>
+<blockquote>
+<p>当然后面会讲到更加深入的再次封装,此处暂时先这么用</p>
+</blockquote>
+<ul>
+<li><code>findRoots</code> 为根分类列表查询添加排序</li>
+<li><code>createDescendantsQueryBuilder</code> 为子孙分类查询器添加排序</li>
+<li><code>createAncestorsQueryBuilder</code> 为祖先分类查询器添加排序</li>
+</ul>
+<h3>DTO 验证</h3>
+<p>新增<code>QueryCategoryDto</code>和<code>QueryPostDto</code>用于查询分类和文章时进行分页以及过滤数据和设置排序类型等</p>
+<p>在添加<code>DTO</code>之前,现在添加几个数据转义函数,以便把请求中的字符串改成需要的数据类型</p>
+<pre><code>// src/core/helpers.ts
+
+// 用于请求验证中的 number 数据转义
+export function tNumber(value?: string | number): string |number | undefined
+// 用于请求验证中的 boolean 数据转义
+export function tBoolean(value?: string | boolean): string |boolean | undefined
+// 用于请求验证中转义 null
+export function tNull(value?: string | null): string | null | undefined
+</code></pre>
+<p>修改<code>create-category.dto.ts</code>和<code>create-comment.dto.ts</code>的<code>parent</code>字段的<code>@Transform</code>装饰器</p>
+<pre><code>export class CreateCategoryDto {
+...
+    @Transform(({ value }) =&gt; tNull(value))
+    parent?: string;
+}
+</code></pre>
+<p>添加一个通用的<code>DTO</code>接口类型</p>
+<pre><code>// src/core/types.ts
+
+// 分页验证 DTO 接口
+export interface PaginateDto {
+    page: number;
+    limit: number;
+}
+</code></pre>
+<h4><code>QueryCategoryDto</code></h4>
+<p><em>代码: src/modules/content/dtos/query-category.dto.ts</em></p>
+<ul>
+<li><code>page</code>属性设置当前分页</li>
+<li><code>limit</code>属性设置每页数据量</li>
+</ul>
+<h4><code>QueryPostDto</code></h4>
+<p>除了与<code>QueryCateogryDto</code>一样的分页属性外,其它属性如下</p>
+<ul>
+<li><code>orderBy</code>用于设置排序类型</li>
+<li><code>isPublished</code>根据发布状态过滤文章</li>
+<li><code>category</code>过滤出一下分类及其子孙分类下的文章</li>
+</ul>
+<p><code>orderBy</code>字段是一个<code>enum</code>类型的字段,它的可取值如下</p>
+<ul>
+<li><code>CREATED</code>: 根据创建时间降序</li>
+<li><code>UPDATED</code>: 根据更新时间降序</li>
+<li><code>PUBLISHED</code>: 根据发布时间降序</li>
+<li><code>COMMENTCOUNT</code>: 根据评论数量降序</li>
+<li><code>CUSTOM</code>: 根据自定义的<code>order</code>字段升序</li>
+</ul>
+<h3>服务类</h3>
+<h4><code>SanitizeService</code></h4>
+<p><em>代码: src/modules/content/services/sanitize.service.ts</em></p>
+<p>此服务类用于<code>clean html</code></p>
+<p><code>sanitize</code>方法用于对 HTML 数据进行防注入处理</p>
+<h4><code>CategoryService</code></h4>
+<p><em>代码:src/modules/content/services/category.service.ts</em></p>
+<p>添加一个辅助函数,用于对打平后的树形数据进行分页</p>
+<pre><code>// src/core/helpers.ts
+export function manualPaginate&lt;T extends ObjectLiteral&gt;(
+    { page, limit }: PaginateDto,
+    data: T[],
+): Pagination&lt;T&gt;
+</code></pre>
+<p>新增<code>paginate(query: QueryCategoryDto)</code>方法用于处理分页</p>
+<pre><code>async paginate(query: QueryCategoryDto) {
+    // 获取树形数据
+    const tree = await this.findTrees();
+    // 打平树形数据
+    const list = await this.categoryRepository.toFlatTrees(tree);
+    // 调用手动分页函数进行分页
+    return manualPaginate(query, list);
+}
+</code></pre>
+<h4><code>PostService</code></h4>
+<p><em>代码:src/modules/content/services/post.service.ts</em></p>
+<ul>
+<li><code>getListQuery</code>: 用于构建过滤与排序以及通过分类查询文章数据等功能的<code>query</code>构建器</li>
+<li><code>paginate</code>: 调用<code>getListQuery</code>生成<code>query</code>,并作为<code>nestjs-typeorm-paginate</code>的<code> paginate</code>的参数对数据进行分页</li>
+</ul>
+<pre><code>async paginate(params: FindParams, options: IPaginationOptions) {
+    const query = await this.getListQuery(params);
+    return paginate&lt;PostEntity&gt;(query, options);
+}
+</code></pre>
+<h3>订阅者</h3>
+<h4><code>PostSubscriber</code></h4>
+<p><em>代码: src/modules/content/subscribers/post.subscriber.ts</em></p>
+<ul>
+<li><code>beforeInsert</code>(插入数据前事件): 如果在添加文章的同时发布文章,则设置当前时间为发布时间</li>
+<li><code>beforeUpdate</code>(更新数据前事件): 更改发布状态会同时更新发布时间的值,如果文章更新为未发布状态,则把发布时间设置为 null</li>
+<li><code>afterLoad</code>(加载数据后事件): 对 HTML 类型的文章内容进行去标签处理防止注入攻击</li>
+</ul>
+<p><strong>一个需要注意的点是需要在</strong><code>subcriber</code>类的构造函数中注入<code>Connection</code>才能获取链接</p>
+<pre><code>   constructor(
+        connection: Connection,
+        protected sanitizeService: SanitizeService,
+    ) {
+        connection.subscribers.push(this);
+    }
+</code></pre>
+<h4>注册订阅者</h4>
+<p>把订阅者注册成服务后,由于在构造函数中注入了<code>connection</code>这个连接对象,所以<code>typeorm</code>会自动把它加载到这个默认连接的<code>subscribers</code>配置中</p>
+<pre><code>// src/modules/content/subscribers/post.subscriber.ts
+import * as SubscriberMaps from './subscribers';
+const subscribers = Object.values(SubscriberMaps);
+@Module({
+    ....
+    providers: [...subscribers, ...dtos, ...services],
+})
+</code></pre>
+<h3>控制器</h3>
+<h4><code>CategoryController</code></h4>
+<p><em>代码: src/modules/content/controllers/category.controller.ts</em></p>
+<ul>
+<li><code>list</code>: 通过分页来查找扁平化的分类列表</li>
+<li><code>index</code>: 把 url 设置成<code> @Get('tree')</code></li>
+</ul>
+<pre><code>    @Get()
+    // 分页查询
+    async list(
+        @Query(
+            new ValidationPipe({
+                transform: true,
+                forbidUnknownValues: true,
+                validationError: { target: false },
+            }),
+        )
+        query: QueryCategoryDto,
+    ) {
+        return this.categoryService.paginate(query);
+    }
+
+    // 查询树形分类
+    @Get('tree')
+    async index() {
+        return this.categoryService.findTrees();
+    }
+</code></pre>
+<h4><code>PostController</code></h4>
+<p><strong>代码: src/modules/content/controllers/post.controller.ts</strong></p>
+<p>修改<code>index</code>方法用于分页查询</p>
+<pre><code>// 通过分页查询数据
+async index(
+        @Query(
+            new ValidationPipe({
+                transform: true,
+                forbidUnknownValues: true,
+                validationError: { target: false },
+            }),
+        )
+        { page, limit, ...params }: QueryPostDto,
+    ) {
+        return this.postService.paginate(params, { page, limit });
+    }
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 两家人的烦恼</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865210#reply4" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865210</id>
+	<published>2022-07-10T01:35:48Z</published>
+	<updated>2022-07-10T01:51:18Z</updated>
+	<author>
+		<name>v2byy</name>
+		<uri>https://www.v2ex.com/member/v2byy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>娃还没满月，爸妈和岳母都来了帮忙。现在家里经常就有一些小事小闹。</p>
+<p>首先家里房子比较小，公共空间就只有个小客厅了，所以经常上午，下午，可能就各自呆在房间的时间居多。</p>
+<p>我爸妈的一些想法跟我们一些想法不一样，比如说产妇饮食问题，他们建议喝汤，排骨汤，鲫鱼汤等等，做饭有点咸，油腻。由于我媳妇现在不存在奶水不足的问题，而且她也不喜欢喝汤。这个沟通了几次，有所改善。生活习惯也很不一样，我爸妈习惯起早，但是起早又没什么事情干，基本也是在沙发上刷抖音之类的。</p>
+<p>我爸是脾气比较不好的人，以前家里都是他说了算，所以有一些饮食等等有冲突的时候，一说他就不开心，一不开心就说要回老家，说一堆再也不来的气话。</p>
+<p>我其实一开始也是想着以后我爸回去，我妈在这边帮忙带娃。后来跟我妈沟通之后，她说她一个人不适应，一个人她不太愿意。她是愿意带娃的。</p>
+<p>然后是我岳母，说真的，在育儿方面，她是更愿意学习，她在这边带娃我也觉得没问题。但是由于我媳妇还有个弟弟(已上大学)，现在老家没人照顾(吃饭问题)。</p>
+<p>我爸这个人经常脸色很难看，其实我是不希望跟他生活在一起的，否则免不了矛盾，况且家里小。</p>
+<p>今天就是因为岳母买了一些李子之类的水果，我爸说不要吃，他说娃现在拉的太多。我说没吃多少，水果适量就行，况且娃现在是正常的吃喝拉撒。我让他们别老是留在老一套上。</p>
+<p>结果我爸就说要回老家，再也不来。现在娃还没有满月，这样的事情已经发生过 3 ，4 回了。</p>
+<p>真的心累。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[小米] 千万别买小米平板的官方磁吸双面保护壳</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865209#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865209</id>
+	<published>2022-07-10T01:35:21Z</published>
+	<updated>2022-07-10T01:34:21Z</updated>
+	<author>
+		<name>azur</name>
+		<uri>https://www.v2ex.com/member/azur</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>千万别买小米平板的官方保护壳，做工很好，有品质感。
+但是真的是不好用，主要问题如下：</p>
+<ul>
+<li><strong>重，特别重</strong>。从贴膜裸奔到带壳，有明显的坠手感，手感上比 11 寸的 ipad pro 要沉得多</li>
+<li>保护壳的角度不好。平板支撑着放的时候几乎与桌面成 80 度，角度过大，看东西有点累</li>
+<li>正面的磁吸力也偏弱</li>
+</ul>
+<p>有没有合适的便宜的轻的保护壳求推荐。。。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 分享一款全平台笔记 app——Upnote</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865208#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865208</id>
+	<published>2022-07-10T01:04:38Z</published>
+	<updated>2022-07-10T01:04:38Z</updated>
+	<author>
+		<name>SenLief</name>
+		<uri>https://www.v2ex.com/member/SenLief</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<blockquote>
+<p>v2 上有不少的笔记 app ，但是少有全平台的又不那么贵的笔记 app ，Upnote 就是的 app ，出来了很多年，但是知道和用的人应该不是很多。</p>
+</blockquote>
+<p><a href="https://getupnote.com/" rel="nofollow">Upnote</a>-Organize Your Ideas</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://getupnote.com/static/images/sync.png"/></p>
+<p>特性</p>
+<ul>
+<li>支持 Mac, Windows, Linux, iOS and Android</li>
+<li>支持离线</li>
+<li>支持自动备份并同时导出 markdown 文件</li>
+<li>支持锁定</li>
+<li>支持链接到其他笔记（单链）</li>
+<li>支持版本历史</li>
+<li>支持 Web 剪藏</li>
+<li>支持笔记分享</li>
+<li>友好的编辑器输入（主要是表格）</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>全平台同步使用的 google 的云服务，所以同步需要 fq 。</li>
+<li>不支持数学公式</li>
+<li>不支持链接到块</li>
+<li>只有简单的标签系统</li>
+<li>中文翻译比较生硬</li>
+</ul>
+<p>价格
+0 .99 刀 /月，24.99 刀 /终生，我买的时候活动土耳其区记得是 60 块终生。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] v2 提示我回复这个内容需要注册满 240 天，然后我的发帖按钮也消失了，请问这是啥回事</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865207#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865207</id>
+	<published>2022-07-10T00:58:30Z</published>
+	<updated>2022-07-02T00:55:30Z</updated>
+	<author>
+		<name>MEIyiyi</name>
+		<uri>https://www.v2ex.com/member/MEIyiyi</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[Apple] apple watch 无限重启，怎么办？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865206#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865206</id>
+	<published>2022-07-10T00:38:41Z</published>
+	<updated>2022-07-10T00:37:41Z</updated>
+	<author>
+		<name>xtyao</name>
+		<uri>https://www.v2ex.com/member/xtyao</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>今晚从 13pm 导资料到 13pro ，导完后顺便在 apple watch 上重置，想不到的是过了一会黑屏了，按键无反应，试着放到充电座上，就出现了现在这种情况，无限重启，每一次都是出现白苹果界面后，五六秒后就息屏，息屏五六秒后又白苹果，反复循环…
+试过从底座上拿起，同时按着表冠+侧边按键十秒，还是一样先白苹果，五六秒后又息屏…</p>
+<p>2019 年 9 月时从 pdd 买的 s5 ，本来想着撑到 s8 出来再换，没想到…</p>
+<p>现在这情况还有救吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Node.js] Nestjs 最佳实践教程:3 模型关联与树形嵌套</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865204#reply0" />
+	<id>tag:www.v2ex.com,2022-07-10:/t/865204</id>
+	<published>2022-07-10T00:19:35Z</published>
+	<updated>2022-07-09T20:19:35Z</updated>
+	<author>
+		<name>lichnow</name>
+		<uri>https://www.v2ex.com/member/lichnow</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>教程地址: <a href="https://v.pincman.com/courses/64.html" rel="nofollow">https://v.pincman.com/courses/64.html</a></li>
+<li>视频地址: <a href="https://www.bilibili.com/video/BV1Ha411Q7iu?spm_id_from=333.999.0.0" rel="nofollow">https://www.bilibili.com/video/BV1Ha411Q7iu?spm_id_from=333.999.0.0</a></li>
+<li>qq: 1849600177</li>
+<li>qq 群: 455820533</li>
+</ul>
+<blockquote>
+<p>另，本人在找工作中，希望能有远程工作匹配(无法去外地)，有需要的老板可以看一下我的个人介绍： <a href="https://pincman.com/about" rel="nofollow">https://pincman.com/about</a></p>
+</blockquote>
+<h2>学习目标</h2>
+<p>这次教程在上一节的基础上实现一个简单的 CMS 系统,实现如下功能</p>
+<ul>
+<li>文章与分类多对多关联</li>
+<li>文章与评论一对多关联</li>
+<li>分类与评论的树形无限级嵌套</li>
+</ul>
+<h2>文件结构</h2>
+<p>这次的更改集中于<code>ContentModule</code>模块,编写好之后的目录结构如下</p>
+<pre><code class="language-shell">src/modules/content
+├── content.module.ts
+├── controllers
+│   ├── category.controller.ts
+│   ├── comment.controller.ts
+│   ├── index.ts
+│   └── post.controller.ts
+├── dtos
+│   ├── create-category.dto.ts
+│   ├── create-comment.dto.ts
+│   ├── create-post.dto.ts
+│   ├── index.ts
+│   ├── update-category.dto.ts
+│   └── update-post.dto.ts
+├── entities
+│   ├── category.entity.ts
+│   ├── comment.entity.ts
+│   ├── index.ts
+│   └── post.entity.ts
+├── repositories
+│   ├── category.repository.ts
+│   ├── comment.repository.ts
+│   ├── index.ts
+│   └── post.repository.ts
+└── services
+    ├── category.service.ts
+    ├── comment.service.ts
+    ├── index.ts
+    └── post.service.ts
+</code></pre>
+<pre><code class="language-shell">cd src/modules/content &amp;&amp; \
+touch controllers/category.controller.ts \
+controllers/comment.controller.ts \
+dtos/create-category.dto.ts \
+dtos/create-comment.dto.ts \
+dtos/update-category.dto.ts \
+entities/category.entity.ts \
+entities/comment.entity.ts \
+repositories/category.repository.ts \
+services/category.service.ts \
+services/comment.service.ts \
+&amp;&amp; cd ../../../
+</code></pre>
+<h2>应用编码</h2>
+<p>编码流程与上一节一样,entity-&gt;repository-&gt;dto-&gt;service-&gt;controller,最后注册</p>
+<h3>模型类</h3>
+<h4>模型关联</h4>
+<p>分别创建分类模型(<code>CategoryEntity</code>)和评论模型(<code>CommentEntity</code>),并和<code>PostEntity</code>进行<a href="https://typeorm.io/#/relations" rel="nofollow">关联</a></p>
+<p>分类模型</p>
+<pre><code class="language-typescript">// src/modules/content/entities/category.entity.ts
+@Entity('content_categories')
+export class CategoryEntity extends BaseEntity {
+  ...
+    // 分类与文章多对多关联
+    @ManyToMany((type) =&gt; PostEntity, (post) =&gt; post.categories)
+    posts!: PostEntity[];
+}
+</code></pre>
+<p>评论模型</p>
+<pre><code class="language-typescript">// src/modules/content/entities/comment.entity.ts
+@Entity('content_comments')
+export class CommentEntity extends BaseEntity {
+  ...
+   // 评论与文章多对一,并触发`CASCADE`
+    @ManyToOne(() =&gt; PostEntity, (post) =&gt; post.comments, {
+        nullable: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
+    post!: PostEntity;
+}
+</code></pre>
+<p>文章模型</p>
+<pre><code class="language-typescript">@Entity('content_posts')
+export class PostEntity extends BaseEntity {
+    // 评论数量
+    // 虚拟字段,在 Repository 中通过 QueryBuilder 设置
+    commentCount!: number;
+
+    // 文章与分类反向多对多关联
+    @ManyToMany((type) =&gt; CategoryEntity, (category) =&gt; category.posts, {
+        cascade: true,
+    })
+    @JoinTable()
+    categories!: CategoryEntity[];
+    // 文章与评论一对多关联
+    @OneToMany(() =&gt; CommentEntity, (comment) =&gt; comment.post, {
+        cascade: true,
+    })
+    comments!: CommentEntity[];
+}
+</code></pre>
+<h4>树形嵌套</h4>
+<p>评论模型与分类模型的树形嵌套实现基本一致,唯一的区别在于在删除父分类时子分类不会删除而是提升为顶级分类,而删除评论则连带删除其后代评论</p>
+<blockquote>
+<p><a href="https://typeorm.io/#/tree-entities" rel="nofollow">typeorm</a>有三种方案实现树形嵌套模型,我们使用综合来说最好用的一种,即物理路径(Materialized Path),原因在于 Adjacency list 的缺点是无法一次加载整个树,而 closure 则无法自动触发<code>Cascade</code></p>
+</blockquote>
+<pre><code class="language-typescript">// src/modules/content/entities/category.entity.ts
+@Entity('content_categories')
+// 物理路径嵌套树需要使用`@Tree`装饰器并以'materialized-path'作为参数传入
+@Tree('materialized-path')
+export class CategoryEntity extends BaseEntity {
+  ...
+    // 子分类
+    @TreeChildren({ cascade: true })
+    children!: CategoryEntity[];
+    // 父分类
+    @TreeParent({ onDelete: 'SET NULL' })
+    parent?: CategoryEntity | null;
+}
+    
+// src/modules/content/entities/comment.entity.ts
+@Entity('content_comments')
+@Tree('materialized-path')
+export class CommentEntity extends BaseEntity {
+    ...
+    @TreeChildren({ cascade: true })
+    children!: CommentEntity[];
+    @TreeParent({ onDelete: 'CASCADE' })
+    parent?: CommentEntity | null;
+}
+
+</code></pre>
+<h3>存储类</h3>
+<p>创建一个空的<code>CategoryRepository</code>用于操作<code>CategoryEntity</code>模型</p>
+<p><strong>注意</strong>:树形的存储类必须通过<code>getTreeRepository</code>获取或者通过<code>getCustomRepository</code>加载一个继承自<code>TreeRepository</code>的类来获取</p>
+<p>在<a href="https://docs.nestjs.com/" rel="nofollow" title="nestjs">nestjs</a>中注入树形模型的存储库使用以下方法</p>
+<ul>
+<li>使用该模型的存储库类是继承自<code>TreeRepository</code>类的自定义类,则直接注入即可</li>
+<li>如果没有存储库类就需要在注入的使用<code>TreeRepository&lt;Entity&gt;</code>作为类型提示</li>
+</ul>
+<blockquote>
+<p>为了简单,<code>CommentRepository</code>暂时不需要创建,直接注入服务即可</p>
+</blockquote>
+<pre><code class="language-typescript">// src/modules/content/repositories/category.repository.ts
+@EntityRepository(CategoryEntity)
+export class CategoryRepository extends TreeRepository&lt;CategoryEntity&gt; {}
+</code></pre>
+<p>修改<code>PostRepository</code>添加<code>buildBaseQuery</code>用于服务查询,代码如下</p>
+<pre><code class="language-typescript">// src/modules/content/repositories/post.repository.ts
+buildBaseQuery() {
+        return this.createQueryBuilder('post')
+            // 加入分类关联
+            .leftJoinAndSelect('post.categories', 'categories')
+            // 建立子查询用于查询评论数量
+            .addSelect((subQuery) =&gt; {
+                return subQuery
+                    .select('COUNT(c.id)', 'count')
+                    .from(CommentEntity, 'c')
+                    .where('c.post.id = post.id');
+            }, 'commentCount')
+            // 把评论数量赋值给虚拟字段 commentCount
+            .loadRelationCountAndMap('post.commentCount', 'post.comments');
+    }
+</code></pre>
+<h3>DTO 验证</h3>
+<p>DTO 类与前面的<code>CreatePostDto</code>和<code>UpdatePostDto</code>写法是一样的</p>
+<blockquote>
+<p>评论无需更新所以没有<code>update</code>的 DTO</p>
+</blockquote>
+<ul>
+<li><code>create-category.dto.ts</code>用于新建分类</li>
+<li><code>update-category.dto.ts</code>用于更新分类</li>
+<li><code>create-comment.dto.ts</code>用于添加评论</li>
+</ul>
+<p>在代码中可以看到我这里对分类和评论的 DTO 添加了一个<code>parent</code>字段用于在创建和更新时设置他们的父级</p>
+<p><code> @Transform</code>装饰器是用于转换数据的,基于<code>class-transformer</code>这个类库实现,此处的作用在于把请求中传入的值为<code>null</code>字符串的<code>parent</code>的值转换成真实的<code>null</code>类型</p>
+<p><code>@ValidateIf</code>的作用在于<strong>只在请求的<code>parent</code>字段不为<code>null</code>且存在值的时候进行验证</strong>,这样做的目的在于如果在更新时设置<code>parent</code>为<code>null</code>把当前分类设置为顶级分类,如果不传值则不改变</p>
+<pre><code class="language-typescript">// src/modules/content/dtos/create-category.dto.ts
+    @IsUUID(undefined, { always: true, message: '父分类 ID 格式不正确' })
+    @ValidateIf((p) =&gt; p.parent !== null &amp;&amp; p.parent)
+    @IsOptional({ always: true })
+    @Transform(({ value }) =&gt; (value === 'null' ? null : value))
+    parent?: string;
+</code></pre>
+<p>在<code>CreatePostDto</code>中添加分类 IDS 验证</p>
+<pre><code class="language-typescript">// src/modules/content/dtos/create-post.dto.ts
+   @IsUUID(undefined, { each: true, always: true, message: '分类 ID 格式错误' })
+   @IsOptional({ always: true })
+   categories?: string[];
+</code></pre>
+<p>在<code>CreateCommentDto</code>中添加一个文章 ID 验证</p>
+<pre><code class="language-typescript">// src/modules/content/dtos/create-comment.dto.ts
+    @IsUUID(undefined, { message: '文章 ID 格式错误' })
+    @IsDefined({ message: '评论文章 ID 必须指定' })
+    post!: string;
+</code></pre>
+<h3>服务类</h3>
+<h4><code>Category/Comment</code></h4>
+<p>服务的编写基本与<code>PostService</code>一致,我们新增了以下几个服务</p>
+<ul>
+<li><code>CategoryService</code>用于分类操作</li>
+<li><code>CommentService</code>用于评论操作</li>
+</ul>
+<p>分类服务通过<code>TreeRepository</code>自带的<code>findTrees</code>方法可直接查询出树形结构的数据,但是此方法无法添加查询条件和排序等,所以后续章节我们需要自己添加这些</p>
+<pre><code class="language-typescript">// src/modules/content/services/category.service.ts
+export class CategoryService {
+    constructor(
+        private entityManager: EntityManager,
+        private categoryRepository: CategoryRepository,
+    ) {}
+
+    async findTrees() {
+        return this.categoryRepository.findTrees();
+    }
+    ...
+</code></pre>
+<p><code>getParent</code>方法用于根据请求的<code>parent</code>字段的<code>ID</code>值获取分类和评论下的父级</p>
+<pre><code class="language-typescript">protected async getParent(id?: string) {
+        let parent: CommentEntity | undefined;
+        if (id !== undefined) {
+            if (id === null) return null;
+            parent = await this.commentRepository.findOne(id);
+            if (!parent) {
+                throw new NotFoundException(`Parent comment ${id} not exists!`);
+            }
+        }
+        return parent;
+    }
+</code></pre>
+<h4><code>PostService</code></h4>
+<p>现在为了读取和操作文章与分类和评论的关联,使用<code>QueryBuilder</code>来构建查询器</p>
+<p>在此之前,在<code>core/types</code>(新增)中定义一个用于额外传入查询回调参数的方法类型</p>
+<pre><code class="language-typescript">// src/core/types.ts
+
+/**
+ * 为 query 添加查询的回调函数接口
+ */
+export type QueryHook&lt;Entity&gt; = (
+    hookQuery: SelectQueryBuilder&lt;Entity&gt;,
+) =&gt; Promise&lt;SelectQueryBuilder&lt;Entity&gt;&gt;;
+</code></pre>
+<p><code>PostService</code>更改</p>
+<blockquote>
+<p>对于评论的嵌套展示在后续教程会重新定义一个新的专用接口来实现</p>
+</blockquote>
+<ul>
+<li><code>create</code>时通过<code>findByIds</code>为新增文章出查询关联的分类</li>
+<li><code>update</code>时通过<code>addAndRemove</code>更新文章关联的分类</li>
+<li>查询时通过<code>.buildBaseQuery().leftJoinAndSelect</code>为文章数据添加上关联的评论</li>
+</ul>
+<h3>控制器</h3>
+<p>新增两个控制器,分别用于处理分类和评论的请求操作</p>
+<h4><code>CategoryContoller</code></h4>
+<p>方法与<code>PostController</code>一样,<code>index</code>,<code>show</code>,<code>store</code>,<code>update</code>,<code>destory</code></p>
+<p>暂时直接用<code>findTrees</code>查询出树形列表即可</p>
+<pre><code class="language-typescript">export class CategoryController {
+  ...
+    @Get()
+    async index() {
+        return this.categoryService.findTrees();
+    }
+}
+</code></pre>
+<h4><code>CommentController</code></h4>
+<p>目前评论控制器只有两个方法<code>store</code>和<code>destory</code>,分别用于新增和删除评论</p>
+<h3>注册代码</h3>
+<p>分别在<code>entities</code>,<code>repositories</code>,<code>dtos</code>,<code>services</code>,<code>controllers</code>等目录的<code>index.ts</code>文件中导出新增代码以给<code>ContentModule</code>进行注册</p>
+<pre><code class="language-typescript">const entities = Object.values(EntityMaps);
+const repositories = Object.values(RepositoryMaps);
+const dtos = Object.values(DtoMaps);
+const services = Object.values(ServiceMaps);
+const controllers = Object.values(ControllerMaps);
+@Module({
+    imports: [
+        TypeOrmModule.forFeature(entities),
+        // 注册自定义 Repository
+        CoreModule.forRepository(repositories),
+    ],
+    controllers,
+    providers: [...dtos, ...services],
+    exports: [
+        // 导出自定义 Repository,以供其它模块使用
+        CoreModule.forRepository(repositories),
+        ...services,
+    ],
+})
+export class ContentModule {}
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 使用 Raycast 的睡眠命令之后 2 秒左右电脑又自动唤醒</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865203#reply5" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865203</id>
+	<published>2022-07-09T23:41:06Z</published>
+	<updated>2022-07-10T00:29:36Z</updated>
+	<author>
+		<name>jsxhhyf</name>
+		<uri>https://www.v2ex.com/member/jsxhhyf</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Model: Mac Studio (M1 Max)
+OS:Monterey 12.4
+Raycast: 1.37.1</p>
+<p>求助各位朋友，不知道是什么原因，是有别的软件冲突了吗？之前用 Alfred 睡眠就没问题。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[硬件] 还有谁不知道 HHKB 可以修改 Fn 键的位置？按方向键的时候解放小拇指</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865202#reply2" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865202</id>
+	<published>2022-07-09T22:51:36Z</published>
+	<updated>2022-07-09T06:51:36Z</updated>
+	<author>
+		<name>LudwigWS</name>
+		<uri>https://www.v2ex.com/member/LudwigWS</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我用 HHKB 用了一两年，很喜欢这种 60% 键盘，唯独一点极为不满，按方向键的时候小拇指很难受。</p>
+<p>使用官方的 HHKB Keyboard Keymap Tool 就可以映射其他按键为 Fn ，很坑的一点是你不能在默认的 QWERTY Layout 视图中做到这一点，以致于我一直没有发现原来可以这么做，你需要切换到 Alphabetical Order ，这时候你就可以映射为 Fn 了（位置在键盘的中央）</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/u1ybuZ4.jpeg"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] google.cn 还活着吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865201#reply12" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865201</id>
+	<published>2022-07-09T22:41:52Z</published>
+	<updated>2022-07-10T01:43:56Z</updated>
+	<author>
+		<name>cloudsigma2022</name>
+		<uri>https://www.v2ex.com/member/cloudsigma2022</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>RT ，
+因为 <a href="http://google.cn" rel="nofollow">google.cn</a> 访问每次都是 404 ，索性就 block 了 <a href="http://google.cn" rel="nofollow">google.cn</a> </p>
+<p>最近，<a href="http://sm.ms" rel="nofollow">sm.ms</a> 网站要求登录才能贴图了，发现始终登录不了。检查了下，登录的时候，请求的 api 是</p>
+<p><a href="https://recaptcha.google.cn/recaptcha/api.js" rel="nofollow">https://recaptcha.google.cn/recaptcha/api.js</a></p>
+<p>不知道网站运营者是怎么想的？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 小米国内版能否通过刷机支持国际版频率？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865200#reply4" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865200</id>
+	<published>2022-07-09T22:19:35Z</published>
+	<updated>2022-07-10T01:41:56Z</updated>
+	<author>
+		<name>lovestudykid</name>
+		<uri>https://www.v2ex.com/member/lovestudykid</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	用了很久苹果想弄个安卓玩玩，有一些问题请教下。<br /><br />1. 小米手机国际版支持的频段更多，能否通过刷机支持？<br />2. 如果购买国际版一般在哪买？小米国外官网没有销售，只找到一些第三方小卖家的链接。<br />3. 有没有其他国外使用的机型推荐？支持频段要够多。一加是可以的，不过看着不喜欢，性价比也不高。
+	]]></content>
+</entry><entry>
+	<title>[分享发现] Nota, markdown 笔记应用, 支持 backlink， UI 特别好</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865199#reply1" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865199</id>
+	<published>2022-07-09T21:47:37Z</published>
+	<updated>2022-07-10T00:17:05Z</updated>
+	<author>
+		<name>Wonderwall</name>
+		<uri>https://www.v2ex.com/member/Wonderwall</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>前不久发现了一款 mac 上的 markdown 笔记应用叫<a href="https://nota.md" rel="nofollow">Nota</a>，各方面都符合我的喜好，最近把笔记迁移了过去，很喜欢。在和开发者交流的过程中，开发者提到没什么中国用户，于是想来和大家安利一下。(我与开发者没有任何所属或利益关系。)</p>
+<p>我之前主要用过 iA Writer 和 Obsidian 来管理 markdown notes 。但各自都有一些让我非常不适应的地方，比如链接不可点击或者 file tree 没法用键盘 navigate 等等。</p>
+<p>Nota 给我的感觉是它不止是一个 markdown editor ，真的是一个笔记应用，也是一个好的 mac citizen 。我更会把它和 Apple Notes 或者 Bear 比较。（功能上 Bear 还挺接近我的理想应用的，可惜我不是很喜欢它的 editor 的界面，以及它不是 file system based 。）</p>
+<p>我能想到一些喜欢 Nota 的点有：</p>
+<ul>
+<li>File system based</li>
+<li>界面漂亮</li>
+<li>全键盘 navigation</li>
+<li>支持 wikilink 和 backlink</li>
+<li>支持 inline image</li>
+</ul>
+<p>它目前还没有 iOS/iPadOS 版，我暂时用 1Writer 配合使用。它们支持同样的 wikilink 格式。我在它的 Twitter 翻到说会开发第一方的 iOS 应用。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 什么牌子的硬盘电源转接线靠谱呢</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865198#reply5" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865198</id>
+	<published>2022-07-09T21:42:02Z</published>
+	<updated>2022-07-09T15:42:02Z</updated>
+	<author>
+		<name>glouhao</name>
+		<uri>https://www.v2ex.com/member/glouhao</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	之前买的绿联的没怎么用，然后最近掏出来给我烧了个硬盘。还听说过绿联的 hub 还烧过笔记本，感觉怕了。目前 pve 虚拟的群晖，硬盘线接口是不太够用。求大佬指点应该搞个啥牌子的线。
+	]]></content>
+</entry><entry>
+	<title>[GitLab] 为什么 gitlab.new 重定向到 gitee</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865197#reply1" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865197</id>
+	<published>2022-07-09T21:17:17Z</published>
+	<updated>2022-07-09T21:16:17Z</updated>
+	<author>
+		<name>kouhe3</name>
+		<uri>https://www.v2ex.com/member/kouhe3</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题。
+打开后是，gitee 新建项目页面。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iOS] 通过快捷指令直接安装 ipa 包，大家看看这个方法还有效吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865196#reply1" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865196</id>
+	<published>2022-07-09T21:11:55Z</published>
+	<updated>2022-07-09T18:10:55Z</updated>
+	<author>
+		<name>daimaosix</name>
+		<uri>https://www.v2ex.com/member/daimaosix</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><a href="https://www.youtube.com/watch?v=CBoe6agYfXo" rel="nofollow">https://www.youtube.com/watch?v=CBoe6agYfXo</a>
+通过快捷指令直接安装 ipa 包，这是什么原理呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Node.js] Nestjs 最佳实践教程:2 基本数据操作</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865195#reply0" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865195</id>
+	<published>2022-07-09T19:41:49Z</published>
+	<updated>2022-07-09T15:41:49Z</updated>
+	<author>
+		<name>lichnow</name>
+		<uri>https://www.v2ex.com/member/lichnow</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>教程地址: <a href="https://v.pincman.com/courses/64.html" rel="nofollow">https://v.pincman.com/courses/64.html</a></li>
+<li>视频地址: <a href="https://www.bilibili.com/video/BV1mT411u76H?spm_id_from=333.999.0.0" rel="nofollow">https://www.bilibili.com/video/BV1mT411u76H?spm_id_from=333.999.0.0</a></li>
+<li>qq: 1849600177</li>
+<li>qq 群: 455820533</li>
+</ul>
+<h2>学习目标</h2>
+<ul>
+<li>简单地整合<a href="https://nestjs.com/" rel="nofollow">nestjs</a>框架与<a href="https://typeorm.io/" rel="nofollow" title="typeorm">typeorm</a></li>
+<li>实现基本的<em>CRUD</em>数据操作</li>
+<li>使用<a href="https://github.com/typestack/class-validator" rel="nofollow" title="class-validator">class-validator</a>验证请求数据</li>
+<li>更换更加快速的<a href="https://www.fastify.io/" rel="nofollow" title="fastify">fastify</a>适配器</li>
+<li>使用 Thunder Client 对测试接口</li>
+</ul>
+<h2>安装 Mysql</h2>
+<blockquote>
+<p>实际生产环境中建议使用 PostgreSQL,因为教程以学习为主,所以直接使用相对来说比较通用和简单的 Mysql</p>
+</blockquote>
+<p>使用以下命令安装 Mysql</p>
+<blockquote>
+<p>如果本机不是使用 linux(比如使用 wsl2),请到<a href="https://dev.mysql.com/downloads/repo/apt/" rel="nofollow">mysql</a>官网点击 download 按钮下载安装包后在 chrome 查看下载地址，然后在开发机用<code>wget</code>下载</p>
+</blockquote>
+<blockquote>
+<p>如果本机使用 MacOS,使用<code>brew install mysql</code>,如果本机使用 Arch 系列,使用<code>sudo pacman -Syy mysql</code></p>
+</blockquote>
+<pre><code class="language-shell"># 下载镜像包
+cd /usr/local/src
+sudo wget sudo wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
+# 添加镜像(其它选项不用管，直接 OK 就可以)
+sudo apt-get install ./mysql-apt-config_0.8.22-1_all.deb
+# 升级包列表
+sudo apt-get update
+# 开始安装，输入密码后，有一个密码验证方式，因为是开发用，所以选择第二个弱验证即可
+sudo apt-get install mysql-server 
+# 初始化,在是否加载验证组件时选择 No,在是否禁用远程登录时也选择 No
+sudo mysql_secure_installation
+# 因为是远程 SSH 连接开发所以需要开启远程数据库链接，如果是本地或者 wsl2 则不需要开启
+mysql -u root -p 
+CREATE USER 'root'@'%' IDENTIFIED BY '密码';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+</code></pre>
+<p>接着使用 Navicat 等客户端就可以连接了</p>
+<h2>预装依赖</h2>
+<ul>
+<li><a href="https://www.lodashjs.com/" rel="nofollow" title="lodash">lodash</a>是常用的工具库</li>
+<li><a href="https://github.com/kentcdodds/cross-env#readme" rel="nofollow" title="cross-env">cross-env</a>用于跨平台设置环境变量</li>
+<li><a href="https://github.com/typestack/class-transformer" rel="nofollow" title="class-transformer">class-transformer</a>用于对请求和返回等数据进行序列化 </li>
+<li><a href="https://github.com/typestack/class-validator" rel="nofollow" title="class-validator">class-validator</a>用于验证请求<code>dto</code>等</li>
+<li><a href="https://typeorm.io/" rel="nofollow" title="typeorm">typeorm</a>一个 TS 编写的[node.js][]ORM</li>
+<li>[@nestjs/typeorm][]Nestjs 的 TypeOrm 整合模块</li>
+<li><a href="https://docs.nestjs.com/techniques/performance" rel="nofollow" title="@nestjs/platform-fastify">@nestjs/platform-fastify</a>Fastify 适配器,用于替代 express</li>
+<li><a href="https://docs.nestjs.com/openapi/introduction" rel="nofollow" title="nestjs-swagger">nestjs-swagger</a>生成 open api 文档,目前我们使用其<code>PartialType</code>函数是<code>UpdateDto</code>中的属性可选</li>
+<li><a href="https://docs.nestjs.com/openapi/introduction" rel="nofollow" title="fastify-swagger">fastify-swagger</a>生成 Fastify 的 Open API</li>
+</ul>
+<pre><code class="language-shell">~ pnpm add class-transformer \
+  @nestjs/platform-fastify \
+  class-validator \
+  lodash \
+  @nestjs/swagger \
+  fastify-swagger \
+  mysql2 \
+  typeorm \
+  @nestjs/typeorm
+
+ ~ pnpm add @types/lodash cross-env @types/node typescript -D
+</code></pre>
+<h2>生命周期</h2>
+<p>要合理的编写应用必须事先了解清楚整个程序的访问流程,本教程会讲解如何一步步演进每一次访问流,作为第一步课时,我们的访问流非常简单,可以参考下图</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f99f264a978240c49711c709990d96b3%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
+<h2>文件结构</h2>
+<p>我们通过整合<a href="https://typeorm.io/" rel="nofollow" title="typeorm">typeorm</a>来连接 mysql 实现一个基本的 CRUD 应用,首先我们需要创建一下文件结构</p>
+<blockquote>
+<p>建议初学者手动创建，没必要使用 CLI 去创建，这样目录和文件更加清晰</p>
+</blockquote>
+<ol>
+<li>创建模块</li>
+<li>编写模型</li>
+<li>编写 Repository(如果有需要的话)</li>
+<li>编写数据验证的 DTO</li>
+<li>编写服务</li>
+<li>编写控制器</li>
+<li>在每个以上代码各自的目录下建立一个<code>index.ts</code>并导出它们</li>
+<li>在各自的<code>Module</code>里进行注册提供者,导出等</li>
+<li>在<code>AppModule</code>中导入这两个模块</li>
+</ol>
+<p>编写好之后的目录结构如下</p>
+<pre><code class="language-shell">.
+├── app.module.ts                           # 引导模块           
+├── config                                  # 配置文件目录
+│   ├── database.config.ts                  # 数据库配置
+│   └── index.ts
+├── main.ts                                 # 应用启动器
+├── modules
+    ├── content                             # 内容模块目录
+    │   ├── content.module.ts               # 内容模块
+    │   ├── controllers                     # 控制器
+    │   ├── dtos                            # DTO 访问数据验证
+    │   ├── entities                        # 数据实体模型
+    |   ├── index.ts              
+    │   ├── repositories                    # 自定义 Repository
+    │   ├── services                        # 服务
+    └──  core
+        ├── constants.ts                    # 常量
+        ├── core.module.ts                  # 核心模块
+        ├── decorators                      # 装饰器
+        └── types.ts                        # 公共类型
+</code></pre>
+<h2>应用编码</h2>
+<p>在开始编码之前需要先更改一下<code>package.json</code>和<code>nestjs-cli.json</code>两个文件</p>
+<p>在<code>package.json</code>中修改一下启动命令,以便每次启动可以自动配置运行环境并兼容<code>windows</code>环境</p>
+<pre><code class="language-json">"prebuild": "cross-env rimraf dist",
+"start": "cross-env NODE_ENV=development nest start",
+"start:dev": "cross-env NODE_ENV=development nest start --watch",
+"start:debug": "cross-env NODE_ENV=development nest start --debug --watch",
+"start:prod": "cross-env NODE_ENV=production node dist/main",
+</code></pre>
+<p>为了在每次重新编译前自动删除上次的产出,在<code>nestjs-cli.json</code>中配置<code> "deleteOutDir": true</code></p>
+<h3><code>main.ts</code></h3>
+<p>把适配器由<a href="https://expressjs.com/" rel="nofollow" title="express">express</a>换成更快的<a href="https://www.fastify.io/" rel="nofollow" title="fastify">fastify</a>,并把监听的 IP 改成<code>0.0.0.0</code>方便外部访问.为了在使用<a href="https://github.com/typestack/class-validator" rel="nofollow" title="class-validator">class-validator</a>的<code>DTO</code>类中也可以注入 nestjs 容器的依赖,需要添加<code>useContainer</code></p>
+<pre><code class="language-typescript">// main.ts
+import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { useContainer } from 'class-validator';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create&lt;NestFastifyApplication&gt;(
+    AppModule,
+    new FastifyAdapter()
+  );
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  await app.listen(3000,'0.0.0.0');
+}
+bootstrap();
+</code></pre>
+<h3>连接配置</h3>
+<p>创建一个<code>src/config/database.config.ts</code>文件</p>
+<pre><code class="language-typescript">export const database: () =&gt; TypeOrmModuleOptions = () =&gt; ({
+    // ...
+    // 此处 entites 设置为空即可,我们直接通过在模块内部使用`forFeature`来注册模型
+    // 后续魔改框架的时候,我们会通过自定义的模块创建函数来重置 entities,以便给自己编写的 CLI 使用
+    // 所以这个配置后面会删除
+    entities: [], 
+    // 自动加载模块中注册的 entity
+    autoLoadEntities: true,
+    // 可以在开发环境下同步 entity 的数据结构到数据库
+    // 后面教程会使用自定义的迁移命令来代替,以便在生产环境中使用,所以以后这个选项会永久 false
+    synchronize: process.env.NODE_ENV !== 'production',
+});
+
+</code></pre>
+<h3><code>CoreModule</code></h3>
+<p>核心模块用于挂载一些全局类服务,比如整合<a href="https://typeorm.io/" rel="nofollow" title="typeorm">typeorm</a>的``TypeormModule`</p>
+<p><strong>注意</strong>: 这里不要使用<code>@Global()</code>装饰器来构建全局模块，因为后面在<code>CoreModule</code>类中添加一些其它方法</p>
+<p>返回值中添加<code>global: true</code>来注册全局模块,并导出<code>metadata</code>.</p>
+<pre><code class="language-typescript">// src/core/core.module.ts
+export class CoreModule {
+    public static forRoot(options?: TypeOrmModuleOptions) {
+        const imports: ModuleMetadata['imports'] = [TypeOrmModule.forRoot(options)];
+        return {
+            global: true,
+            imports,
+            module: CoreModule,
+        };
+    }
+}
+</code></pre>
+<p>在<code>AppModule</code>导入该模块,并注册数据库连接</p>
+<pre><code class="language-typescript">// src/app.module.ts
+@Module({
+    imports: [CoreModule.forRoot(database())],
+  ...
+})
+export class AppModule {}
+</code></pre>
+<h3>自定义存储类</h3>
+<p>由于原来用于自定义 Repository 的<code>@EntityRepository</code>在<a href="https://typeorm.io/" rel="nofollow" title="typeorm">typeorm</a>0.3 版本后已经不可用,特别不方便,所以根据<a href="https://gist.github.com/anchan828/9e569f076e7bc18daf21c652f7c3d012" rel="nofollow">这里的示例</a>来自定义一个<code>CustomRepository</code>装饰器</p>
+<pre><code class="language-typescript">// src/modules/core/constants.ts
+// 传入装饰器的 metadata 数据标识
+export const CUSTOM_REPOSITORY_METADATA = 'CUSTOM_REPOSITORY_METADATA';
+
+// src/modules/core/decorators/repository.decorator.ts
+// 定义装饰器
+import { CUSTOM_REPOSITORY_METADATA } from '../constants';
+export const CustomRepository = &lt;T&gt;(entity: ObjectType&lt;T&gt;): ClassDecorator =&gt;
+    SetMetadata(CUSTOM_REPOSITORY_METADATA, entity);
+
+// src/modules/core/decorators/index.ts
+export * from './repository.decorator';
+</code></pre>
+<p>定义静态方法用于注册自定义 Repository</p>
+<pre><code class="language-typescript"> public static forRepository&lt;T extends Type&lt;any&gt;&gt;(
+        repositories: T[],
+        dataSourceName?: string,
+    ): DynamicModule {
+        const providers: Provider[] = [];
+
+        for (const Repo of repositories) {
+            const entity = Reflect.getMetadata(CUSTOM_REPOSITORY_METADATA, Repo);
+
+            if (!entity) {
+                continue;
+            }
+
+            providers.push({
+                inject: [getDataSourceToken(dataSourceName)],
+                provide: Repo,
+                useFactory: (dataSource: DataSource): typeof Repo =&gt; {
+                    const base = dataSource.getRepository&lt;ObjectType&lt;any&gt;&gt;(entity);
+                    return new Repo(base.target, base.manager, base.queryRunner);
+                },
+            });
+        }
+
+        return {
+            exports: providers,
+            module: CoreModule,
+            providers,
+        };
+    }
+</code></pre>
+<h3><code>ContentModule</code></h3>
+<p>内容模块用于存放<em>CRUD</em>操作的逻辑代码</p>
+<pre><code class="language-typescript">// src/modules/content/content.module.ts
+@Module({})
+export class ContentModule {}
+</code></pre>
+<p>在<code>AppModule</code>中注册</p>
+<pre><code class="language-typescript">// src/app.module.ts
+@Module({
+    imports: [CoreModule.forRoot(database()),ContentModule],
+  ...
+})
+export class AppModule {}
+</code></pre>
+<h4>实体模型</h4>
+<p>创建一个<code>PostEntity</code>用于文章数据表</p>
+<p><code>PostEntity</code>继承``BaseEntity<code>,这样做是为了我们可以进行</code>ActiveRecord<code>操作,例如</code>PostEntity.save(post)<code>,因为纯</code>DataMapper`的方式有时候代码会显得啰嗦,具体请查看<a href="https://typeorm.io/#/active-record-data-mapper" rel="nofollow">此处</a></p>
+<p><code>@CreateDateColumn</code>和<code> @UpdateDateColumn</code>是自动字段,会根据创建和更新数据的时间自动产生,写入后不必关注</p>
+<pre><code class="language-typescript">// src/modules/content/entities/post.entity.ts
+// 'content_posts'是表名称
+@Entity('content_posts')
+export class PostEntity extends BaseEntity {
+...
+    @CreateDateColumn({
+        comment: '创建时间',
+    })
+    createdAt!: Date;
+
+    @UpdateDateColumn({
+        comment: '更新时间',
+    })
+    updatedAt!: Date;
+}
+</code></pre>
+<h4>存储类</h4>
+<p>本节存储类是一个空类,后面会添加各种操作方法</p>
+<blockquote>
+<p>这里用到我们前面定义的自定义 CustomRepository 装饰器</p>
+</blockquote>
+<pre><code class="language-typescript">// src/modules/content/repositories/post.repository.ts
+@CustomRepository(PostEntity)
+export class PostRepository extends Repository&lt;PostEntity&gt; {}
+</code></pre>
+<h4>注册模型和存储类</h4>
+<p>在编写好<code>entity</code>和<code>repository</code>之后我们还需要通过<code>Typeorm.forFeature</code>这个静态方法进行注册,并把存储类导出为提供者以便在其它模块注入</p>
+<pre><code class="language-typescript">// src/modules/content/content.module.ts
+@Module({
+    imports: [
+        TypeOrmModule.forFeature([PostEntity]),
+        // 注册自定义 Repository
+        CoreModule.forRepository([PostRepository]),
+    ],
+     exports: [
+        // 导出自定义 Repository,以供其它模块使用
+        CoreModule.forRepository([PostRepository]),
+    ],
+})
+export class ContentModule {}
+</code></pre>
+<h4>DTO 验证</h4>
+<p><code>DTO</code>配合管道(PIPE)用于控制器的数据验证,验证器则使用<a href="https://github.com/typestack/class-validator" rel="nofollow" title="class-validator">class-validator</a></p>
+<blockquote>
+<p>class-validator 是基于 validator.js 的封装,所以一些规则可以通过 validator.js 的文档查找,后面教程中我们会编写大量的自定义的验证规则,这节先尝试基本的用法</p>
+</blockquote>
+<p>其基本的使用方法就是给<code>DTO</code>类的属性添加一个验证装饰器,如下</p>
+<blockquote>
+<p><code>groups</code>选项用于配置验证组</p>
+</blockquote>
+<pre><code class="language-typescript">// src/modules/content/dtos/create-post.dto.ts
+@Injectable()
+export class CreatePostDto {
+    @MaxLength(255, {
+        always: true,
+        message: '文章标题长度最大为$constraint1',
+    })
+    @IsNotEmpty({ groups: ['create'], message: '文章标题必须填写' })
+    @IsOptional({ groups: ['update'] })
+    title!: string;
+    ...
+}
+
+</code></pre>
+<p>更新验证类<code>UpdatePostDto</code>继承自<code>CreatePostDto</code>,为了使<code>CreatePostDto</code>中的属性变成可选,需要使用[@nestjs/swagger][]包中的<code>PartialType</code>方法,请查阅<a href="https://docs.nestjs.com/openapi/mapped-types" rel="nofollow">此处</a>文档</p>
+<pre><code class="language-typescript">// src/modules/content/dtos/update-post.dto.ts
+@Injectable()
+export class UpdatePostDto extends PartialType(CreatePostDto) {
+    @IsUUID(undefined, { groups: ['update'], message: '文章 ID 格式错误' })
+    @IsDefined({ groups: ['update'], message: '文章 ID 必须指定' })
+    id!: string;
+}
+
+</code></pre>
+<h4>服务类</h4>
+<p>服务一共包括 5 个简单的方法,通过调用<code>PostRepository</code>来操作数据</p>
+<pre><code class="language-typescript">// src/modules/content/services/post.service.ts
+@Injectable()
+export class PostService {
+    // 此处需要注入`PostRepository`的依赖
+    constructor(private postRepository: PostRepository) {}
+    // 查询文章列表
+    async findList() 
+    // 查询一篇文章的详细信息
+    async findOne(id: string)
+    // 添加文章
+    async create(data: CreatePostDto)
+    // 更新文章
+    async update(data: UpdatePostDto)
+    // 删除文章
+    async delete(id: string)
+}
+
+</code></pre>
+<h4>控制器</h4>
+<p>控制器的方法通过<code>@GET</code>,<code>@POST</code>,<code>@PUT</code>,<code>@PATCH</code>,<code>@Delete</code>等装饰器对外提供接口,并且通过注入<code>PostService</code>服务来操作数据.在控制器的方法上使用框架自带的<code>ValidationPipe</code>管道来验证请求中的<code>body</code>数据,<code>ParseUUIDPipe</code>来验证<code>params</code>数据</p>
+<pre><code class="language-typescript">// 控制器 URL 的前缀
+@Controller('posts')
+export class PostController {
+    constructor(protected postService: PostService) {}
+
+    ...
+   // 其它方法请自行查看源码
+    @Get(':post')
+    async show(@Param('post', new ParseUUIDPipe()) post: string) {
+        return this.postService.findOne(post);
+    }
+
+    @Post()
+    async store(
+        @Body(
+            new ValidationPipe({
+                transform: true,
+                forbidUnknownValues: true,
+                // 不在错误中暴露 target
+                validationError: { target: false },
+                groups: ['create'],
+            }),
+        )
+        data: CreatePostDto,
+    ) {
+        return this.postService.create(data);
+    }
+}
+</code></pre>
+<h4>注册控制器等</h4>
+<ul>
+<li>为了后面``DTO<code>中可能会导入服务,需要把</code>DTO<code>,同样注册为提供者并且改造一下</code>main.ts<code>,把容器加入到</code>class-containter`中</li>
+<li><code>PostService</code>服务可能后续会被<code>UserModule</code>等其它模块使用,所以此处我们也直接导出</li>
+</ul>
+<pre><code class="language-typescript">// src/modules/content/content.module.ts
+@Module({
+    imports: [
+        TypeOrmModule.forFeature([PostEntity]),
+        // 注册自定义 Repository
+        CoreModule.forRepository([PostRepository]),
+    ],
+    providers: [PostService, CreatePostDto, UpdatePostDto],
+    controllers: [PostController],
+    exports: [
+        PostService,
+        // 导出自定义 Repository,以供其它模块使用
+        CoreModule.forRepository([PostRepository]),
+    ],
+})
+export class ContentModule {}
+</code></pre>
+<pre><code class="language-typescript">// src/main.ts
+...
+async function bootstrap() {
+    const app = await NestFactory.create&lt;NestFastifyApplication&gt;(
+        AppModule,
+        new FastifyAdapter(),
+    );
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    await app.listen(3000, '0.0.0.0');
+}
+</code></pre>
+<p>最后启动应用在<code>Thunder Client</code>中测试接口</p>
+
+	]]></content>
+</entry><entry>
+	<title>[酷工作] 创业团队招募前端</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865194#reply7" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865194</id>
+	<published>2022-07-09T19:08:06Z</published>
+	<updated>2022-07-10T00:59:34Z</updated>
+	<author>
+		<name>cigaret</name>
+		<uri>https://www.v2ex.com/member/cigaret</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h2>团队情况</h2>
+<p>属于学生创业团队，没有投资，白手起家，之前的业务主要是市场调查、数据分析，今年开始在做技术转型，手头有几个服务周期在两年以上的稳定项目能够维持团队开支。<br/>主要服务对象是高校、央媒、国企等事业单位和社会组织。所谓技术转型是指服务甲方的同时孵化独立产品，目标产品与数据可视化、数据分析、数据监测相关。<br/>做技术的主要有三个人，我和另外两个兼职成员，我算财务 + 商务 + 产品 + 设计 + 前端 + 后端 + ……，另外两个一个前端一个后端。</p>
+<h2>招募初衷</h2>
+<ol>
+<li>我做的事情太多，如果我有伤病，会影响团队整体。</li>
+<li>生产力不够了，需要引入新的成员，目前主要的目的是释放一部分我的时间，让我有精力去发展业务和客户。</li>
+</ol>
+<h2>招募目标</h2>
+<p>希望您来做<strong>前端</strong>工作：</p>
+<ul>
+<li>硬性条件：用 Google 。</li>
+<li>技术栈：Tailwind CSS 、Tailwind UI 、Naive UI 、Vue 3.0 、TypeScript 、AntV （ S2 、G2Plot ）。</li>
+<li>
+加分项：<ul>
+<li>懂后端：后端技术栈是 MySQL 、Prisma 、GraphQL 。</li>
+<li>用得了 Ubuntu 、Docker 。</li>
+</ul>
+</li>
+<li>协作工具：GitHub 、飞书、Apifox 、即时设计。</li>
+</ul>
+<h2>目标工作</h2>
+<p>前两个月，我们的精力会放在迭代和优化这个东西上面：<br/><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.nlark.com/yuque/0/2022/png/300542/1657392975937-83272fa7-368c-48f8-ade0-d9004bea4010.png#clientId=u4b0b0807-2b8c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;id=ucd721a78&amp;margin=%5Bobject%20Object%5D&amp;originHeight=1842&amp;originWidth=3120&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u82b08e75-d2b9-4f61-a50b-72d29d2a40a&amp;title="/><br/><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.nlark.com/yuque/0/2022/png/300542/1657392975883-7d22608c-7671-4db8-8e58-3e2c2e9645d4.png#clientId=u4b0b0807-2b8c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;id=ue463f72f&amp;margin=%5Bobject%20Object%5D&amp;originHeight=1842&amp;originWidth=3120&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=ue0388551-b03b-4623-b155-4d89acb0b49&amp;title="/></p>
+<h2>待遇条件</h2>
+<ul>
+<li>5000 - 6000 每月（至于是工资薪金、劳务、个人打款、报销、五险一金，可以具体商议）</li>
+</ul>
+<p>我们甲方的性质决定了回款周期都是比较慢的，这是我能提供的稳定待遇，最差不会比这个差，我自认为是一个喜欢分享的人，所以如果一切顺利的话结项或年终都会有小心意作为补贴。</p>
+<ul>
+<li>
+兼职或全职随您<ul>
+<li>如果是兼职的话，每周应该保证至少投入 20 小时左右的时间。</li>
+<li>如果是全职的话，希望您不在一线或二线，或者财务自由、生活无忧，只是出来找个乐子。</li>
+</ul>
+</li>
+<li>
+工作时间安排<ul>
+<li>虽然我是个工作狂，但我不会绑架您，每个人都有自己的生活，我们会提前分解目标，在定好的时间之前各自完成目标就好啦。</li>
+<li>会有团队作息不统一的情况出现，不强求某个时段一定要在线，提前约定碰头时间就好。</li>
+</ul>
+</li>
+<li>
+工作地点安排<ul>
+<li>可以完全远程</li>
+<li>如果您在北京的话，我们在双桥办公，离双桥地铁站 300 米左右。（欢迎所有朋友来做客🤗）</li>
+</ul>
+</li>
+</ul>
+<h2>理想同伴</h2>
+<p>诚然，发这个贴我是脸红的，如果条件允许我愿意给所有人最奢侈的待遇，但现实就是我得一分钱掰成两半花。<br/>在这种条件下，最理想的情况是以下几种：</p>
+<ul>
+<li>您的生活由于疫情或市场环境等原因暂时不是很如意，市面上的好坑又不是那么多，希望我们可以是您的一个临时选择。</li>
+<li>您个人对数据分析和可视化工具这个方向比较感兴趣，我们团队在这方面有丰富的业务经验和实践机会给您练手（甚至是学习）。</li>
+<li>作为白手起家的创业团队，我们的发展还是比较稳健的，如果你有创业相关的意向，我们也非常欢迎。</li>
+</ul>
+<p>最最理想的情况是当然是最后一种：跟我们一起创业。</p>
+<h2>恬不知耻画个饼</h2>
+<p>相信，然后看见。上车吧，我们会超牛逼的。</p>
+<h2>联系方式</h2>
+<p>QQ：MTE0NTE3MjA4OQ==<br/>WX：a3h5Y2lnYXJldA==</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Amazon Web Services] 使用 aws- Java -sdk-s3 怎么 aws s3 上断点下载文件，那里有比较好的例子吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865193#reply0" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865193</id>
+	<published>2022-07-09T19:04:57Z</published>
+	<updated>2022-07-09T19:02:57Z</updated>
+	<author>
+		<name>fragrans23</name>
+		<uri>https://www.v2ex.com/member/fragrans23</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>下载文件原先使用下面的代码：</p>
+<pre><code>S3Object object = s3.getObject(bucketName, fileKey);
+        S3ObjectInputStream objectContent = object.getObjectContent();
+        OutputStream out =null;
+        try {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition",
+                    "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
+            out = response.getOutputStream();
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = objectContent.read(buf)) &gt; 0) {
+                out.write(buf, 0, len);
+            }
+            response.flushBuffer();
+</code></pre>
+<p>s3 内有这么一个方法可以获取文件某一断数据：</p>
+<pre><code>etObjectRequest rangeRequest = new GetObjectRequest(bucketName, fileKey)
+                .withRange(start, end);
+        S3Object object = s3.getObject(rangeRequest);
+        S3ObjectInputStream objectContent = object.getObjectContent();
+</code></pre>
+<p>如果下载了某段数据，怎么整合起来形成一个完整文件？
+思路应该是下载各个分片合并，或在某个临时文件后面追加内容？哪里有比较完整的代码吗？希望各位朋友能够帮忙解答</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Gran Turismo] Gran Turismo Sophy AI Defeats Lewis Hamilton’s Nurburgring Lap Time by 17 Seconds</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865192#reply0" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865192</id>
+	<published>2022-07-09T18:37:33Z</published>
+	<updated>2022-07-09T18:37:33Z</updated>
+	<author>
+		<name>Kai</name>
+		<uri>https://www.v2ex.com/member/Kai</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<div class="embedded_video_wrapper"><iframe src="https://www.youtube.com/embed/6kUpOmEQLno" class="embedded_video" allowfullscreen="" type="text/html" id="ytplayer" frameborder="0"></iframe></div><br /><a target="_blank" href="https://www.gtplanet.net/gran-turismo-sophy-ai-defeats-lewis-hamiltons-nurburgring-lap-time-by-17-seconds/" rel="nofollow noopener">https://www.gtplanet.net/gran-turismo-sophy-ai-defeats-lewis-hamiltons-nurburgring-lap-time-by-17-seconds/</a>
+	]]></content>
+</entry><entry>
+	<title>[Node.js] Nestjs 最佳实践教程-1 编码环境搭建</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865189#reply0" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865189</id>
+	<published>2022-07-09T17:50:24Z</published>
+	<updated>2022-07-09T13:50:24Z</updated>
+	<author>
+		<name>lichnow</name>
+		<uri>https://www.v2ex.com/member/lichnow</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>教程地址: <a href="https://v.pincman.com/courses/64.html" rel="nofollow">https://v.pincman.com/courses/64.html</a></li>
+<li>视频地址: <a href="https://www.bilibili.com/video/BV1q34y1n7iu?spm_id_from=333.999.0.0" rel="nofollow">https://www.bilibili.com/video/BV1q34y1n7iu?spm_id_from=333.999.0.0</a></li>
+<li>qq: 1849600177</li>
+<li>qq 群: 455820533</li>
+</ul>
+<blockquote>
+<p>注意: 为了兼顾大多数用户,本教程使用远程 SSH 连接 Debian 服务器进行讲解,同时会给出 MacOS 的命令,windows 本地开发者请自行安装 wsl2 作为替代</p>
+</blockquote>
+<h2>学习目标</h2>
+<ul>
+<li>安装与配置<a href="https://nodejs.org/zh-cn/" rel="nofollow">node.js</a>+<a href="https://pnpm.io/" rel="nofollow">pnpm</a>环境</li>
+<li>配置<code>tsconfig.json</code>+<a href="https://eslint.org/" rel="nofollow">eslint</a>+<a href="https://prettier.io/" rel="nofollow">prettier</a>实现代码规范化</li>
+<li>配置<a href="https://code.visualstudio.com/" rel="nofollow">vscode</a>实现调试与在保存代码时自动运行<code>eslint</code>+<code>prettier</code></li>
+<li>配置<code>lanunch.json</code>进行应用调试</li>
+<li>安装<code>Thunder Client</code>插件进行接口调试</li>
+</ul>
+<h2>环境搭建</h2>
+<p>安装与配置<a href="https://nodejs.org/zh-cn/" rel="nofollow">node.js</a>环境</p>
+<blockquote>
+<p>MacOS 请使用 brew 安装,如果没有安装<a href="https://brew.sh/" rel="nofollow">brew</a>请先安装</p>
+</blockquote>
+<p><strong>建议:安装到 GLOBAL 里面的东西统一使用一个包管理器,我这里使用<a href="https://pnpm.io/" rel="nofollow">pnpm</a></strong></p>
+<p>安装<a href="https://nodejs.org/zh-cn/" rel="nofollow">node.js</a></p>
+<pre><code class="language-shell"># 下载并解压 node
+~ sudo wget https://nodejs.org/dist/v18.4.0/node-v18.4.0-linux-x64.tar.xz -O /usr/local/src/node18.tar.xz
+~ sudo tar -xf /usr/local/src/node18.tar.xz -C /usr/local/
+~ sudo mv /usr/local/node-v18.4.0-linux-x64 /usr/local/node
+# 添加到环境变量
+echo "export PATH=/usr/local/node/bin:\$PATH" &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc
+</code></pre>
+<p>配置<a href="https://www.npmjs.com/" rel="nofollow">npm</a>淘宝镜像</p>
+<pre><code class="language-shell">~ npm config set registry https://registry.npmmirror.com/
+</code></pre>
+<p>安装<a href="https://pnpm.io/" rel="nofollow">pnpm</a>以及初始化 pnpm</p>
+<pre><code class="language-shell">~ npm install -g pnpm
+~ pnpm setup &amp;&amp; source .zshrc
+</code></pre>
+<p>配置<a href="https://pnpm.io/" rel="nofollow">pnpm</a>淘宝镜像</p>
+<pre><code class="language-shell">~ pnpm config set registry https://registry.npmmirror.com/
+</code></pre>
+<p>安装镜像管理工具</p>
+<pre><code class="language-shell">~ pnpm add nrm -g 
+</code></pre>
+<p>建议安装一个<a href="https://nodejs.org/zh-cn/" rel="nofollow">node</a>版本管理工具比如<a href="https://github.com/tj/n" rel="nofollow">n</a>或者<a href="https://github.com/nvm-sh/nvm" rel="nofollow">nvm</a></p>
+<blockquote>
+<p>因为我们使用普通用户编程,所以把 n 的目录通过环境变量改成我们可以操作的目录</p>
+</blockquote>
+<pre><code class="language-shell">~ pnpm add n -g 
+~ echo "\nexport N_PREFIX=\$HOME/.n" &gt;&gt; ~/.zshrc
+~ echo "export PATH=\$N_PREFIX/bin:\$PATH" &gt;&gt; ~/.zshrc
+~ source ~/.zshrc
+# 安装最新的长期支持版
+~ n lts_latest &amp;&amp; node --version
+# 切换回最新版
+~ n latest &amp;&amp; node --version
+</code></pre>
+<p>安装<a href="https://docs.nestjs.com/cli/overview" rel="nofollow">nestjs cli</a></p>
+<pre><code class="language-shell">~ pnpm add @nestjs/cli -g
+</code></pre>
+<p>创建项目,我们命名为 nestplus</p>
+<blockquote>
+<p>这一步如果出现错误就进入<code>nestplus</code>目录,手动<code>pnpm i</code>一下</p>
+</blockquote>
+<pre><code class="language-shell">~ nest new nestplus # 创建的时候选择 pnpm
+</code></pre>
+<p>升级所有包到最新版本</p>
+<pre><code class="language-shell">~ pnpm up -latest
+</code></pre>
+<p>这是会报缺少<code>peer 建议依赖</code>中<code>webpack</code>的警告,把下面这段添加到<code>package.json</code>中就可以了</p>
+<pre><code class="language-json"> "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "webpack"
+      ]
+    }
+  }
+</code></pre>
+<h2>代码规范化</h2>
+<p>具体代码与配置请自行查看源代码</p>
+<h3>代码风格</h3>
+<p>配置<a href="https://github.com/airbnb/javascript" rel="nofollow">airbnb</a>的 eslint 规则并整合<a href="https://prettier.io/" rel="nofollow">prettier</a>,并且经过一定的客制化同时配合 vscode 可达到完美的编码体验</p>
+<pre><code class="language-shell">pnpm add typescript \
+eslint \
+prettier \
+@typescript-eslint/parser \
+@typescript-eslint/eslint-plugin \
+eslint-config-airbnb-base \
+eslint-config-airbnb-typescript \
+eslint-config-prettier \
+eslint-plugin-import \
+eslint-plugin-prettier \
+eslint-plugin-unused-imports \
+eslint-plugin-unused-imports \
+prettier-plugin-organize-imports \
+eslint-plugin-jest -D
+</code></pre>
+<p>配置内容</p>
+<pre><code class="language-javascript">...
+plugins: ['@typescript-eslint', 'jest', 'prettier', 'import', 'unused-imports'],
+extends: [
+    // airbnb 规范
+    'airbnb-base',
+    // 兼容 typescript 的 airbnb 规范
+    'airbnb-typescript/base',
+    // typescript 的 eslint 插件
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+
+    // 支持 jest
+    'plugin:jest/recommended',
+    // 使用 prettier 格式化代码
+    'prettier',
+    // 整合 typescript-eslint 与 prettier
+    'plugin:prettier/recommended',
+],
+</code></pre>
+<h4>一些重要的规则</h4>
+<blockquote>
+<p>其余配置自行查看代码</p>
+</blockquote>
+<p>设置解析文件为<code>tsconfig.eslint.json</code>(我们在[Tsconfig 配置](#Tsconfig 配置)部分新增这个文件)</p>
+<pre><code class="language-javascript">parserOptions: {
+    project: 'tsconfig.eslint.json',
+    tsconfigRootDir: __dirname,
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+},
+</code></pre>
+<p><code>eslint-plugin-unused-imports</code>用于自动删除未使用的导入</p>
+<pre><code class="language-javascript">...
+ 'no-unused-vars': 0,
+ '@typescript-eslint/no-unused-vars': 0,
+ 'unused-imports/no-unused-imports': 1,
+ 'unused-imports/no-unused-vars': [
+    'error',
+    {
+        vars: 'all',
+        args: 'none',
+        ignoreRestSiblings: true,
+    },
+]
+</code></pre>
+<p><code>import</code>插件,<code>import/order</code>可以按照自己的需求配置</p>
+<pre><code class="language-javascript">// 导入模块的顺序
+'import/order': [
+     'error',
+     {
+         pathGroups: [
+             {
+                 pattern: '@/**',
+                 group: 'external',
+                 position: 'after',
+             },
+         ],
+         alphabetize: { order: 'asc', caseInsensitive: false },
+         'newlines-between': 'always-and-inside-groups',
+         warnOnUnassignedImports: true,
+     },
+],
+// 导入的依赖不必一定要在 dependencies 的文件
+'import/no-extraneous-dependencies': [
+    'error',
+     {
+         devDependencies: [
+             '**/*.test.{ts,js}',
+             '**/*.spec.{ts,js}',
+             './test/**.{ts,js}',
+             './scripts/**/*.{ts,js}',
+         ],
+     },
+],
+</code></pre>
+<p>接下来需要配置一下<code>.prettierrc</code>,和<code>.editorconfig</code>,并且把一些它们各自需要忽略的目录和文件分别添加到<code>.eslintignore</code>和<code>.prettierignore</code></p>
+<p>最后把<code>git</code>仓库需要忽略的目录和文件写入<code>.gitignore</code></p>
+<h3>Tsconfig 配置</h3>
+<p><code>tsconfig.json</code>文件中添加<code>ESNEXT</code>就可以使用最新的 ES 语法,并且添加一个<code>@</code>作为根目录映射符</p>
+<pre><code class="language-json">{
+    "compilerOptions": {
+        // ...
+        "paths": {
+            "@/*": ["src/*"]
+        }
+    },
+     "include": ["src", "test", "typings/**/*.d.ts"]
+}
+</code></pre>
+<p>在跟目录添加一个<code>tsconfig.eslint.json</code>文件,供<code>eslint</code>使用</p>
+<pre><code class="language-json">{
+    "extends": "./tsconfig.json",
+    "includes": ["src", "test", "typings/**/*.d.ts", "**.js"]
+}
+</code></pre>
+<p>tsconfig.build.json 中排除<code>**.js</code></p>
+<pre><code class="language-json">{
+    "extends": "./tsconfig.json",
+    "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}
+</code></pre>
+<h2>开发工具</h2>
+<p>对于<a href="https://nodejs.org/zh-cn/" rel="nofollow">node.js</a>,<a href="https://www.typescriptlang.org/" rel="nofollow">typescript</a>,前端等技术最好的开发工具毋庸置疑的就是<a href="https://code.visualstudio.com/" rel="nofollow">vscode</a>,任何其它选项(包括 vim,emacs,sublime text,atom,webstorm 等等)都有这样那样的问题需要去耗费精力,所以建议直接使用 VScode 进行开发</p>
+<blockquote>
+<p>VSCode 已经自带同步配置和插件的功能,建议启用</p>
+</blockquote>
+<p>安装<a href="https://code.visualstudio.com/" rel="nofollow">vscode</a></p>
+<blockquote>
+<p>Windows 直接点击安装包就可以,需要注意的是如果是 WSL2 或远程 SSH 开发,需要在远程再一次安装插件</p>
+</blockquote>
+<pre><code class="language-shell">~ brew install vscode
+</code></pre>
+<p>安装<a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint" rel="nofollow">eslint</a>插件和<a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode" rel="nofollow">prettier</a>插件</p>
+<pre><code class="language-shell">~ code --install-extension dbaeumer.vscode-eslint \
+  &amp;&amp; code esbenp.prettier-vscode
+</code></pre>
+<p>按<code>cmd+,</code>选择偏好设置-&gt;工作空间,配置<a href="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint" rel="nofollow">eslint</a>插件</p>
+<pre><code class="language-json">{
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+}
+</code></pre>
+<p>按<code>shift+cmd+d</code>创建<code>lanunch.json</code>,并且使用<code>ts-node</code>+<code>tsconfig-paths</code>配置断点调试,打好断点,按<code>F5</code>就可以进行调试</p>
+<blockquote>
+<p>这种调试方式适合简单使用,后续我们将会讲到 jest 测试调试,这样效果会更好</p>
+</blockquote>
+<pre><code class="language-json">{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug nestplus",
+            "request": "launch",
+            "runtimeArgs": ["run-script", "start:debug"],
+            "autoAttachChildProcesses": true,
+            "console": "integratedTerminal",
+            "runtimeExecutable": "pnpm",
+            "skipFiles": ["&lt;node_internals&gt;/**"],
+            "type": "pwa-node"
+        }
+    ]
+}
+</code></pre>
+<p>最后安装<a href="https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" rel="nofollow">Thunder Client</a>用于接口测试,当然你也可以安装 postman</p>
+<p>至此,所有配置完成,现在重启<a href="https://code.visualstudio.com/" rel="nofollow">vscode</a>就可以进入下一节学习如何愉快的使用<a href="https://nestjs.com/" rel="nofollow">nestjs</a>构建应用了</p>
+
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] [求助][zerotier]zerotier 很卡，基本处于不太可用状态。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865188#reply8" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865188</id>
+	<published>2022-07-09T16:55:29Z</published>
+	<updated>2022-07-09T19:58:35Z</updated>
+	<author>
+		<name>zjsegzhf</name>
+		<uri>https://www.v2ex.com/member/zjsegzhf</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近房东换了个新网，没有公网 IP 了，之前是在路由器开了个 OpenVpn Server ，公司电脑作为 client 连过去。
+家里路由器下有台服务器，装了些服务，本来公司电脑 vpn 连过来用着很方便。
+同事服务器上开了 samba ，vpn 连过来，samba 作为网络驱动器挂在 windows 下用着很方便，速度也不错。
+现在问题来了。</p>
+<p>没有公网 IP 后，我用过 frp 。
+我腾讯云有机子，frp 可以用，速度也不错，但是只限于我开的那些服务，而且每个服务都要映射一遍，很麻烦。所以开始搜能不能没有公网 IP 的情况下，搭建局域网 vpn 。</p>
+<p>找到两个方案。</p>
+<ul>
+<li>zerotier</li>
+<li>openvpn</li>
+</ul>
+<h4>zerotier</h4>
+<p>我用了，我在我家里服务器上装了 zerotier ，路由器有 zerotier 插件也装了，公司电脑也装了 zerotier 。
+现在有两个问题。</p>
+<ul>
+<li>很卡。节点接互 ping 经常丢包，时延也在 400-800ms 。samba 的服务器上装了 zerotier ，能作为网络驱动器打开但是很卡，打开个目录卡个几秒钟，考个文件过去卡住没什么反应，基本不可用。</li>
+<li>公司能 ping 通路由器，同时路由器上做了端口转发到内网服务端口，但是访问路由器开出来的端口无法访问服务。（这样的思路不行么？）
+不知道怎么解决，卡的问题是不是能通过在腾讯云搭建 moon 节点解决？</li>
+</ul>
+<h4>openvpn</h4>
+<p>我还没有试，思路是在腾讯云或者其他有公网 IP 的机子上装个 openvpn server ，将路由器和公司电脑作为 client 接入。路由器开端口映射，公司电脑是不是就能通过路由器的局域网 ip 和开出来的端口进行访问？
+然后在 samba 服务器作为 client 接入，公司电脑也就能访问 samba 目录了。（不知道行不行？）</p>
+<p>网络小白，大哥们求赐教。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[数据库] 数据库应该使用单独列存储计数吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865187#reply7" />
+	<id>tag:www.v2ex.com,2022-07-09:/t/865187</id>
+	<published>2022-07-09T16:47:53Z</published>
+	<updated>2022-07-09T22:36:23Z</updated>
+	<author>
+		<name>zhengjian</name>
+		<uri>https://www.v2ex.com/member/zhengjian</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h2>问题描述</h2>
+<p>一个学校有 N 个班级，一个班级有 N 个学生。</p>
+<ul>
+<li>在展示学校列表的时候，需要展示该学校的班级数量、学生数量</li>
+<li>在展示班级列表的时候，需要展示该班级的学生数量</li>
+</ul>
+<p>以下两种方式如何选择：</p>
+<hr/>
+<p><strong>1.使用单独列</strong></p>
+<p>在<code>学校</code>表使用 <code>classesCount</code> 和 <code>studentsCount</code> 两个列来分别存储该校<code>班级</code>数量、该校<code>学生</code>数量，在<code>班级</code>表中使用 <code>studentsCount</code> 列存储该班<code>学生</code>数量。</p>
+<p>在<code>班级</code>实体增、删时，更新<code>学校</code>表的 <code>classesCount</code> 列；在<code>学生</code>实体增、删时，更新<code>班级</code>表及<code>学校</code>表的 <code>studentsCount</code> 列。</p>
+<p><strong>2.使用数据库查询</strong></p>
+<p>班级数量和学生数量由数据库查询获得。</p>
+<pre><code class="language-sql">select * from cmapus;
+select count(*) as classesCount from classes group by campus_id;
+select count(*) as studentsCount from students group by campus_id;
+</code></pre>
+<hr/>
+<p>方式一在增、删时需要做额外操作，会存在事务不能保证正确的情况吗？</p>
+<p>方式二在数据量大的时候性能会很差吗？</p>
+<h2>额外提问</h2>
+<p>类似这种数据库设计问题，有推荐的书籍参阅吗？</p>
+
+	]]></content>
+</entry><entry>
 	<title>[macOS] Ventura 设置里有个登录项，怎么删除呢</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865186#reply0" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865186</id>
@@ -26,10 +1723,10 @@
 	]]></content>
 </entry><entry>
 	<title>[微信] 请问如何让微信公众号文章在外部浏览器中打开后还能显示下方的精选留言？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865184#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865184#reply1" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865184</id>
 	<published>2022-07-09T15:41:01Z</published>
-	<updated>2022-07-09T15:38:01Z</updated>
+	<updated>2022-07-09T17:49:48Z</updated>
 	<author>
 		<name>AntaresShao</name>
 		<uri>https://www.v2ex.com/member/AntaresShao</uri>
@@ -89,7 +1786,7 @@
 	]]></content>
 </entry><entry>
 	<title>[生活] 去外面散步一圈一身热汗后，冲个凉水澡，来罐冰啤酒🍺，爽翻了。。。各位务必试试</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865182#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865182#reply1" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865182</id>
 	<published>2022-07-09T15:28:48Z</published>
 	<updated>2022-07-09T13:26:48Z</updated>
@@ -115,10 +1812,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Telegram] 请问如何大批量导出 Telegram 的表情包？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865179#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865179#reply5" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865179</id>
 	<published>2022-07-09T14:33:42Z</published>
-	<updated>2022-07-09T14:31:42Z</updated>
+	<updated>2022-07-09T21:42:14Z</updated>
 	<author>
 		<name>LxnChan</name>
 		<uri>https://www.v2ex.com/member/LxnChan</uri>
@@ -165,10 +1862,10 @@ id: "jsdkfksk...."
 	]]></content>
 </entry><entry>
 	<title>[信息安全] 如何获取安全的国际手机号？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865174#reply13" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865174#reply23" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865174</id>
 	<published>2022-07-09T13:53:58Z</published>
-	<updated>2022-07-09T16:14:28Z</updated>
+	<updated>2022-07-09T19:52:27Z</updated>
 	<author>
 		<name>JiaNa</name>
 		<uri>https://www.v2ex.com/member/JiaNa</uri>
@@ -188,10 +1885,10 @@ id: "jsdkfksk...."
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 联通出口宽带是不是炸了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865173#reply15" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865173#reply23" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865173</id>
 	<published>2022-07-09T13:43:55Z</published>
-	<updated>2022-07-09T16:21:34Z</updated>
+	<updated>2022-07-09T21:27:49Z</updated>
 	<author>
 		<name>plumk</name>
 		<uri>https://www.v2ex.com/member/plumk</uri>
@@ -202,10 +1899,10 @@ id: "jsdkfksk...."
 	]]></content>
 </entry><entry>
 	<title>[问与答] 现在有没有什么便宜量大的 5g 卡？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865172#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865172#reply12" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865172</id>
 	<published>2022-07-09T13:39:04Z</published>
-	<updated>2022-07-09T16:19:37Z</updated>
+	<updated>2022-07-09T18:24:31Z</updated>
 	<author>
 		<name>christin</name>
 		<uri>https://www.v2ex.com/member/christin</uri>
@@ -231,10 +1928,10 @@ id: "jsdkfksk...."
 	]]></content>
 </entry><entry>
 	<title>[Apple] iTunes Store，同一首歌，铃声竟然比完整歌曲还要贵</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865170#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865170#reply6" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865170</id>
 	<published>2022-07-09T13:29:54Z</published>
-	<updated>2022-07-09T13:40:26Z</updated>
+	<updated>2022-07-09T15:40:26Z</updated>
 	<author>
 		<name>GooglePlay</name>
 		<uri>https://www.v2ex.com/member/GooglePlay</uri>
@@ -246,7 +1943,7 @@ id: "jsdkfksk...."
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] block quic 提速 访问</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865168#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865168#reply6" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865168</id>
 	<published>2022-07-09T13:25:47Z</published>
 	<updated>2022-07-09T16:17:26Z</updated>
@@ -283,10 +1980,10 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	]]></content>
 </entry><entry>
 	<title>[问与答] 怎么才能给抖音旗下的学浪 app 提个建议?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865166#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865166#reply4" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865166</id>
 	<published>2022-07-09T13:13:21Z</published>
-	<updated>2022-07-09T13:18:20Z</updated>
+	<updated>2022-07-09T15:18:20Z</updated>
 	<author>
 		<name>x02</name>
 		<uri>https://www.v2ex.com/member/x02</uri>
@@ -310,10 +2007,10 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	]]></content>
 </entry><entry>
 	<title>[程序员] GPL 协议开源项目在被社区完善后发布收费闭源的商业版或转闭源需要为贡献者支付报酬吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865164#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865164#reply9" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865164</id>
 	<published>2022-07-09T12:51:30Z</published>
-	<updated>2022-07-09T16:15:46Z</updated>
+	<updated>2022-07-09T18:15:46Z</updated>
 	<author>
 		<name>dfgxcvbcv</name>
 		<uri>https://www.v2ex.com/member/dfgxcvbcv</uri>
@@ -352,7 +2049,7 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865159#reply7" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865159</id>
 	<published>2022-07-09T12:20:45Z</published>
-	<updated>2022-07-09T15:02:17Z</updated>
+	<updated>2022-07-09T17:02:17Z</updated>
 	<author>
 		<name>youthfire</name>
 		<uri>https://www.v2ex.com/member/youthfire</uri>
@@ -362,10 +2059,10 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	]]></content>
 </entry><entry>
 	<title>[分享创造] [Spark] 一个开源、跨平台、功能齐全的设备管理和远控工具</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865158#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865158#reply5" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865158</id>
 	<published>2022-07-09T12:14:56Z</published>
-	<updated>2022-07-09T15:03:15Z</updated>
+	<updated>2022-07-09T16:03:15Z</updated>
 	<author>
 		<name>xzb0797</name>
 		<uri>https://www.v2ex.com/member/xzb0797</uri>
@@ -421,10 +2118,10 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 请问 3HK DIY 的香港储值卡国内有购买渠道吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865155#reply18" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865155#reply19" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865155</id>
 	<published>2022-07-09T12:04:43Z</published>
-	<updated>2022-07-09T15:18:50Z</updated>
+	<updated>2022-07-09T16:18:50Z</updated>
 	<author>
 		<name>leonme</name>
 		<uri>https://www.v2ex.com/member/leonme</uri>
@@ -461,10 +2158,10 @@ iptables -I FORWARD -i br-lan -p udp --dport 443 -j QUIC
 	]]></content>
 </entry><entry>
 	<title>[程序员] go 有没有比较合适的异常处理流程方案</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865150#reply13" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865150#reply15" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865150</id>
 	<published>2022-07-09T11:29:54Z</published>
-	<updated>2022-07-09T14:14:17Z</updated>
+	<updated>2022-07-09T16:32:59Z</updated>
 	<author>
 		<name>pkupyx</name>
 		<uri>https://www.v2ex.com/member/pkupyx</uri>
@@ -484,7 +2181,7 @@ exceptionHandler(XxxException xxx){ ... }</p>
 	]]></content>
 </entry><entry>
 	<title>[VPS] 甲骨文 ARM 免费 VPS 首尔区是补货了吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865149#reply10" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865149#reply11" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865149</id>
 	<published>2022-07-09T11:27:24Z</published>
 	<updated>2022-07-09T14:59:37Z</updated>
@@ -499,448 +2196,16 @@ exceptionHandler(XxxException xxx){ ... }</p>
 	]]></content>
 </entry><entry>
 	<title>[游戏开发] 开发王者荣耀的团队，纯开发人员大概多少人？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865148#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865148#reply14" />
 	<id>tag:www.v2ex.com,2022-07-09:/t/865148</id>
 	<published>2022-07-09T11:21:57Z</published>
-	<updated>2022-07-09T16:22:02Z</updated>
+	<updated>2022-07-09T17:52:45Z</updated>
 	<author>
 		<name>wxd92</name>
 		<uri>https://www.v2ex.com/member/wxd92</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p>好奇一个大项目的规模，如果只考虑 ios 平台</p>
-
-	]]></content>
-</entry><entry>
-	<title>[游戏主机] 只玩 GTA V 和 PUBG，买什么主机合适</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865147#reply3" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865147</id>
-	<published>2022-07-09T11:20:56Z</published>
-	<updated>2022-07-09T12:45:10Z</updated>
-	<author>
-		<name>dsgdsfh</name>
-		<uri>https://www.v2ex.com/member/dsgdsfh</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题，GTA 只玩在线，PUBG 是去看风景的。啥游戏机合适一些？
-	]]></content>
-</entry><entry>
-	<title>[云计算] 通过 oss 自建 nas 的方案是否可行?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865146#reply20" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865146</id>
-	<published>2022-07-09T11:10:23Z</published>
-	<updated>2022-07-09T15:44:12Z</updated>
-	<author>
-		<name>phony2r</name>
-		<uri>https://www.v2ex.com/member/phony2r</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	购买新加坡或者香港轻量云服务器 24 RMB/月<br />通过 ossfs 把 bucket 挂载到轻量云<br />在轻量云启用文件共享服务<br /><br />轻量云新加坡套餐 <a target="_blank" href="https://share.mebtte.com/Xnip2022-07-09_18-53-19.png" rel="nofollow noopener">https://share.mebtte.com/Xnip2022-07-09_18-53-19.png</a><br /><br />首先 oss 走内网是不需要流量费的<br />轻量云已经包含了 1T 流量 网速也有 4mb/s 左右<br />加上轻量云自带 ip 可以公网访问<br /><br />上面的方案基本只需要付 oss 的存储费用 请求次数费用基本可以忽略<br />不过一直没搞懂 oss 怎么算存储费用的 又流量包又按量计费的<br /><br />比如我要存 4t 的数据 一年大概多少钱?
-	]]></content>
-</entry><entry>
-	<title>[分享发现] state of js 2021 发了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865145#reply1" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865145</id>
-	<published>2022-07-09T11:08:12Z</published>
-	<updated>2022-07-09T12:07:12Z</updated>
-	<author>
-		<name>christin</name>
-		<uri>https://www.v2ex.com/member/christin</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	🔗： <a target="_blank" href="https://2021.stateofjs.com/zh-Hans/" rel="nofollow noopener">https://2021.stateofjs.com/zh-Hans/</a><br />发几个有意思的点：<br />1. react 的使用度（今年的调查范围内，下同）又一次位居榜首，满意度降低了。<br />2. vite 满意度和关注度都是第一。<br />3. 受访者中，71.3%为男性，女性占 4%。<br />4. 好多新特性没听过，也有好多听过但没用过，今年要继续加油了。<br />5. JS 的痛点中，依赖管理占据第一，紧接着就是代码架构。<br />6. JS 发展太快了的问题下，除去 31.1%的中立，38%的人同意或十分同意，31.1 的人反对或十分反对。（这个问题竟然将近对半开是没想到的）<br />其他有意思的点欢迎讨论。
-	]]></content>
-</entry><entry>
-	<title>[Bitcoin] 最近在学习量化交易，哪里可以下载历史十年的比特币 k 线数据</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865144#reply1" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865144</id>
-	<published>2022-07-09T10:59:53Z</published>
-	<updated>2022-07-09T02:59:53Z</updated>
-	<author>
-		<name>roker</name>
-		<uri>https://www.v2ex.com/member/roker</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近在学习量化交易，哪里可以下载历史十年的比特币 k 线数据？我看各大交易所基本上都是三年以内的，我想要精确到小时级别的 k 线数据
-	]]></content>
-</entry><entry>
-	<title>[TypeScript] 关于 TypeScript any 的理解不知道对不对？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865143#reply3" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865143</id>
-	<published>2022-07-09T10:53:29Z</published>
-	<updated>2022-07-09T11:03:41Z</updated>
-	<author>
-		<name>chuanqirenwu</name>
-		<uri>https://www.v2ex.com/member/chuanqirenwu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>TypeScript 中有几种特殊的类型，分别是 any 、unknown 和 never 。</p>
-<p>从集合论的角度理解，unknown 对应于全集，never 对应于空集。</p>
-<p>TypeScript 变量之间是否可赋值的规则是：赋值变量的类型包含的值是被赋值变量的类型包含的值的子集。</p>
-<p>例如 unknown 对应于全集，不是任何类型的子集，所以 unknown 不能赋值给任何别的类型的变量。never 是空集，任何集合均不是其子集，因此任何别的类型的变量都不能赋值给 never 类型的变量。</p>
-<p>但 any 是个例外，any 类型的变量可赋值给任何类型的变量，反之亦成立。如果 any 是一个特定集合的话，这个集合具有这样的性质：任何集合均是其子集且其为任何集合的子集，这显然是矛盾的。</p>
-<p>所以我的理解是，any 不是一个特定的集合，而是可变的，它会根据上下文变为任意的集合，以保证无论是赋值还是被赋值时，均满足上边的说的可赋值的规则（亦或者 TypeScript 直接给 any 类型开绿灯，跳过检查？）。</p>
-<p>由此我又得出一个推论，在编写一些基础的泛型方法或者工具时，如果可接收任意类型，为了类型安全，应该将泛型限定为 unknown 而不是 any ，例如 <code>UnwrapPromise&lt;T extends Promise&lt;unknown&gt;&gt; = T extends Promise&lt;infer U&gt; ? UnwrapPromise&lt;U&gt; : T</code>。</p>
-<p>不知道这样理解是否是正确的？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [杭州] 鲸驰无限 招 C++游戏服务端开发</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865142#reply0" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865142</id>
-	<published>2022-07-09T10:24:38Z</published>
-	<updated>2022-07-09T10:23:38Z</updated>
-	<author>
-		<name>cwaken</name>
-		<uri>https://www.v2ex.com/member/cwaken</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<div>
-<br/> [岗位待遇] ：20k 以上，优秀人才上不封顶
- <br/> [岗位职责] ：
- <br/>1. 服务端大厅功能 /子游戏业务逻辑的维护与开发
- <br/>2. 与产品策划、客户端、Web 后台等相关人员密切配合完成功能模块需求分析与设计
- <br/>3. 游戏数据库的日常维护与开发工作
- <br/>4. 产品发布与更新、线上服务器运维
- <br/>
-<br/> [岗位要求] ：
- <br/>1. 一年以上 c++游戏服务端工作经验或 985 、211 优秀毕业生(技术全面，无游戏开发经验，但拥有强烈兴趣和意愿的也可考虑)
- <br/>2. 熟悉 Visual Studio 开发环境，具备丰富的实际开发调试经验
- <br/>3. C++基础扎实，且拥有良好的编程习惯
- <br/>4. 能熟练使用 STL 模板库、熟悉相关 C++11 标准库的运用
- <br/>5. 熟悉 SQLServer 数据库的基本操作和相关概念，熟练掌握常用及复杂 SQL 脚本编程，具备数据库调优经验优先
- <br/>6. 熟悉 TCP/IP 网络编程的优先
- <br/>7. 具有强烈的技术探索精神和独立完成工作的能力
- <br/>8. 为人诚恳、工作严谨、细致，责任心强，并具有极强的质量意识
- <br/>9. 沟通顺畅、合作相处融洽，能快速融入新环境
- <br/>10. 有志成为一名兼顾一线技术团队管理与核心功能开发的团队负责人的优先
- <br/>
-<br/>[联系方式] ：
- <br/>微信：mns450272527
- <br/>邮箱联系： c373906408@live.cn
-</div>
-	]]></content>
-</entry><entry>
-	<title>[程序员] anaconda 安装第三方库总是失败</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865141#reply8" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865141</id>
-	<published>2022-07-09T10:24:14Z</published>
-	<updated>2022-07-09T12:58:01Z</updated>
-	<author>
-		<name>amiwrong123</name>
-		<uri>https://www.v2ex.com/member/amiwrong123</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>大佬们，求助呀。</p>
-<p>Windows 环境。已经搞了半天了。目前.condarc 里的内容已经为：</p>
-<pre><code>ssl_verify: true
-show_channel_urls: true
-
-channels:
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/win-64
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/win-64
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
-  - defaults
-</code></pre>
-<p>网上说，一定是 http ，不是 https 。所以内容里都是 http 。
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.bmp.ovh/imgs/2022/07/09/4e81745cc80966e7.png"/></p>
-<ul>
-<li><code>conda install --channel <a href="https://conda.anaconda.org/conda-forge" rel="nofollow">https://conda.anaconda.org/conda-forge</a> ocrmypdf</code></li>
-<li><code>conda install --channel <a href="http://conda.anaconda.org/conda-forge" rel="nofollow">http://conda.anaconda.org/conda-forge</a> ocrmypdf</code></li>
-</ul>
-<p>上面两条试了都不好使，以及开着翻墙软件的组合，也不好使。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[生活] 为什么超车道是左侧，这样会车速度更高更危险呀</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865140#reply20" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865140</id>
-	<published>2022-07-09T10:24:06Z</published>
-	<updated>2022-07-09T15:31:54Z</updated>
-	<author>
-		<name>sillydaddy</name>
-		<uri>https://www.v2ex.com/member/sillydaddy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想象中间是黄实线，黄线两侧各有 2 条车道，那么靠近黄线的两条车道上，车辆相向而行，速度相比非超车道更高，危险系数更大吧。</p>
-<p>为什么不把超车道设在右侧？这样会车的两条车道速度会慢些</p>
-<p>问题可能有点无聊，轻拍，就当瞎侃一顿。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[生活] 给大家提个醒：如果开企业专票，戴尔售后就不能退货了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865136#reply4" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865136</id>
-	<published>2022-07-09T09:56:31Z</published>
-	<updated>2022-07-09T14:48:22Z</updated>
-	<author>
-		<name>ok47</name>
-		<uri>https://www.v2ex.com/member/ok47</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>之前发过一个戴尔显示器退货的帖子，但到今天货还没退掉。</p>
-<p>也是第一次知道戴尔售后对于官方商城下单时，选择开企业增值税专用发票的订单，售后会认为是企业使用行为，根据戴尔的售后政策，非个人使用，就不能退货，仅提供保修。</p>
-<p>也搜到几篇时间比较久的相关报道，给大家提个醒：</p>
-<p><a href="http://finance.cnr.cn/gs/20151213/t20151213_520778884.shtml" rel="nofollow">http://finance.cnr.cn/gs/20151213/t20151213_520778884.shtml</a>
-<a href="http://news.cctv.com/2017/11/16/ARTItnh5vbnnsMPDALw5swAC171116.shtml" rel="nofollow">http://news.cctv.com/2017/11/16/ARTItnh5vbnnsMPDALw5swAC171116.shtml</a>
-<a href="http://it.people.com.cn/n/2015/0429/c1009-26922328.html" rel="nofollow">http://it.people.com.cn/n/2015/0429/c1009-26922328.html</a>
-<a href="https://zhidao.baidu.com/question/1237763048713185579.html" rel="nofollow">https://zhidao.baidu.com/question/1237763048713185579.html</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] NextTrace —— 一款开源的路由跟踪工具</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865135#reply12" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865135</id>
-	<published>2022-07-09T09:36:19Z</published>
-	<updated>2022-07-09T15:25:23Z</updated>
-	<author>
-		<name>sjlleo</name>
-		<uri>https://www.v2ex.com/member/sjlleo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h3>写在前面</h3>
-<p>楼主是在读的大三学生，接触 <code>Golang</code> 也就不到一年的时间，代码比较烂... 轻喷</p>
-<h3>为什么要写这个工具</h3>
-<p>其实我最早一直都是使用的是 <code>BestTrace</code>，可惜 IPIP 为了防止数据被抓取，从去年开始限制使用次数，恰好我喜欢折腾，测来测去，一会儿就超限额了，真的很让人难受。</p>
-<p>今年终于官宣会出付费版，心里一喜，终于可以入正不忍受每天 403 了，但是到现在都没啥动静。于是萌生了自己先做一个勉强能满足自己测试需求的小工具，等到正式付费再切回 <code>BestTrace</code> 的想法。</p>
-<h3>支持哪些功能</h3>
-<p><code>TCP</code>、<code>UDP</code>、<code>ICMP</code> 三大协议肯定是支持的，因为我平时测试都是用 <code>TCP SYN</code> 进行测试，防止出现一些只有 <code>ICMP</code> 会走到的假路由。不过自己还比较菜鸡，目前 <code>IPv6</code> 只能使用 <code>ICMP</code> 进行 <code>Traceroute</code>。</p>
-<p>另外之前无意间发现 <a href="https://github.com/nitefood/asn" rel="nofollow">nitefood/asn</a> 的 AS-Path 功能非常简洁明了，就想着用 <code>Go</code> 复刻一个，顺便把地理位置融合进去。又有小伙伴和我说，想加个 Looking Glass 以及可视化 Map 功能，但是我总觉得放在一个 CLI Tool 里面觉得太臃肿了，遂拆成 Lite 、Enhanced 2 个分支版本。</p>
-<p>还有一点，<code>BestTrace</code> 的 <code>IPv6</code> 骨干网信息没有显示，我又是移动 <code>IPv6</code> 重度使用者，所以也自己在学业之余维护一个不怎么准的移动 <code>IPv6</code> 骨干网库（ AS9808 ），CMI 的 AS58453 还是有很多错误，可能需要更多时间慢慢校准吧。<del>说不准哪天 <code>BestTrace</code> 付费版正式发布了我就跑路了</del>（逃</p>
-<p>IPv4 的 AS4134 ( 202.97.*.* ) 、AS4837 ( 219.158.*.* ) 、AS9808 ( 221.183.*.* &amp;&amp; 111.24.*.* ) 、AS9929 ( 210.13.*.* &amp;&amp; 218.105.*.* ) 、AS58453 ( 223.119.*.* ) 骨干网都有自己手动校过，自己也没有太多检测节点，所以准度也就是看着乐的水平吧。</p>
-<h3>项目一些截图</h3>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/SCxw7G11.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/4H3Z2yyA.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/5a9uBLN6.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/vM71kE49.png"/></p>
-<h3>开源地址</h3>
-<ul>
-<li>
-<p>Lite Edition - <a href="https://github.com/xgadget-lab/nexttrace" rel="nofollow">https://github.com/xgadget-lab/nexttrace</a></p>
-</li>
-<li>
-<p>Enhanced Edition - <a href="https://github.com/OwO-Network/nexttrace-enhanced" rel="nofollow">https://github.com/OwO-Network/nexttrace-enhanced</a></p>
-</li>
-</ul>
-<p>第一次发自己的小项目呀，希望能够帮到大家，谢谢！如果有哪个 IP 错了，也可以发 issue 找我，我尽力改正它们。</p>
-<h3>Credits</h3>
-<p>对以下项目表示衷心地感谢！</p>
-<ul>
-<li>
-<p><strong>ASN</strong> - AS-Path 给我带来了很多灵感，让我能够做出更多好用的功能。</p>
-</li>
-<li>
-<p><strong>BestTrace</strong> - 来自 IPIP 异常优秀的 Traceroute 可视化工具，准度极高，对骨干网认知的启蒙工具。</p>
-</li>
-<li>
-<p><strong>WorstTrace</strong> - 如果没有它，我想我应该不会自己想着去做这样一款工具，也不会有 table 模式。</p>
-</li>
-</ul>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 为知笔记还有 15 天到期了，值不值得再续费？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865134#reply6" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865134</id>
-	<published>2022-07-09T09:34:29Z</published>
-	<updated>2022-07-09T13:30:10Z</updated>
-	<author>
-		<name>zzz22333</name>
-		<uri>https://www.v2ex.com/member/zzz22333</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>用为知笔记有一年了，开始用的还挺好的，当为知笔记重构后，以前有的功能现在没有了，以前有的 bug 现在有了。</p>
-<p>近期更新的速度也很慢，从更新日志来看也只是不痛不痒的修复了几个 bug 。</p>
-<p>再吐槽为知笔记的几个点：</p>
-<p>1 、 不能插入思维导图。为知笔记内嵌的 <a href="http://draw.io" rel="nofollow">draw.io</a> ，虽然好用，但是没有思维导图功能，导致得直接从其他软件画了思维导图，在截图到为知笔记中，不方便后续的编辑；</p>
-<p>2 、markdown 编辑器太烂了。为知笔记的 markdown 功能是我用过最烂的，语言自动渲染，导致本来想输入#xxxx#，结果被渲染为了标题；</p>
-<p>3 、不能内部链接引用。比如说从该笔记的第三章跳转到第二章；</p>
-<p>4 、没有文章加密功能。旧版本有的，但是新版本一直没有；</p>
-<p>现在还剩 15 天就到期了 ，有没有必要在续费，或者还有更好的推荐？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Minecraft] 从零开始开发 MC</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865132#reply1" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865132</id>
-	<published>2022-07-09T09:01:21Z</published>
-	<updated>2022-07-09T06:01:21Z</updated>
-	<author>
-		<name>lijinxiang</name>
-		<uri>https://www.v2ex.com/member/lijinxiang</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://github.com/shellljx/McProtocol" rel="nofollow">https://github.com/shellljx/McProtocol</a></p>
-<p>从零开始开发一个 MC 客户端，包括 网络协议的实现，渲染的实现，未来还有一些游戏业务逻辑的实现
-现在的进度刚能渲染出来服务器部分地图
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://github.com/shellljx/McProtocol/blob/main/img3.jpg"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[上海] 现在上海互联网求职机会多吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865131#reply4" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865131</id>
-	<published>2022-07-09T08:58:36Z</published>
-	<updated>2022-07-09T15:08:01Z</updated>
-	<author>
-		<name>szwhszw</name>
-		<uri>https://www.v2ex.com/member/szwhszw</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想问下 v 站的各位大佬，现在在上海求职互联网职位机会还多吗，听讲现在很多公司不招聘，招聘的话工资低，要求多挑三拣四的，有在求职的朋友们可以交流一下经验吗</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 如果让 AI 帮忙写正则表达式</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865127#reply25" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865127</id>
-	<published>2022-07-09T08:44:44Z</published>
-	<updated>2022-07-09T15:04:18Z</updated>
-	<author>
-		<name>SuperMild</name>
-		<uri>https://www.v2ex.com/member/SuperMild</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>看到这个 <a href="https://www.autoregex.xyz" rel="nofollow">https://www.autoregex.xyz</a></p>
-<p>突然想到，如果能让 AI 帮忙写正则，会是一件非常有意义的事情。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[上海] 问一下,浦东图书馆现在开门了吗?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865123#reply4" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865123</id>
-	<published>2022-07-09T08:09:31Z</published>
-	<updated>2022-07-09T08:18:34Z</updated>
-	<author>
-		<name>IGJacklove</name>
-		<uri>https://www.v2ex.com/member/IGJacklove</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有没有最近去过的老哥,现在浦东图书馆是什么状态?</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Ubuntu] Ubuntu Server 22.04 和 iptables/nftables</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865122#reply4" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865122</id>
-	<published>2022-07-09T08:00:17Z</published>
-	<updated>2022-07-09T12:39:08Z</updated>
-	<author>
-		<name>acess</name>
-		<uri>https://www.v2ex.com/member/acess</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>把 VPS 升级到了 Ubuntu Server 22.04 LTS 之后发现 WireGuard VPN 转发不通了。
-iptables -L 提示有 iptables-legacy 的表存在，于是发现 iptables-legacy 的 FORWARD 链的 policy 是 DROP ，而且里面貌似还有 Docker 自动添加的规则。
-把 WireGuard 配置改一下，iptables 替换成 iptables-legacy 之后貌似转发就通了。</p>
-<p>之前有听说新的 iptables 只是翻译成等效 nftables 规则，所以说其实新的 nftables 和老的 iptables-legacy 是并存且同时生效的么？
-不知道能不能让 Docker 也改用新的基于 nftables 的 iptables……</p>
-<p>（顺便，V2EX 发帖的编辑器好像有点问题，会不受控制地重复自动补全单词，就是因为这个我才在别的地方编辑好再粘贴，但粘贴进去的文本实际没发出来。编辑了一下才真正发出来。我用的是 Chrome for Android ，没有用 Markdown ）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 分享下不用靠垫的坐姿</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865121#reply2" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865121</id>
-	<published>2022-07-09T07:58:22Z</published>
-	<updated>2022-07-09T08:22:43Z</updated>
-	<author>
-		<name>JarvenI</name>
-		<uri>https://www.v2ex.com/member/JarvenI</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>前两天看条视频,推荐不用座椅靠垫,因为人体的后背就是直的,用了靠垫,反而导致腰背弯曲了,然后根据教学体验下来,确实很不错,感觉坐姿都更好了.而且还省了靠背的 100+的大洋.
-步骤:
-我现在用的就是普通弓形椅.坐下后,屁股,背部紧贴座椅靠背.最重要的就是要打开胯部.就是快有种菊花贴到椅子的感觉了.</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Mac mini] 2022 年 7 月，现在购买 Mac Mini m1，还有哪些问题吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865120#reply3" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865120</id>
-	<published>2022-07-09T07:56:17Z</published>
-	<updated>2022-07-09T05:56:17Z</updated>
-	<author>
-		<name>leewi9coder</name>
-		<uri>https://www.v2ex.com/member/leewi9coder</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>要用 Windows 虚拟机，要用 office ，要用网银</p>
-<p>要用 AirPods 和 zoom 开会</p>
-<p>蓝牙不稳定的问题还有吗？</p>
-<p>ssd 硬盘过度写入的问题还有吗？</p>
-<p>最近打算入 Mac Mini m1</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 豆瓣骂自己都会禁言吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865119#reply2" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865119</id>
-	<published>2022-07-09T07:54:56Z</published>
-	<updated>2022-07-08T23:54:56Z</updated>
-	<author>
-		<name>revival83</name>
-		<uri>https://www.v2ex.com/member/revival83</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>骂了自己傻逼，被禁言 7 天</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Go 编程语言] 请教一个问题，一个 go1.17 的库要怎么测试泛型是否正常工作？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865118#reply16" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865118</id>
-	<published>2022-07-09T07:53:34Z</published>
-	<updated>2022-07-09T15:03:54Z</updated>
-	<author>
-		<name>Trim21</name>
-		<uri>https://www.v2ex.com/member/Trim21</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最近写了个 golang 的库，我没有用到泛型也不需要泛型，所以就在 go.mod 里面写了 <code>go 1.17</code></p>
-<p>但是因为用到了 <code>unsafe</code>，<code>reflect</code> 这些直接操作了内存，所以有必要测试一下 1.18 的泛型能不能正常工作。</p>
-<p>但是因为我在 go.mod 里面写的版本要求是 1.17 ，所以不能使用泛型语法。 <code>//go:build go1.18</code> 之类的条件编译也不能解决这个问题，因为 go.mod 里面写的还是 1.17 ，所以就算泛型测试在 go1.18 下才会运行，还是不能用泛型语法。</p>
-<p>难道只能额外加一个文件夹，额外写一个 go.mod 用 replace 指向我的库的位置，然后用在 ci 里用多个 go 版本跑我的库的测试和这个额外的文件夹里的 go1.18 测试？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[电影] 《黑钱》第二季第四集剧情讨论</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865117#reply7" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865117</id>
-	<published>2022-07-09T07:44:22Z</published>
-	<updated>2022-07-09T10:31:52Z</updated>
-	<author>
-		<name>daoqiongsi1101</name>
-		<uri>https://www.v2ex.com/member/daoqiongsi1101</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>梳理一下非法黄金洗钱流程：</p>
-<p>拉丁美洲出厂的可卡因等毒品，被毒贩走私到墨西哥等地，更多的毒贩分销往美国各个据点。</p>
-<p>在美国各个据点贩卖毒品获得美元的现金，被汇聚到一起，假设有一亿美金汇聚在片中的迈阿密。</p>
-<p>这些钱不能直接拿来买游艇、飞机等，必须存入银行账户，但存入银行不仅银行会拒收，而且可能向联邦调查局缉毒局举报，因此必须将现金转为合法可用的某样东西。</p>
-<p>首先，会雇用走私贩将这一大笔现金运往秘鲁。</p>
-<p>然后，收购一批总值一亿美元的非法黄金，现在，手上有了价值一亿非法收购的黄金。</p>
-<p>然后，在秘鲁开一家空壳公司，假设叫“世界黄金贸易公司”，这家公司联系美国迈阿密的一家黄金冶炼厂，这家冶炼厂专门从秘鲁进口黄金。冶炼厂会询问“世界黄金贸易公司”这批黄金的来历，公司负责人会说是从地底下挖出来的，之后冶炼厂就不再过问。这批黄金成功运往美国冶炼厂。</p>
-<p>最后，美国冶炼厂通过银行转账服务，将购买黄金支付的一亿美元转到“世界黄金贸易公司”的银行账户。银行不会过问，因为公司已经事先声明那笔钱是出售在秘鲁采集黄金所得来的收入。
-<img alt="dirty_money" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://notes-1303209934.cos.ap-guangzhou.myqcloud.com/2022/07/7478059a09f7180bfa22b4475c35f9bf.webp"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 求能在 macOS 和 Windows 快速切换的键盘推荐</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/865116#reply16" />
-	<id>tag:www.v2ex.com,2022-07-09:/t/865116</id>
-	<published>2022-07-09T07:44:21Z</published>
-	<updated>2022-07-09T13:34:49Z</updated>
-	<author>
-		<name>crystale</name>
-		<uri>https://www.v2ex.com/member/crystale</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>目前手里有一台 Windows 笔记本和 M1 的 MacBook Air ，c 口直连到显示器（ u2723qe)上使用，鼠标也是通过优联连接显示器的 MX master 3 ，可以无缝切换。</p>
-<p>但是只有一把妙控键盘，每次切换电脑的时候都要重新配对键盘，非常繁琐。请问有没有能够方便切换的键盘推荐？</p>
 
 	]]></content>
 </entry>
