@@ -8,15 +8,656 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-08-28T16:02:01Z</updated>
+<updated>2022-08-28T22:05:44Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[Python] Python 实现 Windows 微信消息通知（可显示发送人和消息内容）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876098#reply0" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876098</id>
+	<published>2022-08-29T02:06:44Z</published>
+	<updated>2022-08-28T22:05:44Z</updated>
+	<author>
+		<name>pytth</name>
+		<uri>https://www.v2ex.com/member/pytth</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h2>需求</h2>
+<p>Mac 微信是有一个消息通知的，这一点就挺好的，有时候根本不用点开开看就能看到消息内容。而 Windows 电脑版是没有这个消息通知的，只有右下角图标闪烁。</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.niupic.com/images/2022/08/29/a32V.png"/></p>
+<p>于是我想了不少的办法去实现这么一个功能，已经另辟蹊径实现了这个功能，其实也有一定的局限性，但是能满足办公期间的小需求。</p>
+<p>效果如下：</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.niupic.com/images/2022/08/29/a32Z.png"/></p>
+<h2>实现方法</h2>
+<p><strong>接收通知</strong></p>
+<p>首先是 Windows 的通知弹出的实现就是 Windows 自带的通知栏，我们可以通过 Python 去调用 Windows API 去发送 Windows 通知，让消息弹出来。</p>
+<p><strong>发送通知</strong></p>
+<p>相比于接收通知，那么发送通知就比较困难，因为 Windows 微信电脑版的窗口属于非 Windows 窗口标准，我们无法通过常规的方式去读取每个控件的内容，更无法监听到通知内容，所以我这边另辟蹊径，通过安卓手机去监听微信消息。</p>
+<p>所以这里用到了 SmsForwarder 这款开源软件，安装在你的安卓手机上，然后设置转发规则，监听微信 APP 的通知，然后发送通道选择 WebHook ，将监听到的消息 POST 到 Python 开启的 HTTP 服务器，触发 Windows 通知就行了！</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.niupic.com/images/2022/08/29/a332.png"/></p>
+<h2>上代码</h2>
+<p><a href="http://toasts.py" rel="nofollow">toasts.py</a></p>
+<pre><code>from flask import Flask, request
+from winotify import Notification
+import urllib.parse
+import win32gui
+import win32con
+
+app = Flask(__name__)
+
+@app.route('/')  # 获取 url 信息
+def getUrlInfo():
+    # 完整 url
+    url = request.url
+    # 主机部分
+    hostUrl = request.host_url
+    # 访问路径
+    fullPath = request.full_path
+    # 输出
+    print('收到推送任务，推送内容是：'+str(urllib.parse.unquote(fullPath.split("/?")[1])).replace('+', ' ', 1))
+
+    # 接收到的内容
+    content = str(urllib.parse.unquote(fullPath.split("/?")[1])).replace('+', ' ', 1);
+
+    # 错误处理
+    # 因为监听软件那边监听到的首条消息是没有带上微信用户昵称的
+    # 所以需要判断当前接收到的消息是不是首条消息
+    # 如果不做这一步就会出错
+
+    pdmh = ":" in content
+    if pdmh == True:
+        # 截取:前面的内容
+        qianmian = content.split(":")[0]
+        weixinMsg = content.split(":")[1]
+        # 还要将[]这一块也去掉，这就提取到了微信昵称
+        nickname = qianmian.split("]")[1]
+    else:
+        nickname = '微信消息通知'
+        weixinMsg = content
+
+    # 开发 Push 通知
+    # toaster = ToastNotifier()
+    # toaster.show_toast(title=nickname, msg=weixinMsg,icon_path="logo.ico", duration=5)
+    toast = Notification(app_id="通知中心",title=nickname,msg=weixinMsg,icon=r"D:\Python\demo\wechat.png")
+    toast.show()
+    return "ok"
+
+
+def notify(hwnd, msg, wparam, lparam):
+    print("notify", msg)
+    if lparam == win32con.WM_LBUTTONDBLCLK:  # 双击左键
+        print("双击左键", msg)
+        pass
+    elif lparam == win32con.WM_RBUTTONUP:  # 右键弹起
+        print("右键弹起", msg)
+        pass
+    elif lparam == win32con.WM_LBUTTONUP:  # 左键弹起
+        print("左键弹起", msg)
+        pass
+    return True
+
+wc = win32gui.WNDCLASS()
+wc.hInstance = win32gui.GetModuleHandle(None)
+wc.lpszClassName = "Windows 通知中心"
+wc.style = win32con.CS_VREDRAW | win32con.CS_HREDRAW;
+wc.lpfnWndProc = notify
+classAtom = win32gui.RegisterClass(wc) 
+hwnd =win32gui.CreateWindow(classAtom,"tst2",win32con.WS_OVERLAPPEDWINDOW,win32con.CW_USEDEFAULT,win32con.CW_USEDEFAULT,win32con.CW_USEDEFAULT,win32con.CW_USEDEFAULT,None,None,None,None)
+notify_id = (hwnd,0,win32gui.NIF_ICON | win32gui.NIF_MESSAGE | win32gui.NIF_TIP,win32con.WM_USER + 20,win32gui.LoadIcon(0, win32con.IDI_APPLICATION),"Windows 通知中心")
+win32gui.Shell_NotifyIcon(0,notify_id)
+
+# 在指定 IP 和端口开启 HTTP 服务
+if __name__ == '__main__':
+    app.run(debug=False,host='192.168.1.100', port=8080)
+</code></pre>
+<h2>代码说明</h2>
+<p>192.168.1.100 是我电脑的内网 ip ，8080 是端口号，你需要获取你电脑的内网 ip 换上去，不然后续配置安卓那边的监听转发端就无法正常转发通知。</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.niupic.com/images/2022/08/29/a335.png"/></p>
+<p>执行代码后，会在你电脑开启一个 HTTP 服务，这时候你可以在浏览器进行本地测试，在浏览器按照以下格式粘贴：</p>
+<pre><code>http://内网 ip:端口号 /?通知内容
+</code></pre>
+<h2>安卓手机配置</h2>
+<p>安装 SmsForwarder 这款软件。</p>
+<p>下载地址： <a href="https://gitee.com/pp/SmsForwarder/releases/tag/v3.0.8" rel="nofollow">https://gitee.com/pp/SmsForwarder/releases/tag/v3.0.8</a></p>
+<p>设置发送通道，选择 Webhook ，Webserver 按照以下格式填写：</p>
+<pre><code>http://内网 ip:端口号 /
+</code></pre>
+<p>WebParams 直接填写 [msg] ，请求方式是 GET</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.niupic.com/images/2022/08/29/a332.png"/></p>
+<p>设置转发规则，添加规则，选择匹配 “APP 包名”，匹配模式选择 “是”，匹配值是 <a href="http://com.tencent.mm" rel="nofollow">com.tencent.mm</a> ，选择刚才配置的发送通道，自定义模板直接点击通知内容。</p>
+<p>简单进行配置后，SmsForwarder 进行一些必要的设置后，就可以正常使用了。</p>
+<h2>需要优化的地方</h2>
+<p>目前还在想办法在电脑本地监听微信消息，毕竟通过安卓手机监听消息也不是办法，一方面是依赖本地的服务器，通过局域网才可以发送通知给电脑。另一方面就是安卓监听消息也不具备稳定性，而且也不是人人都用安卓，对于苹果手机的用户，也是难以实现这个。</p>
+<h2>需要注意的地方</h2>
+<ol>
+<li>
+<p>内网 ip 可能会变化，如果你发现后面无法正常接收到通知，可以检查下内网 ip ，更换一下 ip 重启服务。</p>
+</li>
+<li>
+<p>因为这是使用内网 ip 实现的 HTTP 服务，所以你安卓手机需要连接的 wifi 与电脑的一致，如果电脑是有线网络，那么你手机需要与电脑有线网络同一个网络环境，即 ip 相同。</p>
+</li>
+<li>
+<p>如果不想通过局域网实现，可以自己配置内网穿透服务去实现外网请求服务。</p>
+</li>
+</ol>
+<h2>监听微信消息的方案</h2>
+<ol>
+<li>
+<p>自写 Hook 微信，读取内存去监听微信消息</p>
+</li>
+<li>
+<p>使用现成的方案，市面上也有一些 Hook 微信的框架，例如可爱猫，这个框架提供了非常便利的 SDK 去调用 API 来监听微信聊天消息，甚至还可以做到发送消息。</p>
+</li>
+</ol>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 15w 以下落地，买什么车？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876096#reply1" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876096</id>
+	<published>2022-08-29T02:01:26Z</published>
+	<updated>2022-08-28T23:01:26Z</updated>
+	<author>
+		<name>dsggnbsp</name>
+		<uri>https://www.v2ex.com/member/dsggnbsp</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	最近箭在弦上不得不发的状态，中秋节想有个代步工具 带女朋友拜访亲戚，预算大概这么多。对车不是特别了解 有什么注意的 希望大佬多多提出意见或者建议 <br />对车的要求有：<br />+ 燃油车<br />+空间稍微大点（类似 suv ）<br />+不要太有塑料感<br />+舒适？不知道咋说
+	]]></content>
+</entry><entry>
+	<title>[Apple] iPhone13 购买咨询</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876095#reply0" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876095</id>
+	<published>2022-08-29T01:58:41Z</published>
+	<updated>2022-08-29T01:57:41Z</updated>
+	<author>
+		<name>XQ90</name>
+		<uri>https://www.v2ex.com/member/XQ90</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>错过了 618 ，iPhone13+256G 的 5450 价格，后悔至今；
+想问问，还有啥渠道用这个价格能买到这个配置？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] 腾讯会议是不是崩了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876094#reply1" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876094</id>
+	<published>2022-08-29T01:56:37Z</published>
+	<updated>2022-08-29T02:05:48Z</updated>
+	<author>
+		<name>oygh</name>
+		<uri>https://www.v2ex.com/member/oygh</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>企业微信开启快速会议，一直停留在“正在进入会议……”界面，腾讯会议 APP 无法登录，提示“网络异常”。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享创造] Oceanix, 基于 Nix 的 OpenCore 配置管理工具</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876093#reply0" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876093</id>
+	<published>2022-08-29T01:56:12Z</published>
+	<updated>2022-08-29T01:56:12Z</updated>
+	<author>
+		<name>LEXUGE</name>
+		<uri>https://www.v2ex.com/member/LEXUGE</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>最近做了一个实现了一个基于 Nix 的 OpenCore 管理框架，名为 <a href="https://LEXUGE/oceanix" rel="nofollow">oceanix</a>.</p>
+<p>主要功能有：</p>
+<ol>
+<li><strong>根据 Sample.plist 自动设置 defaults</strong> oceanix 会读取对应版本的 OpenCore 的 Sample.plist 并以此补全合适的 section 作为 defaults 。这样配置时只需要编写 dortania guide 说明需要修改的部分来覆盖 defaults 即可。此外，在 OpenCore 更新时，这些 defaults 也会自动更新，所以在更新 OpenCore 时用户基本不需要干预。</li>
+<li><strong>可编程的配置</strong> 因为 oceanix 基于 Nix, 所以你可以实现在配置里写函数，写注释，分离配置等操作。比如你可以抽离敏感部分并加密，也可以根据本地环境不同自动更改配置。</li>
+<li><strong>包管理</strong> Oceanix 对常用的 Kexts, Drivers 等做了打包，因此你可以非常方便的引入 Kexts ，而不需要下载解压复制等操作。此外，升级 /降级 Kexts 也异常简单，只需要修改一下需要引入的包名即可。</li>
+<li><strong>依赖解析</strong> Oceanix 会自动引入 Kexts, Drivers, ACPI patches 并对 Kexts 做依赖解析来保证导入顺序的正确性。你也可以非常方便的启用 /关闭某个 Kexts 和其所有子插件。</li>
+<li><strong>可重现</strong> 基于 Nix, oceanix 可以 bit-by-bit 地保证你的 EFI 可重现性。</li>
+</ol>
+<p>未来可能会支持：</p>
+<ol>
+<li>自动 ocvalidate ，保证每次配置修改都是正确可靠的</li>
+<li>自动进行 OC vaulting 来签名并保证配置的 integrity</li>
+</ol>
+<p>最后，这是我基于 oceanix 的 OpenCore 配置： <a href="https://github.com/LEXUGE/opencore-cfg" rel="nofollow">https://github.com/LEXUGE/opencore-cfg</a></p>
+<p>项目还在非常初期阶段，文档不完善也可能有一些 Bugs ，如果你使用 Nix 并对 OpenCore 感兴趣，或是 OpenCore 用户但未接触过 Nix ，不妨来尝试一下</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Windows] 你永远可以相信微软的本地化</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876092#reply7" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876092</id>
+	<published>2022-08-29T01:53:07Z</published>
+	<updated>2022-08-29T02:03:45Z</updated>
+	<author>
+		<name>shintendo</name>
+		<uri>https://www.v2ex.com/member/shintendo</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/TDnlgtJ.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 现在入 macbook pro 16 寸合适吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876091#reply6" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876091</id>
+	<published>2022-08-29T01:52:57Z</published>
+	<updated>2022-08-29T02:00:10Z</updated>
+	<author>
+		<name>JohnXu20151211</name>
+		<uri>https://www.v2ex.com/member/JohnXu20151211</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题 现在入这个合适吗？ M1 芯片现在兼容性如何啊？程序员 写 java php c++这些。不知道要不要等 m2 的 pro 16 ，这个得明年出了吧？ 但是又怕 m1 有坑</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] 苹果团官网怎么打不开了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876089#reply14" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876089</id>
+	<published>2022-08-29T01:43:53Z</published>
+	<updated>2022-08-29T02:04:46Z</updated>
+	<author>
+		<name>huoguo32</name>
+		<uri>https://www.v2ex.com/member/huoguo32</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>6 月底就定了新 Air ，到现在也没个动静。结果今天发现官网都直接打不开了。是我这边自己的问题还是跑路了，，，，我的 air 怎么还不到啊！这都快三个月了</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 开源 k8s 的教程，全实战引导！顺带问各位大佬一个问题～</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876087#reply4" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876087</id>
+	<published>2022-08-29T01:36:59Z</published>
+	<updated>2022-08-29T01:47:41Z</updated>
+	<author>
+		<name>ligz</name>
+		<uri>https://www.v2ex.com/member/ligz</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>这个教程起初源自于我看过的一份用 ruby 写的 k8s 英文教学文章，觉得写的很好，后来我自己也开始分享 k8s 相关的知识给周边的小伙伴听，过程发现还是有很多大佬对 k8s 不是很熟悉的，所以我想着整理出了这一份 k8s 的基础教程，帮助大家入门和精进 k8s 的使用。</p>
+<p>这份教程的优点在于：</p>
+<ul>
+<li>教学镜像是基于 golang 编写的基础代码，只要有代码基础的人都能看懂！</li>
+<li>教学镜像做过多次优化，目前是用打包成二进制的方式运行在 base image 中，压缩到 dockerhub 中仅 10MB ！非常适合练习使用！</li>
+<li>实战代码很全，不是像其他教程一样理论说一大堆，最后来个 hello world 的 pod 。</li>
+<li>不仅是 k8s 的教程，后面会加上一些高级用法，例如 helm, k9s 等待。</li>
+</ul>
+<p>k8s 作为云原生时代的操作系统，学习它的必要性不言而喻，如果你觉得这个仓库有趣，可以在下方评论或者分享让更多人知道，如果你觉得这个仓库对你有价值，欢迎 start 或者提 PR / Issue ，让它变得更好！</p>
+<p>repository: <a href="https://github.com/guangzhengli/k8s-tutorials" rel="nofollow">https://github.com/guangzhengli/k8s-tutorials</a></p>
+<p>我目前的疑惑点是：为了让大家直接上手操作，理论方面没写太多，在平常线下分享时，我可以口头解释很多知识，但是文档的话，是否会对初学者不够友好？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 如何组装个人服务器或者直接购买成品?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876086#reply8" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876086</id>
+	<published>2022-08-29T01:36:10Z</published>
+	<updated>2022-08-29T01:50:43Z</updated>
+	<author>
+		<name>Cells</name>
+		<uri>https://www.v2ex.com/member/Cells</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><strong>首先我不甚了解硬件方面的知识, 想要找一种低功耗的个人服务器方案</strong></p>
+<p>需求:</p>
+<pre><code>一台功耗低的服务器(或者个人电脑?)去跑一些服务, 挂载硬盘之类的
+可能需要装虚拟机
+</code></pre>
+<p>初步看了下淘宝上卖的 n5105 软路由, 但是内存最高只能到 16g(应该也够用了, 担心需要装虚拟机时不太够用), 功耗的确是非常低 10~15w</p>
+<p>希望有一种具有更好的拓展性且功耗低的方案</p>
+<p>多谢大家了🙏</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Nintendo Switch] 这次 Splatoon3 新联机架构 NPLN 对大陆玩家来说是劣化</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876085#reply3" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876085</id>
+	<published>2022-08-29T01:30:12Z</published>
+	<updated>2022-08-29T02:01:11Z</updated>
+	<author>
+		<name>sonaxyjh</name>
+		<uri>https://www.v2ex.com/member/sonaxyjh</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	昨天玩了一天试射会，UDP 流量是走的 <a target="_blank" href="http://nncs1-lp1.n.n.srv.nintendo.net" rel="nofollow noopener">nncs1-lp1.n.n.srv.nintendo.net</a> ，东京 AWS 中继<br />移动东京出口 AS58453 高峰期延迟两百多毫秒会超时报错无法匹配，偶尔又变成了直连延迟一百出头，这是负载均衡导致的路由抽风?<br />之前 P2P 时代只要玩家够多就能玩，现在这 NPLN 虽然解决了 NAT 问题，但完全取决于玩家到东京 AWS 的链路质量
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] [江湖救急]NGA 你一个论坛,不显示任何回复是要闹哪样</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876084#reply3" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876084</id>
+	<published>2022-08-29T01:30:02Z</published>
+	<updated>2022-08-29T01:32:43Z</updated>
+	<author>
+		<name>tianyou666shen</name>
+		<uri>https://www.v2ex.com/member/tianyou666shen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	从上周五就发现论坛看不到回复了,一个论坛没有任何回复,这是闹哪样<br />各位你们进去也是这样吗?<br /><br />我的每日摸鱼基地痛失三分之一,快乐没有了<br /><a target="_blank" href="https://i.imgur.com/zbTAfpf.jpg" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/zbTAfpf.jpg" class="embedded_image" rel="noreferrer"></a><br /><br /><br /><br />NGA 的程序员老哥(PHPer),或者产品或者随便哪位内部人士透露一下,为啥不开回复啊,啥时候能开??<br /><br /><br />晴风村<br /><a target="_blank" href="https://i.imgur.com/BPxOXwU.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/BPxOXwU.png" class="embedded_image" rel="noreferrer"></a><br /><br />汽车俱乐部<br /><a target="_blank" href="https://i.imgur.com/K7vgGvJ.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/K7vgGvJ.png" class="embedded_image" rel="noreferrer"></a>
+	]]></content>
+</entry><entry>
+	<title>[酷工作] 远程 | 无城市限制 | 无时差 | 长期项目| 高薪资</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876083#reply2" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876083</id>
+	<published>2022-08-29T01:25:44Z</published>
+	<updated>2022-08-29T02:07:01Z</updated>
+	<author>
+		<name>changhe626</name>
+		<uri>https://www.v2ex.com/member/changhe626</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	Java 人才(3 年以上经验)                	           10 名<br />NodeJs 人才(3 年以上经验)                           10 名<br />AI/BigData 人才(3 年以上经验)                     10 名<br />DevOps 人才(3 年以上经验)                          10 名<br />架构师人才(3 年以上经验)                            10 名<br /><br />工作环境可以使用中文或者英文<br />使用 Zoom 或者腾讯会议面试<br />人才 人才 快到碗里来!!!<br />请发简历到 leonardo521879@gmail.com<br /><br />形成长期合作关系，一起吃肉喝汤<br /><br />HIRING FOR TALENTS. GOOD PROJECTS. FULLY REMOTE FLEXIBLE<br />SENIOR JAVA TALENTS(3+ YEARS EXP) * 10<br />NODEJS SENIOR TALENTS(3+ YEARS EXP) * 10<br />AI/BIGDATA SENIOR TALENTS(3+ YEARS EXP) * 10<br />SENIOR DEVOPS TALENTS(3+ YEARS EXP) * 10<br />OTHER SENIOR TALENTS ARE ALSO NEEDED (SUCH AS ARCHITECTS) * 10<br /><br />USE CHINESE OR ENGLISH WHEN WORKING.<br />USE ZOOM OR TENCENT MEETING TO INTERVIEW<br />TALENTS, PLEASE COME!!!<br />PLEASE SEND YOUR RESUME TO leonardo521879@gmail.com<br /><br />&lt;img  src="<a target="_blank" href="https://imgur.com/zSj2x6a" rel="nofollow noopener">https://imgur.com/zSj2x6a</a>"&gt;<br /><br />公司介绍(Company Intro)：<br />皮式亚太咨询研发中心是亚太区领先的咨询研发中心。<br />服务于多家世界五百强企业, 通过技术与用户建立联系，将客户利益放在首位，将时间和热情投入到每一件有需求的产品上。<br />Serving many Fortune 500 companies, establishing connections with users through technology, putting our customer benefits first, and devoting time and enthusiasm to every product in demand.
+	]]></content>
+</entry><entry>
+	<title>[开源软件] YTask Go 语言异步任务框架 v3.0.0 发布</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876082#reply0" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876082</id>
+	<published>2022-08-29T01:24:57Z</published>
+	<updated>2022-08-29T01:23:57Z</updated>
+	<author>
+		<name>a719114136</name>
+		<uri>https://www.v2ex.com/member/a719114136</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>YTask 是一个 go 异步任务框架，本次更新了诸多功能，修复 bug ，提升稳定性。</p>
+<p>github: <a href="https://github.com/gojuukaze/YTask" rel="nofollow">https://github.com/gojuukaze/YTask</a> </p>
+<p>文档: <a href="https://doc.ikaze.cn/YTask" rel="nofollow">https://doc.ikaze.cn/YTask</a></p>
+<h2>更新说明</h2>
+<p>若从 v2 升级，请先阅读 （ If upgrading from v2, please read this first ）-&gt; <a href="https://doc.ikaze.cn/YTask/upgrade.html#v2v3" rel="nofollow">从 v2 升级到 v3</a></p>
+<ul>
+<li>Improve English documentation <a href="https://github.com/gojuukaze/YTask/wiki" rel="nofollow">En Doc</a></li>
+<li>修改目录结构，把 broker, backend 移出主包。现在不用安装不必要的 driver 包了</li>
+<li>broker, backend 全部支持连接池 (#27)</li>
+<li>
+支持工作流，文档 -&gt; <a href="https://doc.ikaze.cn/YTask/workflow.html" rel="nofollow">https://doc.ikaze.cn/YTask/workflow.html</a><pre><code class="language-go">client.Workflow().
+     Send("group1", "add", 123, 44).
+     Send("group1", "add").
+     Done()
+</code></pre>
+</li>
+<li>支持中止任务(#22) ，文档 -&gt; <a href="https://doc.ikaze.cn/YTask/abortTask.html" rel="nofollow">https://doc.ikaze.cn/YTask/abortTask.html</a></li>
+<li>修复 log 行号输出 bug</li>
+<li>修改队列名拼写错误，修改 msg 结构体</li>
+<li>TaskCtl 移动到 server 包中，结构体内的某些字段移动到 msg 中 ( 从 v2 升级时需要注意 )</li>
+<li>通过 TaskCtl 获取重试次数时需要通过 <code>ctl.GetRetryCount()</code></li>
+<li>不在支持 RocketMq ，具体说明见: <a href="https://github.com/gojuukaze/YTask/tree/master/drives/rocketmq" rel="nofollow">drives/rocketmq</a></li>
+</ul>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 这种情况你们有没有？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876081#reply1" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876081</id>
+	<published>2022-08-29T01:23:37Z</published>
+	<updated>2022-08-28T22:23:37Z</updated>
+	<author>
+		<name>thatman</name>
+		<uri>https://www.v2ex.com/member/thatman</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>周一早上是一周内最困的，而且天气越冷表现的越明显，尤其是冬天。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[阅读] 了不起的安迪……</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876079#reply2" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876079</id>
+	<published>2022-08-29T01:18:04Z</published>
+	<updated>2022-08-29T01:57:41Z</updated>
+	<author>
+		<name>IBMall</name>
+		<uri>https://www.v2ex.com/member/IBMall</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>自从见了一本《了不起的盖茨比》以后，今天又读了一篇长文《了不起的雍正》，忽然想起自己也见识过许多了不起的人物事迹，最难忘怀的是看过电影又看了原著的《肖申克的救赎》，于是也提笔写了如下文字。</p>
+<ol>
+<li>要改变现实，请你先接受现实。</li>
+<li>掌握超越他人之本领，才能走出人生之困境。</li>
+<li>成就大事业，须做长期主义者。</li>
+<li>你的舒适之区，就是你的监狱之所。</li>
+</ol>
+<p>左岸记：这部电影（或书）是经典中的经典，无论何时，它都会成为十部必看的电影（或书）之一。所谓的困境，始终都是自己困住了自己。真遇到事了，想想安迪，想想我们的苏东坡——莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。料峭春风吹酒醒，微冷，山头斜照却相迎。回首向来萧瑟处，归去，也无风雨也无晴。</p>
+<p><a href="https://t.me/kejiqu/82" rel="nofollow">https://t.me/kejiqu/82</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[科技] 最近在用 flutter，有个问题请教一下</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876078#reply0" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876078</id>
+	<published>2022-08-29T01:14:09Z</published>
+	<updated>2022-08-29T01:13:09Z</updated>
+	<author>
+		<name>PYHII</name>
+		<uri>https://www.v2ex.com/member/PYHII</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>flutter 里面的各种弹窗，抽屉。是不是都要做成路由。
+这是开发 app 的规范，还是个人喜好？
+在做 web 的时候并不会把弹窗当成一个路由页面吧。有没有大佬解答一下
+有没有活跃的交流群，推荐一下？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[全球工单系统] 有没有简单的方法保持云桌面持续连接</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876077#reply4" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876077</id>
+	<published>2022-08-29T01:12:00Z</published>
+	<updated>2022-08-29T02:01:52Z</updated>
+	<author>
+		<name>fanxasy</name>
+		<uri>https://www.v2ex.com/member/fanxasy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	目前在用华为的 CloudClient 云桌面,一段时间不碰键鼠就会断开。<br />有没有什么简单的方法保持连接不断？（瘦终端这一侧是我自己的机器，可以随意修改）
+	]]></content>
+</entry><entry>
+	<title>[分享发现] MacOS 的微信 165M， iOS 的微信 551M</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876076#reply10" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876076</id>
+	<published>2022-08-29T00:59:05Z</published>
+	<updated>2022-08-29T01:56:31Z</updated>
+	<author>
+		<name>echo1937</name>
+		<uri>https://www.v2ex.com/member/echo1937</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>是 Tx 觉得我的手机空间比较多，电脑空间比较少吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 马斯克给正在奋斗的年轻人提出了一些中肯的建议</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876075#reply36" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876075</id>
+	<published>2022-08-29T00:50:00Z</published>
+	<updated>2022-08-29T02:06:34Z</updated>
+	<author>
+		<name>IBMall</name>
+		<uri>https://www.v2ex.com/member/IBMall</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>1 、用物理思维进行思考</p>
+<p>2 、读书，汲取大量信息</p>
+<p>3 、创业必须召集优秀的人才</p>
+<p>4 、挑战有意义的困难的事</p>
+<p>5 、与优秀的，你尊敬的人为伍</p>
+<p><a href="https://t.me/kejiqu/83" rel="nofollow">视频地址</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[V2EX] ipfs-amd64 CPU 占用率极高</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876074#reply1" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876074</id>
+	<published>2022-08-29T00:43:14Z</published>
+	<updated>2022-08-29T00:40:14Z</updated>
+	<author>
+		<name>TeslaM3</name>
+		<uri>https://www.v2ex.com/member/TeslaM3</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	@<a target="_blank" href="/member/Livid" rel="nofollow noopener">Livid</a>
+	]]></content>
+</entry><entry>
+	<title>[问与答] 现在还有没有比较便宜的云服务器推荐？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876073#reply15" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876073</id>
+	<published>2022-08-29T00:40:04Z</published>
+	<updated>2022-08-29T02:05:09Z</updated>
+	<author>
+		<name>vvv7000</name>
+		<uri>https://www.v2ex.com/member/vvv7000</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>自己拿来部署一些服务玩一玩，性能要求不高，更看重价格</p>
+<p>刚去腾讯云看了一眼，最便宜的轻量应用服务器都 50/月</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 想请教一个 ip 查询接口的问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876072#reply8" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876072</id>
+	<published>2022-08-29T00:39:57Z</published>
+	<updated>2022-08-29T01:40:37Z</updated>
+	<author>
+		<name>chirsgod</name>
+		<uri>https://www.v2ex.com/member/chirsgod</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>目前给公司的某个网站做了一个 IP 获取的功能，调用的是 <a href="http://ip.sb" rel="nofollow">ip.sb</a> 的 API 实现的，但是某些人访问网站的时候，<a href="http://ip.sb" rel="nofollow">ip.sb</a> 会报 403 的错误，要进行 security checking ，但是大多数人的电脑都不会有这个情况，求解下具体的原因。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 大家是如何进行定制化版本控制的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876071#reply2" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876071</id>
+	<published>2022-08-29T00:27:53Z</published>
+	<updated>2022-08-29T00:44:26Z</updated>
+	<author>
+		<name>Kei001</name>
+		<uri>https://www.v2ex.com/member/Kei001</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>本人前端开发，目前公司项目是一套系统，每个客户都会在此基础上定制化开发，做一些样式和功能上的修改。</p>
+<p>目前针对客户的定制化需求，我们前端是采用环境变量+条件编译的方式来管理的，但由此也产生了弊端：客户多了以后，各类编译条件错综复杂，久而久之难以阅读，不利于代码的维护。</p>
+<p>也考虑过每个客户单独拉一个分支出来，在主分支上更新代码，每次更新都合并到其他定制化分支出来，这样也清晰明了，但这种方法容易产生代码冲突，每次合并的时候都需要花时间解决代码冲突。</p>
+<p>所以想问问 V 站的大家一般这种情况是如何进行版本控制的呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[跑步] 昨晚跑步后失眠了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876070#reply15" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876070</id>
+	<published>2022-08-29T00:27:23Z</published>
+	<updated>2022-08-29T01:55:02Z</updated>
+	<author>
+		<name>bigxianyu</name>
+		<uri>https://www.v2ex.com/member/bigxianyu</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>晚上跑步是否有助于助眠，跑完之后脑子非常活跃，大概跑了 15 公里，身体是累的，但是睡不着，不知道是跑步影响了睡眠还是跑完之后吃的红心李影响，有经验的 v 友来分享下</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 语雀？又挂了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876068#reply4" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876068</id>
+	<published>2022-08-29T00:20:26Z</published>
+	<updated>2022-08-29T01:42:01Z</updated>
+	<author>
+		<name>zqguo</name>
+		<uri>https://www.v2ex.com/member/zqguo</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>啥玩意啊，一大早来就打不开了？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 鉴于 V 友的强烈建议，以及大陆区无法上线 CallKit。我在 iPhone 离线智能拦截垃圾短信基础上，新增[来电识别]和
+[来电阻止]。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876067#reply5" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876067</id>
+	<published>2022-08-29T00:04:10Z</published>
+	<updated>2022-08-21T00:02:10Z</updated>
+	<author>
+		<name>strengthen</name>
+		<uri>https://www.v2ex.com/member/strengthen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	一、国内版，App Store 搜索：iSMS<br />链接： <a target="_blank" href="https://apps.apple.com/cn/app/isms/id1610118657" rel="nofollow noopener">https://apps.apple.com/cn/app/isms/id1610118657</a><br />视频教程： <a target="_blank" href="https://www.bilibili.com/video/BV1X34y177bG?spm_id_from=333.999.0.0" rel="nofollow noopener">https://www.bilibili.com/video/BV1X34y177bG?spm_id_from=333.999.0.0</a><br />离线智能拦截垃圾短信 /自动分类短信。<br />自动更新短信机器学习模型。<br /> [使用方法：] <br />打开[设置-信息-未知与过滤信息],开启[过滤未知发件人]并在[短信过滤]一栏选中[iSMS]<br /><br />二、海外版，App Store 搜索：iContact<br />链接： <a target="_blank" href="https://apps.apple.com/cn/app/icontact/id1641294170" rel="nofollow noopener">https://apps.apple.com/cn/app/icontact/id1641294170</a><br />视频教程： <a target="_blank" href="https://www.bilibili.com/video/BV17V4y1H7A3?spm_id_from=333.999.0.0&amp;vd_source=0b4d473da0e181d2f3398821d6671413" rel="nofollow noopener">https://www.bilibili.com/video/BV17V4y1H7A3?spm_id_from=333.999.0.0&amp;vd_source=0b4d473da0e181d2f3398821d6671413</a><br />离线智能拦截垃圾短信 /自动分类短信。<br />自动更新短信机器学习模型。<br />支持拦截英文垃圾短信。<br />支持自定义来电识别。<br />支持自定义来电阻止。<br /> [使用方法：] <br />1 、打开[设置-电话-来电阻止和身份识别],将[iContact]放置第一位，并开启[iContact]开关。<br />2 、打开[设置-信息-未知与过滤信息],开启[过滤未知发件人]并在[短信过滤]一栏选中[iContact]
+	]]></content>
+</entry><entry>
+	<title>[程序员] 分享文章： TCP 粘包？ TCP 警察什么梗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876066#reply34" />
+	<id>tag:www.v2ex.com,2022-08-29:/t/876066</id>
+	<published>2022-08-29T00:02:57Z</published>
+	<updated>2022-08-29T02:05:14Z</updated>
+	<author>
+		<name>DonaldY</name>
+		<uri>https://www.v2ex.com/member/DonaldY</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>文章地址：<a href="https://juejin.cn/post/7135839422360551455" rel="nofollow">TCP 粘包？ TCP 警察什么梗</a></p>
+<p>从 v2 学到很多，按照自己理解总结了下。0.0</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 1 刀等于 6.9 人民币了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876064#reply30" />
+	<id>tag:www.v2ex.com,2022-08-28:/t/876064</id>
+	<published>2022-08-28T23:49:55Z</published>
+	<updated>2022-08-29T02:05:50Z</updated>
+	<author>
+		<name>ChefIsAwesome</name>
+		<uri>https://www.v2ex.com/member/ChefIsAwesome</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>这新 iPhone 不得涨价 10%？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Linux] Ubuntu 有办法在 root 被挂载前进入 Shell 吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876061#reply3" />
+	<id>tag:www.v2ex.com,2022-08-28:/t/876061</id>
+	<published>2022-08-28T19:24:49Z</published>
+	<updated>2022-08-28T16:24:49Z</updated>
+	<author>
+		<name>edis0n0</name>
+		<uri>https://www.v2ex.com/member/edis0n0</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	需求是 shrink lvm 中的系统盘，可以用 VNC 但是不能挂载自定义 ISO 。试了下不管 resuce 还是 emergency mode root 分区都被挂载了，无法操作，折腾了一晚上。
+	]]></content>
+</entry><entry>
+	<title>[软件] 国内的 IM 真的是烂透了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876059#reply11" />
+	<id>tag:www.v2ex.com,2022-08-28:/t/876059</id>
+	<published>2022-08-28T17:05:38Z</published>
+	<updated>2022-08-29T01:21:16Z</updated>
+	<author>
+		<name>AkariChan</name>
+		<uri>https://www.v2ex.com/member/AkariChan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	今天用 qq 的时候莫名奇妙被封了(使用了 10 年+, 而且没有发任何敏感的东西), 后来去其他地方问了情况好像是绑了 gv 号就有概率被封, 解封也不能用 gv 号解封(短信发不到), 只能改成+86, 验证需要人脸, 身份证以及其他好友给你发特定信息, 而且还需要等一段时间(可能是人工验证啥的) 非常恶心.<br /><br />关键是现在这东西还不能不用, 同学朋友家人全都是用的 qq, 也不能换, 感觉被绑架了...
+	]]></content>
+</entry><entry>
+	<title>[问与答] 帮忙参详下，公司主力使用 co 或 biz 域名如何？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876058#reply19" />
+	<id>tag:www.v2ex.com,2022-08-28:/t/876058</id>
+	<published>2022-08-28T16:49:00Z</published>
+	<updated>2022-08-29T02:03:27Z</updated>
+	<author>
+		<name>kimwang</name>
+		<uri>https://www.v2ex.com/member/kimwang</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	现在 com 域名，稍好的资源早已枯竭，不是科技公司，不是玩资本的，所以不打算花几个 w 美刀甚至更多钱购买域名。<br /><br />现在打算两条腿走路。(co 域名与顶级域名同时使用)<br /><br />查询过：<br />co 域名分公司名字、总公司名字均可注册。<br />biz 域名分公司已被注册(四位字母、四位被投资的机会高大家都懂)，总公司可注册(五位字母)。<br /><br />使用 co 域名，可以两家公司对外宣传比较统一，但非顶级域名。<br />使用 biz 域名，则有一家公司要出现不同后缀。<br /><br />另外，公司名加行业特征的顶级域名可以注册(com/net)，长度在 7-8 位字母，不如直接公司名的 4-5 位字母简短。现时打算，无论公司名+行业特征的顶级域名，面世历史较短的 biz 顶级域名，还有 co 域名，全部注册，无论是出于备用还是保护的因素。(毕竟越往后越不能保证资源还在)<br /><br />想问 co 域名在给予客户的可靠性印象，实际应用方面有没有明显的不利因素？公司名+行业特征的顶级域名的应用，在这个案例中，大家有没有什么建议？感谢。
+	]]></content>
+</entry><entry>
 	<title>[问与答] 求助大家:由[draw.io-20.2.3-windows-no-installer.exe]缺失[ffmpeg.dll]所引发地一系列疑惑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876056#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876056#reply3" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876056</id>
 	<published>2022-08-28T16:05:01Z</published>
-	<updated>2022-08-28T16:02:01Z</updated>
+	<updated>2022-08-28T18:39:19Z</updated>
 	<author>
 		<name>7RTDKSAK</name>
 		<uri>https://www.v2ex.com/member/7RTDKSAK</uri>
@@ -51,10 +692,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[淘宝] 淘宝上远程安装操作系统是如何实现的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876055#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876055#reply5" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876055</id>
 	<published>2022-08-28T15:58:20Z</published>
-	<updated>2022-08-28T15:58:20Z</updated>
+	<updated>2022-08-28T16:58:20Z</updated>
 	<author>
 		<name>huage</name>
 		<uri>https://www.v2ex.com/member/huage</uri>
@@ -63,28 +704,11 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	安装过程没有网络不能远程，而且很多选项，这样是怎么操作的？
 	]]></content>
 </entry><entry>
-	<title>[分享创造] 做了个润友交流社区</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876054#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876054</id>
-	<published>2022-08-28T15:56:02Z</published>
-	<updated>2022-08-28T15:53:02Z</updated>
-	<author>
-		<name>markJason</name>
-		<uri>https://www.v2ex.com/member/markJason</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>小润书</h2>
-<p><a href="https://xiaorunshu.com/" rel="nofollow">xiaorunshu.com</a></p>
-<p>小弟我计划留学，逃离 996 ，建立此社区想寻找伙伴，互相交流经验，共同进步。</p>
-<p>希望润友们早日脱离苦海</p>
-
-	]]></content>
-</entry><entry>
 	<title>[Hadoop] 菜鸡初学者对 Hadoop 云端架构的一些疑惑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876050#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876050#reply4" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876050</id>
 	<published>2022-08-28T15:21:38Z</published>
-	<updated>2022-08-28T15:55:31Z</updated>
+	<updated>2022-08-28T17:55:31Z</updated>
 	<author>
 		<name>zywoo</name>
 		<uri>https://www.v2ex.com/member/zywoo</uri>
@@ -99,7 +723,7 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[Linux] manjaro-kde 颠覆了我的认知， kde5 内存消耗居然和 xfce4 持平</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876048#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876048#reply4" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876048</id>
 	<published>2022-08-28T15:17:39Z</published>
 	<updated>2022-08-27T23:17:39Z</updated>
@@ -112,10 +736,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[程序员] 构建一个漂亮的跨平台登录 / 注册能有多难？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876047#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876047#reply2" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876047</id>
 	<published>2022-08-28T15:06:25Z</published>
-	<updated>2022-08-28T15:03:25Z</updated>
+	<updated>2022-08-28T16:24:50Z</updated>
 	<author>
 		<name>logto</name>
 		<uri>https://www.v2ex.com/member/logto</uri>
@@ -202,10 +826,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[程序员] 现在有什么便宜点的 香港或者海外服务器没有 ，测试学习下网站</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876046#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876046#reply21" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876046</id>
 	<published>2022-08-28T14:51:41Z</published>
-	<updated>2022-08-28T16:06:49Z</updated>
+	<updated>2022-08-29T01:54:49Z</updated>
 	<author>
 		<name>alex58</name>
 		<uri>https://www.v2ex.com/member/alex58</uri>
@@ -216,10 +840,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 谁不想在网页里来一颗核弹呢（狗头）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876045#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876045#reply9" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876045</id>
 	<published>2022-08-28T14:48:42Z</published>
-	<updated>2022-08-28T16:00:22Z</updated>
+	<updated>2022-08-28T17:31:39Z</updated>
 	<author>
 		<name>imba97</name>
 		<uri>https://www.v2ex.com/member/imba97</uri>
@@ -258,10 +882,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[问与答] 谷歌浏览器现在还支持侧载吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876043#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876043#reply5" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876043</id>
 	<published>2022-08-28T14:25:05Z</published>
-	<updated>2022-08-28T16:09:54Z</updated>
+	<updated>2022-08-28T23:04:08Z</updated>
 	<author>
 		<name>520discuz</name>
 		<uri>https://www.v2ex.com/member/520discuz</uri>
@@ -272,7 +896,7 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[Apple] 土区 ID 支付订阅的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876042#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876042#reply6" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876042</id>
 	<published>2022-08-28T14:24:55Z</published>
 	<updated>2022-08-28T14:40:29Z</updated>
@@ -302,10 +926,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[Safari] Safari 的 tab 样式如何改成和 chrome 一样</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876040#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876040#reply3" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876040</id>
 	<published>2022-08-28T14:17:42Z</published>
-	<updated>2022-08-28T14:21:52Z</updated>
+	<updated>2022-08-28T15:21:52Z</updated>
 	<author>
 		<name>lovepplforever</name>
 		<uri>https://www.v2ex.com/member/lovepplforever</uri>
@@ -315,26 +939,11 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 
 	]]></content>
 </entry><entry>
-	<title>[随想] 亲戚朋友怕我学坏了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876039#reply18" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876039</id>
-	<published>2022-08-28T14:16:04Z</published>
-	<updated>2022-08-28T16:18:23Z</updated>
-	<author>
-		<name>x198</name>
-		<uri>https://www.v2ex.com/member/x198</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>今晚跟亲戚朋友一起喝啤酒聊天，大家围在一起海阔天空。也许我个性是比较沉闷那种吧，不过今晚还是跟他们交流了我对世界局势的看法。他们对我的想法感到很震惊，认为我学坏了，叫我不要再翻墙出去了。他们觉得这样的现状很好。其中有只想看中医被中药折磨的不成人形的，我说中医不怎么靠谱，他们觉得有病的是我…………</p>
-<p>他们的世界只有微信和抖音。他们没听说过 google ，Facebook,whatsapp,telegram……………</p>
-
-	]]></content>
-</entry><entry>
 	<title>[程序员] 《DDIA 逐章精读》小册和逐章分享</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876038#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876038#reply11" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876038</id>
 	<published>2022-08-28T14:15:44Z</published>
-	<updated>2022-08-28T16:11:54Z</updated>
+	<updated>2022-08-28T19:26:18Z</updated>
 	<author>
 		<name>qingtengmuniao</name>
 		<uri>https://www.v2ex.com/member/qingtengmuniao</uri>
@@ -347,31 +956,11 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 
 	]]></content>
 </entry><entry>
-	<title>[深圳] 在深圳真的被封怕了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876037#reply23" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876037</id>
-	<published>2022-08-28T14:14:16Z</published>
-	<updated>2022-08-28T16:17:25Z</updated>
-	<author>
-		<name>zohar727</name>
-		<uri>https://www.v2ex.com/member/zohar727</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>好好的周日又被临时封控了一天，明明是低风险区，却因为隔壁村确诊一例，就要陪跑一起封控。。</p>
-<p>现在的防疫真的有点夸张，一个村那么大，确诊一例整个村都要被封。</p>
-<p>附近有个小区更夸张，无确诊，低风险，被临时管控四天，昨晚居民吵着要解封，终于在今天早上解封了。</p>
-<p>附近另一个村有一例确诊，除中高风险的楼栋，也是临时管控了四天。昨晚很多人在村口吵着要解封，还唱起了国歌。<br/>
-<strong>结果很戏剧的是，凌晨卫健委连夜发文将这个村全部调为中风险地区（经专家研判），于是封控又续费了七天。</strong></p>
-<p>每天做着 24 小时核酸，还要随便担心被临时管控，动不动三天起步，太难了。。</p>
-<p>身为屁民，只是乖乖听话。。</p>
-
-	]]></content>
-</entry><entry>
 	<title>[分享创造] RANDMAP：干翻防火墙的 TCP 状态机</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876036#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876036#reply22" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876036</id>
 	<published>2022-08-28T14:10:27Z</published>
-	<updated>2022-08-28T15:54:55Z</updated>
+	<updated>2022-08-28T22:27:51Z</updated>
 	<author>
 		<name>northernsnowx</name>
 		<uri>https://www.v2ex.com/member/northernsnowx</uri>
@@ -385,10 +974,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 周末花了一天时间写了一个表情包斗图小程序</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876035#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876035#reply6" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876035</id>
 	<published>2022-08-28T14:07:23Z</published>
-	<updated>2022-08-28T15:13:57Z</updated>
+	<updated>2022-08-28T18:13:57Z</updated>
 	<author>
 		<name>nightsky</name>
 		<uri>https://www.v2ex.com/member/nightsky</uri>
@@ -417,10 +1006,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[前端开发] 为了回味一下以前 UP 主的视频去看了优酷，却发现完全不支持 Safari 播放</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876033#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876033#reply3" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876033</id>
 	<published>2022-08-28T14:04:27Z</published>
-	<updated>2022-08-28T16:06:46Z</updated>
+	<updated>2022-08-28T18:06:46Z</updated>
 	<author>
 		<name>orangie</name>
 		<uri>https://www.v2ex.com/member/orangie</uri>
@@ -430,10 +1019,10 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[程序员] Safari 禁止了跨域追踪，为什么登录 Google 还是能同步登录不同域名下的 YouTube？用了什么黑科技？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876032#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876032#reply7" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876032</id>
 	<published>2022-08-28T14:03:56Z</published>
-	<updated>2022-08-28T15:13:28Z</updated>
+	<updated>2022-08-28T17:30:39Z</updated>
 	<author>
 		<name>edis0n0</name>
 		<uri>https://www.v2ex.com/member/edis0n0</uri>
@@ -443,7 +1032,7 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	]]></content>
 </entry><entry>
 	<title>[数学] 请问什么是概率的对称性。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876031#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876031#reply4" />
 	<id>tag:www.v2ex.com,2022-08-28:/t/876031</id>
 	<published>2022-08-28T13:58:57Z</published>
 	<updated>2022-08-27T21:56:57Z</updated>
@@ -453,800 +1042,6 @@ C:难道[<a href="http://draw.io" rel="nofollow">draw.io</a>-20.2.3-windows-no-i
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/BC0HsXW.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[数据库] 问个数据库设计问题，比如课程有单课程和组合课程（每个组合课程有多个单课程组成，单课程有交叉）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876030#reply4" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876030</id>
-	<published>2022-08-28T13:51:58Z</published>
-	<updated>2022-08-28T16:14:37Z</updated>
-	<author>
-		<name>baleeny</name>
-		<uri>https://www.v2ex.com/member/baleeny</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>单课程和组合课程（每个组合课程有多个单课程组成，单课程有交叉）
-而这些课程又会根据上课地点，时间，年龄等条件生成不同的商品
-这个表应该怎么设计好点。数据库是 postgresql</p>
-
-	]]></content>
-</entry><entry>
-	<title>[深圳] 深圳哪里电路板维修靠谱？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876028#reply2" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876028</id>
-	<published>2022-08-28T13:31:04Z</published>
-	<updated>2022-08-28T15:42:04Z</updated>
-	<author>
-		<name>mengzhuo</name>
-		<uri>https://www.v2ex.com/member/mengzhuo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	手头的板子有奇怪的 bug ，搞软件的我已经投降了……<br /><br /><a target="_blank" href="https://i.imgur.com/0Zvo5FK.jpg" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/0Zvo5FK.jpg" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[SSD] 便宜大碗的低速仓库盘 SSD 有什么推荐吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876027#reply2" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876027</id>
-	<published>2022-08-28T13:25:41Z</published>
-	<updated>2022-08-28T13:27:44Z</updated>
-	<author>
-		<name>DTCPSS</name>
-		<uri>https://www.v2ex.com/member/DTCPSS</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>放游戏 /电影 /数据用，读取速度几百兆就足够了</p>
-<p>机械硬盘声音比较大，不太想用</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 把想法落地有多难</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876026#reply0" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876026</id>
-	<published>2022-08-28T13:00:40Z</published>
-	<updated>2022-08-28T08:59:40Z</updated>
-	<author>
-		<name>TomVista</name>
-		<uri>https://www.v2ex.com/member/TomVista</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>趁着等外卖的功夫,分享一下这个周末,抛砖引玉</p>
-<h2>万恶的苗头</h2>
-<p>入手了新电脑,加上最近看测评走火入魔,想搞一个 电脑使用统计 的程序,大概思路就是,每隔几秒记录一下 cpu 温度,cpu 使用率,当前电量,当前功耗,风扇速度,内存使用率 等等设备信息,最后用图标展示一下</p>
-<h2>实现过程</h2>
-<p>按时间线的技术选择变化.dog</p>
-<ul>
-<li><code>node</code> 和 <code>c++ .dll</code> 调用 (无法获取 温度 风扇 电池信息)</li>
-<li><code>node</code> <code>c++ .dll</code> 和 <code>win32/WMI</code> (无法获取 温度 风扇, 有相关接口但是依赖设备驱动实现,我的电脑不行, 另外 windows sdk 必须安装 vs studio)</li>
-<li><code>node</code> <code>c# .dll</code> 和 <code>openhardwaremonitorlib.dll</code>(依赖 c# 开发环境,不想下载)</li>
-<li><code>node</code> <code>c++/clr c# .dll</code> 和 <code>openhardwaremonitorlib.dll</code>(缺少引用,这里因为 c++/clr 的原因,没有错误明细, 后面看 是缺少 .net framework 下的 System.manager)</li>
-<li><code>.net maui</code> 和 <code>openhardwaremonitorlib.dll</code> (首先同上面缺少依赖,然后 .net 6 ( maui ) 和 .net framework 4.8 ( openhardwaremonitorlib.dll ) 环境不同, 同时由于 <code>code access security</code> 也无法移植)</li>
-<li><code>WPF</code> 和 <code>openhardwaremonitorlib.dll</code>( cpu 温度打印出来了,还没往下进行,看起来不会出意外了 )</li>
-</ul>
-<p>大概两天满负荷 20 小时的开发结果,以前写过 <a href="http://asp.net" rel="nofollow">asp.net</a> ,上学学过 c++,没别的技术基础.这两天是真的累,好久没有这么高负荷写代码了,自己写的开心什么都拦不住.</p>
-<p>最后,吐槽下 Windows sdk 真的好大</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有没有得过新冠的，来说一下到底是个啥情况？有后遗症吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876022#reply36" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876022</id>
-	<published>2022-08-28T12:38:30Z</published>
-	<updated>2022-08-28T15:57:59Z</updated>
-	<author>
-		<name>microxiaoxiao</name>
-		<uri>https://www.v2ex.com/member/microxiaoxiao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[随想] 身边几乎找不到能传数据的 MicroUSB 线</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876021#reply8" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876021</id>
-	<published>2022-08-28T12:33:55Z</published>
-	<updated>2022-08-28T16:06:45Z</updated>
-	<author>
-		<name>Danswerme</name>
-		<uri>https://www.v2ex.com/member/Danswerme</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想给小爱音响刷机，试了手头积攒的几根 MicroUSB 线，都是只能充电不能传数据；本来打算下楼去买一根，忽然发现抽屉里有一条几年前买小米充电宝送的一条超短 MicroUSB 线，试了一下居然可以用。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 不懂就问，大家平时使用触摸板的姿势？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876020#reply9" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876020</id>
-	<published>2022-08-28T12:30:35Z</published>
-	<updated>2022-08-28T15:37:10Z</updated>
-	<author>
-		<name>sickoo</name>
-		<uri>https://www.v2ex.com/member/sickoo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>看到一个油管老哥姿势是右手拇指扶着中指关节处，靠中指在触摸板右上角区域一点一点滑动。
-个人尝试了一下，有点减轻对手腕的压力。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有 b 站的同学吗，网页端视频页点击右侧推荐项，没反应</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876019#reply7" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876019</id>
-	<published>2022-08-28T12:29:58Z</published>
-	<updated>2022-08-28T15:30:35Z</updated>
-	<author>
-		<name>gauzung</name>
-		<uri>https://www.v2ex.com/member/gauzung</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	视频播放页，开启网页全屏，看一段时间视频，取消全屏，点击右侧推荐列表的视频，地址栏会改变，但是页面没有变化，需要手动刷新页面，不一定复现，两星期内遇到有七八次了<br /><br />macOS Chrome 版本 104.0.5112.101 （正式版本） (x86_64)
-	]]></content>
-</entry><entry>
-	<title>[微信] 喷了，微信使用协议写着不让用于工作</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876018#reply3" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876018</id>
-	<published>2022-08-28T12:28:23Z</published>
-	<updated>2022-08-28T13:13:02Z</updated>
-	<author>
-		<name>RealVic</name>
-		<uri>https://www.v2ex.com/member/RealVic</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>「 2.3 本服务许可的范围</p>
-<p>2.3.1 腾讯给予你一项个人的、不可转让及非排他性的许可，以使用本软件。你可以为非商业目的在单一台终端设备上安装、使用、显示、运行本软件。
-」</p>
-<p>原文链接： <a href="https://weixin.qq.com/cgi-bin/readtemplate?t=weixin_agreement#%E4%BA%8C%E3%80%81%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%9C%8D%E5%8A%A1" rel="nofollow">https://weixin.qq.com/cgi-bin/readtemplate?t=weixin_agreement#%E4%BA%8C%E3%80%81%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%9C%8D%E5%8A%A1</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 通过网易云音乐分享链接找到分享用户主页</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876017#reply11" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876017</id>
-	<published>2022-08-28T12:23:00Z</published>
-	<updated>2022-08-28T14:46:23Z</updated>
-	<author>
-		<name>ufan0</name>
-		<uri>https://www.v2ex.com/member/ufan0</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>曾经网易云音乐的音乐分享链接携带了用户明文 id ，可以直接通过拼接网址得到用户主页。</p>
-<p>前天发现网易云音乐似乎为这个举措在安全层面下了功夫加固了数据，好歹终于不是明文，研究一番下来发现却也和明文差不多，做了个工具直接直接解析用户主页，比较粗糙，仅仅能用而已，有需要的自取。</p>
-<p><a href="https://findneteasecloudmusicuser.nclgclub.com/" rel="nofollow">https://findneteasecloudmusicuser.nclgclub.com/</a></p>
-<p>more: 作为非安全专业的同学也很想吐槽一下网易云音乐的用户 id 加密设计，出发点是好的，但是用点心噻。
-这是一个拍拍脑袋就知道不合适的设计，代码 review 竟然也能过。不如给我个面试机让我试试。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] 如何在 mac 上拆出完全独立的两个空间？在强制加入 MDM 的情况下</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876016#reply3" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876016</id>
-	<published>2022-08-28T12:20:32Z</published>
-	<updated>2022-08-28T12:20:32Z</updated>
-	<author>
-		<name>JohnXu20151211</name>
-		<uri>https://www.v2ex.com/member/JohnXu20151211</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.v2ex.com/t/863958#reply41" rel="nofollow">https://www.v2ex.com/t/863958#reply41</a>
-这个是之前的帖子，是问的怎么拆分出两个独立空间。后来我做的是创建新用户，也算是勉强能达到多个独立的空间，但是最近公司强制要求加入 mdm ，请问这种情况下的话，我通过用户分开的多个空间是否还有效？这种情况下是不是没用了，整个硬盘下的内容都会被监控到? 即使我在一个盘下装两个系统也是都能被监控到吧？ 启动任一一个系统都会加载这个 mdm 嘛？</p>
-<p>这种情况怎么能保持两个独立的空间呢？我的 macbook 升级过硬盘,如果用原装的硬盘做成外接硬盘盒来装个双系统呢？这样应该能做到完全独立，但是这样估计外接会很慢，而且应该也不稳定吧。</p>
-<p>最后就是想入 macbook pro 16 彻底独立开，但是 m1 芯片现在兼容性如何？平时主要写 java ，其他 c++啥的也会用。不知道有没有必要等等 m2,现在如果买 Intel 的 macbook 又感觉不值的了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 2022 年 9 月买华为 p40pro 合适吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876015#reply5" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876015</id>
-	<published>2022-08-28T12:16:50Z</published>
-	<updated>2022-08-28T13:05:51Z</updated>
-	<author>
-		<name>Lotii</name>
-		<uri>https://www.v2ex.com/member/Lotii</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	二手<br />mate40 系列二手价格还是有点贵
-	]]></content>
-</entry><entry>
-	<title>[随想] 金风未动蝉先觉</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876013#reply0" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876013</id>
-	<published>2022-08-28T12:07:55Z</published>
-	<updated>2022-08-28T12:07:55Z</updated>
-	<author>
-		<name>westoy</name>
-		<uri>https://www.v2ex.com/member/westoy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>淘系留存猛降，  都拼着给拼多多送人头的嫌疑把省钱卡给变相砍了去压缩成本</p>
-<p>大厂们未来几年的目标都是活下去吧........</p>
-
-	]]></content>
-</entry><entry>
-	<title>[随想] 关于时下的直播热潮</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876011#reply8" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876011</id>
-	<published>2022-08-28T11:55:52Z</published>
-	<updated>2022-08-28T13:39:36Z</updated>
-	<author>
-		<name>justanetizen</name>
-		<uri>https://www.v2ex.com/member/justanetizen</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	不知道坛子里的大佬们是如何看待时下热门的直播和粉丝经济的
-	]]></content>
-</entry><entry>
-	<title>[深圳] 西丽周末有约台球爱好者没</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876007#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876007</id>
-	<published>2022-08-28T11:41:33Z</published>
-	<updated>2022-08-28T15:12:29Z</updated>
-	<author>
-		<name>bojue</name>
-		<uri>https://www.v2ex.com/member/bojue</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ol>
-<li>
-<p>桌球协会因为公司开源节流公款消费取消了，流失了大部分爱好者</p>
-</li>
-<li>
-<p>附近打桌球的同事很少，想追个分人经常拼不够</p>
-</li>
-</ol>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] idea 激活 copilot 失败，请问如何解决？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876004#reply4" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876004</id>
-	<published>2022-08-28T11:11:11Z</published>
-	<updated>2022-08-28T11:15:35Z</updated>
-	<author>
-		<name>AA5DE3F034ACCB9E</name>
-		<uri>https://www.v2ex.com/member/AA5DE3F034ACCB9E</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	github 账户购买了 copilot ，idea 装了插件，激活的时候：<br />1. login in 弹窗，正常；<br />2. 复制验证码和打开 GitHub 链接，正常；<br />3. 页面操作 授权 后，回到 idea 显示 waiting for github authentication ，若干秒后弹框消失，没有任何提示，激活也没成功；<br />4. 一直重复 1-3 。<br />尝试过：<br />1. 设置 host ；<br />2. 回滚 idea 版本至 2022.1 ；<br />3. 换代理软件，从 shadowrocket 换到 clash 、clash for windows ，其中开启了 tun 模式设置全局代理；<br />4. 换网络，不过都是联通的，手机、宽带等。<br />猜测原因：<br />可能是激活验证的链接，被 dns 污染了。在不开启代理的情况下，ping <a target="_blank" href="http://github.com" rel="nofollow noopener">github.com</a> 显示的 IP 地址是保留地址，即 198.x.x.x 。<br /><br />尝试了多种方法都激活失败，略微绝望。请教下各位老铁，怎么样才可以激活，或者说有没有最近两天用最新版 idea 激活成功的，用的是什么网络可以告知下吗？
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 花两天总结了市面上主流开源许可证的区别，希望能给点建议</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876002#reply16" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876002</id>
-	<published>2022-08-28T10:56:09Z</published>
-	<updated>2022-08-28T12:46:43Z</updated>
-	<author>
-		<name>HikariLan</name>
-		<uri>https://www.v2ex.com/member/HikariLan</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>因为感觉市面上类似的文章讲的都有点浅和乱，尤其是很多文章没能点出 Copyleft 许可证和宽松许可证之间本质的区别，因此特别写了这篇文章，希望大家能够给点建议。 </p>
-<p>如果可以的话，请在 GitHub 给我一个 Star：<a href="https://github.com/shaokeyibb/open-source-licenses-in-depth" rel="nofollow">https://github.com/shaokeyibb/open-source-licenses-in-depth</a></p>
-<p>（主题内容太长了只能截断一部分 TvT ，完整版的话可以进入 GitHub 看）</p>
-<h1>深入理解开源许可证（ Apache,MIT,GPL,BSD,CC ）</h1>
-<h2>前言</h2>
-<p>如果说有什么东西正在为开源世界保驾护航，那就一定不能不提到开源许可证（ Open Source License ），正是因为这些各不相同的开源许可证的共同支持下，才有了现在这么繁荣的开源软件社区。</p>
-<p>但是问题是，这些开源协议太多了（至少有上百种！），即使是主流的几个开源协议，由于其法律文本的晦涩难懂，经常令很多开发者摸不着头脑，不知道他们的软件应当使用什么样的许可协议，或者如何使用这些协议。因此，本文试图通过简单通俗的语言，带领读者了解和区分不同许可证之间的区别。</p>
-<p>最后，因为作者知识有限，因此对于本文可能存在的谬误，烦请读者尽数指正，不尽感激！</p>
-<h2>什么是开源许可证？“开源”和“自由”的区别是什么</h2>
-<h3>开源许可证</h3>
-<p>狭义的来讲，根据 <a href="https://opensource.org/licenses" rel="nofollow">OSI （ Open Source Initiative ，开放源代码倡议组织）</a> 的解释，开源许可证（ Open source licenses ）是指那些符合 <a href="https://opensource.org/osd" rel="nofollow">OSD （开源定义，Open Source Definition ）</a> 的许可证 —— 简单来说，这些许可证允许软件被自由的使用，修改和分发。</p>
-<p>广义来讲，开源许可证是指<em>一种被用于计算机软件或其他产品的，允许在指定的条款内使用，修改和 /或分发其源代码，蓝图或设计的许可证</em>[^1]。一般来讲，我们说的开源许可证是指广义的开源许可证释义。</p>
-<p>通俗来讲的话，开源许可证就是一种允许我们在一定条件内按照我们的需要自由使用和修改软件及其源代码的法律条款，籍此条款，这个软件的作者（可能是一个人，也可能是很多人）可以将这些权利许可给我们，并告知我们一些使用限制。这些条款有时由个人起草，有时由商业公司起草，但最广泛使用的是由非营利组织（例如 <a href="https://fsf.org" rel="nofollow">自由软件基金会，FSF</a>）起草的各种开源许可证，通常情况下，作为开发者的我们可以通过按照这些许可证的要求放置许可证条款（有的许可证可能有别的要求，也有可能没有要求）来声明我们<strong>基于这些许可证开源</strong>。</p>
-<p>需要注意的是，使用开源许可证并不意味着单纯的限制使用者，对于一些许可证（例如下文将会提到的 GPL 协议），他们也会限制您（开发者）的行为。因此，选择一个合适的许可证是十分重要的。</p>
-<h4>小提示：开源不等于放弃版权</h4>
-<p>拥有版权（ Copyright ）意味着你对你开发的软件及其源代码拥有著作权，所有权和其他法定权利，使用一个开源协议并不意味着放弃版权，它仅意味着<strong>您将您在许可证许可的这部分软件（及其源代码）副本的一部分权利（例如，专利权）让渡给软件使用者和其他开发者，并在可能的情况下放弃一些权利（例如，针对软件破解和修改的起诉权）</strong>，这仅对您使用指定许可证开源的软件（及其源代码）副本有效，也就是说，对于您手上那部分未使用任何开源许可证开源的软件（及其源代码）来说，您仍然拥有包括版权在内的一切权利（无论您手上的那部分和您发布出去的副本是否相同）。</p>
-<p>从另一个角度来讲，开源许可证作为法律条款之所以能工作，正是因为您本身拥有一个软件的版权和著作权：如果您不是这些软件的作者，那么开源也就无从谈起（当然，这不意味着您必须对您的程序主张版权）。</p>
-<h3>自由软件许可证</h3>
-<p>根据 FSF 的解释，“自由软件”是指尊重用户自由和社区的软件。粗略地说，这意味着<strong>用户可以自由运行，复制，分发，研究，更改和改进软件</strong>。[^2] 而自由软件许可证通过法律协议，保障使用者的四大基本自由[^3]。</p>
-<p>通常情况下，<strong>自由软件许可证都是（狭义的）开源许可证</strong>。</p>
-<h4>Copyleft 许可证</h4>
-<p>对于 copyleft 一词的中文翻译有很多种，例如“版权相左”，“版权所无”，“著佐权”，但是无论如何，我们能发现其与 "copyright （版权）"一词恰好相反，这意味着 copyleft 许可证与版权的巨大对立。Copyleft 许可证是自由软件许可证中的一种，它旨在通过一些限制，给予用户更多自由。</p>
-<p>虽然我们还没有开始讲述详细的许可证文本，但是你将会发现，由于通常的开源许可证偏向于给予使用者几乎所有权力，这也包含了<em>闭源的权利</em>。如何理解？<em>假设有软件 A ，基于某种简单全权许可证开源，这时，一个商业公司看中了这个软件，并基于此软件进行修改得到了软件 B ，这时这个商业公司完全可以不向公众发布这个软件 B 的源代码 —— 他有权利这么做，但是，这也就意味着其他开发者失去了对于这个软件 A 的“改进版本”（也就是软件 B ）的<strong>自由</strong></em>。Copyleft 许可证通过条款限制，要求<strong>程序的所有修改和扩展版本也是自由的</strong>，为用户争取到了这一自由。</p>
-<blockquote>
-<p><em>专有软件开发商使用版权来剥夺用户的自由；我们使用版权来保证他们的自由。这就是为什么我们颠倒了名称，将“版权”改为“copyleft”。</em></p>
-</blockquote>
-<p>当然，仍要提到的是，使用 Copyleft 许可证依然不意味着放弃版权（当然，在本地法律允许的条件下，你可以这么做）。</p>
-<blockquote>
-<p><em>Copyleft 是一种在程序上使用版权的方式。这并不意味着放弃版权；事实上，这样做会使 copyleft 变得不可能。“copyleft”中的“left”不是对动词“离开”的引用，而只是指向“right”镜像的方向。</em></p>
-</blockquote>
-<h4>小提示：copyleft 许可证不排斥商业化使用</h4>
-<p>Copyleft 许可证的诞生虽然是为了抵制商业公司通过闭源的方式妨碍用户修改和访问软件源代码的自由，但是这并不意味着 copyleft 许可证是排斥商业化使用的，事实上，<strong>copyleft 许可证所许可的软件应该允许任何人使用他们，也包括商业公司</strong>。但是，这些商业公司在使用这些 copyleft 软件时，也应当受到这些 copyleft 许可证条款的制约。</p>
-<p>了解了开源许可证的概念，接下来，我们将详细介绍一些主流的开源许可证及其与其他许可证之间的区别。</p>
-<h2>主流开源许可证及其区别</h2>
-<p>一般来讲，我们可以将主流许可协议分为两个部分，copyleft license （ copyleft 许可证）和 permissive license （宽松许可证）。相比 copyleft 许可证，宽松许可证对软件的再分发限制更加宽容，即不要求公开源代码。</p>
-<p>当我们谈到如何使用这些开源许可证时，事实上，几乎所有主流许可证都会要求你提供这些许可证自身的完整内容到你的项目中 —— 通常情况，我们会创建一个 "LICENSE" 文件，并填入完整的许可证条款。当然，对于不同的许可证，会有额外的要求，这些要求将会在下方被详细提及。</p>
-<p>下文中，我们将会着重介绍 copyleft 许可证，并提及这些许可证<strong>与其他许可证的兼容性</strong>，简单来说，如果两个许可证可以被称作是<strong>兼容的</strong>，这就意味着这两个许可证所分别许可的作品可以组合成一个更大的作品（此时，这个更大的作品可能采用一个共同的新许可证，也可能依然以不同区块分别许可）。</p>
-<h3>Copyleft 许可证</h3>
-<p>比较常用且著名的 copyleft 许可证即为由 FSF 组织发布的，以 GPL 为首的一系列自由软件许可证，接下来，我们将着重介绍这些许可证。</p>
-<p>在 GPL 系列许可证中，存在一个 "X 或以后版本" 的概念，例如 "GPLv2 或以后版本"。这意味着，当我们声明一个项目基于 "GPLv2" 许可时，我们必须严格按照 GPLv2 协议中对代码使用的要求进行许可；但是，当我们声明其基于 "GPLv2 或以后版本" 许可，当其他人在试图合并他的代码和您的代码时，它们将可以按照更新的 "GPLv3" 协议对代码使用的要求进行许可，即使两个 GPL 协议之间本身并不互相兼容。</p>
-<h5>小提示：理解“合并 /组合代码”</h5>
-<p>根据 <a href="https://www.gnu.org/licenses/gpl-faq.html#GPLPlugins" rel="nofollow">GNU 组织关于"主程序与其插件何时被视为单个组合程序"的解释</a>：</p>
-<blockquote>
-<p>这取决于主程序如何调用其插件。如果主程序使用 fork 和 exec 来调用插件，并且它们通过共享复杂的数据结构或相互传递复杂的数据结构来建立亲密的通信，则可以使它们成为一个单一的组合程序。使用简单 fork 和 exec 调用插件且未在它们之间建立密切通信的主程序会导致插件成为单独的程序。</p>
-<p>如果主程序动态链接插件，并且它们相互调用函数并共享数据结构，我们认为它们形成一个单一的组合程序，必须将其视为主程序和插件的扩展。如果主程序动态链接插件，但它们之间的通信仅限于使用某些选项调用插件的“main”函数并等待它返回，则属于临界情况。</p>
-<p>使用共享内存与复杂的数据结构进行通信几乎等同于动态链接。</p>
-</blockquote>
-<h5>小提示：理解“明确声明”</h5>
-<p>有的简单全权许可证因为其许可条款十分短小简单，可能会造成很多模糊 —— 有时候，某些权利并未显式授予您，但实际上您拥有这些权利，例如专利权；反之，有些权利并未显式告知限制，但实际上您不拥有这些权利，例如商标权。如果你的项目十分重要，那么选择一个更加复杂正式的协议可能更好一些（反之，有的小型程序代码可能比协议文本还短，这个时候建议使用一些简单的许可证）。</p>
-<h4>GNU General Public License v3.0</h4>
-<p><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" rel="nofollow">协议原文</a> | <a href="https://jxself.org/translations/gpl-3.zh.shtml" rel="nofollow">非官方翻译</a></p>
-<p>GNU 通用公共许可证第三版（简称 GNU GPLv3 ，或 GPLv3 ）是截至目前最新版的 GPL 协议，它发布于 <code>29 June 2007</code>，他相比上一个版本（ GPLv2 ，接下来会提到）提供了些许宽松，并且规范了一些法律术语，同时为软件提供了一些更加有力的保护。GPLv3 是目前使用最广泛的主流 copyleft 许可证之一。</p>
-<h5>条款简述</h5>
-<p>在 GPLv3 协议许可下，您可以：</p>
-<ul>
-<li>商业化使用（这意味着，您可以出于商业目的使用这些源代码）</li>
-<li>再分发（这意味着，您可以将源代码副本传输给其他任何人）</li>
-<li>修改（这意味着，您可以修改源代码）</li>
-<li>专利使用（这意味着，版权人<strong>明确声明</strong>授予您专利使用权）</li>
-<li>私人使用（这意味着，您可以出于一切目的私下使用和修改源代码）</li>
-</ul>
-<p>唯须遵守以下条款：</p>
-<ul>
-<li>披露源码（这意味着，分发软件时，您必须提供源代码）</li>
-<li>协议和版权通知（这意味着，软件中必须包含许可证和版权声明的副本）</li>
-<li>相同许可证共享（这意味着，如果您修改并再分发软件，您必须使用相同许可证分发；在一定条件下，还可以使用类似或相关的许可证）</li>
-<li>状态更改说明（如果您更改软件，您应当提供适当的说明）</li>
-</ul>
-<p>除此之外，该软件：</p>
-<ul>
-<li>提供责任限制（版权人声明不对使用者造成的任何损失负责）</li>
-<li>不提供任何担保（版权人声明不为该软件的品质提供任何担保）</li>
-</ul>
-<h5>详细介绍</h5>
-<blockquote>
-<p>Tips: 详细介绍是出于对许可证原文的简化或可读性描写，它们不是任何法律条款，也不是协议的一部分，只是作者对该协议的一些解释。</p>
-</blockquote>
-<p>GPLv3 许可证许可任何人使用，修改和分发程序及其源代码，这包括：</p>
-<ul>
-<li>转发完整副本。同时为每一个副本标明版权声明；保留一切免责声明；提供 GPLv3 协议的完整副本且完整保留所有附加条款（下文会提到）</li>
-<li>转发修改过的源码版本。但你必须提供醒目的修改声明并为其标注日期；必须使用本协议为整个程序授权，而不是某一个部分；如果该程序包含有交互式用户界面，则必须显示适当的法律声明（例外的情况是，如果这个程序原版有交互式用户界面，但未提供法律声明，则你也无须提供）</li>
-<li>以非源码形式转发。但你应当通过适当方式，在适当地点，为任何可以获得该程序非源码形式的用户提供其源代码</li>
-</ul>
-<p>GPLv3 允许你在 GPLv3 协议之外添加一些附加许可，这些附加许可以在转发程序时被选择性删除，这些可能的附加许可包括：</p>
-<ul>
-<li>表示不提供品质担保或有超出协议要求的责任。</li>
-<li>要求在此材料中或在适当的法律声明中保留特定的合理法律声明或创作印记。</li>
-<li>禁止误传材料的起源，或要求合理标示修改以别于原版。</li>
-<li>限制以宣传为目的使用该材料的作者或授权人的名号。</li>
-<li>降低约束以便赋予在商标法下使用商品名、商品标识及服务标识。</li>
-<li>要求任何转发该材料（或其修改版）并对接收者提供契约性责任许诺的人，保证这种许诺不会给作者或授权人带来连带责任。</li>
-</ul>
-<p>除此之外的许可并不被允许和 GPLv3 协议共存，如果你看到软件声明了那些额外的许可，你可以去掉他们。</p>
-<p>GPLv3 <strong>明确授予</strong>使用者专利权。</p>
-<p>GPLv3 <em>保护用户的合法权益免受反破解法限制</em>，这意味着当你转发一个受保护作品时，你将会失去任何限制他人破解该作品的权利。</p>
-<p>GPLv3 不允许您将您的程序与私有程序合并。</p>
-<h5>兼容性</h5>
-<ul>
-<li>GPLv3 与 LGPLv2.1 ，LGPLv3 兼容，这个情况下，整个作品基于 GPLv3 许可；例外的，当该 LGPLv2.1 或 LGPLv3 内容被以类库引用方式与 GPLv3 许可作品合并时，该类库仍可基于 LGPLv2.1 或 LGPLv3 许可；</li>
-<li>GPLv3 与 AGPLv3 兼容，这个情况下，整个作品基于 GPLv3 许可，但应当适用 AGPLv3 中关于网络交互的特别要求（下文会提到）；</li>
-<li>GPLv3 与 MIT License ，Apache License 2.0 ，Unlicense ，WTFPL 兼容，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>GPLv3 与 BSD 3-Clause "New" or "Revised" License （ Modified BSD ），BSD 2-Clause "Simplified" License （ FreeBSD ），BSD Zero Clause License 兼容，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>GPLv3 与 BSD 3-Clause Clear License （ Clear BSD ） 兼容，但是由于后者明确不授予专利权，因此可能引发某些专利问题，因此不建议与之合并[^4]；</li>
-<li>GPLv3 与 MPL 2.0 兼容，这个情况下，先前由 MPL 2.0 许可的作品部分使用 MPL 2.0 和 GPLv3 双重许可，整个作品基于 GPLv3 许可[^5]；</li>
-<li>GPLv3 与 CC-BY 4.0 兼容，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>GPLv3 与 CC-BY-SA 4.0 <strong>单向兼容</strong>[^6]，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>GPLv3 与 CC0 兼容，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>GPLv3 与 GPLv2 不兼容（但是，GPLv3 与被声明为适用于 "GPLv2 或以后版本" 的 GPLv2 协议兼容，并使整个作品基于 GPLv3 许可）；</li>
-<li>GPLv3 与 BSD 4-Clause "Original" or "Old" License （ Original BSD ） 不兼容；</li>
-<li>GPLv3 与 CC-BY-NC ，CC-BY-ND 不兼容。</li>
-</ul>
-<h5>如何使用</h5>
-<p>通常情况下的做法是，在你的源代码根目录中创建一个文本文件（ GNU 建议命名为 <code>COPYING</code>，通常情况下，也可以使用 <code>LICENSE</code>），将 GPLv3 的完整许可证文本复制到该文件中。</p>
-<p>可选的，你可以在每个文件的顶部添加模板版权声明，这些版权声明也可以在许可证原文底部找到：</p>
-<pre><code>    &lt;one line to give the program's name and a brief idea of what it does.&gt;
-    Copyright (C) &lt;year&gt;  &lt;name of author&gt;
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-</code></pre>
-<p>如果你的程序拥有交互界面（这里指的是 CLI ），你应该通过一种方式输出一个简短的版权声明：</p>
-<pre><code>    &lt;program&gt;  Copyright (C) &lt;year&gt;  &lt;name of author&gt;
-    This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
-    This is free software, and you are welcome to redistribute it
-    under certain conditions; type `show c' for details.
-</code></pre>
-<p>如果你的程序使用 GUI 交互界面，则可以将其放在“关于”栏目中。</p>
-<p>如果你之上存在雇主或校方，你还应当让他们在必要时为此程序签署放弃版权声明。</p>
-<h5>小提示：如何理解 GPLv3 中对源代码再分发的要求</h5>
-<p>有时候很多人会对 GPLv3 中源代码再分发的要求产生误解，认为 GPLv3 就是必须将软件和源代码免费公布给所有人，其实这个观点这是错误的：首先 GPL 不排斥商业化，因此你完全可以付费出售你的软件，但是前提是这些软件中必须附带（或许可在未来一段时间内通过网络提供）这些软件的源代码 —— 此时，你不能限制这些购买了你软件的人修改这些源代码或是将这些源代码免费 /付费发布给其他人；同时需要注意的是，使用 GPLv3 协议也不意味着你必须将你的软件和源代码公布给所有人，你可以只向你的付费用户公布它们，或是另一家购买你软件的公司（同样，你依然不能阻止这些人根据协议再分发你的软件及其源代码）。</p>
-<p>一个例外是，这个软件如果只在你个人，团队，甚至是公司内部使用，那么这些软件源代码应当适用于私人使用许可，这也就意味着，你无需按照 GPL 的要求将它们公开。</p>
-<h4>GNU General Public License v2.0</h4>
-<p><a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html" rel="nofollow">协议原文</a> | <a href="https://jxself.org/translations/gpl-2.zh.shtml" rel="nofollow">非官方翻译</a></p>
-<p>GNU 通用公共许可证第二版（简称 GNU GPLv2 ，或 GPLv2 ）是上一版的 GPL 协议，事实上在大部分情况下，你不应该使用这个协议，而应当使用 GPLv3 ，但是鉴于一些老的软件仍在使用 GPLv2 授权，在此一并提及，但不作详细介绍。</p>
-<p>GPLv2 未向使用者提供明确的专利授权，且未声明保护用户破解软件的权利。同时，GPLv2 不允许提供任何 GPLv2 协议之外的附加许可。</p>
-<p>GPLv2 不允许您将您的程序与私有程序合并。</p>
-<h5>兼容性</h5>
-<ul>
-<li>GPLv2 与 LGPLv2.1 兼容，这个情况下，整个作品基于 GPLv2 许可；例外的，当该 LGPLv2.1 内容被以类库引用方式与 GPLv2 许可作品合并时，该类库仍可基于 LGPLv2.1 许可；</li>
-<li>GPLv2 与 MIT License ，Unlicense ，WTFPL 兼容，这个情况下，整个作品基于 GPLv2 许可；</li>
-<li>GPLv2 与 BSD 3-Clause "New" or "Revised" License （ Modified BSD ），BSD 2-Clause "Simplified" License （ FreeBSD ），BSD Zero Clause License 兼容，这个情况下，整个作品基于 GPLv2 许可；</li>
-<li>GPLv2 与 BSD 3-Clause Clear License （ Clear BSD ） 兼容，但是由于后者明确不授予专利权，因此可能引发某些专利问题，因此不建议与之合并[^4]；</li>
-<li>GPLv2 与 MPL 2.0 兼容，这个情况下，先前由 MPL 2.0 许可的作品部分使用 MPL 2.0 和 GPLv2 双重许可，整个作品基于 GPLv2 许可[^5]；</li>
-<li>GPLv2 与 CC-BY 4.0 兼容，这个情况下，整个作品基于 GPLv2 许可；</li>
-<li>GPLv2 与 CC0 兼容，这个情况下，整个作品基于 GPLv2 许可；</li>
-<li>GPLv2 与 GPLv3 不兼容（但是，被声明为适用于 "GPLv2 或以后版本" 的 GPLv2 协议 与 GPLv3 兼容，并使整个作品基于 GPLv3 许可）；</li>
-<li>GPLv2 与 LGPLv3 不兼容（但是，被声明为适用于 "GPLv2 或以后版本" 的 GPLv2 协议 与 LGPLv3 兼容，并使整个作品基于 GPLv3 许可）；</li>
-<li>GPLv2 与 AGPLv3 不兼容；</li>
-<li>GPLv2 与 Apache License 2.0 不兼容；</li>
-<li>GPLv2 与 BSD 4-Clause "Original" or "Old" License （ Original BSD ） 不兼容；</li>
-<li>GPLv2 与 CC BY-SA 4.0 ，CC-BY-NC ，CC-BY-ND 不兼容。</li>
-</ul>
-<h4>GNU Lesser General Public License v3.0</h4>
-<p><a href="https://www.gnu.org/licenses/lgpl-3.0-standalone.html" rel="nofollow">协议原文</a> | <a href="http://www.thebigfly.com/gnu/lgpl/lgpl-v3.php" rel="nofollow">非官方翻译（不推荐）</a></p>
-<p>与 GPLv3 这样的"强 copyleft 许可证（ strong copyleft license ）"相对的，GNU 宽通用公共许可证第三版（简称 GNU LGPLv3 ，或 LGPLv3 ）是一种弱 copyleft 许可证（ weak copyleft license ），常用于各种类库（依赖库），其本质上是在 GPLv3 上增加的额外条款，作为一种例外，LGPLv3 豁免您的软件使用者<strong>在以类库引用（ link ）的方式使用 LGPL 许可的作品时可以不必开源</strong>。</p>
-<p>当然，由于其弱 copyleft 的性质，GNU 组织认为 LGPL 实际上是一种妥协，并建议您<a href="https://www.gnu.org/licenses/why-not-lgpl.html" rel="nofollow">不要在您的下一个库中使用 LGPL</a>。</p>
-<h5>条款简述</h5>
-<p>在 LGPLv3 协议许可下，您可以：</p>
-<ul>
-<li>商业化使用</li>
-<li>再分发</li>
-<li>修改</li>
-<li>专利使用</li>
-<li>私人使用</li>
-</ul>
-<p>唯须遵守以下条款：</p>
-<ul>
-<li>披露源码</li>
-<li>协议和版权通知</li>
-<li><strong>有条件的相同许可证共享（见下）</strong></li>
-<li>状态更改说明</li>
-</ul>
-<p>除此之外，该软件：</p>
-<ul>
-<li>提供责任限制</li>
-<li>不提供任何担保</li>
-</ul>
-<h5>详细介绍</h5>
-<p>当使用 LGPLv3 许可证时，您实际上同样应当遵循 GPLv3 协议的条款，并辅以以下例外和附加条件：</p>
-<ul>
-<li>
-<p>对于以库头文件部分作为目标代码合并时，你可以选择下述两个条款之一对这部分代码进行分发：</p>
-<ul>
-<li>在目标代码的每个副本中明确声明库在其中使用，并且该库及其使用受 LGPLv3 许可证的约束；</li>
-<li>在目标代码中附上 GNU GPL 和 LGPLv3 许可证文档的副本。</li>
-</ul>
-</li>
-<li>
-<p>对于组合作品，您需要：</p>
-<ul>
-<li>在组合作品的每份副本上明确声明，其中使用了该库，并且该库及其使用受 LGPLv3 许可证的约束；</li>
-<li>在组合作品中附上 GNU GPL 和 LGPLv3 许可证文档的副本；</li>
-<li>对于在执行期间显示版权声明的组合作品，请在这些声明中包括库的版权声明，以及将用户引导至 GNU GPL 副本和 LGPLv3 许可证文档的引用；</li>
-<li>
-执行下列操作之一：<ul>
-<li>根据 LGPLv3 的条款，通过适当的形式允许用户将应用程序与链接库的修改版本重新组合或重新链接以产生修改后的组合作品，以代表您遵照 GPL 条款中 “以非源码形式转发” 作品。</li>
-<li>使用合适的共享库机制与库链接。合适的机制是指在运行时使用用户计算机系统上已经存在的库的副本，并且库的修改版可以正常工作并且与链接版本兼容。</li>
-</ul>
-</li>
-<li>您不得限制您组合作品中该库这部分的修改和逆向调试。</li>
-</ul>
-</li>
-<li>
-<p>通过以上两种情况下发布的合并软件，不受 GPL 对保护用户的合法权益免受反破解法限制的条款保护；</p>
-</li>
-<li>
-<p>如果您试图分发修改版的本软件，且有某个应用程序引用了本软件提供的功能（而不是通过传递命令行参数的方式），那么您必须选择下列操作之一：</p>
-<ul>
-<li>根据 LGPLv3 许可证要求，前提是您做出真诚的努力，以确保在应用程序不提供功能或数据的情况下，该软件仍在运行，且执行其目的的任何部分仍然有意义；</li>
-<li>使用 GPL 协议授权本软件。</li>
-</ul>
-</li>
-<li>
-<p>如果您试图将本库与另一个不受 LGPLv3 协议许可的库合并，那么您必须选择下列操作之一：</p>
-<ul>
-<li>在组合库中附带一份不与任何其他库组合的，基于该库的相同作品的副本，并根据 LGPLv3 许可证的条款分发；</li>
-<li>在组合库中给出醒目的通知，说明它的一部分是基于该库的作品，并解释在哪里可以找到相同作品的未组合形式。</li>
-</ul>
-</li>
-</ul>
-<h5>兼容性</h5>
-<ul>
-<li>LGPLv3 与 GPLv3 兼容，这个情况下，整个作品基于 GPLv3 许可；</li>
-<li>LGPLv3 与 LGPLv2.1 兼容，这个情况下，基于 LGPLv2.1 许可代码须以 GPLv3 许可分发（但是，LGPLv3 与被声明为 "LGPLv2.1 或以后版本" 的 LGPLv2.1 协议，或当该 LGPLv2.1 作品被以类库引用方式与 LGPLv3 许可作品合并时兼容）;</li>
-<li>LGPLv3 与 AGPLv3 兼容，这个情况下，整个作品基于 GPLv3 许可，但应当适用 AGPLv3 中关于网络交互的特别要求（下文会提到）；</li>
-<li>LGPLv3 与 MIT License ，Apache License 2.0 ，Unlicense ，WTFPL 兼容，这个情况下，整个作品基于 LGPLv3 许可；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 BSD 3-Clause "New" or "Revised" License （ Modified BSD ），BSD 2-Clause "Simplified" License （ FreeBSD ），BSD Zero Clause License 兼容，这个情况下，整个作品基于 LGPLv3 许可；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 BSD 3-Clause Clear License （ Clear BSD ） 兼容，但是由于后者明确不授予专利权，因此可能引发某些专利问题，因此不建议与之合并[^4]；</li>
-<li>LGPLv3 与 MPL 2.0 兼容，这个情况下，先前由 MPL 2.0 许可的作品部分使用 MPL 2.0 和 LGPLv3 双重许可，整个作品基于 LGPLv3 许可[^5]；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 CC-BY 4.0 兼容，这个情况下，整个作品基于 LGPLv3 许可；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 CC-BY-SA 4.0 <strong>单向兼容</strong>[^6]，这个情况下，整个作品基于 LGPLv3 许可；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 CC0 兼容，这个情况下，整个作品基于 GPLv3 许可；例外的，当该 LGPLv3 内容被以类库引用方式与这些许可证许可作品合并时，仅该类库基于 LGPLv3 许可；</li>
-<li>LGPLv3 与 GPLv2 不兼容（但是，LGPLv3 与被声明为适用于 "GPLv2 或以后版本" 的 GPLv2 协议兼容，并使整个作品基于 GPLv3 许可）；</li>
-<li>GPLv3 与 BSD 4-Clause "Original" or "Old" License （ Original BSD ） 不兼容；</li>
-<li>GPLv3 与 CC-BY-NC ，CC-BY-ND 不兼容。</li>
-</ul>
-<h5>如何使用</h5>
-<p>按照 GPLv3 协议的使用方法应用 GPLv3 协议，然后创建 <code>COPYING.LESSER</code> 文件，将 LGPLv3 的完整许可证文本复制到该文件中。（但是有时，我们也通过直接将 <a href="https://www.gnu.org/licenses/lgpl+gpl-3.0.txt" rel="nofollow">LGPL+GPL</a> 放入同一个 <code>LICENSE</code> 或 <code>COPYING</code> 文件中来使用）。然后，您可仿照上文 GPLv3 协议的本部分内容，添加一些可选的附加许可，此处不再赘述。</p>
-<h4>GNU Affero General Public License v3.0</h4>
-<p><a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html" rel="nofollow">协议原文</a> | <a href="https://www.chinasona.org/gnu/agpl-3.0-cn.html" rel="nofollow">非官方翻译</a></p>
-<p>GNU Affero 通用公共许可证第三版（简称 GNU AGPLv3 ，或 AGPLv3 ）发布于 <code>19 November 2007</code>，作为一种比 GPL 协议更加严格的 copyleft 协议，它催生于一个新的互联网环境 —— 客户端软件逐渐被 Web 浏览器前端+后端软件取代，由于 GPL 协议生效的一个主要要求是 “发布”，但是通过后端向用户提供服务，这部分后端代码并未直接向用户提供，因此按照 GPL 协议无须公开其修改版本。AGPL 就是为了修补这一个漏洞 —— 它要求网络服务器的运营商向该服务器的用户提供运行在那里的修改版本的源代码。因此，只要有人在一个可公开访问的服务器上公开使用一个修改过的版本，公众将能够获得修改过的版本的源代码。</p>
-<p>AGPLv3 协议主体基于 GPLv3 协议修改，并加入了远程网络交互和与 GPLv3 兼容的相关内容。在此，我们仅介绍这一部分，对其他主体部分一概省略。</p>
-<h5>条款简述</h5>
-<p>在 AGPLv3 协议许可下，您可以：</p>
-<ul>
-<li>商业化使用</li>
-<li>再分发</li>
-<li>修改</li>
-<li>专利使用</li>
-<li>私人使用</li>
-</ul>
-<p>唯须遵守以下条款：</p>
-<ul>
-<li>披露源码</li>
-<li>协议和版权通知</li>
-<li><strong>网络使用视为分发（这意味着，通过网络与软件交互的用户有权获得其源代码的副本）</strong></li>
-<li>相同许可证共享</li>
-<li>状态更改说明</li>
-</ul>
-<p>除此之外，该软件：</p>
-<ul>
-<li>提供责任限制</li>
-<li>限制商标使用（这意味着版权人<strong>明确声明</strong>其不授予您商标权）</li>
-<li>不提供任何担保</li>
-</ul>
-<h5>详细介绍</h5>
-<p>除去 GPLv3 协议中对您的类似要求外，您仍需注意以下 AGPLv3 协议中关于网络交互的特别要求：</p>
-<ul>
-<li>如果您修改本程序，您的修改版本必须在显著位置向所有通过计算机网络远程与本程序交互的用户（如果您的版本支持这种交互）提供机会，从网络服务器上免费提供相应的源码。相应源码应包括根据下段规定纳入 GPLv3 许可证的的任何作品相应源码；</li>
-<li>您有权将任何受 AGPLv3 协议许可的作品与受 GPLv3 协议许可的作品合并为一个单一作品并分发，本许可证仍保护原作品部分，但合并后的完整作品将受 GPLv3 协议管辖。</li>
-</ul>
-<h5>兼容性</h5>
-<ul>
-<li>AGPLv3 与 LGPLv2.1 ，LGPLv3 兼容，这个情况下，整个作品基于 AGPLv3 许可；例外的，当该 LGPLv2.1 或 LGPLv3 内容被以类库引用方式与 AGPLv3 许可作品合并时，该类库仍可基于 LGPLv2.1 或 LGPLv3 许可；</li>
-<li>AGPLv3 与 GPLv3 兼容，这个情况下，整个作品基于 GPLv3 许可，但应当适用 AGPLv3 中关于网络交互的特别要求（见上）；</li>
-<li>AGPLv3 与 MIT License ，Apache License 2.0 ，Unlicense ，WTFPL 兼容，这个情况下，整个作品基于 AGPLv3 许可</li>
-<li>AGPLv3 与 BSD 3-Clause "New" or "Revised" License （ Modified BSD ），BSD 2-Clause "Simplified" License （ FreeBSD ），BSD Zero Clause License 兼容，这个情况下，整个作品基于 AGPLv3 许可；</li>
-<li>AGPLv3 与 BSD 3-Clause Clear License （ Clear BSD ） 兼容，但是由于后者明确不授予专利权，因此可能引发某些专利问题，因此不建议与之合并[^4]；</li>
-<li>AGPLv3 与 MPL 2.0 兼容，这个情况下，先前由 MPL 2.0 许可的作品部分使用 MPL 2.0 和 AGPLv3 双重许可，整个作品基于 AGPLv3 许可[^5]；</li>
-<li>AGPLv3 与 CC-BY 4.0 兼容，这个情况下，整个作品基于 AGPLv3 许可；</li>
-<li>AGPLv3 与 CC-BY-SA 4.0 <strong>单向兼容</strong>[^6]，这个情况下，整个作品基于 AGPLv3 许可；</li>
-<li>AGPLv3 与 CC0 兼容，这个情况下，整个作品基于 AGPLv3 许可；</li>
-<li>AGPLv3 与 GPLv2 不兼容；</li>
-<li>AGPLv3 与 BSD 4-Clause "Original" or "Old" License （ Original BSD ） 不兼容；</li>
-<li>AGPLv3 与 CC-BY-NC ，CC-BY-ND 不兼容。</li>
-</ul>
-<h5>如何使用</h5>
-<p>通常情况下的做法是，在你的源代码根目录中创建一个文本文件（通常情况下，也可以使用 <code>LICENSE</code> 或 <code>LICENSE.txt</code>），将 AGPLv3 的完整许可证文本复制到该文件中。然后，您可仿照上文 GPLv3 协议的本部分内容，添加一些可选的附加许可，此处不再赘述。</p>
-<h4>Mozilla Public License 2.0</h4>
-<p><a href="https://www.mozilla.org/en-US/MPL/2.0/" rel="nofollow">协议原文</a></p>
-<p>Mozilla 公共许可证第二版（简称 MPL2.0 ）是一个弱 copyleft 许可证，但是其条款的特殊性质又使其更像一个宽松许可证（甚至，有人专门创造了词语 <code>copycenter</code> 来描述这一类许可证），该许可证虽然要求软件源代码需要使用相同许可证进行分发，但是对于可执行软件和包含本软件的大型作品的协议做出了宽松的要求。</p>
-<p>MPL2.0 被设计为兼容 GPL 的：其定义了“次要许可证”的概念：这些许可证包含 GPLv2 ，LGPLv2.1 ，AGPLv3 及其所有后续版本。对于在合并作品中使用与这些许可证不兼容的许可证时，MPL2.0 额外允许您根据这些次要许可证分发此类作品，且无须公开源代码。</p>
-<h5>条款简述</h5>
-<p>在 MPL2.0 协议许可下，您可以：</p>
-<ul>
-<li>商业化使用</li>
-<li>再分发</li>
-<li>修改</li>
-<li>专利使用</li>
-<li>私人使用</li>
-</ul>
-<p>唯须遵守以下条款：</p>
-<ul>
-<li>披露源码</li>
-<li>协议和版权通知</li>
-<li><strong>有条件的相同许可证共享（见下）</strong></li>
-</ul>
-<p>除此之外，该软件：</p>
-<ul>
-<li>提供责任限制</li>
-<li>限制商标使用</li>
-<li>不提供任何担保</li>
-</ul>
-<h5>详细介绍</h5>
-<p>MPL2.0 许可证许可任何人使用，修改和分发程序及其源代码，额外的：</p>
-<ul>
-<li>任何贡献者均不会因您选择根据 MPL2.0 的后续版本或根据次要许可证的条款（如果允许）分发本软件而授予额外的授权；</li>
-<li>所有以源代码形式分发的软件均应遵守 MPL2.0 许可证的条款。您必须告知接收者，软件的源代码形式受 MPL2.0 许可证条款的约束，以及他们如何获取 MPL2.0 许可证的副本。您不得尝试在源代码中更改或限制收件人的权利；</li>
-<li>以可执行文件形式分发的软件仍应同上述条款提供其源代码形式，且您即可以根据 MPL2.0 许可证，也可以根据其他不同的许可证对该软件的可执行文件形式进行再许可，前提是可执行软件的许可证不试图限制或更改接收者在 MPL2.0 许可证下在软件源代码部分中的权利；</li>
-<li>如果您打算分发一个合并作品，且该合并作品是该软件和受一个或多个次要许可证管辖的作品的组合，并且该软件与次要许可证不见容，则 MPL2.0 允许您根据此类次要许可证的条款额外分发本软件以便大型作品的开发者可以，根据他们的选择，使用 MPL2.0 或此类次要许可证的条款进一步分发该软件。</li>
-</ul>
-<h5>兼容性</h5>
-<p>MPL 2.0 协议理论上兼容所有协议，但当您要合并的许可证与 MPL 2.0 协议中定义的“次要许可证”（见上）不兼容时，您应当再分发源代码时提供一个额外的声明，以证明您使用了不兼容的许可证，这些额外声明也可以在许可证原文底部找到：</p>
-<pre><code>This Source Code Form is “Incompatible With Secondary Licenses”, as defined by the Mozilla Public License, v. 2.0.
-</code></pre>
-<h5>如何使用</h5>
-<p>通常情况下的做法是，在你的源代码根目录中创建一个文本文件（通常情况下，也可以使用 <code>LICENSE</code> 或 <code>LICENSE.txt</code>），将 MPL2.0 的完整许可证文本复制到该文件中。额外的，Mozilla 基金会建议在每个文件的顶部添加模板版权声明，这些版权声明也可以在许可证原文底部找到：</p>
-<pre><code>This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
-</code></pre>
-<h3>宽松许可证</h3>
-<p>宽松许可证中的宽松并不意味着 LGPL 中的 "宽松"，相反，宽松许可证试图通过给予直接用户更多自由和更少的限制，但这么做却放弃了间接用户的自由。但是不可否认的是，宽松许可证的开源方式因为成功拉拢到了商业公司的支持，成功且有效的推进了开源进程，壮大了开源生态，并使其成为了开源世界的主流许可证类型。</p>
-<p>......</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 关于最近联通 70G 通用大流量卡事宜</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876001#reply0" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876001</id>
-	<published>2022-08-28T10:55:40Z</published>
-	<updated>2022-08-26T10:53:40Z</updated>
-	<author>
-		<name>xuxinglin8888</name>
-		<uri>https://www.v2ex.com/member/xuxinglin8888</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题，申请卡今天到了激活了。70G 通用流量有效期至 2029 年，30G 定向流量永久有效，充 50 话费送 50 问题，我充了 100 ，但是立即到账 30 转，我在 app 上没看到，客服说有，19 元月租只有三个月，三个月后是 29 元。另外，坐标深圳龙华新区民治，信号不是一般的差，5G 手机 5G 的卡 3G 的网络！！！还有联通服务经理加我微信，但是激活充值后就不理睬我了！！
-	]]></content>
-</entry><entry>
-	<title>[Alfred] 有人一起合购 Alfred5 的 Mega Supporter 吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/876000#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/876000</id>
-	<published>2022-08-28T10:54:54Z</published>
-	<updated>2022-08-28T10:51:54Z</updated>
-	<author>
-		<name>ZacharyLau1202</name>
-		<uri>https://www.v2ex.com/member/ZacharyLau1202</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.alfredapp.com/shop/" rel="nofollow">https://www.alfredapp.com/shop/</a>
-59 英镑 4 个人，每人 119 元，拼车价 115 元，终生使用，可以永久升级。
-有人上车么？
-在上学，所以选择拼车，还请大佬们轻喷，谢谢了。
-有需要的加一下小而美软件：MTY2NzEyMjgxMQ</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 不懂就问，为什么谷歌翻译里有那么多的 断续器</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875999#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875999</id>
-	<published>2022-08-28T10:48:09Z</published>
-	<updated>2022-08-28T10:45:09Z</updated>
-	<author>
-		<name>Aloento</name>
-		<uri>https://www.v2ex.com/member/Aloento</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://imgse.com/i/vWR5S1" rel="nofollow"><img alt="vWR5S1.jpg" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/08/28/vWR5S1.jpg"/></a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 真是多少台显示器，都不嫌多。。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875998#reply34" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875998</id>
-	<published>2022-08-28T10:13:15Z</published>
-	<updated>2022-08-28T15:57:45Z</updated>
-	<author>
-		<name>fl2d</name>
-		<uri>https://www.v2ex.com/member/fl2d</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我目前用着 3 台：1 个带鱼屏，左右再分别放 1 个竖屏，</p>
-<p>这周我又申请买了个显示器和支架，准备放在带鱼屏上面，下周到。</p>
-<p>我感觉理想情况下我至少还需要 2 台：</p>
-<p>1 台播放音乐 mv ，</p>
-<p>另 1 台显示摄像头拍下的我对面的情况，因为完全被显示器挡住了，经常有人过来找我时吓我一跳。😂</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 网上找了一个任务悬赏类的源码，想学习下，请教下怎么部署</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875997#reply5" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875997</id>
-	<published>2022-08-28T10:11:38Z</published>
-	<updated>2022-08-28T13:38:16Z</updated>
-	<author>
-		<name>alex58</name>
-		<uri>https://www.v2ex.com/member/alex58</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>源码是前后端分离的  请教下 怎么部署  自身没有经过专业技术学习，只是比较感兴趣
-前端、后端 源码目录是这样的 <a href="https://www.yuque.com/u26367414/sdghkf/cdds96" rel="nofollow">https://www.yuque.com/u26367414/sdghkf/cdds96</a>
-不知道全不全  是什么架构环境</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Apple] 中信 MasterCard 苹果官网购买美区礼品卡失败</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875996#reply24" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875996</id>
-	<published>2022-08-28T09:56:37Z</published>
-	<updated>2022-08-28T16:05:35Z</updated>
-	<author>
-		<name>hihanley</name>
-		<uri>https://www.v2ex.com/member/hihanley</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>账单地址中国 /美国都试过</p>
-<p>试了超级多次，有一次下单成功但是第二天被 Cancel ，钱也退回来了。</p>
-<p>其余时候一直提示:<br/>
-<code>Your payment authorization failed on card xxxx. Please verify your infomation and try again......</code></p>
-<p>实在没办法在美亚用信用卡买了 25 刀，有点担心被美亚或者苹果风控。</p>
-<p>大家有遇到这种情况吗？</p>
-<p>是银行的问题还是苹果的问题</p>
-
-	]]></content>
-</entry><entry>
-	<title>[全球工单系统] 有无 B 站产品经理，拉黑后的 UP 主还出现在自己账号搜索结果页中的逻辑真的合适吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875995#reply4" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875995</id>
-	<published>2022-08-28T09:53:13Z</published>
-	<updated>2022-08-28T14:57:55Z</updated>
-	<author>
-		<name>ecletics</name>
-		<uri>https://www.v2ex.com/member/ecletics</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<a target="_blank" href="https://www.v2ex.com/t/461396" rel="nofollow noopener">https://www.v2ex.com/t/461396</a><br />站内搜索看到 2018 年已有相关帖子，但是 4 年过去了，为何还是这样？<br />拉黑过的 UP 主据观察倒是没有出现在首页推荐中了，但是搜索结果页还是出现。<br />目前看来 B 站对于拉黑有两个点：1 、不再主动推荐，2 、无法查看其首页，但可以看他的视频。<br /><br />这样对我来说很劝退，为了放松搜些感兴趣的视频看，拉黑过的 UP 却阴魂不散，有种吃了苍蝇的感觉。
-	]]></content>
-</entry><entry>
-	<title>[Linux] Linux 修改键位映射</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875994#reply6" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875994</id>
-	<published>2022-08-28T09:44:05Z</published>
-	<updated>2022-08-28T13:23:24Z</updated>
-	<author>
-		<name>phoulx</name>
-		<uri>https://www.v2ex.com/member/phoulx</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	折腾了几天， 分享一下 Linux 下修改键位映射的思路和工具。<br /><br />需达到的效果：<br />CapsLock 单按为 Esc ，组合按为 Ctrl<br />左 Shift 单按切输入法，右 Shift 单按打出左括号<br />文本编辑时适配 Emacs 基础快捷键<br />按键布局尽量与 macOS 一致<br /><br />macOS 键位的好处是 Command 与 Ctrl 分开，使得一些 Emacs 快捷键与系统命令快捷键能够共存（如 Ctrl+A 跳至行首，Command+A 全选等）。<br /><br />调研：<br />Linux 下的改键软件大致分为两类：<br />一类为使用 X11/Xorg 的键盘映射接口，如 xmodmap 、xkeysnail 等；<br />另一类为调用 kernel 层的输入接口，如 keyd 、KMonad 等。<br />因为我用的桌面是 Gnome Wayland ，所以 X11 下的就无法考虑了。後面两个目前都在积极开发中：keyd 用 C 写的，配置文件类似 TOML ，Linux 专属； KMonad 是 Haskell ，配置文件是类似 Lisp 但惊人的直观，且跨平台。考虑到效率，我选择了 keyd （ <a target="_blank" href="https://github.com/rvaiya/keyd" rel="nofollow noopener">https://github.com/rvaiya/keyd</a> ）。<br /><br />安装过程不表，说一下遇到的体会和小坑。<br />keyd 以 layer 为核心概念，每个 layer 就是一段配置，layer 可以继承和切换。这样很容易实现我需要的效果（如：左 Alt 继承 Ctrl 功能，但特定键下可触发自定义）。<br />不过要注意的是，目前 git 仓库中的示例配置有部分是错的（应该是近期迭代了 2.0 版但示例未及时更新），修改要点：<br />1. 2.0 版舍弃了`leftmeta = alt`的语法，现在必须写成`leftmeta = layer(alt)`<br />2. 切换 layer 时如果有参数，要用 swap2 而不是 swap ，具体用法在 man page 有写<br /><br />现在仍有部分 Emacs 键位无法实现，如 Ctrl+k （删至行末），因这一功能没有单键对应。如果定义为 Shift+End+Delete 组合键，不仅删除时有延迟，而且会影响 Terminal 中 Ctrl+k 的行为。<br />注意到 Gnome Tweak 中有一个启用 Emacs 键位的选项，研究了一下如何实现的，发现是使用了 gtk 的 Api 自定义了一些配置（位于：/usr/share/themes/Emacs/gtk-3.0/gtk-keys.css ），这样我们可以仿照此配置，新建一个 YourKey 文件夹，将 gtk-keys.css 中需要的搬过来，再通过`gsettings set org.gnome.desktop.interface gtk-key-theme YourKey`设为自己想到的效果。<br />不过这衹对 gtk 应用生效，好在我装的非 gtk 应用不多，目前已基本够用。
-	]]></content>
-</entry><entry>
-	<title>[程序员] 瑞昱（小螃蟹）的硬件驱动程序去哪里下载？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875993#reply2" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875993</id>
-	<published>2022-08-28T09:38:35Z</published>
-	<updated>2022-08-27T13:38:35Z</updated>
-	<author>
-		<name>NETID</name>
-		<uri>https://www.v2ex.com/member/NETID</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	瑞昱真是家奇葩公司，从来不发布自家设备的驱动程序，官网什么也没有……<br />只能用 OEM 提供的驱动，但是 OEM 的驱动尼玛也是从来不更新，都是一次性驱动……<br />想问下是不是有我不知道的瑞昱驱动获取渠道呢？
-	]]></content>
-</entry><entry>
-	<title>[问与答] 痛点：请教一款 Mac 下的邮件管理软件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875992#reply3" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875992</id>
-	<published>2022-08-28T09:33:49Z</published>
-	<updated>2022-08-28T10:51:07Z</updated>
-	<author>
-		<name>hubahuba</name>
-		<uri>https://www.v2ex.com/member/hubahuba</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>出于每次 git 的交互都会邮箱提醒，但每次都要不定时登录网页刷新邮箱····</p>
-<p>而 Mac 下自带的邮箱软件，不会后台常驻，强迫症总是把他退出了···而且它对 gmail 的支持好像并不是很好，每次同步要好久。</p>
-<p>所以有没有一种状态栏常驻的邮箱呢？有那种小红点提示，像微信一样 hhhh</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 3D 潮汐模拟演示</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875991#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875991</id>
-	<published>2022-08-28T09:29:08Z</published>
-	<updated>2022-08-28T10:52:14Z</updated>
-	<author>
-		<name>IBMall</name>
-		<uri>https://www.v2ex.com/member/IBMall</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://t.me/kejiqu/81" rel="nofollow">https://t.me/kejiqu/81</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[App Store] 记 MindNode 7 买断版本下载的问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/875989#reply1" />
-	<id>tag:www.v2ex.com,2022-08-28:/t/875989</id>
-	<published>2022-08-28T09:15:05Z</published>
-	<updated>2022-08-28T10:15:05Z</updated>
-	<author>
-		<name>shmilypeter</name>
-		<uri>https://www.v2ex.com/member/shmilypeter</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>三年前购买了 MindNode iOS Volume License 版本，该版本是当时 MindNode 团队为了方便家人共享推出的付费购买版本（正常搜索到的是免费下载但是 98 元付费内购版本），然后 Mac 上我也花了 254 购买了 MindNode 7 内购。因为当时 iOS 和 Mac 平台的 APP 是需要分开购买的。</p>
-<p>后来 MindNode 也变成了只提供 MindNode Plus 订阅的选项，价格差不多 19 刀一年，但是我也不需要他推出的新功能，所以在 iPhone 上通过已购买的项目下载到 MindNode Volume License 版本，但是 iPad 上的已购买项目就没有 MindNode Volume License 版本了。为此苦恼了一段时间，觉得我想在 iPad 上用就非得为了订阅制付钱不可了。但是后来在 safari 上搜索 mindnode volume license ，搜到了 appstore 的链接，点进去之后能跳转到 AppStore （但是在 AppStore 搜就搜不到了，估计是开发者隐藏了但是没下架），点进去是显示价格¥128 的，我点击购买，AppStore 提示我已经拥有该软件的历史版本，更新不需要付费，然后就顺利在 iPad 上下载了 MindNode 。</p>
-<p>Mac AppStore 下载完 MindNode 之后恢复购买还是能恢复之前购买的 MindNode 7 ，当然，订阅制之后推出的新功能肯定是没有了，但是老版的功能对我而言够用了。虽然 MindNode 只在苹果平台提供，不过我也只用苹果设备，这个问题不大。</p>
-<p>XMind 一年 388 的订阅费用太贵了，还限制五台设备。如果 XMind 能用学生优惠价格购买（这个需要提供学信网的验证报告人工审核，做不了假），那么价格就是 99 元。如果五个人拼个车，一年 20 的价格就非常的可以接受了。</p>
 
 	]]></content>
 </entry>
