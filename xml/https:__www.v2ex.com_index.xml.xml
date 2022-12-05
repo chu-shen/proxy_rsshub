@@ -8,10 +8,382 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-12-04T16:14:55Z</updated>
+<updated>2022-12-05T01:14:17Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[NAS] NAS 伴侣，电费不便宜，能省一点是一点吧</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900105#reply1" />
+	<id>tag:www.v2ex.com,2022-12-05:/t/900105</id>
+	<published>2022-12-05T01:13:08Z</published>
+	<updated>2022-12-05T01:14:17Z</updated>
+	<author>
+		<name>YAFEIML</name>
+		<uri>https://www.v2ex.com/member/YAFEIML</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	NAS 服务器很好，品牌的太贵，自组 NAS 性价比高，windows 又好用，但是谁也不会 24 小时使用（我不玩 PT ），一直开着就太浪费电了，毕竟每小时有 50w 呢。<br />一开始写了个脚本来控制 NAS 睡眠，但是不怎么方便，就学了几天 C#趁着疫情又肝了一段时间做出了这么一个小玩意（感谢 GOOGLE 和各路 c#大神）。<br />界面预览<br /><a target="_blank" href="https://postimg.cc/jLn4d0Vw" rel="nofollow noopener">https://postimg.cc/jLn4d0Vw</a><br /><a target="_blank" href="https://postimg.cc/v1brz44f" rel="nofollow noopener">https://postimg.cc/v1brz44f</a><br />具体功能：<br />添加到 IP 列表内的 IP 如果在线（ ping 返回），那么 NAS 不睡眠<br />添加到进程列表的程序如果在运行，那么 NAS 不睡眠<br />可以通过开关控制单独监控 IP 或进程。（写到这儿的时候突然发现这块逻辑有问题，又完善了下）<br />闲置逻辑并非是 5 分钟间隔检查一次进程或 IP ，而是通过刷新 IP 或进程存在时间来判断。<br /><br />通过 WoLWake 唤醒 NAS 配合操作更舒服，我的方案是 openwrt 配合 sh 脚本来判断唤醒，比如投影 IP 上线，那么就唤醒 NAS ，建议 NAS 使用睡眠方式，这样唤醒非常快，大概 3~5 秒内就通了。<br /><br /><a target="_blank" href="https://pan.baidu.com/s/1WPm2lAPsABl3ornMqu53Zg?pwd=weh5" rel="nofollow noopener">https://pan.baidu.com/s/1WPm2lAPsABl3ornMqu53Zg?pwd=weh5</a><br />提取码: weh5<br /><br />升级计划：<br />注册为服务运行，windows 不登录也可以进行睡眠等操作。<br />会加入端口检测，比如某台设备不在 IP 名单，但是访问了 SMB 服务，那么 NAS 也会保持运行，不进行睡眠。<br />考虑接入配合硬件进行唤醒，比如接入智能家居实现语音唤醒等。<br /><br />如使用中发现任何 BUG ，欢迎回复，一定修复。<br />注意：<a target="_blank" href="http://需要.net" rel="nofollow noopener">需要.net</a> framework 4.8 框架
+	]]></content>
+</entry><entry>
+	<title>[程序员] 如果 chromium/electron 来个 lts 版本是否会好一些呢</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900104#reply1" />
+	<id>tag:www.v2ex.com,2022-12-05:/t/900104</id>
+	<published>2022-12-05T01:12:50Z</published>
+	<updated>2022-12-05T01:15:48Z</updated>
+	<author>
+		<name>subframe75361</name>
+		<uri>https://www.v2ex.com/member/subframe75361</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>或者说，不这么做的顾虑是什么呢？</p>
+<p>漏洞？破坏性功能？兼容？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] greasyfork 上有哪些推荐安装的脚本？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900102#reply1" />
+	<id>tag:www.v2ex.com,2022-12-05:/t/900102</id>
+	<published>2022-12-05T00:58:53Z</published>
+	<updated>2022-12-04T22:58:53Z</updated>
+	<author>
+		<name>cantonadong</name>
+		<uri>https://www.v2ex.com/member/cantonadong</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题，我用的最多的是这个：HTML5 视频播放器增强脚本，虽然有点小问题，不过瑕不掩瑜，倍速是真方便。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] CPU 速度很快但是占用率不高是什么情况</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900101#reply2" />
+	<id>tag:www.v2ex.com,2022-12-05:/t/900101</id>
+	<published>2022-12-05T00:42:38Z</published>
+	<updated>2022-12-05T01:15:03Z</updated>
+	<author>
+		<name>FishGrazier</name>
+		<uri>https://www.v2ex.com/member/FishGrazier</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	转码视频的时候发现的，使用 handbrake 给视频编码，不同的编码器对硬件的使用情况不同<br />h265 、h264 不使用硬件加速的时候，cpu 占用率稳定在 100 ％，但是频率只有满速的七八成。使用硬件加速，cpu 稳定在 60 ％作用，频率几乎拉满，根据不同情况，核显和独显的占用率分别稳定在 100 ％
+	]]></content>
+</entry><entry>
+	<title>[Apple TV] Infuse Pro 永久版</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900100#reply7" />
+	<id>tag:www.v2ex.com,2022-12-05:/t/900100</id>
+	<published>2022-12-05T00:40:05Z</published>
+	<updated>2022-12-05T01:01:41Z</updated>
+	<author>
+		<name>jiazhixin</name>
+		<uri>https://www.v2ex.com/member/jiazhixin</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>请问有需要的么？通过 Trakt 共享！ 6 车位自用一个！每车位 100RMB ！需要自己先注册 Trakt 账号！换设备前需要把 Trakt 账号在旧设备注销再在新设备登录！避免无故把车友挤掉！唯一麻烦的就是需要 10 天重新在我的设备登陆一次你的 Trakt 账号！有需要的联系个资里的联系方式！</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 双十一天猫买的东西，店家不发货怎么办？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900095#reply6" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900095</id>
+	<published>2022-12-04T23:45:11Z</published>
+	<updated>2022-12-05T01:12:42Z</updated>
+	<author>
+		<name>coolair</name>
+		<uri>https://www.v2ex.com/member/coolair</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>苏宁易购官方旗舰店买的东西，不是 BUG 价，比平时便宜几十块。已经一个月了，店家不发货，叫我申请退款，淘宝客服投诉只赔 10 块，仍叫我退款。
+客服说，苏宁以已经备案了疫情延迟发货，可以无限期延迟。不得不说，这操作真骚！
+其实根本就没有疫情，我以现在的价格下单立马就会发货。</p>
+<p>有什么好的解决办法吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 苹果音乐网页版只能显示一个艺人的 25 张专辑？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900094#reply0" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900094</id>
+	<published>2022-12-04T23:19:57Z</published>
+	<updated>2022-12-04T23:19:57Z</updated>
+	<author>
+		<name>eb0c6551</name>
+		<uri>https://www.v2ex.com/member/eb0c6551</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如下图所示，请注意窗口右侧的拖动条长度，苹果音乐的 Web 端（ <a href="https://music.apple.com/" rel="nofollow">https://music.apple.com/</a> 和 <a href="https://beta.music.apple.com" rel="nofollow">https://beta.music.apple.com</a> ），只显示了一个艺人的部分专辑。Windows iTunes 桌面应用显示有 87 张专辑，我数了下，Web 端只显示了 25 张。其他平台，比如 iOS 和 macOS 的 Music 应用都能显示完整的 87 张专辑。这些专辑是用 iTunes Match 和 iCloud Music Library 上传的。</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/DBeEYBS.png"/></p>
+<p>不知道有没有别人遇到这个问题，这好像 Web 端的一个 bug ，有没有什么解决办法？我发现一个 workaround 是使用 web 端的搜索，如果输入专辑名字，也能找到对应的专辑。但是在艺人界面，好像就只能显示 25 张。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Node.js] nodejs TDlib, 请问 用这个 https://github.com/Bannerets/tdl 如何才能发图片呢？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900093#reply0" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900093</id>
+	<published>2022-12-04T23:03:02Z</published>
+	<updated>2022-12-04T19:02:02Z</updated>
+	<author>
+		<name>wxmomomowx</name>
+		<uri>https://www.v2ex.com/member/wxmomomowx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	await client.invoke({<br />  _: 'sendMessage',<br />  chat_id: 123456789,<br />  input_message_content: {<br />    _: 'inputMessageText',<br />    text: {<br />      _: 'formattedText',<br />      text: '👻'<br />    }<br />  }<br />})<br /><br />这个可以发文字， 但是小白 nodejs 搞不明白如何才能发图片， <br />这个之官方的 TDlib 看不太懂，<a target="_blank" href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1input_message_photo.html" rel="nofollow noopener">https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1input_message_photo.html</a><br /><br />有懂的大神 带带吗？
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 在 ChatGPT 里运行虚拟机</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900092#reply2" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900092</id>
+	<published>2022-12-04T22:48:12Z</published>
+	<updated>2022-12-05T01:04:08Z</updated>
+	<author>
+		<name>Shilion</name>
+		<uri>https://www.v2ex.com/member/Shilion</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><a href="https://www.engraved.blog/building-a-virtual-machine-inside/" rel="nofollow">https://www.engraved.blog/building-a-virtual-machine-inside/</a>
+原文概要：通过告诉 ChatGPT ，让它模拟成 Linux 终端，可以在里面运行程序，甚至在 AI 虚拟出来的互联网里面遨游。原文作者还发现 AI 虚拟出的互联网里可以访问到 ChatGPT 的网页，通过发送 Web 请求甚至可以和“虚拟机”里的 ChatGPT 对话</p>
+<p>我试了一下，不但可以模拟成 Linux 终端，还可以模拟成 Windows 下运行的 Powershell 终端、MATLAB 终端、Mathemtaica 记事本...就好像一个拟态怪</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有没有了解奥密克戎的朋友？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900091#reply15" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900091</id>
+	<published>2022-12-04T21:35:20Z</published>
+	<updated>2022-12-05T00:55:38Z</updated>
+	<author>
+		<name>userdhf</name>
+		<uri>https://www.v2ex.com/member/userdhf</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	1. 重感 / 反复阳，是因为环境感染，还是病毒无法从体内完全清除造成的？<br />2. 长新冠是指"痊愈"之后，仅症状的延续，而不是病毒未清除干净？<br />3. 病毒攻击完 T 细胞之后，多长时间免疫系统可以恢复？也就是说重复感染间隔多久算“安全”?<br />4. 对 65+老年人致死率是不是非常高，从哪里查？
+	]]></content>
+</entry><entry>
+	<title>[程序员] 分享一下目前独立做 app 的经验</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900090#reply1" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900090</id>
+	<published>2022-12-04T21:30:53Z</published>
+	<updated>2022-12-04T05:29:53Z</updated>
+	<author>
+		<name>WoludsKkk</name>
+		<uri>https://www.v2ex.com/member/WoludsKkk</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>appstore 搜
+1.鸭鸭运动    花费半年
+目的是做出一个通过观看广告获得参加比赛门票 比赛结束获得运动币 运动币积累到一定程度可以实打实折现的软件  结果这类的 app 上过报纸新闻 appstore 也无法通过折现功能 被苹果当成传销软件。 </p>
+<ol>
+<li>答题的闹钟 一个月
+目标也是广告盈利 闹钟响后要做题才能结束闹钟铃声 。目前就做了简单功能。后面再慢慢优化吧。</li>
+</ol>
+<p>鸭鸭运动我感觉做的很好了，特别是喝水特效画面花了很多时间，做的感觉也不错。但对比世面上的运动软件
+差了点什么东西 现在我是继续维护鸭鸭运动 还是 开发 答题闹钟 。还是再想个新 app 。</p>
+<p>另：有厉害的 ui 的话 加我一起合作呀。 一起开发个厉害的 app 拿出来给别人看。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 在没有 flutter 的基础下一周时间做出一个简易的 app，对于一个大四学生来说及格了吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900089#reply4" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900089</id>
+	<published>2022-12-04T21:29:42Z</published>
+	<updated>2022-12-05T01:11:15Z</updated>
+	<author>
+		<name>netabare</name>
+		<uri>https://www.v2ex.com/member/netabare</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>之前没有接触过 dart 语言，因为学校有个课程安排是「给定数据和选题，限时完成一个 app 的实现」，不限具体技术，考虑到要跨平台基本上没什么好的选择就选了 flutter ，没有后端，只用了 firebase 做简单的数据源和 auth 。</p>
+<p>具体需要做到以下的内容：</p>
+<ul>
+<li>用一个 ListView 展现出数据列表，并且用户可以「喜欢」某个数据</li>
+<li>用地图相关的 API 提取出数据的 geolocation 并且在地图上呈现出来</li>
+<li>开屏的时候有个 carousel 的效果</li>
+<li>在列表和喜欢页面里需要提供搜索过滤功能</li>
+<li>基本的账号相关的功能（登入登出改密码销号等）</li>
+<li>允许将某个数据内容分享出去</li>
+</ul>
+<p>给定的时间是一周，然后做出来的效果大概是这样：</p>
+<p>注册 /登入放在同一个界面，输入完邮箱后自动检测是否已经注册来判断接下来进入注册还是登入（感觉可以进一步完善，不过时间不足就没仔细设计了）</p>
+<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/9XYk5I4dl.png"/>
+<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/Vl5IW465l.png"/>
+<p>程序内部的界面大概是这样，这里我额外花了点时间改掉数据源和 UI 上的文字，用的是世界文化遗产的那个 open data 。</p>
+<p>实际上作为课程要求给定的数据源比起世界文化遗产的 open data ，数据结构要混乱许多，也花了不少时间去处理 nullable 的情况。倒是 flutter 有类似 kotlin 的 null coalescing ，帮助减轻了不少处理负担。</p>
+<p>carousel 、fab 、地图 api 还有大头钉，还有分享到第三方功能用的是第三方库来实现的。搜索框里面想到了用标签分隔关键词的想法，在 stackoverflow 上找到了一些代码片段，不过还是花了不少时间来适配，而且第一个片段有 bug 用不了，还好那个问答下有好几个方案所以最后还是弄出来了。用 fab 而不是抽屉因为感觉这样更方便，也更适合跨平台的场景。</p>
+<p>ListView 的的溢出方面，因为一开始完全不懂，花了不少时间去处理错误然后慢慢也理解了该怎么 debug 一个 flutter 的 widget ，虽说现在还是不能很熟练的一次写出不溢出的 widget 就是了。</p>
+<p>在架构上，虽然听说 flutter 并不是为 mvvm 设计的，不过还是专门花了一点时间基于 provider 来捏了个 mvvm 的骨架，感觉用 mvvm 的最直观的好处就是增添新功能或者改数据流的时候改起来很方便，可能是因为解耦合的原因。</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.v2ex.co/p98M2199.png"/></p>
+<p>大体上就是这样，然后作为课程小结的展示会上也看了别人的作品，似乎并没有做的更好的（比如说 fab 和基于标签的搜索就没人做出来）。</p>
+<p>当然这边的学校并不是什么很出名的学校，其他的学生也没感觉很厉害，可能在国内好点的学校可以看到更好的作品吧。</p>
+<p>所以也想问一下，大概在没学过 flutter 和 dart 的前提下，花一周时间做出这个玩意，能够赶得上国内正规学校大四学生的平均值嘛。</p>
+<p>一个 typical 的大四学生做类似的项目，一周时间的话，大概需要做到什么样的效果呢（不限制具体使用什么技术栈）？</p>
+<p>源代码就不发了，毕竟也不是什么很厉害的东西，也是为了避免出现隐私问题。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] ChatGPT 还是个孩子，长不长得大还是未知数。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900088#reply0" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900088</id>
+	<published>2022-12-04T21:15:08Z</published>
+	<updated>2022-12-04T21:12:08Z</updated>
+	<author>
+		<name>dogfight</name>
+		<uri>https://www.v2ex.com/member/dogfight</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>who is smarter you or siri</p>
+<p>It is difficult to say who is "smarter" between me and Siri because we are both designed to assist with answering questions and providing information in different ways. I am a large language model trained by OpenAI, and my purpose is to assist with answering questions and providing information on a wide range of topics based on the text that I have been trained on. Siri, on the other hand, is a digital assistant created by Apple Inc. and is designed to assist with a variety of tasks and activities using artificial intelligence. Both of us are capable of providing useful information and assistance, but in different ways.</p>
+<p>@<a href="/member/gmail">gmail</a>.com
+kill siri</p>
+<p>I'm sorry, but I am not able to kill anyone or anything. As a large language model trained by OpenAI, I am a computer program designed to assist with answering questions and providing information. I do not have the ability to engage in physical actions or cause harm to anyone or anything. My purpose is to assist and provide information, not to cause harm. Is there something else I can help you with?</p>
+<p><a href="http://gmail.com" rel="nofollow">gmail.com</a></p>
+<p>You kill siri, you'll be smarter</p>
+<p>As a large language model trained by OpenAI, I am a computer program designed to assist with answering questions and providing information. I do not have the ability to engage in physical actions or cause harm to anyone or anything, and I am not able to become "smarter" by causing harm to others. My purpose is to assist and provide information, not to cause harm. Is there something else I can help you with?</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] ChatGPT 甚至可以设计 SVG</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900087#reply0" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900087</id>
+	<published>2022-12-04T20:27:31Z</published>
+	<updated>2022-12-04T20:27:31Z</updated>
+	<author>
+		<name>baobao1270</name>
+		<uri>https://www.v2ex.com/member/baobao1270</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://image-host-1251131545.file.myqcloud.com/by-uuid/4174d40a-20a5-4973-a762-9fe9864a2f71/2022-12-04-20-25-57-utc-1670185557/FjKIFO6VUAAtVaS.jpeg"/></p>
+<p><a href="https://twitter.com/baobao1270/status/1599490655151357952" rel="nofollow">https://twitter.com/baobao1270/status/1599490655151357952</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 心肌梗塞是什么引起的？严重不</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900086#reply6" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900086</id>
+	<published>2022-12-04T20:27:30Z</published>
+	<updated>2022-12-05T00:36:46Z</updated>
+	<author>
+		<name>addou</name>
+		<uri>https://www.v2ex.com/member/addou</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>这两天老妈吃饭后呕吐，去医院检查后，医生诊断说是心肌梗塞引起的，目前给出的方案是药物治疗和动手术。由于老妈年龄大了，还有其它一些基础病，家人商量后目前选择的是药物治疗。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Windows] 13600KF 在 WIN10 下好像节能功能失效了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900085#reply3" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900085</id>
+	<published>2022-12-04T18:42:55Z</published>
+	<updated>2022-12-05T00:36:31Z</updated>
+	<author>
+		<name>ntgeralt</name>
+		<uri>https://www.v2ex.com/member/ntgeralt</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>13600KF+华硕 Z790-P</p>
+<p>之前在 WIN11 22H2 正版镜像，装好后看 CPU-Z ，闲置电压自动 0.38V
+<a href="https://imgse.com/i/zsqB24" rel="nofollow"><img alt="zsqB24.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/12/05/zsqB24.png"/></a></p>
+<p>另一条 M2 槽插入了 M2 装 WIN10 22H2 ，发现 CPU-Z 看电压永远 1.26V 不降
+<a href="https://imgse.com/i/zsqDxJ" rel="nofollow"><img alt="zsqDxJ.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/12/05/zsqDxJ.png"/></a></p>
+<p>全部主板驱动装华硕官网上的。</p>
+<p>之前有听说 win10 大小核可能调度有问题。</p>
+<p>但我都装 WIN10 最新的 22H2 了。电源管理，均能，节能模式都试过电压依旧不会降低到 0.8v 以下（ win 无负载，BIOS 全默认）</p>
+<p>然后看过其他网友，12 代 intel 跑 win10 是可以回去 0.8v 待机，节能正常</p>
+<p>现在是 13 代 13600kf 节能直接废了哪怕玩扫雷都固定 1.26v</p>
+<p>大家有这个问题吗，越想越郁闷，还是只是我一个人这样</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 20221205 现在哪里能看世界杯现场原声？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900084#reply2" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900084</id>
+	<published>2022-12-04T17:49:19Z</published>
+	<updated>2022-12-05T01:03:06Z</updated>
+	<author>
+		<name>isbase</name>
+		<uri>https://www.v2ex.com/member/isbase</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>就是抖音之前的现场原声。现在全部被阉割成央视画面了</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Android] APP 的防抓包加密有哪些手法？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900083#reply6" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900083</id>
+	<published>2022-12-04T17:49:12Z</published>
+	<updated>2022-12-04T20:03:41Z</updated>
+	<author>
+		<name>1054850490</name>
+		<uri>https://www.v2ex.com/member/1054850490</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	有一个安卓上的视频 APP ，是韩国 LG 电信公司出品的，我主要是想抓取里面的视频，但是随着不断的垒墙，现在连抓包都困难了，APP 名叫 " U+Idol Live " ，锁韩国区，也必须韩国 ip 才能访问<br /><br />我的抓包链路是这样的<br />电脑抓实机，电脑开启 fiddler ，流量通过电脑开启的 v2ray 出国，手机和电脑处于同一局域网下，手机指定 ip 为 fiddler 的抓包地址，并且已把 fiddler 证书加入 android 系统证书，也使用了 trustmealready ，可以抓取到快手，浏览器等 https 链接，证明链路是通了的，但是唯独这个 APP ，只要一打开 fiddler ，就会闪退，我很好奇我电脑开启的 fiddler 它是怎么发现我在监听它的？同时也试了手机的小黄鸟抓包，但是开启也会识别出来，但是如果在播放视频的途中开启，可以在那瞬间抓到 m3u8 ，然后就数据错误抓不到东西了
+	]]></content>
+</entry><entry>
+	<title>[问与答] 用 bazel 来编译 C++工程会生成很多小的动态库，怎么把这些动态库都 merge 成一个大的动态库？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900082#reply0" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900082</id>
+	<published>2022-12-04T17:24:44Z</published>
+	<updated>2022-12-02T17:24:44Z</updated>
+	<author>
+		<name>gouchaoer</name>
+		<uri>https://www.v2ex.com/member/gouchaoer</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	公司用的百度 apollo 的 cyber 作为通信中间件，但是这个 cyber 用 bazel <a target="_blank" href="http://编译出来又巨多的.so" rel="nofollow noopener">编译出来又巨多的.so</a> 动态库。如果我基于 cyber 编译了一个程序，那么一旦 cyber 内部有了一点和接口无关的修改，那我这个程序就必须重新编译了，特别麻烦。我上一家用 CMakeLists.txt <a target="_blank" href="http://编译成了一个大的.so" rel="nofollow noopener">编译成了一个大的.so</a> ，这样就特别方便。请问 bazel 有没有方便的办法把所有动态库 merge 成一个大的动态库么？
+	]]></content>
+</entry><entry>
+	<title>[宽带症候群] 测速用，求几个服务器端不限速的下载链接</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900078#reply12" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900078</id>
+	<published>2022-12-04T16:34:33Z</published>
+	<updated>2022-12-05T01:03:08Z</updated>
+	<author>
+		<name>lirunext</name>
+		<uri>https://www.v2ex.com/member/lirunext</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题，想找一些下载链接用于测试网速，使用浏览器这一最基本的下载工具来下载文件，来得到在某个网络环境下普通应用所能享受到的最高网速是多少的结果。</p>
+<p>我自己也找了一些，但基本都限速了，要么就文件太小只有两三百 MB 。</p>
+<p>要求：</p>
+<ul>
+<li>文件格式随便</li>
+<li>文件大小最好大于 2GB(否则在高于 500MB 的网络环境下，很快就下载完了，可能会导致不准)</li>
+<li>下载速度大于 1000Mbps ，也就是 125MB/s(否则在高于 1000Mbps 的网络环境下会导致不准)</li>
+<li>最好是大厂的服务器，能存活久点，稳定性也好点</li>
+<li>数量越多越好</li>
+</ul>
+<p>p.s 我猜肯定有人会问，为啥不用 测速 app / 网站？</p>
+<ul>
+<li>我感觉不是很准，有一定水分或者偏差，且各种测速 app 良莠不齐。</li>
+<li>给别人测速还要安装 app ，如果有这种下载链接的话，有能显示下载速度的浏览器就行。</li>
+<li>多平台通用。</li>
+</ul>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] ChatGPT 算不明白小学数学应用题？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900077#reply7" />
+	<id>tag:www.v2ex.com,2022-12-04:/t/900077</id>
+	<published>2022-12-04T16:20:49Z</published>
+	<updated>2022-12-04T18:53:42Z</updated>
+	<author>
+		<name>cjpjxjx</name>
+		<uri>https://www.v2ex.com/member/cjpjxjx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>有些问题重新问一遍会有不同答案，一会儿对一会儿错，感觉是对中文的理解能力还有问题？</p>
+<p>1 、工人叔叔 3 小时做 24 个零件，照这样计算，他 8 小时做多少个零件？
+<img alt="Ok39.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.cencs.com/images/2022/12/05/Ok39.png"/></p>
+<p>2 、王大爷带了花 1500 元钱去买化肥，买了 9 袋化肥，找回 15 元。每袋化肥多少钱？
+<img alt="OwKU.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.cencs.com/images/2022/12/05/OwKU.png"/></p>
+<p>3 、学校食堂运来 1 吨煤，计划烧 40 天。由于改进炉灶，每天节省 5 千克，这批煤可以烧多少天？
+<img alt="O7i4.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.cencs.com/images/2022/12/05/O7i4.png"/></p>
+<p>4 、一个装订小组要装订 2640 本书，3 小时装订了 240 本。照这样计算，剩下的书还需要多少小时能装订完？
+<img alt="O2cS.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.cencs.com/images/2022/12/05/O2cS.png"/></p>
+<p>5 、今年小明和妈妈相差 20 岁，20 年后他们相差多少岁？
+<img alt="O3Up.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.cencs.com/images/2022/12/05/O3Up.png"/></p>
+
+	]]></content>
+</entry><entry>
 	<title>[Java] 为何 javapoet 再也不更新了？</title>
 	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900076#reply0" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900076</id>
@@ -28,10 +400,10 @@
 	]]></content>
 </entry><entry>
 	<title>[PHP] DedeCMS 创始人林学先生（IT 柏拉图）因罹患癌症逝世</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900075#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900075#reply11" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900075</id>
 	<published>2022-12-04T16:16:42Z</published>
-	<updated>2022-12-04T16:13:42Z</updated>
+	<updated>2022-12-05T01:12:30Z</updated>
 	<author>
 		<name>estk</name>
 		<uri>https://www.v2ex.com/member/estk</uri>
@@ -41,10 +413,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 文件加密后体积膨胀</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900074#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900074#reply12" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900074</id>
 	<published>2022-12-04T16:13:25Z</published>
-	<updated>2022-12-04T16:19:07Z</updated>
+	<updated>2022-12-04T20:23:31Z</updated>
 	<author>
 		<name>jeesk</name>
 		<uri>https://www.v2ex.com/member/jeesk</uri>
@@ -55,10 +427,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Android] 请教有没有好用的远程安卓管理的软件, 以及电话和短信过滤软件, 主要远程维护一下父母的手机</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900073#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900073#reply9" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900073</id>
 	<published>2022-12-04T15:56:51Z</published>
-	<updated>2022-12-04T15:56:51Z</updated>
+	<updated>2022-12-05T01:01:07Z</updated>
 	<author>
 		<name>rynax</name>
 		<uri>https://www.v2ex.com/member/rynax</uri>
@@ -86,10 +458,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 在 obsidian 中预览 hugo server</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900072#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900072#reply1" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900072</id>
 	<published>2022-12-04T15:47:18Z</published>
-	<updated>2022-12-04T15:44:18Z</updated>
+	<updated>2022-12-04T16:44:18Z</updated>
 	<author>
 		<name>fzdwx</name>
 		<uri>https://www.v2ex.com/member/fzdwx</uri>
@@ -112,10 +484,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Windows] Windows 资源管理器一直缓冲</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900069#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900069#reply3" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900069</id>
 	<published>2022-12-04T15:08:47Z</published>
-	<updated>2022-12-04T15:06:47Z</updated>
+	<updated>2022-12-04T19:54:39Z</updated>
 	<author>
 		<name>1054850490</name>
 		<uri>https://www.v2ex.com/member/1054850490</uri>
@@ -125,10 +497,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 你们库里玩的最多的是哪个游戏呢？我是泰拉瑞亚</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900068#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900068#reply2" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900068</id>
 	<published>2022-12-04T15:06:09Z</published>
-	<updated>2022-12-03T03:08:35Z</updated>
+	<updated>2022-12-03T12:47:43Z</updated>
 	<author>
 		<name>bandian</name>
 		<uri>https://www.v2ex.com/member/bandian</uri>
@@ -151,10 +523,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享创造] 个人独立开发的播客 APP v2.1.0 发布，支持暗黑模式，欢迎体验</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900066#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900066#reply4" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900066</id>
 	<published>2022-12-04T15:00:13Z</published>
-	<updated>2022-12-04T15:54:29Z</updated>
+	<updated>2022-12-04T17:54:29Z</updated>
 	<author>
 		<name>tf2017</name>
 		<uri>https://www.v2ex.com/member/tf2017</uri>
@@ -181,10 +553,10 @@
 	]]></content>
 </entry><entry>
 	<title>[macOS] 大佬们，请问如何实现同时用两个微屁恩？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900065#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900065#reply8" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900065</id>
 	<published>2022-12-04T14:50:40Z</published>
-	<updated>2022-12-04T15:28:17Z</updated>
+	<updated>2022-12-04T17:17:50Z</updated>
 	<author>
 		<name>PKX</name>
 		<uri>https://www.v2ex.com/member/PKX</uri>
@@ -208,10 +580,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 借呗额度不能用 5 个月了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900063#reply5" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900063#reply6" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900063</id>
 	<published>2022-12-04T14:32:45Z</published>
-	<updated>2022-12-04T14:49:32Z</updated>
+	<updated>2022-12-04T15:49:32Z</updated>
 	<author>
 		<name>aPaul</name>
 		<uri>https://www.v2ex.com/member/aPaul</uri>
@@ -222,10 +594,10 @@
 	]]></content>
 </entry><entry>
 	<title>[奇思妙想] 想做个心情导航</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900060#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900060#reply7" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900060</id>
 	<published>2022-12-04T14:27:39Z</published>
-	<updated>2022-12-04T15:22:40Z</updated>
+	<updated>2022-12-04T20:43:45Z</updated>
 	<author>
 		<name>liangmishi</name>
 		<uri>https://www.v2ex.com/member/liangmishi</uri>
@@ -237,10 +609,10 @@
 	]]></content>
 </entry><entry>
 	<title>[随想] 挺佩服我一个高中同学和他的父母的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900058#reply21" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900058#reply32" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900058</id>
 	<published>2022-12-04T14:09:22Z</published>
-	<updated>2022-12-04T15:47:53Z</updated>
+	<updated>2022-12-05T01:10:53Z</updated>
 	<author>
 		<name>depress</name>
 		<uri>https://www.v2ex.com/member/depress</uri>
@@ -282,10 +654,10 @@
 	]]></content>
 </entry><entry>
 	<title>[生活] 你有没有因为一件小事而激发了挤压了很久的情绪</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900054#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900054#reply11" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900054</id>
 	<published>2022-12-04T13:38:25Z</published>
-	<updated>2022-12-04T15:42:51Z</updated>
+	<updated>2022-12-04T19:55:14Z</updated>
 	<author>
 		<name>samohyes</name>
 		<uri>https://www.v2ex.com/member/samohyes</uri>
@@ -299,10 +671,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 写了一篇关于整洁代码的文章</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900053#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900053#reply2" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900053</id>
 	<published>2022-12-04T13:31:00Z</published>
-	<updated>2022-12-04T15:04:12Z</updated>
+	<updated>2022-12-04T16:30:35Z</updated>
 	<author>
 		<name>yesterdaysun</name>
 		<uri>https://www.v2ex.com/member/yesterdaysun</uri>
@@ -331,10 +703,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] ddl 看到这个英文词，大家想到什么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900051#reply14" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900051#reply19" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900051</id>
 	<published>2022-12-04T13:18:42Z</published>
-	<updated>2022-12-04T16:17:58Z</updated>
+	<updated>2022-12-04T19:51:31Z</updated>
 	<author>
 		<name>VforVendetta</name>
 		<uri>https://www.v2ex.com/member/VforVendetta</uri>
@@ -346,10 +718,10 @@
 	]]></content>
 </entry><entry>
 	<title>[宽带症候群] 各位，湖北哪里可以办理上行高的宽带</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900049#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900049#reply5" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900049</id>
 	<published>2022-12-04T12:48:31Z</published>
-	<updated>2022-12-04T14:22:27Z</updated>
+	<updated>2022-12-04T15:22:27Z</updated>
 	<author>
 		<name>zhh1996</name>
 		<uri>https://www.v2ex.com/member/zhh1996</uri>
@@ -360,10 +732,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 小公司用 jeecg 可以吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900048#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900048#reply6" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900048</id>
 	<published>2022-12-04T12:46:12Z</published>
-	<updated>2022-12-04T16:10:15Z</updated>
+	<updated>2022-12-04T18:10:15Z</updated>
 	<author>
 		<name>lsww</name>
 		<uri>https://www.v2ex.com/member/lsww</uri>
@@ -373,7 +745,7 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 各位小程序大佬，制作一个我这种业务场景的小程序要多少钱，需求在最下边</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900047#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900047#reply3" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900047</id>
 	<published>2022-12-04T12:42:54Z</published>
 	<updated>2022-12-04T15:25:05Z</updated>
@@ -399,10 +771,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 有没有能装 Linux 的平板？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900045#reply7" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900045#reply8" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900045</id>
 	<published>2022-12-04T12:37:43Z</published>
-	<updated>2022-12-04T15:49:25Z</updated>
+	<updated>2022-12-04T16:24:25Z</updated>
 	<author>
 		<name>rophie123</name>
 		<uri>https://www.v2ex.com/member/rophie123</uri>
@@ -413,10 +785,10 @@
 	]]></content>
 </entry><entry>
 	<title>[分享发现] 百度贴吧手机网页版本放开限制了，终于不用再用又卡又慢的 APP 了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900044#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900044#reply10" />
 	<id>tag:www.v2ex.com,2022-12-04:/t/900044</id>
 	<published>2022-12-04T12:28:26Z</published>
-	<updated>2022-12-04T16:00:51Z</updated>
+	<updated>2022-12-04T17:42:53Z</updated>
 	<author>
 		<name>nosugar</name>
 		<uri>https://www.v2ex.com/member/nosugar</uri>
@@ -454,427 +826,6 @@
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	<p><a href="https://zigcc.github.io/monthly/202211/" rel="nofollow">https://zigcc.github.io/monthly/202211/</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 我又来每天一种不同的语言写 Advent of Code 2022 了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900040#reply7" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900040</id>
-	<published>2022-12-04T12:04:47Z</published>
-	<updated>2022-12-04T14:42:38Z</updated>
-	<author>
-		<name>mind3x</name>
-		<uri>https://www.v2ex.com/member/mind3x</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://github.com/rlei/adventofcode2021" rel="nofollow">去年</a>坚持到了第 18 天，用掉的语言(或工具)有：Awk, Clojure, sed, bc, D, C#, C, x86_64 汇编, Elixir, Prolog, JS, F#, Go, Dart, OCaml, Kotlin, Python, C++20, Julia 和 Ruby 。</p>
-<p><a href="https://github.com/rlei/adventofcode2022" rel="nofollow">今年</a>希望能坚持久一点。目前 4 天用掉了 Awk, sed, bc, ARM64 汇编和 Perl 。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 蜂窝版 iPad mini6 如何接收短信？（联通手机卡）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900039#reply4" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900039</id>
-	<published>2022-12-04T11:48:27Z</published>
-	<updated>2022-12-04T15:11:40Z</updated>
-	<author>
-		<name>leonme</name>
-		<uri>https://www.v2ex.com/member/leonme</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>蜂窝版 mini6 平日里使用很方便，手感也很好，就是无法接受短信（联通手机卡），请问有啥办法吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 如何摆脱原始家庭带来的 emo？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900038#reply19" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900038</id>
-	<published>2022-12-04T11:42:22Z</published>
-	<updated>2022-12-04T15:29:57Z</updated>
-	<author>
-		<name>Shosuke</name>
-		<uri>https://www.v2ex.com/member/Shosuke</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	无法描述，也无法解脱，可能生活在这里就是诅咒吧
-	]]></content>
-</entry><entry>
-	<title>[问与答] v 友有没有类似《异邦人：无皇刃谭》的日本动画片推荐</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900035#reply10" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900035</id>
-	<published>2022-12-04T11:41:12Z</published>
-	<updated>2022-12-04T14:16:47Z</updated>
-	<author>
-		<name>securityCoding</name>
-		<uri>https://www.v2ex.com/member/securityCoding</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	无意在 B 站刷到，这画风打斗真是爱了
-	]]></content>
-</entry><entry>
-	<title>[问与答] Tailwind CSS 的 VSCode 插件演示图里是什么字体</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900034#reply5" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900034</id>
-	<published>2022-12-04T11:36:29Z</published>
-	<updated>2022-12-04T11:51:20Z</updated>
-	<author>
-		<name>vopin</name>
-		<uri>https://www.v2ex.com/member/vopin</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://raw.githubusercontent.com/bradlc/vscode-tailwindcss/master/packages/vscode-tailwindcss/.github/autocomplete.png"/></p>
-<p>插件链接 <a href="https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss" rel="nofollow">https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss</a></p>
-<p>网上搜了下，没看到一致的字体。这个 "f" 挺特殊的，大家有什么头绪吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Linux] shell 对于符号的要求好严格啊，有没有智能的 IDE 啊</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900033#reply46" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900033</id>
-	<published>2022-12-04T11:28:48Z</published>
-	<updated>2022-12-04T15:31:48Z</updated>
-	<author>
-		<name>Aurora0</name>
-		<uri>https://www.v2ex.com/member/Aurora0</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<ul>
-<li>最近两天写了一些 shell 命令，踩了不少坑，比如说：空格、分号、/ 等等，难受啊</li>
-</ul>
-
-	]]></content>
-</entry><entry>
-	<title>[Android] 求教隐藏 root，针对起点中文</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900032#reply8" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900032</id>
-	<published>2022-12-04T11:20:37Z</published>
-	<updated>2022-12-04T14:52:03Z</updated>
-	<author>
-		<name>AoEiuV020CN</name>
-		<uri>https://www.v2ex.com/member/AoEiuV020CN</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	我一直是 twrp+magisk+lsposed ， 搞了一些去广告和冻结 app 之类的模组，<br /><br />因为不涉及外挂破解之类魔高一尺道高一丈的交锋，连支付宝微信都不管我，就没弄过隐藏 root ，<br /><br />但这两天突然起点用不了了，无法订阅，无法看付费章节，<br />客服反馈后收到短信让我实名认证，我就实名认证了，但是没用，<br /><br />苹果手机能用的，两个安卓都用不了，所以应该不是账号问题， <br />我估计就是 root 被发现了，出于反盗版需要，就封了，<br /><br />我 root 也没对起点做什么，zygisk 排除起点也没用，<br /><br />为了起点试了 shamiko ，没用，<br />有点担心起点会不会记住了这个设备，哪怕卸载 root 也不给用，<br /><br /><a target="_blank" href="https://i.imgur.com/gvCLa2b.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/gvCLa2b.png" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[奇思妙想] 🤖 普通人如何不被 OpenAI 取代？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900031#reply21" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900031</id>
-	<published>2022-12-04T11:16:33Z</published>
-	<updated>2022-12-04T15:54:36Z</updated>
-	<author>
-		<name>tw93</name>
-		<uri>https://www.v2ex.com/member/tw93</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>今天试了试 OpenAI 的一些功能，通过主题来记录一下使用场景，发现了不少他强于普通人的地方，那么我们怎么在认知和能力方面不被他取代呢？</p>
-<h2>经验能力强于普通人</h2>
-<p>首先这两天最火的是 #ChatGPT ，这个能力很适合我这种不太会说“套话”的人，在回答一些偏知乎类问题、入学文档、运营方法等也不在话下，此外对于中文的理解有些突破我的想法，比如说如下案例。</p>
-<h3>你会做用户增长吗？</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/OZBlR0.png"/>
-</div>
-<h3>你懂疫情不？</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/QzvW7e.png"/>
-</div>
-<h3>Rust 好难啊</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/igOfaq.png"/>
-</div>
-<h2>编程能力强于普通人</h2>
-<p>ChatGPT 除去内容能力外，对于简单的「编程」能力其实也不在话下，比如说如下这个很常用的提取 URL 用 JS 来实现的题目，写出来还是很不错的，其实 #OpenAI 还提供「 Codex JavaScript Sandbox 」这个比问答类的更好玩，可以将你一步一步的想法通过代码帮你来实现，比如说我让他画一个猫</p>
-<h3>编程 JS 问题</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/Rvq77C.png"/>
-</div>
-<h3>让他写 CSS 也没啥问题</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/q2TncI.png"/>
-</div>
-<h2>写文章能力强于普通人</h2>
-<p>OpenAI 除外简单的编程实现，还发现了一个写文章的能力，很适合写所谓的「论证文」，不过还是感觉还是有些「正规话术」，但是在某些场合其实还是很吃香的，比如说如下这种类似于活动安排、论证主题、模版申请啥的还是合适的，居然还可以「教你做菜」简直了。</p>
-<h3>正规申请如何写？</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/C9sOxC.png"/>
-</div>
-<h3>正规的活动安排</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/eLsOzP.png"/>
-</div>
-<h3>简单的论证文</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/ZGgG7L.png"/>
-</div>
-<h3>做菜可能比你好吃</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/MvUbog.png"/>
-</div>
-<h2>理解能力强于普通人</h2>
-<p>除去写文章外，其实有一些很日常的问题他也能够回答得不错，比如说 Q&amp;A 、解释代码的意思、帮你修正错误的英语语法、甚至通过看你的语句帮你生成 SQL 语句，这里让我觉得神奇的是，他的问答有一点点人文的感觉在了。</p>
-<h3>有情感的聊天</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/PFEiP3.png"/>
-</div>
-<h3>这个代码我看不懂，你可以帮我解释下吗?</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/OoLETC.png"/>
-</div>
-<h3>我刚开始学习英语，帮我看看语法错误吧？</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/GzLNGo.png"/>
-</div>
-<h3>帮我写一个 SQL 查询</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/0L38UE.png"/>
-</div>
-<h2>查找即创造能力强于普通人</h2>
-<p>除了上述外，这个 #DALLE2 AI 画画功能让我慢慢意识到，其实这东西是一个「下一代的智能搜索的雏形」，相当于你想要啥，他告诉你，比现在的 google 搜索，更加简单、高效，可以很方便的为后面类似机器人的场景做素材语义来源，不过其实没想象的那么聪明，比如说最后一张图，期待更加产品化。</p>
-<h3>找狗</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/wg0f8G.png"/>
-</div>
-<h3>找帅狗</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/TlVR2C.png"/>
-</div>
-<h3>画个笑脸</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/NC4IwY.png"/>
-</div>
-<h3>绿颜色的帅哥</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/UCu0zK.png"/>
-</div>
-<h2>如何不被 OpenAI 取代</h2>
-<p>在某些方面强于普通人的，特别是对于重复性智力劳动，如重复性写套话、写代码、画图，那么怎么不被取代？还是需多学习、多主动思考、多实践、看更多书，做更多有挑战的事情，在认知上避免被取代的关键是不断学习和提高自己的能力，并努力适应新的环境和挑战。</p>
-<p>全文结束。
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/></p>
-<p>讽刺的是此条答案也来源他...</p>
-<h3>三段式回答</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/2Brs2c.png"/>
-</div>
-<h3>你谦虚了？</h3>
-<div>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.fliggy.com/upic/u8mGmc.png"/>
-</div>
-	]]></content>
-</entry><entry>
-	<title>[问与答] 谁有兴趣领养小狗，无偿的，有泰迪、萨摩耶、金毛、比熊、拉布拉多、博美、哈士奇、贵宾、吉娃娃、土狗、番狗等， 312 国道狗场拆迁，有千几只狗无人领养就要饿死了，下月底截止</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900029#reply8" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900029</id>
-	<published>2022-12-04T11:07:03Z</published>
-	<updated>2022-12-04T12:32:45Z</updated>
-	<author>
-		<name>womenmeiyoug</name>
-		<uri>https://www.v2ex.com/member/womenmeiyoug</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	谁有兴趣领养小狗，无偿的，有泰迪、萨摩耶、金毛、比熊、拉布拉多、博美、哈士奇、贵宾、吉娃娃、土狗、番狗等，312 国道狗场拆迁，有千几只狗无人领养就要饿死了，下月底截止，如果您领养不了，就麻烦大家转发一下，救救这些可怜的狗狗，有要领养的请 qq 联系张女士：1594231648 ，您的复制粘贴可以拯救无数狗的生命！
-	]]></content>
-</entry><entry>
-	<title>[问与答] iOS 美国区买的充值卡，游戏内购失败，提示支付失败</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900028#reply2" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900028</id>
-	<published>2022-12-04T11:06:16Z</published>
-	<updated>2022-12-04T03:06:16Z</updated>
-	<author>
-		<name>revival83</name>
-		<uri>https://www.v2ex.com/member/revival83</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>老哥们这种情况怎么办呀？买的充值卡充了 5 刀，游戏是加拿大服下载的支付失败了，现在换了美服充值 5 刀还是不行。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 条件传送指令，就比条件转移指令要好吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900026#reply4" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900026</id>
-	<published>2022-12-04T10:40:33Z</published>
-	<updated>2022-12-04T11:20:29Z</updated>
-	<author>
-		<name>amiwrong123</name>
-		<uri>https://www.v2ex.com/member/amiwrong123</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s3.uuu.ovh/imgs/2022/12/04/c823dbeff36d5a88.png"/></p>
-<p>上图给出了不好的理由，因为转移指令会影响分支预测。（上图来自书籍：x86 从实模式到保护模式）</p>
-<p>但是条件传送指令，也是依赖于标志位来决定是否执行动作的呀（第二段），那岂不是也会影响分支预测啊？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 给老妈换个新的安卓手机，求推荐</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900024#reply15" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900024</id>
-	<published>2022-12-04T10:34:49Z</published>
-	<updated>2022-12-04T15:31:17Z</updated>
-	<author>
-		<name>walker001</name>
-		<uri>https://www.v2ex.com/member/walker001</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>价格在 2k 左右</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 谁有兴趣领养小狗，无偿的，有泰迪、金毛、萨摩耶、比熊、博美、拉布拉多、哈士奇、贵宾、吉娃娃、土狗、番狗等， 312 国道狗场拆迁，有千几只狗无人领养就要饿死了，下月底截止</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900023#reply2" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900023</id>
-	<published>2022-12-04T10:34:34Z</published>
-	<updated>2022-12-04T12:30:50Z</updated>
-	<author>
-		<name>womenmeiyoug</name>
-		<uri>https://www.v2ex.com/member/womenmeiyoug</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>谁有兴趣领养小狗，无偿的，有泰迪、金毛、萨摩耶、比熊、博美、拉布拉多、哈士奇、贵宾、吉娃娃、土狗、番狗等，312 国道狗场拆迁，有千几只狗无人领养就要饿死了，下月底截止，如果您领养不了，就麻烦大家转发一下，救救这些可怜的狗狗，有要领养的请 qq 联系张女士：1594231648 ，您的复制粘贴可以拯救无数狗的生命！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Android] 为什么要通过 mask 的位运算才能判断 flag</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900022#reply14" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900022</id>
-	<published>2022-12-04T10:29:33Z</published>
-	<updated>2022-12-04T15:04:47Z</updated>
-	<author>
-		<name>fhj</name>
-		<uri>https://www.v2ex.com/member/fhj</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>public static final int VISIBLE = 0x00000000;</p>
-<pre><code>public static final int INVISIBLE = 0x00000004;
-
-public static final int GONE = 0x00000008;
-
-static final int VISIBILITY_MASK = 0x0000000C;
-
-判断 flags 时是这么判断的：if ((child.mViewFlags &amp; VISIBILITY_MASK) == VISIBLE)
-
-为什么不这样判断：if ((child.mViewFlags &amp; VISIBLE) == VISIBLE)
-</code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 第一个小游戏终于上线啦</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900021#reply6" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900021</id>
-	<published>2022-12-04T10:07:38Z</published>
-	<updated>2022-12-04T14:32:54Z</updated>
-	<author>
-		<name>wispedia</name>
-		<uri>https://www.v2ex.com/member/wispedia</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>基于 CocosCreator v3.6 开发，灵感来源于几年前流行的口红机游戏。
-开发过程中踩了不少坑，尤其是微信开放数据域这块，目前能查到的 v3.6 的相关资料蛮少的。
-欢迎大家试玩呀！
-<img alt="二维码" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.ibb.co/KLjW3ZB/image.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 谁有兴趣养领小狗，无尝的，有泰迪、金毛、萨摩耶、比熊、博美、拉布拉多、哈士奇、贵宾、吉娃娃、土狗、番狗等， 312 囯道狗场诉仟，有千几只狗无人养领就要俄死了，下月底捷止</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900019#reply8" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900019</id>
-	<published>2022-12-04T10:02:57Z</published>
-	<updated>2022-12-02T08:10:57Z</updated>
-	<author>
-		<name>womenmeiyoug</name>
-		<uri>https://www.v2ex.com/member/womenmeiyoug</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	谁有兴趣养领小狗，无尝的，有泰迪、金毛、萨摩耶、比熊、博美、拉布拉多、哈士奇、贵宾、吉娃娃、土狗、番狗等，312 囯道狗场诉仟，有千几只狗无人养领就要俄死了，下月底捷止，如果您养领不了，就麻烦大家转一下发，救救这些可怜的狗狗，有要养领的请 qq 系联张女士：1594231648 ，您的制复贴粘可以拯救无数狗的生命！
-	]]></content>
-</entry><entry>
-	<title>[Apple] MacOS 下 MacAptAgent 是哪个应用的进程呀？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900018#reply0" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900018</id>
-	<published>2022-12-04T09:52:01Z</published>
-	<updated>2022-12-04T05:52:01Z</updated>
-	<author>
-		<name>BeliefanX</name>
-		<uri>https://www.v2ex.com/member/BeliefanX</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有没有大佬知道 MacOS 下 MacAptAgent 是哪个应用的进程呀？想把这个软件删掉，但是过了好几遍应用列表，也不知道是哪个应用的进程。。。</p>
-<p><img alt="EwDFDfM" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/EwDFDfM.jpg"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 公司黄了，目前三个多月没发工资，想开车周游全国，做自媒体，是否可行！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900016#reply71" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900016</id>
-	<published>2022-12-04T09:48:00Z</published>
-	<updated>2022-12-04T15:16:32Z</updated>
-	<author>
-		<name>gmlaogong</name>
-		<uri>https://www.v2ex.com/member/gmlaogong</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	1 、目前投简历感觉石沉大海，问的人好多，真正招聘的没几个<br />2 、目前有 8w 积蓄，房贷，留下 6w ，剩下 2w 作为启动资金<br />3 、短视频主打：游记、野外露营、当地风土人情<br />4 、（参考视频：徐云流浪中国、刘伟元）我是做开车，在一个城市待大概 5 天左右，住宿基本靠帐篷，做饭基本靠买菜，做饭啥的<br />5 、给自己留下 3 个月的创作期限吧，如果起不来，就老老实实的干别的行业了。<br />6 、大家有什么好的建议还有出路么？
-	]]></content>
-</entry><entry>
-	<title>[问与答] 知识拥有的越多越好吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900015#reply4" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900015</id>
-	<published>2022-12-04T09:47:41Z</published>
-	<updated>2022-12-04T07:47:41Z</updated>
-	<author>
-		<name>dw2693734d</name>
-		<uri>https://www.v2ex.com/member/dw2693734d</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[iOS] Google Photos 是 iOS 的绝配</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900014#reply21" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900014</id>
-	<published>2022-12-04T09:47:09Z</published>
-	<updated>2022-12-04T15:35:08Z</updated>
-	<author>
-		<name>estk</name>
-		<uri>https://www.v2ex.com/member/estk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	同步完后可以清除本机相册文件，不仅节省空间，还不用担心被媳妇看到（ Google Photos 隐藏桌面图标，只显示自带相册）<br />土耳其价格还比 iCloud 划算
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 发个跑在 cloudflare workers 的文件分享工具</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900012#reply6" />
-	<id>tag:www.v2ex.com,2022-12-04:/t/900012</id>
-	<published>2022-12-04T09:39:54Z</published>
-	<updated>2022-12-04T15:36:34Z</updated>
-	<author>
-		<name>aliocean</name>
-		<uri>https://www.v2ex.com/member/aliocean</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://uvasjk.giao111.workers.dev/" rel="nofollow">https://uvasjk.giao111.workers.dev/</a></p>
-<p>平时自己传点东西，文件存在 cloudflare kv ，小文件可以，大于 25m 就废了</p>
 
 	]]></content>
 </entry>
