@@ -8,1214 +8,1281 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2022-12-07T01:11:41Z</updated>
+<updated>2022-12-07T12:19:07Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
-	<title>[OpenAI] 让 chatGPT 做饭，感觉 AI 还不会合理地拒绝</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900674#reply2" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900674</id>
-	<published>2022-12-07T01:09:47Z</published>
-	<updated>2022-12-07T01:11:41Z</updated>
+	<title>[程序员] 大数据量、高并发业务怎么优化？（一）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900925#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900925</id>
+	<published>2022-12-07T16:19:07Z</published>
+	<updated>2022-12-07T12:19:07Z</updated>
 	<author>
-		<name>plmsuper8</name>
-		<uri>https://www.v2ex.com/member/plmsuper8</uri>
+		<name>wayn111</name>
+		<uri>https://www.v2ex.com/member/wayn111</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>只要你提，它都给你做！这和人类行为是不一致的。
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/SIwuscq.png"/></p>
+	<p>博主这里的大数据量、高并发业务处理优化基于博主线上项目实践以及全网资料整理而来，在这里分享给大家</p>
+<h1>一. 大数据量上传写入优化</h1>
+<blockquote>
+<p>线上业务后台项目有一个消息推送的功能，通过上传包含用户 id 的文件，给指定用户推送系统消息</p>
+</blockquote>
+<h2>1.1 如上功能描述很简单，但是对于技术侧想要做好这个功能，保证大用户量（比如达到百万级别）下，系统正常运行，功能正常其实是需要仔细思考的，博主这里给出思路：</h2>
+<ol>
+<li>上传文件类型选择</li>
+</ol>
+<p>通常情况下大部分用户都会使用 excel 文件，但是相比 excel 文件还有一种更加推荐的文件格式，那就是 csv 文件，相比 excel 文件它可以直接在记事本编辑，excel 也可以打开 cvs 文件，且占用内存更少（画重点），对于上传的 csv 文件过于庞大，也可以采用流式读取，读一部分写一部分</p>
+<ol>
+<li>消息推送成功与否状态保存</li>
+</ol>
+<p>由于大批量数据插入是一个耗时操作（可能几秒也可能几分钟），所以需要保存批量插入是否成功的状态，在后台中可以显现出这条消息推送记录是成功还是失败，方便运营回溯消息推送状态</p>
+<ol>
+<li>批量写入启不启用事务</li>
+</ol>
+<p>博主这里给出两种方案利弊：</p>
+<ul>
+<li>启用事务：好处在于如批量插入过程中，异常情况可以保证原子性，但是性能比不开事务低，在特大数据量下会明显低一个档次</li>
+<li>不启用事务：好处就是写入性能高，特大数据量写入性能提升明显，但是无法保证原子性，但是对于已经批量插入的新增数据，只是会产生脏数据而已，在功能设计合理的情况下是不影响业务的，如下面第四点</li>
+</ul>
+<p>综上：在大数据量下，我们要是追求极致性能可以不启用事务，具体选择也需各位结合自身业务情况</p>
+<ol>
+<li>推送异常失败的消息处理</li>
+</ol>
+<p>建议功能设计上，可以屏蔽对失败消息再进行操作，这样不需要再处理之前推送失败写入的脏数据，直接新增消息推送即可</p>
+<h2>1.2 批量写入代码优化</h2>
+<ol>
+<li>jdbc 参数携带 <code>rewriteBatchedStatements=true</code> 在 jdbc 驱动上启动批量写入功能，如下</li>
+</ol>
+<pre><code class="language-java">spring.datasource.master.jdbc-url=jdbc:mysql://localhost:3306/test_db?allowMultiQueries=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useSSL=false&amp;rewriteBatchedStatements=true
+</code></pre>
+<ol>
+<li>启用 <code>insert into table(id, name) values(1, 'tom'),(2, 'jack')</code> 模式，建议一次写入个数不要太多，MySQL 对于 sql 长度是有限制的，对于这种字段少的表，一次写入 500 - 1000 问题不大，字段多了需要降低这个写入量</li>
+</ol>
+<pre><code class="language-xml">insert into im_notice_app_ref(notice_id, app_id, create_time)
+values
+&lt;foreach collection="list" separator="," item="item"&gt;
+    (#{item.noticeId}, #{item.appId}, #{item.createTime})
+&lt;/foreach&gt;
+</code></pre>
+<p>一般情况下大家都知道第二条优化，但是可能会忽略 jdbc 参数携带 <code>rewriteBatchedStatements=true</code>，这个参数能在第二条的基础上启用批量执行 SQL ，进一步提升写入性能</p>
+<h1>二. 大事务优化，减小影响范围，提升系统处理能力</h1>
+<p><code>@Transactional</code> 大于 <code>Spring</code> 提供得事务注解，许多人都知道，但是在高并发下，不建议使用，推荐通过编程式事务来手动控制事务提交或者回滚，减少事务影响范围</p>
+<p>如下是一段订单超时未支付回滚业务数据得代码，采用 <code>@Transactional</code> 事务注解</p>
+<pre><code class="language-java">@Transactional(rollbackFor = Exception.class)
+public void doUnPaidTask(Long orderId) {
+    // 1. 查询订单是否存在
+    Order order = orderService.getById(orderId);
+    if (order == null) {
+        throw new BusinessException(String.format("订单不存在，orderId:%s", orderId));
+    }
+    if (order.getOrderStatus() != OrderStatusEnum.ORDER_PRE_PAY.getOrderStatus()) {
+        throw new BusinessException(String.format("订单状态错误，order:%s", order));
+    }
+
+    // 2. 设置订单为已取消状态
+    order.setOrderStatus((byte) OrderStatusEnum.ORDER_CLOSED_BY_EXPIRED.getOrderStatus());
+    order.setUpdateTime(new Date());
+    if (!orderService.updateById(order)) {
+        throw new BusinessException("更新数据已失效");
+    }
+
+    // 3.商品货品数量增加
+    LambdaQueryWrapper&lt;OrderItem&gt; queryWrapper = Wrappers.lambdaQuery();
+    queryWrapper.eq(OrderItem::getOrderId, orderId);
+    List&lt;OrderItem&gt; orderItems = orderItemService.list(queryWrapper);
+    for (OrderItem orderItem : orderItems) {
+        if (orderItem.getSeckillId() != null) { // 秒杀单商品项处理
+            Long seckillId = orderItem.getSeckillId();
+            SeckillService seckillService = SpringContextUtil.getBean(SeckillService.class);
+            if (!seckillService.addStock(seckillId)) {
+                throw new BusinessException("秒杀商品货品库存增加失败");
+
+            }
+        } else { // 普通单商品项处理
+            Long goodsId = orderItem.getGoodsId();
+            Integer goodsCount = orderItem.getGoodsCount();
+            if (!goodsDao.addStock(goodsId, goodsCount)) {
+                throw new BusinessException("秒杀商品货品库存增加失败");
+            }
+        }
+    }
+
+    // 4. 返还优惠券
+    couponService.releaseCoupon(orderId);
+    log.info("---------------订单 orderId:{},未支付超时取消成功", orderId);
+}
+</code></pre>
+<p>采用编程式事务对其优化，代码如下：</p>
+<pre><code class="language-java">@Resource
+private PlatformTransactionManager platformTransactionManager;
+@Resource
+private TransactionDefinition transactionDefinition;
+
+public void doUnPaidTask(Long orderId) {
+    // 启用编程式事务
+    // 1. 在开启事务钱查询订单是否存在
+    Order order = orderService.getById(orderId);
+    if (order == null) {
+        throw new BusinessException(String.format("订单不存在，orderId:%s", orderId));
+    }
+    if (order.getOrderStatus() != OrderStatusEnum.ORDER_PRE_PAY.getOrderStatus()) {
+        throw new BusinessException(String.format("订单状态错误，order:%s", order));
+    }
+    // 2. 开启事务
+    TransactionStatus transaction = platformTransactionManager.getTransaction(transactionDefinition);
+    try {
+        // 3. 设置订单为已取消状态
+        order.setOrderStatus((byte) OrderStatusEnum.ORDER_CLOSED_BY_EXPIRED.getOrderStatus());
+        order.setUpdateTime(new Date());
+        if (!orderService.updateById(order)) {
+            throw new BusinessException("更新数据已失效");
+        }
+        // 4. 商品货品数量增加
+        LambdaQueryWrapper&lt;OrderItem&gt; queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(OrderItem::getOrderId, orderId);
+        List&lt;OrderItem&gt; orderItems = orderItemService.list(queryWrapper);
+        for (OrderItem orderItem : orderItems) {
+            if (orderItem.getSeckillId() != null) { // 秒杀单商品项处理
+                Long seckillId = orderItem.getSeckillId();
+                SeckillService seckillService = SpringContextUtil.getBean(SeckillService.class);
+                RedisCache redisCache = SpringContextUtil.getBean(RedisCache.class);
+                if (!seckillService.addStock(seckillId)) {
+                    throw new BusinessException("秒杀商品货品库存增加失败");
+                }
+                redisCache.increment(Constants.SECKILL_GOODS_STOCK_KEY + seckillId);
+                redisCache.deleteCacheSet(Constants.SECKILL_SUCCESS_USER_ID + seckillId, order.getUserId());
+            } else { // 普通单商品项处理
+                Long goodsId = orderItem.getGoodsId();
+                Integer goodsCount = orderItem.getGoodsCount();
+                if (!goodsDao.addStock(goodsId, goodsCount)) {
+                    throw new BusinessException("秒杀商品货品库存增加失败");
+                }
+            }
+        }
+
+        // 5. 返还优惠券
+        couponService.releaseCoupon(orderId);
+        // 6. 所有更新操作完成后，提交事务
+        platformTransactionManager.commit(transaction);
+        log.info("---------------订单 orderId:{},未支付超时取消成功", orderId);
+    } catch (Exception e) {
+        log.info("---------------订单 orderId:{},未支付超时取消失败", orderId, e);
+        // 7. 发生异常，回滚事务
+        platformTransactionManager.rollback(transaction);
+    }
+}
+</code></pre>
+<p>可以看到采用编程式事务后，我们将查询逻辑排除在事务之外，减小了其影响范围，也就提升了性能，在高并发场景下，性能优先的场景，我们甚至可以考虑不适用事务</p>
+<h1>三. 客户端海量日志上报优化</h1>
+<blockquote>
+<p>线上项目客户端，采用 tcp 协议与日志采集服务建立连接，上报日志数据。业务高峰期下，会有同时成千个客户端建立连接实时上报日志数据</p>
+</blockquote>
+<p>如上场景，高峰期下，对日志采集服务会造成不小的压力，处理服务处理不当，会造成高峰期下，服务卡顿、CPU 占用过高、内存溢出等。</p>
+<p>这里给出海量日志高并发下优化点：</p>
+<ol>
+<li>上报日志进行异步化处理，</li>
+</ol>
+<ul>
+<li>普通版：采用阻塞队列 <code>ArrayBlockingQueue</code> 得生产者消费者模式，对日志数据进行异步批量处理，在此场景下，通过生产者将数据缓存再内存中，然后再消费者中批量保存入库。</li>
+<li>进阶版：采用 <code>Disruptor</code> 队列，也是基于内存队列的生产者消费者模型，消费速度对比 <code>ArrayBlockingQueue</code> 有一个数量级得性能提升，附简介说明： <a href="https://www.jianshu.com/p/bad7b4b44e48" rel="nofollow">https://www.jianshu.com/p/bad7b4b44e48</a></li>
+<li>终极版：采用 <code>kfaka</code> 消息队列中间件，持久日志数据，慢慢消费。虽然引入第三方依赖会增加系统复杂度，但是相比 <code>kfaka</code> 在大数据场景下提供的优秀表现，这一点也是值得。</li>
+</ul>
+<p>如上三种方案：大家可以结合自身项目实际体量选择</p>
+<ol>
+<li>采集日志压缩</li>
+</ol>
+<p>对上报后的日志如果要再发送给其他服务，推荐是对其进行压缩处理，避免消耗过多网络带宽以及最终数据落库选型：</p>
+<ul>
+<li>网络传输，在 <code>Java</code> 里通常是指序列化方式，<code>Jdk</code> 自带得序列化方式对比<code> Protobuf 、fst 、Hession</code> 等在序列化速度和大小的表现上都没有优势，甚至可以用垃圾形容，博主这里直接给出 <code>Java</code> 得几种序列化方式对比链接： <a href="https://segmentfault.com/a/1190000039934578" rel="nofollow">https://segmentfault.com/a/1190000039934578</a> ，
+建议对传输大小要求较高可以使用 <code>Avro</code> 序列化， 对综合要求较高可采用 <code>Protobuf</code></li>
+<li>落库选型，像日志这种大数据量落库，都是新增且无修改得场景建议使用 <code>Clickhouse</code> 进行存储，相同数据量下对比 <code>MySql</code> 占用存储更少，查询性能更高</li>
+</ul>
+<p>最后，附博主 <code>github</code> 地址： <a href="https://github.com/wayn111" rel="nofollow">https://github.com/wayn111</a></p>
 
 	]]></content>
 </entry><entry>
-	<title>[OpenAI] 自制国内 1 块钱注册 ChatGPT 视频教程</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900673#reply0" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900673</id>
-	<published>2022-12-07T01:08:38Z</published>
-	<updated>2022-12-06T21:08:38Z</updated>
+	<title>[分享创造] 做了个 chatgpt 的知乎浏览器插件，可根据知乎的问题直接给出答案，供回复者参考</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900924#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900924</id>
+	<published>2022-12-07T16:15:14Z</published>
+	<updated>2022-12-07T16:15:14Z</updated>
 	<author>
-		<name>woniuppp</name>
-		<uri>https://www.v2ex.com/member/woniuppp</uri>
+		<name>no13bus</name>
+		<uri>https://www.v2ex.com/member/no13bus</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><a href="https://www.youtube.com/watch?v=5-TK7U0Q3ug" rel="nofollow">https://www.youtube.com/watch?v=5-TK7U0Q3ug</a></p>
+	<p>功能就是打开一个知乎问题页面，页面的右侧边栏会出现 chatgpt 根据问题做的回答，用户还可以在回答完毕后复制这个回答，作为本题的回答参考。</p>
+<p>功能截图:
+<img alt="screenshot" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://raw.githubusercontent.com/no13bus/chat-gpt-zhihu-extension/main/screenshot.png"/></p>
+<p>项目地址:
+<a href="https://github.com/no13bus/chat-gpt-zhihu-extension" rel="nofollow">https://github.com/no13bus/chat-gpt-zhihu-extension</a></p>
+<p>插件已经上架 chrome 应用商店，地址在 github 项目中</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 最近 B 站刷了好多回二线三线城市的视频，感觉有点迷茫</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900672#reply4" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900672</id>
-	<published>2022-12-07T01:05:27Z</published>
-	<updated>2022-12-07T01:18:46Z</updated>
+	<title>[酷工作] [上海]-[不加班]-[外企] 招 中级前端（3 年起）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900923#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900923</id>
+	<published>2022-12-07T16:14:01Z</published>
+	<updated>2022-12-07T16:11:01Z</updated>
 	<author>
-		<name>jwangkun</name>
-		<uri>https://www.v2ex.com/member/jwangkun</uri>
+		<name>xsldebugger</name>
+		<uri>https://www.v2ex.com/member/xsldebugger</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>公司福利 </p>
+<hr/> 
+- 14 薪（写进 offer ）+ 5% 左右浮动的奖金
+- 14 天年假
+- 可申请人才引进落沪
+- 可申请人才公寓
+- 公司给员工配意外险，医疗险，寿险，重疾险，看病不花钱
+- 补充公积金
+<hr/> 
+英语，一般要求读写没问题，口语看部门要求，所有职位详情戳 https://mf-refer.xianshenglu.xyz
+<hr/> 
+**注: 2022 年底正在谈被加拿大 top2 外企收购情况，公告称一年内不会有大动作。**
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 打开 Apple 健康后，我发现了不得了的东西</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900921#reply1" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900921</id>
+	<published>2022-12-07T15:50:04Z</published>
+	<updated>2022-12-07T15:55:11Z</updated>
+	<author>
+		<name>cooljiang</name>
+		<uri>https://www.v2ex.com/member/cooljiang</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	事情是这样的，打开 Apple 健康-&gt;浏览-&gt;右上角头像-&gt;设备，里面出现了很多我从来没见过的 Apple 设备。<br />苹果这是在利用我的手机给其他设备定位吗？
+	]]></content>
+</entry><entry>
+	<title>[数据库] 总感觉数据库 SQL 语法解析的报错信息都很鸡肋</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900920#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900920</id>
+	<published>2022-12-07T15:44:55Z</published>
+	<updated>2022-12-07T15:41:55Z</updated>
+	<author>
+		<name>oxygenkun101</name>
+		<uri>https://www.v2ex.com/member/oxygenkun101</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>近一年高强度使用 MySQL 和 Clikhouse ，手撸 sql 出错后进行排查，数据库提供的语法错误信息总是很迷惑。</p>
+<p>相比较其他编程语言编译期的报错信息就很准确。</p>
+<p>在 user-friendly 这块，是不是各家数据库提升的空间还很大。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] chat.openai.com 登录不了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900918#reply4" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900918</id>
+	<published>2022-12-07T15:31:14Z</published>
+	<updated>2022-12-07T16:09:18Z</updated>
+	<author>
+		<name>MindYoga</name>
+		<uri>https://www.v2ex.com/member/MindYoga</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	使用了全局代理，<br /><br />点击登录没反应 <br />地址变成 ：<br /><a target="_blank" href="https://chat.openai.com/auth/login?callbackUrl=https%3A%2F%2Fchat.openai.com%2F&amp;error=OAuthSignin" rel="nofollow noopener">https://chat.openai.com/auth/login?callbackUrl=https%3A%2F%2Fchat.openai.com%2F&amp;error=OAuthSignin</a><br /><br /><a target="_blank" href="http://openai.com" rel="nofollow noopener">openai.com</a> 是可以登录的，<br />就是 <a target="_blank" href="http://chat.openai.com" rel="nofollow noopener">chat.openai.com</a> <br />玩不了了。。<br /><br />你们呢？可以正常使用吗？
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请问大佬一个问题 [关于 Taro+vue3+webpack5]</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900917#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900917</id>
+	<published>2022-12-07T15:27:46Z</published>
+	<updated>2022-12-07T15:27:46Z</updated>
+	<author>
+		<name>larisboy</name>
+		<uri>https://www.v2ex.com/member/larisboy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>主要问题是：
+page 目录下的文件通过 import 的方式引入 components 文件夹下的组件，打包的时候发现小程序的 components 目录是空的，没有将组件也打包进去，请问是什么原因导致的呢。</p>
+<p>求大佬解答，感谢感谢感谢！！！</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 淘宝买到假戴森，卖家不退款</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900916#reply6" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900916</id>
+	<published>2022-12-07T15:26:48Z</published>
+	<updated>2022-12-07T16:21:41Z</updated>
+	<author>
+		<name>lllby1102</name>
+		<uri>https://www.v2ex.com/member/lllby1102</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>淘宝不小心买到假的戴森吹风机，价格 2000+，用了一个多月发现异常，寄给戴森售后维修时候告知是假冒伪劣产品，戴森不给维修，同时也不给出示任何证明是假冒伪劣产品。</p>
+<p>回去看淘宝店已经关了。于是找淘宝客服，淘宝客服应该是与卖家沟通了，给了我一个地址寄回去并说会退款。我寄回去之后发现收不到退款。再找淘宝客服，也说联系不上卖家，并且这间店因为没有足够的保证金所以无法赔付给我，找客服理论后给我的回答是他们会尝试 3 个月去催促卖家缴纳保证金...大家看看有啥办法么</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 被阿里的领导折磨地很痛苦</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900915#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900915</id>
+	<published>2022-12-07T15:25:55Z</published>
+	<updated>2022-12-07T16:07:46Z</updated>
+	<author>
+		<name>v2e0xAdmin2</name>
+		<uri>https://www.v2ex.com/member/v2e0xAdmin2</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	职业生涯里，遇到过 P10 ，P9 ，P8 ，P7 ，都做过一阵子我领导，总而言之，我是真的怕了。<br /><br />想问问 v 友们，有类似的经历吗？
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有你忒别想推荐的网站吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900914#reply2" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900914</id>
+	<published>2022-12-07T15:25:01Z</published>
+	<updated>2022-12-07T15:34:53Z</updated>
+	<author>
+		<name>yuan321</name>
+		<uri>https://www.v2ex.com/member/yuan321</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>除了最近才出的 chartgpt</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 2023 大家觉得哪些股票会翻倍呢？ A 股港股或美股</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900913#reply3" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900913</id>
+	<published>2022-12-07T15:20:37Z</published>
+	<updated>2022-12-07T16:07:48Z</updated>
+	<author>
+		<name>timeface</name>
+		<uri>https://www.v2ex.com/member/timeface</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	
 	]]></content>
 </entry><entry>
-	<title>[问与答] [求助] Surface pro 9 ssd 品牌选择</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900671#reply0" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900671</id>
-	<published>2022-12-07T00:57:33Z</published>
-	<updated>2022-12-07T00:57:33Z</updated>
+	<title>[问与答] 冬天小腿的皮肤像鱼鳞一样干裂，疼和痒，有什么解决方法？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900912#reply7" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900912</id>
+	<published>2022-12-07T15:14:51Z</published>
+	<updated>2022-12-07T15:54:11Z</updated>
 	<author>
-		<name>timenotimeno</name>
-		<uri>https://www.v2ex.com/member/timenotimeno</uri>
+		<name>syushin</name>
+		<uri>https://www.v2ex.com/member/syushin</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>市面上出现的 m2 2230 的 ssd 极少，现需要 pcie4 m2 2230 1t 功耗低 的 ssd ，
-比较了半天，暂时看到的只有 西数 sn740, 铠侠 bg5, 建兴 cl4
-不知道有没有其他的选择，至少别两三年就挂彩的那种吧。上面的 ssd 主控好像查不出来，只有建兴是用的慧荣的主控.铠侠的价格上合适，只是质量上...
-请问大家有没有别的推荐下</p>
+	<p>应该是鱼鳞病，冬天很干燥，小腿的皮肤就脱皮，皲裂，洗澡稍微热一点的水就会烫伤小腿的皮肤。又疼又痒得......</p>
 
 	]]></content>
 </entry><entry>
-	<title>[iPad] 为什么 iPad 连 wifi 比 mac 和 iPhone 要差？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900670#reply5" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900670</id>
-	<published>2022-12-07T00:56:56Z</published>
-	<updated>2022-12-07T01:11:57Z</updated>
+	<title>[问与答] 请问软路由配 ap 做 mesh 有推荐的 ap 型号吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900911#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900911</id>
+	<published>2022-12-07T15:09:28Z</published>
+	<updated>2022-12-07T15:09:28Z</updated>
 	<author>
-		<name>JohnXu20151211</name>
-		<uri>https://www.v2ex.com/member/JohnXu20151211</uri>
+		<name>ysn2233</name>
+		<uri>https://www.v2ex.com/member/ysn2233</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我的 ipad 的是 ipad 9  iphone 11 pro max 、macbook m1 max 。 为什么 ipad 和其他几个设备连同一个网时，没有其他几个设备流畅？ 经常卡断， 看个世界杯也是卡卡停停。手机就相对好点。我的网络环境可能不是很好。附近 wifi 很多  信道可能有些冲突，但是为什么其他两个设备就没啥太大的影响？ 难道是因为 ipad 9 便宜 配的硬件也差？</p>
-
+	现在的 acap 因为精装 ap 位置太垃圾了，被柜子电视各种遮挡，信号很烂想换 mesh 了。现在主路由是软路由，想配两个到三个 ap 组 mesh ，价格不要太夸张就能接受，关键颜值最好要高点，请问有推荐的吗。
 	]]></content>
 </entry><entry>
-	<title>[分享创造] 试试用它来写工作日报，生成代码等</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900669#reply6" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900669</id>
-	<published>2022-12-07T00:49:07Z</published>
-	<updated>2022-12-07T01:07:13Z</updated>
-	<author>
-		<name>Cmdhelp</name>
-		<uri>https://www.v2ex.com/member/Cmdhelp</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近在深度体验 Github 的 codespaces ，然后最近 openAi 比较火，就做了个在线的工具<br /><br />欢迎来体验<br /><br />体验地址： <a target="_blank" href="https://aitool.app/" rel="nofollow noopener">https://aitool.app/</a>
-	]]></content>
-</entry><entry>
-	<title>[问与答] 2 年半的 iPhone11 健康度 86 正常吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900667#reply12" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900667</id>
-	<published>2022-12-07T00:44:51Z</published>
-	<updated>2022-12-07T01:11:49Z</updated>
-	<author>
-		<name>wangxiaoaer</name>
-		<uri>https://www.v2ex.com/member/wangxiaoaer</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题，半年前貌似就 86 的健康度了，天天开省电模式，勉强能坚持到下班。最近可能是天气冷了吧，感觉更不耐用，刷半小时知乎电量就到 85%左右，回复几个微信消息，再一看就 83%了，坚持不到下班。</p>
-<p>是否正常，更换电池大概多少钱？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[生活] 既然不喜欢小猫，为什么要摸小猫的头呢🥺</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900666#reply21" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900666</id>
-	<published>2022-12-07T00:44:33Z</published>
-	<updated>2022-12-07T01:15:21Z</updated>
-	<author>
-		<name>q1angch0u</name>
-		<uri>https://www.v2ex.com/member/q1angch0u</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>诶......</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 长沙的冬天真的太冷了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900665#reply4" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900665</id>
-	<published>2022-12-07T00:26:35Z</published>
-	<updated>2022-12-07T01:18:06Z</updated>
-	<author>
-		<name>kangkkk</name>
-		<uri>https://www.v2ex.com/member/kangkkk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>长沙这鬼天气，夏天热死，冬天冷死。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 你有什么做饭、洗碗的好技巧吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900664#reply10" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900664</id>
-	<published>2022-12-07T00:13:29Z</published>
-	<updated>2022-12-07T01:15:48Z</updated>
-	<author>
-		<name>ZC3746</name>
-		<uri>https://www.v2ex.com/member/ZC3746</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>三口之家，每天早饭晚饭在家吃，午饭都是带饭。基本都是我做饭+洗碗，挺费时的。</p>
-<p>如何高效做饭、洗碗？</p>
-<p>我分享个我刚刚发明的方法：每次做饭，做一大锅菜，至少能吃两顿。当场吃一顿，剩下的放冰箱、第二天吃。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有没有一个能把 Android 手机当作 WebDav Server 的 APP？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900663#reply2" />
-	<id>tag:www.v2ex.com,2022-12-07:/t/900663</id>
-	<published>2022-12-07T00:06:37Z</published>
-	<updated>2022-12-07T00:17:34Z</updated>
-	<author>
-		<name>sutking</name>
-		<uri>https://www.v2ex.com/member/sutking</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最好是简单风格的，一进入 app 就一个大大的开关按钮，或者干脆可以允许用户把 app 设置成一打开就自动开启 WebDav serve ，就是想需要用的时候手机从兜里拿出来就能很迅速地进入 server 状态。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请问服务器负载突然拉高但 CPU 使用率没明显波动如何定位原因？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900662#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900662</id>
-	<published>2022-12-06T23:49:12Z</published>
-	<updated>2022-12-06T23:49:12Z</updated>
-	<author>
-		<name>zhoudaiyu</name>
-		<uri>https://www.v2ex.com/member/zhoudaiyu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	服务器是一台 k8s 的 worker 节点，48 核 384G 内存，跑着大概 65 个容器(tomcat 的容器占 70%)，最近经常负载突然拉高(30-&gt;80)，但是 CPU 的各项指标没有异常，然后过不到 1 分钟就恢复了(后续从小米的 falcon 监控试图看的)，看了一下当时的系统日志没有发现异常，k8s 层面当时该技术有一个容器自身探活失败被重启了(也就是一个 tomcat 工程)，而且不能十分确定就是它重启导致的，因为重启个 tomcat 按理来说不该把负载拉高，而且 CPU 并没有被拉高。请问大家这种情况怎么定位出导致负载拉升的原因？或者说 CPU 使用率正常(system,user,iowait)的情况，负载突然高了如何定位问题？感谢🙏
-	]]></content>
-</entry><entry>
-	<title>[移民] 如果你是一个不随大流的人，没有太多面子思想的人，并且追求自由的人，你就可以润</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900661#reply15" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900661</id>
-	<published>2022-12-06T23:49:02Z</published>
-	<updated>2022-12-07T01:14:31Z</updated>
-	<author>
-		<name>chasb</name>
-		<uri>https://www.v2ex.com/member/chasb</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	1 ，心疼钱的，算了，你还是别润了，总想一分钱不花或者幻想白嫖的人不适合润。<br />2 。面子思想太重，算了，你还是别润了<br />3 。没有自己主见的人，老是随大流的人，别润，你润了后，内心会崩溃的。你最终还是会打道回府的。<br />4 。老想着家乡的美，家乡的美食的人，别润了，你会因为食物思想情绪会崩溃的。<br />5 。老想着落叶归根的人，劝你还是别润了。否则，你归不了根，那岂不是人生都不完整？<br /><br />6 。年轻，有最求，有理想，有行动力，不在意他人眼光和不随大流的，敢于冒险的人，你值得尝试润润看。也许你会有意想不到的收获。但是收获之前，你得付出很多。失去很多。
-	]]></content>
-</entry><entry>
-	<title>[OpenAI] delete</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900660#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900660</id>
-	<published>2022-12-06T23:48:57Z</published>
-	<updated>2022-12-05T19:48:57Z</updated>
-	<author>
-		<name>woniuppp</name>
-		<uri>https://www.v2ex.com/member/woniuppp</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	delete
-	]]></content>
-</entry><entry>
-	<title>[macOS] macos app store 更新问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900659#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900659</id>
-	<published>2022-12-06T23:47:52Z</published>
-	<updated>2022-12-05T23:47:52Z</updated>
+	<title>[macOS] df -h 显示数据和存储空间显示不一致</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900910#reply1" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900910</id>
+	<published>2022-12-07T15:03:40Z</published>
+	<updated>2022-12-07T11:03:40Z</updated>
 	<author>
 		<name>jald</name>
 		<uri>https://www.v2ex.com/member/jald</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>MacOS 目前是 12.6.1 了，
-n 久前安装了 Microsoft Remote Desktop 8 ，
-好像还是用的 US 区的号安装上的（当时只有美区有这个应用），
-US 区的号目前已经不能使用了。
-microsoft remote desktop 8 永远提示要更新，点更新提示：</p>
-<p>无法更新 App
-无法更新“Microsoft Remote Desktop 8”，因为此项目已退款或由其他 Apple ID 购买。</p>
-<p>现在怎么把这个应用提升更新从 App Store 取消</p>
+	<p>macOS 12.6.1</p>
+<p>df -h 显示
+Avail/65Gi</p>
+<p>存储空间
+显示 可用 335.94GB</p>
+<p>磁盘工具显示：</p>
+<p>可用 335.95 GB （ 266.54 GB 可清除）</p>
+<p>好像就是 266.54 GB 可清除的原因？具体清除什么意思，怎么清除</p>
 
 	]]></content>
 </entry><entry>
-	<title>[站长] 下载站需要服务器，被世纪互联清退了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900658#reply7" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900658</id>
-	<published>2022-12-06T23:10:02Z</published>
-	<updated>2022-12-07T01:19:00Z</updated>
+	<title>[生活] 有推荐点好点的洗衣液嘛？ 感觉现在洗衣液蓝月亮垄断地位啊</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900908#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900908</id>
+	<published>2022-12-07T14:48:27Z</published>
+	<updated>2022-12-07T16:08:56Z</updated>
 	<author>
-		<name>floatkayau</name>
-		<uri>https://www.v2ex.com/member/floatkayau</uri>
+		<name>leafyyy</name>
+		<uri>https://www.v2ex.com/member/leafyyy</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>一个月大概<strong>100T</strong>流量。求大佬推荐。<br/>
-对大陆线路好点的，别全球乱绕<br/>
-越便宜越好</p>
+	<p>之前用过 EX 留下的其他洗衣液 感觉比蓝月亮。。。香一点。 不知道这东西都有些什么讲究 平时衣服说实话 贴身衣物洗的还是挺勤快，总觉得蓝月亮有点 不太行。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 前端 er 用 cocos 开发微信小游戏快速入门指南</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900657#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900657</id>
-	<published>2022-12-06T22:52:18Z</published>
-	<updated>2022-12-06T22:51:18Z</updated>
+	<title>[程序员] 给大家推荐一个减少括号层级嵌套的 flutter ui 工具</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900907#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900907</id>
+	<published>2022-12-07T14:42:10Z</published>
+	<updated>2022-12-07T14:39:10Z</updated>
 	<author>
-		<name>windliang</name>
-		<uri>https://www.v2ex.com/member/windliang</uri>
+		<name>caicai1812</name>
+		<uri>https://www.v2ex.com/member/caicai1812</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>总结了下 <code>cocos</code> 相比于平常前端开发一些不同的点，以及上架微信小游戏的过程，希望对大家有帮助，<a href="https://zhuanlan.zhihu.com/p/588214185" rel="nofollow">https://zhuanlan.zhihu.com/p/588214185</a></p>
+	<p>通过链式封装来减少 flutter 的括号嵌套，像榫卯一样来组装 UI ，大大提升开发效率。
+<a href="https://pub.dev/packages/tenon_mortise" rel="nofollow">https://pub.dev/packages/tenon_mortise</a>
+目前封装了常用的 wifget ，
+如果喜欢给个 star ，我会持续封装更多也，欢迎 pull request</p>
 
 	]]></content>
 </entry><entry>
-	<title>[投资] 招行的投资推荐 劝你善良</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900656#reply6" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900656</id>
-	<published>2022-12-06T21:11:27Z</published>
-	<updated>2022-12-07T00:49:33Z</updated>
+	<title>[Android] 处理滑动时，为什么 getX()会导致抖动？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900906#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900906</id>
+	<published>2022-12-07T14:34:21Z</published>
+	<updated>2022-12-07T14:34:21Z</updated>
 	<author>
-		<name>Tiande</name>
-		<uri>https://www.v2ex.com/member/Tiande</uri>
+		<name>fhj</name>
+		<uri>https://www.v2ex.com/member/fhj</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>刷到了朝朝宝的贴子投了 5w 后推荐这个。  </p>
-<p><img alt="4@K}RT{VV@)H)N3L{B}}S.jpg" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://tva1.sinaimg.cn/large/6e8d8f65ly1h8us60bsfcj20sc1pc435.jpg"/></p>
+	<p>使用 getX()会导致抖动，但是 Recyclerview 处理 Move 事件也是使用的 getX(),RecyclerView 为什么不使用 getRawX 呢？</p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] War3 的 RPG 是有接口或脚本么？怎么和抖音直播聊天建立连接的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900655#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900655</id>
-	<published>2022-12-06T19:27:34Z</published>
-	<updated>2022-12-06T20:27:34Z</updated>
+	<title>[问与答] 中信国际入账富途炒股，那种方式入账，比较划算？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900905#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900905</id>
+	<published>2022-12-07T14:34:09Z</published>
+	<updated>2022-12-07T14:31:09Z</updated>
 	<author>
-		<name>FT</name>
-		<uri>https://www.v2ex.com/member/FT</uri>
+		<name>DavidXs</name>
+		<uri>https://www.v2ex.com/member/DavidXs</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最近魔兽争霸 RPG 和抖音聊天互动游戏比较多<br/>
-有没有大哥知道 魔兽争霸 RPG 怎么实时和抖音聊天礼物数据建立连接的<br/><br/>
-<img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://tva3.sinaimg.cn/large/006Ge7hKly1h8upbrocq8j306y0dr76h.jpg"/></p>
+	1.人民币或者美元转账入账，我看到电报及手续费港币$100<br />2.人民币或者美元转换成港币，入账是免费的，但是汇率转换，肯定是有差价的。<br /><br />如果有相关了解的，可以说说，感谢。
+	]]></content>
+</entry><entry>
+	<title>[问与答] Cisco 思科裁员怎么没人讨论啊，听说双 12 确定名单</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900904#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900904</id>
+	<published>2022-12-07T14:27:05Z</published>
+	<updated>2022-12-07T10:27:05Z</updated>
+	<author>
+		<name>imv2er</name>
+		<uri>https://www.v2ex.com/member/imv2er</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>只听说 webex 也有，有进一步消息没</p>
 
 	]]></content>
 </entry><entry>
-	<title>[MacBook Pro] 2021 款丐版 mbp 可以用多久</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900654#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900654</id>
-	<published>2022-12-06T19:19:36Z</published>
-	<updated>2022-12-05T19:19:36Z</updated>
+	<title>[OpenAI] ChatGPT 是会好多语言么？还是有翻译的前级？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900903#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900903</id>
+	<published>2022-12-07T14:25:05Z</published>
+	<updated>2022-12-07T14:22:05Z</updated>
 	<author>
-		<name>Asdfr123</name>
-		<uri>https://www.v2ex.com/member/Asdfr123</uri>
+		<name>zib</name>
+		<uri>https://www.v2ex.com/member/zib</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>最近黑五刚入了 2021 款 14 寸的 MacBook Pro ，8 核 cpu 14 核 gpu 16g 内存，512 硬盘</p>
-<p>最近使用了一段时间，平时正常使用一段时间内存压力可以达到 50%-60%，CPU 也能达到 60-70%，想问下朋友们这个算是性能的合理使用还是有点不够，明年后年就得换，想用大概 3 年以上。</p>
-<p>预算有限
-平时主要是 Java 开发，业余搞搞 unity 3d 开发</p>
+	怎么什么语言都能回答
+	]]></content>
+</entry><entry>
+	<title>[VPS] 求教 套用 CF CDN , cloud flare 返回 521</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900902#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900902</id>
+	<published>2022-12-07T14:15:00Z</published>
+	<updated>2022-12-07T10:15:00Z</updated>
+	<author>
+		<name>leoluo1023</name>
+		<uri>https://www.v2ex.com/member/leoluo1023</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>求教，搬瓦工 IP 被封，买的数字 XYZ 域名套用 CF CDN ，显示返回 521 错误，求教各位大神，怎么解决。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[Firefox] Mac 端 FireFox 对本地字体的支持不全？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900653#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900653</id>
-	<published>2022-12-06T17:48:14Z</published>
-	<updated>2022-12-06T21:40:03Z</updated>
+	<title>[推广] 有偿调研（100 元京东卡）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900898#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900898</id>
+	<published>2022-12-07T14:05:06Z</published>
+	<updated>2022-12-07T14:02:06Z</updated>
 	<author>
-		<name>oszlso</name>
-		<uri>https://www.v2ex.com/member/oszlso</uri>
+		<name>zhuxiaocai</name>
+		<uri>https://www.v2ex.com/member/zhuxiaocai</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>今天意外发现如果页面使用 <em>PingFangSC-Light</em> 字体，FireFox （最新版）无法识别，Chrome 、Safari 都是正常的。</p>
-<p>FireFox 用户有遇到过这种情况么～</p>
+	<p>《数据库运维情况调研》报名链接（非注册）： <a href="https://www.wenjuan.com/s/UZBZJvBaZ0/#" rel="nofollow">https://www.wenjuan.com/s/UZBZJvBaZ0/#</a>
+参与要求：
+1 、对所在公司的数据库运维情况较为了解；
+2 、愿意配合解答相关疑问（对于问卷中填写不明的情况我们会人工确认哦）。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[分享发现] 这是一个可以用 ChatGPT 自动回复你的 B 站视频！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900651#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900651</id>
-	<published>2022-12-06T17:30:53Z</published>
-	<updated>2022-12-06T13:30:53Z</updated>
+	<title>[问与答] 新十条的实施，会让就业形势变好吗？考研人数会因此变少吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900897#reply3" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900897</id>
+	<published>2022-12-07T13:48:24Z</published>
+	<updated>2022-12-07T16:07:23Z</updated>
 	<author>
-		<name>ACMCoder</name>
-		<uri>https://www.v2ex.com/member/ACMCoder</uri>
+		<name>Alexppc</name>
+		<uri>https://www.v2ex.com/member/Alexppc</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<a target="_blank" href="https://www.bilibili.com/video/BV1YG411T7bY/" rel="nofollow noopener">https://www.bilibili.com/video/BV1YG411T7bY/</a><br /><br />再发一次，之前正文的地址不对。<br /><br />原理是 B 站爬虫+ChatGPT 的转发<br /><br />ChatGPT 非官方库： <a target="_blank" href="https://github.com/acheong08/ChatGPT" rel="nofollow noopener">https://github.com/acheong08/ChatGPT</a><br /><br />蛮好玩的，已经有 1000 多条评论了
+	
 	]]></content>
 </entry><entry>
-	<title>[问与答] 路由器是怎么知道设备及其厂商的</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900650#reply2" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900650</id>
-	<published>2022-12-06T17:30:27Z</published>
-	<updated>2022-12-06T17:42:26Z</updated>
+	<title>[分享创造] ts-dns v1.0.0 发布了！</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900896#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900896</id>
+	<published>2022-12-07T13:42:12Z</published>
+	<updated>2022-12-07T15:32:34Z</updated>
 	<author>
-		<name>Uzuki</name>
-		<uri>https://www.v2ex.com/member/Uzuki</uri>
+		<name>marquina</name>
+		<uri>https://www.v2ex.com/member/marquina</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>现在很多路由器都能识别出连接的设备是手机还是电脑，而且主流的手机品牌（华为 小米 苹果等等）也能识别出来。</p>
-<p>有些路由器还带 UU 插件，UU 插件甚至能识别出是 Windows Android iOS 还有各种游戏主机。</p>
-<p>我试过修改设备的 mac ，但是路由器还能识别出来。</p>
-<p>比较好奇这些功能他们是怎么实现的，有没有办法让设备识别成另一个设备呢（比如把安卓识别成苹果，把 Xbox 识别成 switch ）
-请问有大佬知道吗？</p>
+	<p>2020 年的时候 OP 为了跳槽学了 go ，然后写了一个用于防止 dns 污染的小工具：<code>ts-dns</code>，还在 V2EX 上发了帖子：<a href="https://www.v2ex.com/t/651196" rel="nofollow">用 Go 写了一个老少皆宜的 DNS 分流 /转发器：TS-DNS - V2EX</a></p>
+<p>虽然后续迭代了一些版本、而且 OP 在使用时也发现有可改进的地方，但困于初版糟糕的代码结构，项目在 OP 跳槽到新公司后不久就停滞了。最近偶然发现有人在催更新功能，于是索性花时间整体重构了一遍，并发布了 v1.0.0 版，主要是移除了初版所谓的 [半智能污染检测] 、增加了解析重定向功能。</p>
+<hr/>
+<p>ts-dns 的定位是灵活快速的 DNS 分组转发器：</p>
+<h1>灵活解析</h1>
+<ul>
+<li>支持按 ABP 风格规则 /GFWList 对 DNS 请求进行分组</li>
+<li>支持按 CIDR 对 DNS 请求进行重定向</li>
+<li>支持 DNS over UDP/TCP/TLS/HTTPS 、socks5 代理、ECS</li>
+<li>支持将查询结果中的 IPv4 地址添加至 IPSet</li>
+</ul>
+<h1>快速解析</h1>
+<ul>
+<li>支持并发请求上游 DNS ，选择最快响应</li>
+<li>选择 ping 值最低的 IPv4 地址（ tcp/icmp ping ）</li>
+<li>支持 hosts/DNS 缓存 /屏蔽指定查询类型</li>
+<li>支持热重载配置文件</li>
+</ul>
+<hr/>
+<p>整体架构也是比较简单的：</p>
+<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://raw.githubusercontent.com/wolf-joe/ts-dns/master/doc/arch.drawio.svg"/></p>
+<pre><code>查找 hosts -&gt; 查找缓存 -&gt; 匹配规则 -&gt; 指定 group 处理 -&gt; 重定向 -&gt; 设置缓存
+</code></pre>
+<hr/>
+<p>配置文件示例：</p>
+<pre><code class="language-toml">listen = ":53"
+
+[groups]
+  [groups.clean]
+  dns = ["223.5.5.5", "114.114.114.114"]
+  concurrent = true
+
+  [groups.dirty]
+  dns = ["208.67.222.222:5353", "176.103.130.130:5353"]
+  gfwlist_file = "gfwlist.txt"
+</code></pre>
+<p>下载地址： <a href="https://github.com/wolf-joe/ts-dns/releases/latest" rel="nofollow">https://github.com/wolf-joe/ts-dns/releases/latest</a></p>
 
 	]]></content>
 </entry><entry>
-	<title>[职场话题] 菜鸡后端，找了一个多月了，一个 Offer 都没有，感觉对职业生涯迷茫的很了。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900648#reply8" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900648</id>
-	<published>2022-12-06T17:21:41Z</published>
-	<updated>2022-12-07T01:18:15Z</updated>
+	<title>[程序员] 想入手一个 steam deck, 请教一下使用场景是否适合?</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900895#reply10" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900895</id>
+	<published>2022-12-07T13:36:41Z</published>
+	<updated>2022-12-07T16:15:15Z</updated>
 	<author>
-		<name>Essaim</name>
-		<uri>https://www.v2ex.com/member/Essaim</uri>
+		<name>wuchujie</name>
+		<uri>https://www.v2ex.com/member/wuchujie</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>8 月份公司裁员之后，因为长期加班、报复性进食导致体重超标、重度脂肪肝，狠下心花了两个多月减了 17.5kg ，结果广州 10 月末爆发一轮疫情，到现在面试都没几个，这都到年底，机会就更少了。最难受的是，前两天面试，面试整个过程中，所有的八股文、解决方案以及架构设计我都回答上来了，薪资也是平薪，结果大家互卷没卷过，hr 跟我说薪资要求太高了，选择了另一位。（其实这薪资也就是个小厂的中开水平）</p>
-<p>本人是双非一本非科班出身的，所以当年第一份工作就不算好，后面工作跳起来也很困难，实际技术呢，也只能说是及格吧，对于有兴趣的东西会研究的稍微多一点，但是很多东西实际生产中接触不到的时候，都只能玩玩简单 demo ，很少去深度研究。（比如上周面的一家公司狂问我 k8s ，我真的只是简单玩过一点，其次你一家几百人的公司也轮不到一个开发去部署吧，运维呢？！）</p>
-<p>现在互联网这行成这样，大厂员工出来之后，我这种底边 CRUD Boy 就更难进大厂了，现在投大厂，没有一家能过简历初筛的，感觉把自己路子走窄了，以后不知道干嘛去了。</p>
+	之前用 intel 的 macbook pro 的时候配备 2 个外置 4k 显示器。现在换了 M2 以后只能插一个。多余了一个显示器。<br />一直有玩游戏习惯。但是 Mac 最多玩下文明 6 之类的游戏。一直想弄个游戏主机，奈何租房子关系不想搬来搬去，最近想购置个 steam deck 但是不是为了玩掌机模式。想直接连接外置显示器来玩。请问一下体验如何。能玩 3A 游戏吗？画质没啥大的要求。
+	]]></content>
+</entry><entry>
+	<title>[程序员] 基于开源项目二次开发违反道德吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900894#reply20" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900894</id>
+	<published>2022-12-07T13:35:48Z</published>
+	<updated>2022-12-07T15:24:43Z</updated>
+	<author>
+		<name>ggp1ot2</name>
+		<uri>https://www.v2ex.com/member/ggp1ot2</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>RT 。</p>
+<p>想用 Python 写一个插件，在查找相关资料时，发现在 GitHub 上有老外已经写了一个相关的项目。</p>
+<p>当然，<strong>不是 100%和我要实现的需求重合，大概有 60-70%的重合度</strong>。</p>
+<p>但是主要的逻辑代码，我自从看过他写的，就跳不出他的想法了，因为已经实现了，代码写的也挺漂亮。</p>
+<p>我想<strong>基于他的代码，去做二次开发（删掉我不要的功能，新增我需要的特性，优化使用细节等）</strong></p>
+<p>======</p>
+<p>如果我直接拿走二次开发，那么我最终的项目里面不可避免的会有他的影子，至少主要逻辑的实现上差不多。</p>
+<p>=======</p>
+<p>我不知道这样做，是否违反某些开源协议，至少如果我直接这样做我会觉得有点不厚道。</p>
+<p>当然我可以重写他的代码，换换函数掉用顺序，修改修改变量名、参数名等等来魔改，改到至少一眼看不出来，但是这样更让我觉得有点 shame ，并且我也觉得，写的挺好了。</p>
+<p>======</p>
+<p>所以，就这种情况，如果我基于别人的项目，具体点，<strong>在他现有的代码上修改来二次开发</strong>（无法通过提交 PR 合并来实现我的需求），是否为一件  [不应该]  去做的事情。</p>
+<p>另外，如果可以，那我的项目应该属于谁？</p>
+<p>=======</p>
+<p>补充，我检索到的 GitHub 项目没有几个 star ，页面提示了 MIT 协议。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] QQ PC 版本升级后无法正常向其他程序粘贴聊天中的图片了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900647#reply2" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900647</id>
-	<published>2022-12-06T17:11:41Z</published>
-	<updated>2022-12-06T18:43:41Z</updated>
+	<title>[OpenWrt] openwrt 的 openclash 玩游戏规则问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900893#reply1" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900893</id>
+	<published>2022-12-07T13:25:45Z</published>
+	<updated>2022-12-07T13:29:55Z</updated>
 	<author>
-		<name>natsukage</name>
-		<uri>https://www.v2ex.com/member/natsukage</uri>
+		<name>CSGO</name>
+		<uri>https://www.v2ex.com/member/CSGO</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>比如从 QQ 中复制包含多张图片的一条消息到微信或 TG 。
-现在复制单图后，在 TG 粘贴还是正常的。但是如果复制同时含有多张图片的消息（不论是其他人发的还是自己在发送栏里的）直接复制粘贴，到 TG 都会提示给出的图片路径是一个 Empty File 无法发送。
-例如，这里 TG 粘贴时给出的报错路径是</p>
-<p>.../AppData/Roaming/Tencent/QQ/Temp/O0%60%25RZ8JC6%60L[GDE03DE$QI.png</p>
-<p>但是实际查看剪贴板内容可以看到，剪贴板中无论是 HTML 还是 QQRichText 格式的均为正常路径。</p>
-<p>Version:0.9
-StartHTML:00000112
-EndHTML:00000432
-StartFragment:00000126
-EndFragment:00000396</p>
-&lt;html&gt;&lt;body&gt;
-<div>
-<p><img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer"/><img class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer"/></p>
-</div>
-&lt;/body&gt;
-&lt;/html&gt;
-<p>另，图文混合的消息，和多图消息一样，也会出现同样的问题。粘贴时报告 /AppData/Roaming/Tencent/QQ/Temp/下的图片为空，无法发送。但是实际上图片真实的目录根本不在这里，而是在 QQ 自己的消息记录文件夹（ Tencent Files&lt;QQ 号&gt;\Image\）下。</p>
-<p>回退到 QQ9.6.8.28823 版本后工作正常。
-此外，运行旧版本 QQ 时，即使直接在 TG 中粘贴几分钟前从新版本 QQ 粘贴来的图片组，也可以正常的粘贴。
-经过对比可以看到剪贴板内容格式上，新旧版 QQ 并没有区别。在新版本 QQ 中 Ctrl+C 复制多图消息，然后安装并启动旧版本 QQ ，然后再在 TG 中按下粘贴，就可以正常的粘贴多图了。</p>
-<p>显然，问题是由于当你在其他程序（微信或 TG 等）中粘贴来自 QQ 的消息时，作为粘贴来源的 QQ 提供了一个%AppData%下的 Temp 路径下的临时图片目录。但是这个目录中是并没有实际对应的图片文件的。我用图片文件名通过 Everything 搜索只能找到 Tencent Files&lt;QQ 号&gt;\Image\下的唯一图片。</p>
-<p>这个本来是这类非纯文本内容在复制粘贴时的特性，即复制源并没有真的把复制的内容原原本本的放在剪贴板里，而是到内容被 CtrlV 时，才会去要求内容源按照要求的格式进行渲染。这也是为什么在 OneNote 等软件中粘贴来自 VSC 的代码时会保留高亮格式的原因。
-显然，新版本的 QQ 在这里额外的多做了一些处理，使得当 QQ 的消息被粘贴至其他应用时，对方应用无法正确地取得消息中图片的地址。</p>
-<p>这个问题也会导致 flomo 等其他软件中无法正常粘贴图片（起码在 pwa 中不行）。</p>
-<p>目前姑且是用 Quicker 写了个动作每次粘贴之前手动的处理剪贴板里的内容，但是做得并不优美。还是回退回之前版本 QQ 最简单。</p>
-<p>虽然知道大概的理由，但是完全不清楚 QQ 要这么做的原因（不单单是笔记软件等受到影响，连自家的微信也无法正常粘贴图片了）
-姑且还是想问一下，有没有办法规避这个问题呢？还是说其实是我想错了，有什么其他东西影响了我的剪贴板内容？（因为完全没看到有其他人提起过相关 issue ，所以确实也有这种可能性）</p>
-<p>万分感谢！</p>
+	为了玩游戏至少可以连得上服务器，特意买了一个机场带游戏节点的。<br /><br />然后按照一个教程，使用了订阅连接做了转换规则好像叫 ACL4SSR Online Full,然后控制台就有类似这也的很多选项： <a target="_blank" href="https://i.imgur.com/P6Yu6aO.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/P6Yu6aO.png" class="embedded_image" rel="noreferrer"></a><br />我测试了一个晚上，大概就是把“游戏平台"和"漏网之鱼"都设置成 香港 就可以达到全部玩游戏的时候都能走到 香港里的游戏节点，虽然会把很多个人站点或不知名的 ip 都走这个游戏节点，但是我可以在玩游戏的时候手动将“游戏平台"和"漏网之鱼"选择到香港，然后不玩游戏的时候就设置成手动节点或直连。<br /><br />但是有个问题，香港的这个选项，似乎是根据延时自动选中的，但是偶尔我看它并不能选中到游戏节点，而我想如果能手动选择就更好了，但是似乎不能手动选，它是写的 URLtest ，这该怎么办？
+	]]></content>
+</entry><entry>
+	<title>[问与答] 关于良心云 cdn 黑名单 ip 返回 403 也产生大流量计费的情况，大家怎么处理的？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900890#reply9" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900890</id>
+	<published>2022-12-07T12:49:23Z</published>
+	<updated>2022-12-07T15:50:45Z</updated>
+	<author>
+		<name>herozzm</name>
+		<uri>https://www.v2ex.com/member/herozzm</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	我将某些机器人 ip 拉入了 cdn 后台的黑名单中，cdn 就会返回了 403 ，会产生头部 header 返回流量，但是这些机器人坚持不懈，累计产生了很大的流量（每天快 10G ），消耗了大量流量包余额。<br /><br />咨询客服后得知这些返回 403 的流量也是要正常扣除付费流量包的，<br />我就懵了，既然已经拉入了黑名单，不应该将这个返回 403 的流量费用让用户承担了，客服表示无能为力，就是算你头上了，我觉得从技术角度实现不难识别这些 403 流量从而刨除。<br /><br />良心云 cdn 的兄弟们接一下工单？
+	]]></content>
+</entry><entry>
+	<title>[问与答] 买到了一个被 DNS 污染的域名</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900889#reply8" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900889</id>
+	<published>2022-12-07T12:48:45Z</published>
+	<updated>2022-12-07T15:21:30Z</updated>
+	<author>
+		<name>XimuTao</name>
+		<uri>https://www.v2ex.com/member/XimuTao</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>解析出的 IP 全是各种数据中心</p>
+<p><a href="https://imgse.com/i/zgsKgK" rel="nofollow"><img alt="zgsKgK.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/12/07/zgsKgK.png"/></a></p>
+<p><a href="https://imgse.com/i/zgsluD" rel="nofollow"><img alt="zgsluD.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s1.ax1x.com/2022/12/07/zgsluD.png"/></a></p>
+<p>在站内查了一下发现也有人遇到过和我一样的情况 <a href="https://v2ex.com/t/590944" rel="nofollow">我今天（ 2019.08.11 ）刚注册的域名就被强了吗？</a>，<a href="https://www.v2ex.com/t/330385" rel="nofollow">买了个域名，发现解析不了</a></p>
+<p>有点倒霉</p>
+<p>有解决方法吗?</p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 老外在中国生活了 15 年后润回去了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900646#reply30" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900646</id>
-	<published>2022-12-06T17:09:44Z</published>
-	<updated>2022-12-07T01:17:57Z</updated>
+	<title>[Telegram] Telegram 收不到验证码怎么破</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900888#reply7" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900888</id>
+	<published>2022-12-07T12:48:17Z</published>
+	<updated>2022-12-07T15:37:48Z</updated>
 	<author>
-		<name>amanbolatbalabek</name>
-		<uri>https://www.v2ex.com/member/amanbolatbalabek</uri>
+		<name>2dot71828</name>
+		<uri>https://www.v2ex.com/member/2dot71828</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我大概 5 年前在 V2EX 上发了个<a href="https://www.v2ex.com/t/339371" rel="nofollow">贴子</a>。当时一个人在某家贸易公司做全栈开发，可是因为公司小所以会接触公司的其他业务。因此，我有了个想法真正的转行做一个程序员，在一个团队里工作，接触中国的 IT 圈子。</p>
-<p>当时 V2EX 上很多中国网友回应我，而且给我不少建议。有些人建议继续做外贸，有些人以为我技术不过关，但还是有不少人鼓励我。我甚至认识了一个人，到现在为止做一个好朋友！</p>
-<p>2019 年末，刚好疫情刚开始我就做出了决定，到了一家创业公司做 go 开发。收入虽然没以前高，但是认识了很多大佬，而且学了不少东西。在这家公司我了解到了中国 IT 市场的内卷。我发现的一些现象是加班，还有很多人没有时间概念，比如晚上或者周末会发微信或者打电话过来。总体来说可以接受。据说大点的公司，像阿里巴巴或者腾讯还有很多奇葩的事情。</p>
-<p>今年因为公司没有拿到融资我就开始回复那些天天给我信息的猎头。一开始面试了几家国内企业，但是没有接受他们的工作邀请。其中一个原因是有些公司刚面试就问能不能接受加班，所以我假装可以接受过了几个。最终发现国内工资水平相对比较低，很难突破年薪百万。如果考虑加班的话那更别说了，时薪太低了。因此接受了一家外企的机会。</p>
-<p>现在的工作是远程，而且是一个技术主管的职位，所以暂时可以满足我的要求。因为远程工作没法继续办理工作签证我就离开了中国，回家了。回到家之后感觉到了自由的滋味：不用到处扫二维码、不用戴口罩、不用开 vpn ，不用一样无缘无故的做核酸检测。😃</p>
-<p>我讲解这个故事主要是想分享下个人经历并且感谢中国网友对我的支持！</p>
+	<p>老哥们，换了新电脑发现登陆不上 Telegram ，老电脑一把梭还原了。翻墙没问题，收不到 SMS Code ，这个有解吗？求教～</p>
 
 	]]></content>
 </entry><entry>
-	<title>[宽带症候群] 魔都天天宽带套餐好像不支持提速了？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900645#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900645</id>
-	<published>2022-12-06T17:02:36Z</published>
-	<updated>2022-12-06T18:02:36Z</updated>
+	<title>[程序员] 有没有独立开发者大佬可以带带？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900887#reply2" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900887</id>
+	<published>2022-12-07T12:45:41Z</published>
+	<updated>2022-12-07T13:05:22Z</updated>
 	<author>
-		<name>kosmosr</name>
-		<uri>https://www.v2ex.com/member/kosmosr</uri>
+		<name>keith2018</name>
+		<uri>https://www.v2ex.com/member/keith2018</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>刚刚发现不支持的，还是我个人的问题</p>
+	<p>羡慕相对自由点的生活方式，但苦于没有好的项目，就只能一直在公司里熬着，干着没什么成就感的活，甚至还要担心被裁员</p>
+<p>之前一直搞移动端，Android/iOS 都写，熟悉 C++/OpenGL ，对游戏也挺感兴趣（不过没有完整做过，学习 ing ），不知道有没有大佬可以带带~，帮打打杂也好哇</p>
 
 	]]></content>
 </entry><entry>
-	<title>[VPS] 收甲骨文新加坡</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900644#reply3" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900644</id>
-	<published>2022-12-06T16:44:56Z</published>
-	<updated>2022-12-06T19:44:56Z</updated>
+	<title>[程序员] 请问有没有概率不均等的随机数生成算法？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900886#reply9" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900886</id>
+	<published>2022-12-07T12:40:53Z</published>
+	<updated>2022-12-07T14:12:47Z</updated>
 	<author>
-		<name>ryan123</name>
-		<uri>https://www.v2ex.com/member/ryan123</uri>
+		<name>LeeReamond</name>
+		<uri>https://www.v2ex.com/member/LeeReamond</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>联系 tg: dG9taGFua3MyMA==</p>
+	<p>在做相似商品推荐，给定用户的特征后后台会回一个向量串，里面分别是</p>
+<pre><code>[
+A 对象和输入的相似度为 99.5%，
+B 对象相似度为 99.2%，
+C 对象相似度为 80%
+] 
+</code></pre>
+<p>等等等等以此类推
+由于推荐列表很长，实际能展示的只有几个，如果只取相似度最高的几个的话还好，但如果想随机选几个的话，有一定随机性，有没有一种随机数可以让相似度高的更多被选中，相似度少的更少被选中？</p>
+<p>===</p>
+<p>题外话，不是很严格的相似推荐，要求没有那么高，目前的系统满足需求挺好的，暂时不考虑从推荐系统方面整个改。。。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[区块链] 更加快速的完成 Web 3 软件开发——Mirror World Smart SDK</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900643#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900643</id>
-	<published>2022-12-06T16:41:39Z</published>
-	<updated>2022-12-06T16:38:39Z</updated>
+	<title>[电影] 《阿凡达：水之道》预售了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900884#reply9" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900884</id>
+	<published>2022-12-07T12:33:21Z</published>
+	<updated>2022-12-07T15:18:37Z</updated>
 	<author>
-		<name>Andreases</name>
-		<uri>https://www.v2ex.com/member/Andreases</uri>
+		<name>meisen</name>
+		<uri>https://www.v2ex.com/member/meisen</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>什么是 Mirror World Smart SDK ？</h2>
-<p>简而言之，Mirror World Smart SDK 为 Web3 的 dApp 和游戏提供了无缝的使用体验。能让你在几分钟内完成验证、钱包和 Marketplace 的强大 API 。你可以访问我们的官网获取更加详细的信息：mirrorworld.fun</p>
-<h2>Mirror World Smart SDK 可以做什么？</h2>
-<p>Mirror World Smart SDK 基本上涵盖了构建一个 Web 3 项目所需的绝大多数内容。许多其他的 Web 3 基础设施服务商仅提供部分开发需要的 API ，或者它们常常提供很具体的单个 API ，例如如何通过一个 API 获取 NFT 元数据等。Mirror World 的 SDK 的特点是我们打算涵盖整个项目开发过程，而非仅提供单个的 API 调用。</p>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tlvofeww1lre2k3shgkt.jpg"/></p>
-<p>这意味着从 Web 2/Web 3 登录到 NFT Marketplace 、钱包集成和 NFT 创建的所有开发工作都包含在只需极少代码的 SDK 中。只需一次接入，所有 API 都可以随意使用。如果你只想构建单个功能，例如 Marketplace 或登录功能，你只需要调用该 API 并开始构建即可轻松完成。</p>
-<p>除了这些主要功能外，我们还提供其他辅助功能，例如 UI 仪表板、开源前端、数据监控工具等，以最大程度地减少开发工作量。Mirror World Smart SDK 还对移动 dApp 进行了特殊适配，例如 In-App-Wallet 的提供。同时，如果你打算在 IOS App Store 上发布你的产品或游戏，你可以回避掉苹果商店高达 30% 的抽成。</p>
-<p>一个有创造力的 dApp 的想法和去完成它的行动之间通常存在差距，而我们希望减少开发者前进的摩擦力。</p>
-<h2>Smart SDK 内有什么功能？</h2>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3eddtyzqxzyjyv9ozxfh.PNG"/></p>
-<h3>Smart Marketplace</h3>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ie52h62hexld6slee6vf.png"/></p>
-<h4>将开发速度提升十倍左右</h4>
-<p>构建 NFT Marketplace 的包含了从用户信息前端展示、处理交易分析、签名和 Marketplace 的前端构建到获取 NFT 元数据、数据存储以及智能合约等许多难点。这种情况下一个小的开发团队可能需要很长的时间才能构建出一个功能齐全的 NFT Marketplace 。在下面链接中的 Demo 里你可以看见 Mirror World 最新游戏 demo—Mirrors Jump 的游戏内置 Marketplace ，使用 Smart SDK 让我们的开发团队让这个 Marketplace 从零到完全开始运行几乎只花了大约 1 天时间。</p>
-<p>点击<a href="https://www.producthunt.com/products/mirror-world-smart-sdk#mirror-world-smart-sdk" rel="nofollow">这个链接</a>下载我们的游戏 Demo——Mirrors Jump 来预览 SDK 的功能呈现</p>
-<h4>改善终端用户体验</h4>
-<p>通过 Smart SDK 构建 Marketplaces 意味着移动端的支付不会在 dApps 里跳来跳去，Mirrors Jump 的 Marketplace 允许用户在整个交易过程中留在你的 dApps 中。一直待在一个 Dapp 中也意味着你的客户流失到其他 NFT 项目的可能性会降到最低。</p>
-<h4>拥有开源的前端</h4>
-<p>前端方面，我们会为你提供一个的解决方案——用于一些简单布局和颜色定制的 UI 仪表板。Mirrors Jump 的 Demo 里使用的是现有的 Marketplace 模板，但如果你需要进行更精细的更改，我们还为你提供开源的店面前端，让你的 Marketplace 外观布局更适合您的项目。
-在前端，我们为您提供一个店面模板解决方案 - 一个用于与您的 dApp 市场交互的 UI 界面。我们同时也会提供一个简单的数据监控工具，你可以利用它并通过透彻的数据分析来改进你的产品。</p>
-<h4>尝试制作一个你自己的 NFT Marketplace MVP</h4>
-<p>我们的技术团队在 Youtube 上上传了有关如何使用 Smart SDK 显示用户代币、NFT 和交易的简短教程，可以随时查看。 同时 SDK 现在也可以免费使用，欢迎大家随时去尝试，即便只是花几个小时做一个 MVP 也好。</p>
-<h3>Smart Wallet</h3>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2hlq7jwogw3c3k8d4eb5.png"/></p>
-<h4>Wallet 主要开发难点</h4>
-<p>钱包的开发需要先构建前端，同时找到最匹配的链上数据监控工具来发送数据，最后再展示交易细节，整个过程会很麻烦。而正如你在 Mirrors Jump 场景中看到的那样，Smart Wallet 将提供一个界面，为你免去整个前端开发的麻烦。同时，具有可靠第三方 KMS 的安全密码将为您的 dApp 带来额外的安全性。开发者只需要插入 SDK ，然后就可以直接在 dApp 中调用整个功能。</p>
-<h4>改善终端用户体验</h4>
-<p>Web 3 的终端用户常常很难拥有良好的购买体验，尤其是在移动场景中。可以与 Smart Marketplace 一并使用的，Smart Wallet 有助于减少购买摩擦，限制 dApp 内的所有购买行为。购买越容易带来更多的购买。
-正如您在 Mirror Jump 演示中看到的那样，SDK 提供了其他辅助服务例如 on-ramp 。</p>
-<h4>现在就开始尝试制作一个 Wallet MVP ！</h4>
-<p>点击 <a href="docs.mirrorworld.com" rel="nofollow">docs.mirrorworld.com</a> 进入完整的 Mirror World Smart SDK 文档，并在免费开发你的第一个加密钱包。</p>
-<h3>Smart Auth</h3>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/l7j4osz25f2lvtayzt2k.png"/></p>
-<h4>Login 主要开发难点</h4>
-<p>构建 Web 3 钱包登录需要熟悉的点包括钱包、交易、构建链上和链下数据库以及不断同步数据的原理。Smart Auth 将解决所有这些问题，并提供额外的通过 Web 2 社交账号登录 Web 3 dApp 的方案。</p>
-<h4>传统社交账号登录方案</h4>
-<p>使用 Smart Auth 可以通过一次集成完成五种甚至更多的 Web 2 社交账号登陆 dApp 的集成。使用 Web 2 社交账号（ Google 、Twitter 、Discord 、电子邮件、Facebook 等）登录将使你的产品在用户获取方面与 Web 2 应用没有什么不同，同时也会把更多终端用户变成你的顾客。</p>
-<h4>适配包括你自己开发在内的各种钱包</h4>
-<p>对于许多 Web 3 基础设施提供商而言，提供很多小 API 的目的之一是为了使各种各样的用例成为可能，Mirror World 的 SDK 也能做到这一点，只不过相对更简单。你仍然可以自由的使用自己开发的钱包或接入第三方钱包进行登录和购买，但开发过程不那么复杂，省去了麻烦的开发，你可以专注于使你的产品与众不同。</p>
-<h4>示例：Mirror Jump 登录</h4>
-<p>在 Mirrors Jump 的演示中，正常的 Web 2 登录看起来和任何 Web 2 应用程序几乎一样，并且钱包在登录时不会强迫用户跳出 dApp 。只需连接 SDK 即可使用上述功能，然后随意进行任何更改。</p>
-<h4>使用 Smart Auth 搭建你的第一个登录系统</h4>
-<p>有关 Web 3 用户登录的过程，请访问我们技术团队的视频教程：</p>
-<h3>Smart NFT Creation</h3>
-<p><img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vprge6830pgm8vmxaf5m.png"/></p>
-<h4>主要开发难点</h4>
-<p>NFT 创建对于开发人员来说是一项复杂且重复的任务，因为必须彻底弄清楚智能合约并确保它在落地之前是安全的。由于智能合约一旦应用之后几乎什么都做不了，因此通常需要额外的严格审计以及产生由此带来的成本，大家需要极其小心谨慎。对于这一点，Mirror World Smart SDK 会提供不同类型的智能合约。每个智能合约都经过严格审计以确保安全，消除担忧，同时简化大家的开发过程。</p>
-<h4>在游戏中创建 NFT</h4>
-<p>在 Mirrors Jump 中，你可以在游戏中十分丝滑的铸造您的 NFT 。开发者只需在 Mirror World 仪表板上填写配置信息，NFT 创建系统即可运行。
-<img alt="Image description" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/tirhxv19s7ljzy3u6mss.png"/></p>
-<h4>如何开始？</h4>
-<p>你可以在这里查看 Smart SDK 的视频上手教程：<a href="https://www.youtube.com/watch?v=ZJo4_N7JpU8" rel="nofollow">https://www.youtube.com/watch?v=ZJo4_N7JpU8</a></p>
-<p>你也可以直接登录我们的 SDK 仪表盘，来跟着视频尝试制作你的第一个 Web 3 dApp：<a href="https://app.mirrorworld.fun/" rel="nofollow">app.mirrorworld.fun</a></p>
-<h2>Smart SDK 有什么优势？</h2>
-<h3>节省成本，提高收入</h3>
-<p>为开发人员节省数月的琐碎工作和重复开发是我们的主要目标。此外，您还可以通过 Web 2 登陆等功能来扩张您的 Web 2 用户群体。</p>
-<h3>完整方便</h3>
-<p>Mirror World Smart SDK 是一体化的，所有的上述功能都会被集成到一个 SDK 中，不需要在开发的时候费力寻找最合适的 API 。只需要根据博客和视频教程中的信息进行搭建就足够了。
-同时，我们认为开发人员不应该花时间一遍又一遍地重新发明轮子。Smart SDK 中的几乎所有用例都有市场上最完善的前端和后端解决方案，你需要做的只是介入 SDK 而已。
-安全
-在 Web 3 项目中，你最不希望看到的就是您的智能合约出现预期外的问题，或者存在容易受到外来攻击的 bug 。Mirror World Smart SDK 会使用可靠的第三方 KMS 来保证您私钥的安全，远离外来攻击。</p>
-<h4>现有的社群和专业的支持</h4>
-<p>我们有详细的文档和博客 /视频教程供您使用 Smart SDK ，并且有所有上述功能 MVP 的简单 Walkthrough 。假如你有其他问题和希望为 SDK 做出自己的贡献，请加入我们的 discord 获得我们技术团队的专业支持以及和进行更深入的交流。</p>
-<h2>其他问题</h2>
-<h3>什么是 Mirror World</h3>
-<p>Mirror World 是一个为前瞻性的加密项目提供 Web3 基础设施服务的项目，专注于跨平台开发，致力于帮助项目加快上市速度并帮助游戏团队推出全栈加密 dApp 。Mirror World 得到了 Galaxy Interactive 、Republic Crypto 、Mirana Ventures 、OKX BDV 、IVC 、Sky9 Ventures 等顶级风险投资公司的支持。Mirror World 拥有十分多元的团队背景，团队中有来自包括 EA 、Dropbox 、字节跳动、网易以及全球各种初创公司的前员工。</p>
-<h3>为什么这么注重移动端？</h3>
-<p>Mirror World 团队关注的一个核心重点是移动端 dApp 。我们坚信 Web 3 的未来是在移动端的。这就是为什么我们非常重视帮助开发人员及其产品从移动端和 Web 2 端获得更多客户。我们自己作为移动游戏的开发者非常熟悉传统游戏和移动应用程序开发中的问题，包括 Web3 的引导、交易处理、店面，并创建了相应基础设施来优雅地解决这些 Web 3 的问题。我们现在已经成功推出了三款移动 NFT 游戏，其中最新的一款是你在本文中看到的 Mirrors Jump 。我们在移动游戏方面的努力以及不断增长的超过 70000 名成员的社区代表了我们对创建和维护这些 API 和 SDK 的愿景的承诺。</p>
-<h2>官网 /文档链接</h2>
-<p>如需浏览我们的技术文档，请访问：<a href="docs.mirrorworld.fun" rel="nofollow">docs.mirrorworld.fun</a></p>
-<p>官方网站请访问：<a href="https://mirrorworld.fun" rel="nofollow">mirrorworld.fun</a></p>
+	<p>阿凡达 1 上映两遍我都没赶上进入影院，挺遗憾的，这次直接看首映。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[程序员] 信心不足，不敢面试怎么解？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900642#reply15" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900642</id>
-	<published>2022-12-06T16:29:16Z</published>
-	<updated>2022-12-07T01:16:39Z</updated>
+	<title>[程序员] Agileboot 1.6.0 发布啦 - 一款致力于规范/精简/可维护 的 Springboot + Vue3 的快速开发脚手架</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900881#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900881</id>
+	<published>2022-12-07T12:13:46Z</published>
+	<updated>2022-12-07T12:28:58Z</updated>
 	<author>
-		<name>SJH0402</name>
-		<uri>https://www.v2ex.com/member/SJH0402</uri>
+		<name>ngduncent</name>
+		<uri>https://www.v2ex.com/member/ngduncent</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>初入此行，普通大专学历。</p>
-<p>身边的同学大部分都已经踏入这行，工作基本稳定了。
-初出校门时，我的水平在其中也是中等，或者稍偏上的</p>
-<p>但总觉得自己还没学够，学的不够扎实全面，
-面试的时候看着对方脸上的笑容，我总觉得是对我不自量力的讥讽，
-这种感觉让人抓狂。</p>
-<p>一直在为自己找借口逃避。</p>
-<p>自从今年毕业后，没有真正意义上的接触过这行，
-一直挣扎在其他行业中。</p>
-<p>目前对我来说，找工作的意义比工作的意义更大。
-这种处处逃避的人生，这种懦弱的性格真的无法接受。</p>
-<p>想问问各位大佬们，是否有过这种状况，如何克服的。</p>
-<p>希望能传授点经验，感激不尽。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享创造] withtyped: 写原生 SQL 即可拥有强类型 API 和客户端，数据库初始化工具，以及动态 OpenAPI 接口</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900641#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900641</id>
-	<published>2022-12-06T16:26:27Z</published>
-	<updated>2022-12-06T16:26:27Z</updated>
-	<author>
-		<name>pseudo</name>
-		<uri>https://www.v2ex.com/member/pseudo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>新框架新概念层出不穷，业务总逃不过 CRUD 。与其加一层又一层抽象，或者是生成再同步代码，是不是可以换一个角度，直接处理数据库定义、前后端、和 API 文档之间的同步问题？</p>
-<p>在解决完前后端的类型同步问题以后，结合最近的项目实践，我想干脆更进一步：</p>
-<p>在 TypeScript 里写 SQL ，然后即可得到四个东西：</p>
-<ol>
-<li>数据库初始化工具</li>
-<li>RESTful API 服务（ CRUD API 开箱即用，深度定制也没问题）</li>
-<li>类型安全的 JS 客户端（基于 fetch ，并且能自动推导所有 API 的入参和出参）</li>
-<li>动态生成的 OpenAPI 接口</li>
-</ol>
-<p>没有代码生成，没有同步时间 - 改一改 SQL ，上述四项就会同步变化，让 VSCode 的 IntelliSense 为你工作就行。</p>
-<p>所有组件都是解耦的，比如可以只用路由和客户端，服务器用 Koa/Express/Next 应该都没问题。</p>
-<p>字有点多，来张图吧：</p>
-<p><img alt="Banner" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2022/12/07/a7yve3BhlouN6K1.png"/></p>
-<p>⬇️ 项目地址</p>
-<p><a href="https://github.com/withtyped/withtyped" rel="nofollow">https://github.com/withtyped/withtyped</a></p>
-<p>自己试了试感觉开发效率有所提升，欢迎大家拍砖讨论</p>
-
-	]]></content>
-</entry><entry>
-	<title>[macOS] 流行终端模拟器 汇总</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900640#reply8" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900640</id>
-	<published>2022-12-06T16:06:48Z</published>
-	<updated>2022-12-07T00:48:24Z</updated>
-	<author>
-		<name>2NUT</name>
-		<uri>https://www.v2ex.com/member/2NUT</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>首先排除 iterm 和 wrap 不跨平台 不开开源，3 个 *term, 3 个 *y</p>
+	<h2>⚡平台简介⚡</h2>
+<p>AgileBoot 是一套开源的全栈精简快速开发平台，毫无保留给个人及企业免费使用。本项目的目标是做一款<em><strong>精简可靠</strong></em>，<em><strong>代码风格优良</strong></em>，<em><strong>项目规范</strong></em>的小型开发脚手架。
+适合个人开发者的小型项目或者公司内部项目使用。也可作为供初学者学习使用的模板项目。</p>
+<ul>
+<li>前端采用 Vue3 、Element UI 。对应前端仓库 <a href="https://github.com/valarchie/AgileBoot-Back-End" rel="nofollow">AgileBoot-Front-End</a> ，保持同步更新。</li>
+<li>后端采用 Spring Boot 、Spring Security 、Redis &amp; Jwt 、Mybatis Plus 、MySql 。</li>
+<li>权限认证使用 Jwt ，支持多终端认证系统。</li>
+<li>支持加载动态权限菜单，多方式轻松权限控制。</li>
+<li>🙌 有大量的单元测试，集成测试覆盖确保业务逻辑正确。🙌</li>
+</ul>
+<blockquote>
+<p>有任何问题或者建议，可以在 <em>Issues</em> 中提给作者。 也可以发 PR 。</p>
+<p>您的 Issue 比 Star 更重要 😆</p>
+<p>😜 如果觉得项目对您有帮助，可以来个 ⭐ Star ⭐</p>
+</blockquote>
+<h2>💥 在线体验 💥</h2>
+<p>演示地址：</p>
+<ul>
+<li><a href="http://www.agileboot.vip" rel="nofollow">www.agileboot.vip</a></li>
+<li><a href="http://www.agileboot.cc" rel="nofollow">www.agileboot.cc</a></li>
+</ul>
+<blockquote>
+<p>账号密码：admin/admin123</p>
+</blockquote>
+<p>项目地址：</p>
+<ul>
+<li><a href="https://github.com/valarchie/AgileBoot-Back-End" rel="nofollow">https://github.com/valarchie/AgileBoot-Back-End</a></li>
+<li><a href="https://github.com/valarchie/AgileBoot-Front-End" rel="nofollow">https://github.com/valarchie/AgileBoot-Front-End</a></li>
+<li>码云 gitee 有对应地址进行同步</li>
+</ul>
+<h2>🌴 项目背景 🌴</h2>
+<p>本项目基于 Ruoyi 项目进行完全重构改造。<br/>
+首先非常感谢 Ruoyi 作者。但是 Ruoyi 项目存在太多缺陷。</p>
+<ul>
+<li>命名比较乱七八糟（很多很糟糕的命名，包括机翻英语乱用）</li>
+<li>项目分包以及模块比较乱</li>
+<li>比较原始的 Controller &gt; Service &gt; DAO 的开发模式。过于面向过程。</li>
+<li>一大堆自己造的轮子，并且没有 UT 覆盖。</li>
+<li>大量逻辑嵌套在 if else 块当中</li>
+<li>值的前后不统一，比如有的地方 1 代表是，有的地方 1 代表否</li>
+<li>很多很奇怪的代码写法（比如 return result &gt; 0 ? true:false..    一言难尽）</li>
+<li>业务逻辑不集中，代码可读性较差。</li>
+</ul>
+<p><em><strong>很多人直接使用开源项目二开，但是代码不规范，可维护性不高，导致使用者的二开的成本比较高。</strong></em></p>
+<p>于是我做了大量的重构工作。</p>
+<h3>重构内容</h3>
+<ul>
+<li>
+规范：<ul>
+<li>切分不同环境的启动文件</li>
+<li>统一设计异常类</li>
+<li>统一设计错误码并集中处理异常</li>
+<li>统一系统内的变量并集中管理</li>
+<li>统一返回模型</li>
+<li>引入 Google 代码格式化模板</li>
+<li>后端代码的命名基本都整改 OK</li>
+<li>前端代码的命名也非常混乱，进行了整改</li>
+<li>规范系统内的常量</li>
+</ul>
+</li>
+<li>
+整改：<ul>
+<li>引入 hutool 包以及 guava 包去掉大量自己造的轮子，尽可能使用现成的轮子</li>
+<li>去除代码中大量的 warning</li>
+<li>引入 lombok 去除大量 getter setter 代码</li>
+<li>调整日志级别</li>
+<li>字典类型数据完全用 Enum 进行代替</li>
+<li>移除 SQL 注入的 Filter ，因为迁移到 Mybatis Plus 就不会有这个注入的问题</li>
+<li>XSS 直接通过 JSON 序列化进行转义。</li>
+<li>替换掉很多 Deprecated 的类以及配置</li>
+<li>替换 fastJson 为 Jackson</li>
+<li>数据库的整体重构设计，缩减至 10 张表。</li>
+<li>重新设计异步代码</li>
+<li>前后端密码加密传输（更严谨的话，还是需要 HTTPS ）</li>
+<li>重构权限校验和数据权限校验（直接都通过注解的形式）</li>
+</ul>
+</li>
+<li>
+优化：<ul>
+<li>优化异步服务</li>
+<li>优化 Redis 缓存类，封装各个业务缓存，提供多级缓存实现</li>
+<li>权限判断使用多级缓存</li>
+<li>IP 地址查询引入离线包</li>
+<li>前端优化字典数据缓存</li>
+<li>启动优化</li>
+<li>i18n 支持</li>
+<li>优化 excel 工具类，代码更加简洁</li>
+<li>将所有逻辑集中于 Domain 模块中</li>
+<li>切面记录修改者和创建者</li>
+<li>统一设置事务</li>
+</ul>
+</li>
+</ul>
+<h2>✨ 使用 ✨</h2>
+<h3>技术栈</h3>
 <table>
 <thead>
 <tr>
-<th>终端模拟器</th>
-<th>FOSS</th>
-<th>语言</th>
-<th>跨平台</th>
-<th>star</th>
-<th>commits</th>
+<th>技术</th>
+<th>说明</th>
+<th>版本</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>wezterm</td>
-<td>MIT</td>
-<td>Rust</td>
-<td>Y</td>
-<td>6.5k</td>
-<td>active</td>
+<td><code>springboot</code></td>
+<td>Java 项目必备框架</td>
+<td>2.7</td>
 </tr>
 <tr>
-<td>electerm</td>
-<td>MIT</td>
-<td>JS</td>
-<td>Y</td>
-<td>7.5k</td>
-<td>less active</td>
+<td><code>druid</code></td>
+<td>alibaba 数据库连接池</td>
+<td>1.2.8</td>
 </tr>
 <tr>
-<td><del>warp</del></td>
-<td>N</td>
-<td>Rust</td>
-<td>Y</td>
-<td>9.9k</td>
-<td>less active</td>
+<td><code>swagger</code></td>
+<td>文档生成</td>
+<td>3.0.0</td>
 </tr>
 <tr>
-<td>windterm</td>
-<td>Apache</td>
-<td>C</td>
-<td>Y</td>
-<td>10.7k</td>
-<td>less active</td>
+<td><code>mybatis-plus</code></td>
+<td>数据库框架</td>
+<td>3.5.2</td>
 </tr>
 <tr>
-<td><del>iTerm2</del></td>
-<td>GPL</td>
-<td>OC</td>
-<td>N</td>
-<td>13k</td>
-<td>very active</td>
+<td><code>hutool</code></td>
+<td>国产工具包（简单易用）</td>
+<td>3.5.2</td>
 </tr>
 <tr>
-<td>kitty</td>
-<td>GPL</td>
-<td>C+Py</td>
-<td>Y</td>
-<td>16.8k</td>
-<td>active</td>
+<td><code>mockito</code></td>
+<td>单元测试模拟</td>
+<td>1.10.19</td>
 </tr>
 <tr>
-<td>tabby</td>
-<td>MIT</td>
-<td>TS</td>
-<td>Y</td>
-<td>41.1k</td>
-<td>active</td>
+<td><code>guava</code></td>
+<td>谷歌工具包（提供简易缓存实现）</td>
+<td>31.0.1-jre</td>
 </tr>
 <tr>
-<td>alacritty</td>
-<td>Apache</td>
-<td>Rust</td>
-<td>Y</td>
-<td>43.4k</td>
-<td>active</td>
+<td><code>junit</code></td>
+<td>单元测试</td>
+<td>1.10.19</td>
 </tr>
-</tbody></table>
-	]]></content>
-</entry><entry>
-	<title>[问与答] 学 Java /前端不想看 B 站培训班视频，求大佬支支招</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900639#reply6" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900639</id>
-	<published>2022-12-06T16:01:14Z</published>
-	<updated>2022-12-06T19:20:40Z</updated>
-	<author>
-		<name>taoshaoz1</name>
-		<uri>https://www.v2ex.com/member/taoshaoz1</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	RT ，本人十分渴望写出一套属于自己的网站，但是对于 B 站培训班视频先讲的一坨坨知识点十分不耐烦，感觉视频里学到的大部分是 **IDE 等工具** 的操作快捷键啥的，因为十分枯燥，所以我并不能坚持看很长时间。而且就算照着他视频敲了，到自己写时也没有头绪。有大佬说从实际项目开始实现需求，在需求中学习，但是需求是创造了，无从下手又怎么办呢？<br />有什么好办法能高效学习这方面的知识吗？啃书吗？
-	]]></content>
-</entry><entry>
-	<title>[问与答] 应用交互讨论： 为什么相册都是左右翻页呢？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900636#reply11" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900636</id>
-	<published>2022-12-06T15:30:32Z</published>
-	<updated>2022-12-06T18:10:55Z</updated>
-	<author>
-		<name>jeesk</name>
-		<uri>https://www.v2ex.com/member/jeesk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>很显然上下翻页才更加符合手指的习惯， 就像刷抖音一样，目前没有任何一个相册应用支持上下滑动翻页，技术上实现也不难呀。 你们觉得呢？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[OpenAI] AI 降临</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900635#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900635</id>
-	<published>2022-12-06T15:28:28Z</published>
-	<updated>2022-12-06T15:26:28Z</updated>
-	<author>
-		<name>bmpidev2019</name>
-		<uri>https://www.v2ex.com/member/bmpidev2019</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>文章地址： <a href="https://www.bmpi.dev/self/ai-arrival/" rel="nofollow">https://www.bmpi.dev/self/ai-arrival/</a></p>
-<p>也谈最近大火的 chatGPT 应用，这表现太惊人了：</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.bmpi.dev/d6465373-18f6-76a6-137f-8d5b3802707f.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img.bmpi.dev/e7ecaa92-4c38-1246-6617-9054911f28a4.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 有意思的面试题-如何在网页置灰的前提下，保持部分元素彩色</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900634#reply4" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900634</id>
-	<published>2022-12-06T15:19:20Z</published>
-	<updated>2022-12-06T13:19:20Z</updated>
-	<author>
-		<name>woniuppp</name>
-		<uri>https://www.v2ex.com/member/woniuppp</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h1>网页置灰方案讨论</h1>
-<p>如何在网页置灰的前提下，保持部分元素彩色</p>
-<p><a href="https://shengxinjing.cn/gray.html" rel="nofollow">在线体验</a></p>
-<p><a href="https://shengxinjing.cn/gray.html" rel="nofollow">本文视频版链接</a></p>
-<p>最近哀悼日，网页端如何一键变灰已经有很多实现方式了，但是我看到一个推文很有意思，是一个不错的面试题</p>
-<blockquote>
-<p>现在网页置灰已经不仅仅是一行 css 的事了，如何在网页置灰的前提下，部分元素保持彩色，这是一个不错的 system design 题</p>
-</blockquote>
-<p><a href="https://shengxinjing.cn/about.html" rel="nofollow">欢迎加我</a>，畅聊前端</p>
-<h2>一键变灰</h2>
-<p>这个大部分同学都写了，直接</p>
-<pre><code class="language-css">html{
-    filter: grayscale(100%);
-}
+<tr>
+<td><code>h2</code></td>
+<td>内存数据库</td>
+<td>1.10.19</td>
+</tr>
+<tr>
+<td><code>jackson</code></td>
+<td>比较安全的 Json 框架</td>
+<td>follow springboot</td>
+</tr>
+</tbody></table><h2>🙊 系统内置功能 🙊</h2>
+<p>🙂 大部分功能，均有通过 <strong>单元测试</strong> <strong>集成测试</strong> 保证质量。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>功能</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>用户管理</td>
+<td>用户是系统操作者，该功能主要完成系统用户配置</td>
+</tr>
+<tr>
+<td>⭐</td>
+<td>部门管理</td>
+<td>配置系统组织机构（公司、部门、小组），树结构展现支持数据权限</td>
+</tr>
+<tr>
+<td>⭐</td>
+<td>岗位管理</td>
+<td>配置系统用户所属担任职务</td>
+</tr>
+<tr>
+<td></td>
+<td>菜单管理</td>
+<td>配置系统菜单、操作权限、按钮权限标识等，本地缓存提供性能</td>
+</tr>
+<tr>
+<td>⭐</td>
+<td>角色管理</td>
+<td>角色菜单权限分配、设置角色按机构进行数据范围权限划分</td>
+</tr>
+<tr>
+<td></td>
+<td>参数管理</td>
+<td>对系统动态配置常用参数</td>
+</tr>
+<tr>
+<td></td>
+<td>通知公告</td>
+<td>系统通知公告信息发布维护</td>
+</tr>
+<tr>
+<td>🚀</td>
+<td>操作日志</td>
+<td>系统正常操作日志记录和查询；系统异常信息日志记录和查询</td>
+</tr>
+<tr>
+<td></td>
+<td>登录日志</td>
+<td>系统登录日志记录查询包含登录异常</td>
+</tr>
+<tr>
+<td></td>
+<td>在线用户</td>
+<td>当前系统中活跃用户状态监控</td>
+</tr>
+<tr>
+<td></td>
+<td>系统接口</td>
+<td>根据业务代码自动生成相关的 api 接口文档</td>
+</tr>
+<tr>
+<td></td>
+<td>服务监控</td>
+<td>监视当前系统 CPU 、内存、磁盘、堆栈等相关信息</td>
+</tr>
+<tr>
+<td></td>
+<td>缓存监控</td>
+<td>对系统的缓存信息查询，命令统计等</td>
+</tr>
+<tr>
+<td></td>
+<td>连接池监视</td>
+<td>监视当前系统数据库连接池状态，可进行分析 SQL 找出系统性能瓶颈</td>
+</tr>
+</tbody></table><p>目前版本是 V1.6 ，将在 2.0 版本后陆续新增新功能。</p>
+<h2>🐯 工程结构 🐯</h2>
+<pre><code>agileboot
+├── agileboot-admin -- 管理后台接口模块（供后台调用）
+│
+├── agileboot-api -- 开放接口模块（供客户端调用）
+│
+├── agileboot-common -- 精简基础工具模块
+│
+├── agileboot-infrastructure -- 基础设施模块（主要是配置和集成）
+│
+├── agileboot-domain -- 业务模块
+├    ├── user -- 用户模块（举例）
+├         ├── command -- 命令参数接收模型（命令）
+├         ├── dto -- 返回数据类
+├         ├── model -- 领域模型类
+├         ├── query -- 查询参数模型（查询）
+│         ├────── UserApplicationService -- 应用服务（事务层，操作领域模型类完成业务逻辑）
+│
+├── agileboot-integration-test -- 集成测试模块
+│
+├── agileboot-orm -- 数据映射模块（仅包含数据相关逻辑）
+├    ├── entiy -- 实体类
+├    ├── enums -- 数据相关枚举 
+├    ├── mapper -- DAO 
+├    ├── query -- 封装查询对象 
+├    ├── result -- 封装多表查询对象 
+└──  └── service -- 服务层
 </code></pre>
-<p>考虑 ie 之类的兼容性的话，就直接把兼容性的属性都搞上去</p>
-<pre><code class="language-css">html{
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: gray;
-  filter: progid:dximagetransform.microsoft.basicimage(grayscale=1);
-}
-</code></pre>
-<p>如果想控制的更动态一些，可以用 js 控制 html 的 class 来实现这个切换过程</p>
-<pre><code class="language-html">&lt;button class="btn" id="set-gray"&gt;置灰&lt;/button&gt;
-</code></pre>
-<pre><code class="language-javascript">let style = document.createElement('style')
-let graySelector = 'gray-filter'
-style.setAttribute('type', 'text/css')
-// style.setAttribute('data-vite-dev-id', id)
-style.textContent = `.${graySelector}{
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: gray;
-  filter: progid:dximagetransform.microsoft.basicimage(grayscale=1);
-}`
-document.head.appendChild(style)
-
-let root = document.querySelector('html')
-let btn = document.querySelector('#set-gray')
-btn &amp;&amp; btn.addEventListener('click', () =&gt; {
-  setAllGray()
-}, false)
-
-function toggleClassName(el,name){
-  if (el.className.indexOf(name) &gt; -1) {
-    el.className = el.className.replace(name, '').trim()
-  } else {
-    el.className = [el.className, name].join(' ')
-  }
-}
-
-function setAllGray() {
-  toggleClassName(root,graySelector)
-}
-
-</code></pre>
-<p>这样可以在后端通过接口的形式决定是不是加载这段 js 就可以了  </p>
-<p><img alt="01.gif" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/71936e0bca774644a7eb24af5b4cd84d%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<blockquote>
-<p>那么问题来了，如何在置灰的前提下部分元素保持彩色呢</p>
-</blockquote>
-<h2>filter 重置（失败）</h2>
-<p>如果能直接某个元素重置 filter, 尝试下面的写法，但是不生效</p>
-<pre><code class="language-css">html{
-    filter:grayscale(100%);
-}
-.not-gray{
-    filter:none;
-}
-</code></pre>
-<p>如果 filter 的算法可逆的话，可以在<code>.not-gray</code>元素上设置一个翻转的 filter ，查了点资料,Chromium 灰色 100%的算法如下, 我本人图像处理方面比较菜，但是看起来全灰的算法不可逆，而且如果在元素上再盖一个 canvas 也不太好弄 放弃</p>
-<pre><code class="language-text">R/G/B = 0.2126R' + 0.7152G' + 0.0722'B
-</code></pre>
-<h2>遮挡解决方案 backdrop-filter</h2>
-<p>有一个解决方案是用 backdrop-filter 做一个遮罩，毕竟 filter 还是有点损耗首屏性能的，虽然可以用 transform 开启硬件优化一些，我们还可以用遮罩的方式挡住也可以的，并且设置<code>pointer-events: none;</code>不阻挡用户交互，也是一段 css 搞定</p>
-<pre><code class="language-css">html {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-html::before {
-    content: "";
-    position: fixed;
-    backdrop-filter: grayscale(100%);
-    pointer-events: none;
-    inset: 0;
-    z-index: 100;
-}
-</code></pre>
-<p>还可以把遮罩的 position 换成 absolute, 实现一个只置灰首屏的效果，不过我感觉没啥必要</p>
-<p><img alt="02.gif" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4bf01e0235824086a9f9ad68fe57960c%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<p>然后我们可以设置指定元素的 z-index ，超过 backdrop-filter 的 100 就可以, 就有首屏+部分彩色的效果</p>
-<p><img alt="05.gif" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a53bffbbd1b74260bba618ec60842164%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<pre><code class="language-css">.not-gray{
-  position: relative;
-  z-index:1000;
-}
-</code></pre>
-<h2>元素遍历标记</h2>
-<p>backdrop-filter 其实也有他的兼容性问题，尤其是 firefox 版本 102(最新 107)之前都不能用，filter 方案更普及一些，不过作为面试题的话 我们还可以继续用 filter 这个方法，</p>
-<p><img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d92347f45b2b4768bfc8129d7292d851%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<p><img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d61f548cf85841b7bc15e5c79e5580be%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<p>我们设置有一些选择器保持彩色，然后统计出当前这个网页中，需要置灰的元素，网页是一个属性结果，我们先对选中元素的父元素进行遍历标记</p>
-<p><img alt="06.jpeg" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8466aa5236e9479297974322eab588e2%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<pre><code class="language-javascript">
-let body = document.body
-//配置选择器，命中这个列表选择器的不置灰
-let selectors = ['#not-gray2', '.not-gray3']
-selectors.forEach(selector=&gt;{
-    let doms = [...document.querySelectorAll(selector)].forEach(v=&gt;{
-      if(!v) return 
-      v.staycolor = true
-      let parent = v.parentNode
-      while(parent &amp;&amp; !parent.colorful){
-        parent.colorful = true
-        parent = parent.parentNode
-      }
-    })
-})
-
-</code></pre>
-<p>然后现在需要置灰的元素都已经标记了 colorful ，然后我们遍历一下，递归每个 child ，如果没有 colorful ，直接置灰返回，通过递归就可以把所有元素都置灰了</p>
-<pre><code class="language-js">let graySelector = 'gray-filter'
-walk(body)
-
-function walk(node){
-    if(node.nodeType!==1) return 
-    if(node.staycolor) return 
-    if(!node.colorful){
-      toggleClassName(node,graySelector)
-      return
-    }
-    for (var i = 0; i &lt; node.children.length; i++) {  
-      var child = node.children[i]; 
-      walk(child)
-    }  
-}
-</code></pre>
-<p>可以把 selectors 做成从后端读取，就可以动态设置保持彩色的部分了, 不过这样设置 filter 可能会导致部分元素的定位失效，不过作为面试题的追问还不错</p>
-<p><img alt="04.gif" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f7a2de7d0ecc45b88000a98c95422af2%7Etplv-k3u1fbpfcp-watermark.image?"/></p>
-<h2>总结</h2>
-<p>作为面试题来说，考察了面试者的 css ，js 的 dom 遍历，递归思想，很不错的入门题</p>
-
-	]]></content>
-</entry><entry>
-	<title>[移民] 日经贴，要不要润日本</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900633#reply15" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900633</id>
-	<published>2022-12-06T15:12:14Z</published>
-	<updated>2022-12-06T23:55:10Z</updated>
-	<author>
-		<name>OneMillionBeams</name>
-		<uri>https://www.v2ex.com/member/OneMillionBeams</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h3>目标国家</h3>
+<h3>代码流转</h3>
+<p>请求分为两类：一类是查询，一类是操作（即对数据有进行更新）。</p>
+<p><strong>查询</strong>：Controller &gt; xxxQuery &gt; xxxApplicationService &gt; xxxService(Db) &gt; xxxMapper<br/>
+<strong>操作</strong>：Controller &gt; xxxCommand &gt; xxxApplicationService &gt; xxxModel(处理逻辑) &gt; save 或者 update (本项目直接采用 JPA 的方式进行插入已经更新数据)</p>
+<hr/>
+<h2>🎅 技术文档 🎅</h2>
 <ul>
-<li>日本</li>
+<li><a href="https://juejin.cn/post/7152871067151777829" rel="nofollow">AgileBoot - 基于 SpringBoot + Vue3 的前后端快速开发脚手架</a></li>
+<li><a href="https://juejin.cn/post/7153812187834744845" rel="nofollow">AgileBoot - 手把手一步一步带你 Run 起全栈项目(SpringBoot+Vue3)</a></li>
+<li><a href="https://juejin.cn/post/7156062116712022023" rel="nofollow">AgileBoot - 项目内统一的错误码设计</a></li>
+<li><a href="https://juejin.cn/post/7158793441198112781" rel="nofollow">AgileBoot - 如何集成内置数据库 H2 和内置 Redis</a></li>
+<li>持续输出中</li>
 </ul>
-<h3>选择日本的原因</h3>
+<h3>最后</h3>
+<p>本项目的目标是做一款精简可靠，代码风格优良，项目规范的小型开发脚手架。
+适合个人开发者的小型项目或者公司内部项目使用。也可作为供初学者学习使用的案例。</p>
+<p><em><strong>希望大佬们有兴趣的话~ 可以一起来完善这个项目，让这个项目更规范，代码更好维护，真正成为一款能作为生产直接使用的开源项目。</strong></em></p>
+<p>PS: 鄙人前端小白，仅在对应的 ruoyi 原版前端项目上做了大概 50%的重构。能力有限，有没有前端大佬一起来重构一下前端项目呀~~  目前打算改成 TS 。</p>
+<p>全栈技术交流群：1398880</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Surge] surge for mac 会升 5 吗、我看 IOS 端已经 5 了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900880#reply1" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900880</id>
+	<published>2022-12-07T12:06:35Z</published>
+	<updated>2022-12-07T14:20:32Z</updated>
+	<author>
+		<name>zhengjianyang</name>
+		<uri>https://www.v2ex.com/member/zhengjianyang</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	车还没凑够人呢、今天看 IOS 端已经是 5 了、Mac 端如果升 5 还能有啥重大功能可以发布的<br />Mac 车队还差俩人、想拼的来：aHR0cHM6Ly90Lm1lL1lFdmFuQm8=
+	]]></content>
+</entry><entry>
+	<title>[问与答] 今天去检查眼睛，角膜炎和结膜炎都中招了...</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900879#reply11" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900879</id>
+	<published>2022-12-07T12:06:28Z</published>
+	<updated>2022-12-07T15:10:17Z</updated>
+	<author>
+		<name>Danswerme</name>
+		<uri>https://www.v2ex.com/member/Danswerme</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>医生给开了普拉洛芬滴眼液和红霉素眼膏，开了点消炎药。已经请假了，在家休息到下周再看看，这期间是坚决不碰任何电子设备了，发完这贴就出门转转去。</p>
+<p>大家有得过这病的吗？大概多久能好转呢？ 用的是上面那些药物吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[YouTube] Youtube Premium 印度区无法付款解决办法</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900878#reply4" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900878</id>
+	<published>2022-12-07T11:55:40Z</published>
+	<updated>2022-12-07T13:27:15Z</updated>
+	<author>
+		<name>shoper</name>
+		<uri>https://www.v2ex.com/member/shoper</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>油管印度区家庭会员这个月因为绑的信用卡到期换新（其实就是使用期限变动了），结果一直更新失败，付不了月费。
+和客服沟通，让我取消再绑，感觉就是坑。
+来这里请教下大家还有什么解决办法吗？
+要换区的话，是不是家庭账户都要被赶下车了？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Telegram] Telegram 开启隐私新时代,从今天起,可以注册无手机号账户</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900874#reply2" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900874</id>
+	<published>2022-12-07T11:38:24Z</published>
+	<updated>2022-12-07T03:38:24Z</updated>
+	<author>
+		<name>wbrobot</name>
+		<uri>https://www.v2ex.com/member/wbrobot</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	今天起,Telegram 可以注册无需绑定手机号的账户<br />这下就更隐私了<br />官方博客:<br /><a target="_blank" href="https://telegram.org/blog/ultimate-privacy-topics-2-0" rel="nofollow noopener">https://telegram.org/blog/ultimate-privacy-topics-2-0</a><br /><br />同时提到,可以全局设定多久自动删除聊天记录.
+	]]></content>
+</entry><entry>
+	<title>[问与答] 2023 年过年考虑回家吗，怎么回家？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900873#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900873</id>
+	<published>2022-12-07T11:35:20Z</published>
+	<updated>2022-12-07T14:35:14Z</updated>
+	<author>
+		<name>2218675712</name>
+		<uri>https://www.v2ex.com/member/2218675712</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>现在新十条出了，各地管的没那么严了</p>
+<p>那么今年考虑回家吗</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 请问 Github 如何设置单独只能访问一个库的秘钥？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900872#reply3" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900872</id>
+	<published>2022-12-07T11:34:54Z</published>
+	<updated>2022-12-07T11:49:49Z</updated>
+	<author>
+		<name>Richard14</name>
+		<uri>https://www.v2ex.com/member/Richard14</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>使用场景，自动监控机器，需要定时提交记录的数据到 github 。</p>
+<p>不太希望在这个机器上直接登录 gh 账号，万一机器被攻击了那所有东西都泄露了。</p>
+<p>所以理想情况应该是通过一个特定的 key ，该机器上持有这个 key ，只能修改那个 key 对应的仓库的东西。。。</p>
+<p>我印象里以前在 github 上创建过类似的 key ，创建的时候还要我选择这个 key 都能包含什么什么权限。。但是不知道为啥今天找了半天没找到，只找到一个 ssh 或 gpgkey ，感觉这两个都不太对啊</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Java] spring initializr 默认配置为什么用 properties 而不是 yml？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900871#reply12" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900871</id>
+	<published>2022-12-07T11:31:25Z</published>
+	<updated>2022-12-07T15:09:05Z</updated>
+	<author>
+		<name>dunhanson</name>
+		<uri>https://www.v2ex.com/member/dunhanson</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我看包管理都改成 Gradle 了</p>
+<p>配置文件管理这种，yml 不是更新，更灵活吗？</p>
+<p>有点无法理解</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] Vue 的开发生态是不是没有 React 好</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900870#reply22" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900870</id>
+	<published>2022-12-07T11:24:14Z</published>
+	<updated>2022-12-07T15:25:51Z</updated>
+	<author>
+		<name>movq</name>
+		<uri>https://www.v2ex.com/member/movq</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我一开始学前端的时候，想的就是顺手简单写一写，vue 写起来简单，就学了 vue3</p>
+<p>后面发现那些 UI 库，react 的更多，更丰富，比如 github 上面，ant design 的 star 有 80 多 k ，而 vue 对应只有一个第三方开发者做的 ant design vue ，才 18k star</p>
+<p>再比如大厂背书的 element ui ，vue2 版本的 star 很多，但是 vue3 的才 18k star ，感觉像是没那么多人去维护新版</p>
+<p>听说国外大厂用 react 的也多，很少有用 vue 的</p>
+
+	]]></content>
+</entry><entry>
+	<title>[VPS] 220 出一个还剩 9 个月的搬瓦工 CN2 GT， ip 正常，流量几乎没用。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900869#reply3" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900869</id>
+	<published>2022-12-07T11:22:29Z</published>
+	<updated>2022-12-07T11:30:32Z</updated>
+	<author>
+		<name>xuangoer666</name>
+		<uri>https://www.v2ex.com/member/xuangoer666</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[Microsoft Azure] 怎么使用 Azure 自定义语言模型</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900867#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900867</id>
+	<published>2022-12-07T11:17:17Z</published>
+	<updated>2022-12-07T07:17:17Z</updated>
+	<author>
+		<name>meta2048</name>
+		<uri>https://www.v2ex.com/member/meta2048</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>训练了一个 Azure 的语言模型，但是不会用，有没有高手指导一下，使用 PHP 或者 Python 都可以。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[MongoDB] 12 月 14 日上海新天地朗廷酒店，我司赞助的 MongoDB Day 上海站，欢迎大家联系我注册报名。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900866#reply7" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900866</id>
+	<published>2022-12-07T11:10:34Z</published>
+	<updated>2022-12-07T12:55:56Z</updated>
+	<author>
+		<name>don1731</name>
+		<uri>https://www.v2ex.com/member/don1731</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<ul>
+<li>会议时间：上午九点到下午五点</li>
+<li>主题演讲：MongoDB 北亚区高级副总裁，MongoDB 北亚区技术总监</li>
+<li>客户分享：网易游戏，咪咕视讯，腾讯游戏，南瓜电影</li>
+<li>抽奖奖品：Airpods Pro ，雷蛇机械键盘，华为充电宝</li>
+<li>更多介绍信息，联系微信：MTUzNTM3MzcwNDI=</li>
+</ul>
+
+	]]></content>
+</entry><entry>
+	<title>[Kubernetes] Java 要对接 K8s，请问集群上 master 节点，如果挂了，会自动转接到备用的机子上吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900865#reply5" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900865</id>
+	<published>2022-12-07T11:06:15Z</published>
+	<updated>2022-12-07T14:27:54Z</updated>
+	<author>
+		<name>gzk329</name>
+		<uri>https://www.v2ex.com/member/gzk329</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我 java 在本地用一份 config 里边配了一个 server 地址，如果这台 master 机子挂了，可以继续维持与集群的连接吗？还是说我必须换一份 config ？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Windows] 找类似 mac 下 skim 的 windows 平台的 pdf 阅读器。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900864#reply1" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900864</id>
+	<published>2022-12-07T11:02:53Z</published>
+	<updated>2022-12-07T11:17:53Z</updated>
+	<author>
+		<name>ly879</name>
+		<uri>https://www.v2ex.com/member/ly879</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>主要需求：</p>
 <ul>
-<li>便宜，甚至可以 0 日语基础直接过去（虽然会被外包坑）。一年语言学校+生活费 15w 也够了</li>
-<li>是发达国家</li>
-<li>亚洲文化相对好融入</li>
-<li>游戏行业发达</li>
+<li>分为三栏，左边导航、中间 pdf 正文、右边笔记（支持以列表形式展示）；</li>
+<li>笔记列表，能够显示被注释的正文内容、注释、注释类型、日期、页面等信息。</li>
 </ul>
-<h3>润的原因</h3>
+<p>谢谢！</p>
+
+	]]></content>
+</entry><entry>
+	<title>[深圳] 深圳转让电信宽带，可双拨带公网 ip</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900862#reply2" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900862</id>
+	<published>2022-12-07T10:54:43Z</published>
+	<updated>2022-12-07T10:54:43Z</updated>
+	<author>
+		<name>msy333</name>
+		<uri>https://www.v2ex.com/member/msy333</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	转让一条深圳电信宽带<br />下行 500M 上行 50M ，实测冗余约 20%<br />不含手机卡，资费简单，中途退出可协商<br />包年 1800 元原价转，可直接在电信官网支付<br />免费借用光猫，迁移费自理。<br />vx：U2l5dV9TdGVmYW5pZQ==<br /><br />防杠声明：深圳电信宽带全国最贵，如非必要不推荐办这个。联通 /移动 /携转，有更多高性价比套餐可供选择<br />本宽带为 10 年前的老套餐，比现在新办便宜，session2 ，带公网 ip ，适合以下有需求的 v 友：<br />双拨叠加上行、公网 ip 、只能装电信、游戏服务器特定需求、仅需宽带不想多开手机卡<br /><br /> <img src="https://wx4.sinaimg.cn/mw1024/64444788gy1h8vfqkj5i1j214q0b3jrx.jpg" class="embedded_image" rel="noreferrer" referrerpolicy="no-referrer"> 
+	]]></content>
+</entry><entry>
+	<title>[OpenAI] ChatGPT 的出现，我们离《她》中的 OS 系统还有多远？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900861#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900861</id>
+	<published>2022-12-07T10:51:00Z</published>
+	<updated>2022-12-07T10:51:00Z</updated>
+	<author>
+		<name>zhijiansha</name>
+		<uri>https://www.v2ex.com/member/zhijiansha</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	ChatGPT 的出现，我们离《她》中的 OS 系统还有多远？
+	]]></content>
+</entry><entry>
+	<title>[路由器] 同一个 wifi 下，手机有网， macbook 没网，请问可能是什么原因？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900860#reply0" />
+	<id>tag:www.v2ex.com,2022-12-07:/t/900860</id>
+	<published>2022-12-07T10:50:58Z</published>
+	<updated>2022-12-07T10:49:58Z</updated>
+	<author>
+		<name>snimstice</name>
+		<uri>https://www.v2ex.com/member/snimstice</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>wifi 是光猫自带的 wifi ，没有使用路由器。网络是移动的宽带。<br/>
+现在的问题就是：同一个 wifi ，手机是一直有网的，但是电脑有时候会没网，不太清楚什么原因。<br/>
+目前观察到的状况是：  </p>
 <ul>
-<li>核心原因还是对国内的 法律.txt 感到绝望，近几年疫情导致的基层执法问题亲身遇到太多了</li>
-<li>房价性价比真的差。房价不贵的城市又几乎没有游戏产业</li>
-<li>卷。做游戏的这几年狗屎运，我加班不多，但朋友和同学他们都还是一样的卷</li>
-<li>他又连任了</li>
+<li>网络正常的时候，电脑的 ip 是：192.168.1.105 ，且可以通过 192.168.1.1 访问到路由器管理页面</li>
+<li>电脑没网的时候，ip 地址会变成：2409:8a00:26b0:2fdo:xxxx:xxxx,这样的格式。而且无法访问 192.168.1.1</li>
+<li>没网的话，重启下路由器就会变好</li>
 </ul>
-<h3>犹豫的原因</h3>
-<ul>
-<li>上头的情绪被几个朋友浇了冷水</li>
-<li>日本贫富差距小，但也意味着做程序员挣得少（在国内年包 40w+，去那边肯定拿不到这个数）</li>
-<li>
-日本游戏大厂其实也不好进<ul>
-<li>任天堂出了名的难进</li>
-<li>FS 不招程序员了</li>
-<li>感觉就 CyGames 和 SE 稍微有点机会 （都有我很喜欢的项目）</li>
-</ul>
-</li>
-<li>舍不得现在的朋友，想到换地方又要重新交朋友，就感觉很累</li>
-</ul>
-<h3>目前状态</h3>
-<ul>
-<li>在联系语言学校，打算过去先好好学好语言（在国内学到流畅工作的程度不太可能，又不想被外包坑）</li>
-</ul>
-<p>知道这里是都是劝润的，所以来给自己找 [决心]  buff 了（ doge ）</p>
+<p>毫无头绪，有了解的大佬吗？<br/>
+补充信息：电脑是 macbook pro 16 寸 2019 款，macOS 版本是：12.5</p>
 
-	]]></content>
-</entry><entry>
-	<title>[程序员] 云盘精灵及同类网站为何关停？究竟有哪些法律风险？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900630#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900630</id>
-	<published>2022-12-06T15:03:40Z</published>
-	<updated>2022-12-06T15:00:40Z</updated>
-	<author>
-		<name>purenothingform</name>
-		<uri>https://www.v2ex.com/member/purenothingform</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>除了内容审核还有哪些法律风险？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[MacBook Pro] 好想换 m1 pro 的 Mac，求打醒</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900629#reply24" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900629</id>
-	<published>2022-12-06T14:42:45Z</published>
-	<updated>2022-12-07T01:17:15Z</updated>
-	<author>
-		<name>Curtains</name>
-		<uri>https://www.v2ex.com/member/Curtains</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>目前用的 19 年 intel 的 16 寸，日常开发还算够用，摸了下朋友的 m1 pro 发现提升好大，有种被库克背刺的感觉</p>
-
-	]]></content>
-</entry><entry>
-	<title>[iOS] 苹果键盘是怎么做到如此难用的？弱智到不像是苹果出的产品</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900628#reply38" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900628</id>
-	<published>2022-12-06T14:40:20Z</published>
-	<updated>2022-12-07T01:16:09Z</updated>
-	<author>
-		<name>congjinyebaiya</name>
-		<uri>https://www.v2ex.com/member/congjinyebaiya</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<div>
- 我宣布，傻逼苹果自带键盘是这个公司最弱智的产品，难用到爆炸。
- <br/>
-<br/>无奈的是在安卓上无敌好用的 gboard 在 iOS 上不够上心，体验完全无法跟安卓上比，主题跟随系统的缺失、震动手感很差，有时候切换还会鬼畜。但就算这样，我觉得 gboard 依然强过苹果键盘太多，因为输入法最核心的打字体验没有太差。
- <br/>
-<br/>在被迫用苹果键盘的日子里，我一度怀疑这个软件会故意让我选错字，打错拼音，因为同样的姿势同样的打字手法，谷歌键盘就是可以正确打出，哪怕错也不会很离谱。比如侧躺的情况下，苹果键盘配合双拼，有时候连一个正确的字词都打不出来，我时常被弱智的纠错和选词气到咆哮，同样的姿势换到 gboard ，谷歌强无敌的纠错就是可以挽救一切。
- <br/>
-<br/>完全没有纠错的远古弱智键盘就归苹果莫属了。
-</div>
-	]]></content>
-</entry><entry>
-	<title>[macOS] macOS 下的鼠须管输入法是个不错的选择</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900627#reply4" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900627</id>
-	<published>2022-12-06T14:38:19Z</published>
-	<updated>2022-12-06T18:35:12Z</updated>
-	<author>
-		<name>arare</name>
-		<uri>https://www.v2ex.com/member/arare</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>多年前用 Win 的时候对搜狗就没什么好感，换 Mac 平台后也没有用过搜狗输入法，一直用 Mac 自带的原生输入法。
-原生的拼音输入法最大问题是词库太差了，而且学习能力太差，很多词组打很多次都没记住。。。</p>
-<p>昨天换了鼠须管，目前感觉满意。
-一开始还担心配置会很复杂，结果找到一些现成的配置，复制粘贴替换原始配置就可以用。</p>
-<p>几个令我满意的细节：
-1 、Caps 切换英文 /中文；
-2 、支持系统自定义文本；
-3 、支持和原声输入法一样的[]键上词；
-4 、支持备份配置；
-5 、自带的词库还算完善；
-6 、最重要的，词组学习能力挺好的，打一两次就能记住。</p>
-<p>具体配置见这里： <a href="https://dvel.me/posts/my-rime/" rel="nofollow">https://dvel.me/posts/my-rime/</a>
-有兴趣的可以试试。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Android] 有没有大佬帮忙定位和解决下某工作 APP 无法启动的原因？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900626#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900626</id>
-	<published>2022-12-06T14:36:48Z</published>
-	<updated>2022-12-06T12:36:48Z</updated>
-	<author>
-		<name>cantonadong</name>
-		<uri>https://www.v2ex.com/member/cantonadong</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	因工作需要，用到某 APP ，但是点 APP 无法启动。卸载 magisk 就正常，通过安装隐藏 root 、隐藏应用列表、隐藏 magisk 改名，shamiko 等方式试了都不行。<br /><br />但是在 root 的模拟器里又可以用，不知道是否有大佬帮忙定位下无法启动原因，和能给个解决方案。
-	]]></content>
-</entry><entry>
-	<title>[健康] 公司体检：发现肝囊肿</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900625#reply0" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900625</id>
-	<published>2022-12-06T14:36:10Z</published>
-	<updated>2022-12-06T10:35:10Z</updated>
-	<author>
-		<name>idragonet</name>
-		<uri>https://www.v2ex.com/member/idragonet</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>严重吗？ 需要如何治疗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 如何理解汇编伪指令 equ 的使用？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900623#reply1" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900623</id>
-	<published>2022-12-06T14:35:00Z</published>
-	<updated>2022-12-06T17:18:03Z</updated>
-	<author>
-		<name>amiwrong123</name>
-		<uri>https://www.v2ex.com/member/amiwrong123</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<pre><code class="language-asm">;===============================================================================
-SECTION core_data vstart=0                  ;系统核心的数据段
-;-------------------------------------------------------------------------------
-         pgdt             dw  0             ;用于设置和修改 GDT 
-                          dd  0
-
-         ram_alloc        dd  0x00100000    ;下次分配内存时的起始地址
-
-         ;符号地址检索表
-         salt:
-         salt_1           db  '@PrintString'
-                     times 256-($-salt_1) db 0
-                          dd  put_string
-                          dw  sys_routine_seg_sel
-
-         salt_2           db  '@ReadDiskData'
-                     times 256-($-salt_2) db 0
-                          dd  read_hard_disk_0
-                          dw  sys_routine_seg_sel
-
-         salt_3           db  '@PrintDwordAsHexString'
-                     times 256-($-salt_3) db 0
-                          dd  put_hex_dword
-                          dw  sys_routine_seg_sel
-
-         salt_4           db  '@TerminateProgram'
-                     times 256-($-salt_4) db 0
-                          dd  return_point
-                          dw  core_code_seg_sel
-
-         salt_item_len   equ $-salt_4
-         salt_items      equ ($-salt)/salt_item_len
-</code></pre>
-<p>如上代码来自书籍 x86 从实模式到保护模式。equ 好像是 NASM 编译器的伪指令。</p>
-<p>这是 部分的内核代码，如上是，内核的数据段的描述。
-里面有一个符号对应表：每个符号包括三部分：</p>
-<ul>
-<li>字符串</li>
-<li>函数在段内的偏移</li>
-<li>函数所在的系统例程段的选择子</li>
-</ul>
-<p>上面这个<code>salt_items</code>应该是 4 ，<code>salt_item_len</code>应该是 256+6=262 。</p>
-<ol>
-<li>
-<p><code>salt_item_len   equ $-salt_4</code>这一句是可以理解为，计算出了<code>salt_4</code>标号后面的 db dd dw 的总和吗？但书中原话又说了<code>$-salt_4</code>是标号 salt_4 的汇编地址，如果是这样，那么这句也是不对的。</p>
-</li>
-<li>
-<p><code>salt_items      equ ($-salt)/salt_item_len</code>这一句则完全不理解，除法前面的是<code>salt</code>，即符号表的基地址，放到这里除 不太对吧？</p>
-</li>
-</ol>
-
-	]]></content>
-</entry><entry>
-	<title>[Android] 为什么安卓系统不能像苹果一样，直接显示手机电池的健康度</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900622#reply27" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900622</id>
-	<published>2022-12-06T14:34:47Z</published>
-	<updated>2022-12-07T01:16:59Z</updated>
-	<author>
-		<name>silypie</name>
-		<uri>https://www.v2ex.com/member/silypie</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	想看这东西还得自己下载第三方 app 测，结果也不一定准确
-	]]></content>
-</entry><entry>
-	<title>[OpenAI] chatgpt 注册视频教程，超级详细</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900621#reply2" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900621</id>
-	<published>2022-12-06T14:23:50Z</published>
-	<updated>2022-12-06T18:41:04Z</updated>
-	<author>
-		<name>hijoker</name>
-		<uri>https://www.v2ex.com/member/hijoker</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<div class="embedded_video_wrapper"><iframe src="https://www.youtube.com/embed/6twBWZsBA5w" class="embedded_video" allowfullscreen="" type="text/html" id="ytplayer" frameborder="0"></iframe></div>我是注册完成才发现这个视频的，很详细。
-	]]></content>
-</entry><entry>
-	<title>[Android] Android 版微信内置的 WebView 要如何开启调试模式？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900620#reply5" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900620</id>
-	<published>2022-12-06T14:23:48Z</published>
-	<updated>2022-12-06T17:41:32Z</updated>
-	<author>
-		<name>ipcjs</name>
-		<uri>https://www.v2ex.com/member/ipcjs</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>网页在微信里面打开样式不对，想要连上电脑审查下元素试试看🙄</p>
-<p>下的官网的最新版 apk ，试了网上流传的各种方法：</p>
-<ul>
-<li><a href="http://debug5.qq.com" rel="nofollow">http://debug5.qq.com</a> -&gt; 白屏</li>
-<li><a href="http://debugx5.qq.com" rel="nofollow">http://debugx5.qq.com</a> -&gt; 白屏</li>
-<li><a href="http://debugtbs.qq.com" rel="nofollow">http://debugtbs.qq.com</a> -&gt; 白屏</li>
-<li><a href="https://x5.tencent.com/tbs/guide/debug/faq.html" rel="nofollow">https://x5.tencent.com/tbs/guide/debug/faq.html</a> -&gt; 提示不支持 -&gt; 点击连接 503</li>
-<li>etc.</li>
-</ul>
-<p>这玩意现在还支持开启 WebView 的调试模式吗？</p>
-<p>（之前的帖子没法编辑也没人回答，所以重新写了一个。。。）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[OpenAI] ChatGPT 可以解各种试卷题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900618#reply8" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900618</id>
-	<published>2022-12-06T14:03:55Z</published>
-	<updated>2022-12-06T16:06:42Z</updated>
-	<author>
-		<name>xssxsxk</name>
-		<uri>https://www.v2ex.com/member/xssxsxk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<a target="_blank" href="https://i.imgur.com/Lr4ubnB.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/Lr4ubnB.png" class="embedded_image" rel="noreferrer"></a><br /> <a target="_blank" href="https://i.imgur.com/6hzI29Y.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/6hzI29Y.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <a target="_blank" href="https://i.imgur.com/4iAX750.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/4iAX750.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <a target="_blank" href="https://i.imgur.com/oPuzKk3.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/oPuzKk3.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <a target="_blank" href="https://i.imgur.com/L30u9dk.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/L30u9dk.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <a target="_blank" href="https://i.imgur.com/nZNNtPp.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/nZNNtPp.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <a target="_blank" href="https://i.imgur.com/YiyNKqT.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/YiyNKqT.png" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[程序员] Hive SQL 题求教</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900617#reply8" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900617</id>
-	<published>2022-12-06T13:55:06Z</published>
-	<updated>2022-12-06T18:39:34Z</updated>
-	<author>
-		<name>wloverine</name>
-		<uri>https://www.v2ex.com/member/wloverine</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>已知价格会随着时间发生变化，想要求得每款产品的每个价格的起始时间,示例数据如下。
-需要注意的是<strong>当价格发生变动后又恢复了原价的话，起始日期需重新计算，如 item_id 为 2 ，price 为 399 的数据，就产出了两条起始时间</strong>。只能编写 SQL 实现</p>
-<pre><code>input:
-item_id price dt
-1 100 2020-01-01
-1 100 2020-01-02
-1 120 2020-01-03
-2 399 2020-01-01
-2 399 2020-01-02
-2 399 2020-01-03
-2 499 2020-01-04
-2 399 2020-01-05
-</code></pre>
-<pre><code>output:
-item_id price start_date end_date
-1       100     2020-01-01      2020-01-02
-1       120     2020-01-03      2020-01-03
-2       399     2020-01-01      2020-01-03
-2       499     2020-01-04      2020-01-04
-2       399     2020-01-05      9999-12-31
-</code></pre>
-
-	]]></content>
-</entry><entry>
-	<title>[OpenAI] 离谱，我放了一篇雅思英语阅读理解， AI 只需要 15 秒左右就能给正确答案。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/900615#reply5" />
-	<id>tag:www.v2ex.com,2022-12-06:/t/900615</id>
-	<published>2022-12-06T13:47:45Z</published>
-	<updated>2022-12-06T16:32:13Z</updated>
-	<author>
-		<name>Red51531</name>
-		<uri>https://www.v2ex.com/member/Red51531</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	好快的理解，我感觉这 AI 真能理解文章意思啊，是不是强人工智能不远了。
 	]]></content>
 </entry>
 </feed>
