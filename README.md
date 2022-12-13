@@ -14,7 +14,7 @@ https://github.com/wdssmq/proxy_rsshub
 
 ---start---
 
-2022-12-13 09:21:12
+2022-12-13 13:34:37
 
 title: The Airbnb Tech Blog - Medium
 
@@ -24,25 +24,9 @@ title: v2ex 最热
 
 path: [https://www.v2ex.com/index.xml](xml/https:__www.v2ex.com_index.xml.xml "v2ex 最热") 「[raw](xml/https:__www.v2ex.com_index.xml.xml?raw=true "v2ex 最热")」
 
-title: nyaa [Nemuri]
+title: Hacker News Best
 
-path: [https://nyaa.si/?page=rss&u=Nemuri](xml/https:__nyaa.si_?page=rss&u=Nemuri.xml "nyaa [Nemuri]") 「[raw](xml/https:__nyaa.si_?page=rss&u=Nemuri.xml?raw=true "nyaa [Nemuri]")」
-
-title: nyaa iDOLM@STER lossless
-
-path: [https://nyaa.si/?page=rss&q=iDOLM%40STER+&c=2_1&f=0](xml/https:__nyaa.si_?page=rss&q=iDOLM%40STER_&c=2_1&f=0.xml "nyaa iDOLM@STER lossless") 「[raw](xml/https:__nyaa.si_?page=rss&q=iDOLM%40STER_&c=2_1&f=0.xml?raw=true "nyaa iDOLM@STER lossless")」
-
-title: nyaa 漫之学园资源部
-
-path: [https://sukebei.nyaa.si/?page=rss&u=acg-school](xml/https:__sukebei.nyaa.si_?page=rss&u=acg-school.xml "nyaa 漫之学园资源部") 「[raw](xml/https:__sukebei.nyaa.si_?page=rss&u=acg-school.xml?raw=true "nyaa 漫之学园资源部")」
-
-title: nyaa COMIC ExE
-
-path: [https://sukebei.nyaa.si/?page=rss&q=COMIC+ExE&c=0_0&f=0&u=milannews](xml/https:__sukebei.nyaa.si_?page=rss&q=COMIC_ExE&c=0_0&f=0&u=milannews.xml "nyaa COMIC ExE") 「[raw](xml/https:__sukebei.nyaa.si_?page=rss&q=COMIC_ExE&c=0_0&f=0&u=milannews.xml?raw=true "nyaa COMIC ExE")」
-
-title: nyaa COMIC LO
-
-path: [https://sukebei.nyaa.si/?page=rss&q=COMIC+LO&c=0_0&f=0&u=milannews](xml/https:__sukebei.nyaa.si_?page=rss&q=COMIC_LO&c=0_0&f=0&u=milannews.xml "nyaa COMIC LO") 「[raw](xml/https:__sukebei.nyaa.si_?page=rss&q=COMIC_LO&c=0_0&f=0&u=milannews.xml?raw=true "nyaa COMIC LO")」
+path: [https://rsshub.app/hackernews/best](xml/https:__rsshub.app_hackernews_best.xml "Hacker News Best") 「[raw](xml/https:__rsshub.app_hackernews_best.xml?raw=true "Hacker News Best")」
 
 
 ---end---
