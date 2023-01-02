@@ -8,897 +8,1033 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2023-01-02T00:55:00Z</updated>
+<updated>2023-01-02T16:18:45Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
-	<title>[程序员] 请问 AWS Certified Developer Associate 认证如何备考?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906005#reply0" />
-	<id>tag:www.v2ex.com,2023-01-02:/t/906005</id>
-	<published>2023-01-02T00:58:00Z</published>
-	<updated>2023-01-02T00:55:00Z</updated>
+	<title>[分享发现] 做了个网站追踪国内变异株的情况</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906136#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906136</id>
+	<published>2023-01-02T16:18:45Z</published>
+	<updated>2023-01-02T16:18:45Z</updated>
 	<author>
-		<name>Angela2022</name>
-		<uri>https://www.v2ex.com/member/Angela2022</uri>
+		<name>EridanusSora</name>
+		<uri>https://www.v2ex.com/member/EridanusSora</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	我刚看完 Udemy 上的 AWS Certified Developer Associate 认证全套视频, 自己做了个简单的 lamda serverless 项目.  感到 AWS 要熟练应用的话对我这种女码农也太难了.<br /><br />请问下一步如何备考? 哪里有题库可以刷一下?  有没有好的论坛能讨论备考问题?  <br /><br />谢谢
+	<p><a href="https://github.com/Last-Order/china-variants-report" rel="nofollow">https://github.com/Last-Order/china-variants-report</a></p>
+<p>花了一点时间做的一个小工具，数据的来源是各省 CDC/研究机构 /医院上传到 GISAID 的测序数据，目前手动更新数据。独有功能是支持分省份查询，毕竟，中国很大。</p>
+<p>数据起点是 2022 年 12 月 1 日，因为 12 月才有来自中国上传的大量数据，之前的数据太少、时间间隔大，没有统计意义。</p>
+<p>目前港澳台数据暂缺，后续会补上。</p>
+
 	]]></content>
 </entry><entry>
-	<title>[问与答] 车开始烧机油之后是不是只能定期加机油了， 1.8T 的帕萨特 11 年的。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906004#reply1" />
-	<id>tag:www.v2ex.com,2023-01-02:/t/906004</id>
-	<published>2023-01-02T00:41:28Z</published>
-	<updated>2023-01-01T21:41:28Z</updated>
+	<title>[Java] 关于 Redis 的 PTTL 命令的一个疑惑</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906135#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906135</id>
+	<published>2023-01-02T15:54:54Z</published>
+	<updated>2023-01-02T16:09:19Z</updated>
+	<author>
+		<name>Ymmmmmmmm</name>
+		<uri>https://www.v2ex.com/member/Ymmmmmmmm</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>PTTL 命令的伪代码：</p>
+<p>def PTTL(key):</p>
+<pre><code>#键不存在于数据库
+if key not in redisDb.dict
+	return -2
+    
+#尝试获取键的过期时间
+#如果键没有设置过期时间，那么 expire_time_in_ms 将为 none
+expire_time_in_ms = redisDb.expires.get(key)
+
+#键没有设置过期时间
+if expire_time_in_ms is None:
+   return -1
+   
+#获取当前时间
+now_ms = get_current_unix_timestamp_in_ms()
+
+#返回过期时间
+return expire_time_in_ms - now_ms
+</code></pre>
+<p>就这个方法而言，为什么 redis 要返回-2 和-1 来表示键不存在于数据库中和键没有设置过期时间，因为 redis 过期的键不会被立即清除掉，expire_time_in_ms-now_ms 是会存在-2 和-1 ，这样不是会造成误判嘛，-2 的话到无所谓应该反正过期了，也可以理解为该键不存在于数据库中（当然不能使用 PTTL 命令来判断一个 key 是否存在），但是-1 的话含义就差老大了</p>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] macOS 13.1 耗电量激增+自动亮度失效</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906134#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906134</id>
+	<published>2023-01-02T15:47:36Z</published>
+	<updated>2023-01-02T16:05:06Z</updated>
+	<author>
+		<name>dvwei</name>
+		<uri>https://www.v2ex.com/member/dvwei</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>前两天从 12 升级到 13.1 之后，出现了两个严重的问题：</p>
+<ol>
+<li>睡眠一段时间之后，屏幕自动亮度失效了，必须重启才恢复。</li>
+<li>耗电量简直离谱到家！！有时候睡眠一晚上掉电 20%。</li>
+</ol>
+<p>我元旦假期三天没动过电脑，今天晚上一打开，掉了 60%多！</p>
+<p>有人遇到过这两个问题吗？目前有没有解决方案呢？
+哭死了，又不想清数据降级。</p>
+<p>我的是 2021 版 14 寸的 MacBook Pro (m1 Pro)</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 分享下元旦折腾的流程~ 群晖 + Emby 打造家庭影音中心</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906133#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906133</id>
+	<published>2023-01-02T15:37:15Z</published>
+	<updated>2023-01-02T15:41:04Z</updated>
+	<author>
+		<name>doraemonext</name>
+		<uri>https://www.v2ex.com/member/doraemonext</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>元旦在家，看着吃灰的 ThinkPad P1 ，开始动了它的坏心思。虽然家里有一个群晖 DS216j ，但也是四五年前的老古董了，电影稍微大一点解码就卡，这台 ThinkPad 性能对于家庭影音来说绰绰有余，杀鸡用牛刀了。</p>
+<p>弄好之后的效果如下（手机、Pad 、电脑、电视风格及体验一致，内网和外网一致）：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_84efb131340750ed2b93a24cc7c92f3e.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_84efb131340750ed2b93a24cc7c92f3e.jpg"/></a></p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_e5dfff57aa0c862f684625e5d58a35a8.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_e5dfff57aa0c862f684625e5d58a35a8.jpg"/></a></p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f5b6fdb724beee294032cdfbcd1afe3b.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f5b6fdb724beee294032cdfbcd1afe3b.jpg"/></a></p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_5c4de875aede7a0d4d18044d978ec4e2.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_5c4de875aede7a0d4d18044d978ec4e2.jpg"/></a></p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_fa06c2b3a2121808defdeabc49af5c86.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_fa06c2b3a2121808defdeabc49af5c86.jpg"/></a></p>
+<p>然后就可以开始搞了，开搞之前，先把现状和目标捋清楚。</p>
+<p><strong>现状：</strong></p>
+<ul>
+<li>有一台白群晖 DS216j ，性能那是相当的低。里面有两块 WD 4T 红盘，没有做 RAID 。一块文件盘，一块视频盘。文件盘通过 Cloud Sync 实时同步着 Dropbox ，所以并不担心盘坏了会怎么样。视频盘没有做备份，但本身也没什么备份的必要，真的 boom 了就随缘~</li>
+<li>有一台 ThinkPad P1 Gen2 ，配置 i9-9750H,64GB,512SSD 。因为日常杂七杂八的需求，需要 Windows 系统。内存足够，VMWare 虚拟机随便开。可常年开着当 Server ，耗电几十 W ，很省电了</li>
+<li>ASUS AC86U 路由器，刷了梅林，弄了科学上网，确保在整个安装过程中不需要操心代理的事情</li>
+<li>宽带有公网 IP （没有的话，得搞 ngrok 或者 frp 之类的来做内网穿透了，我之前装宽带的时候让师傅直接改成桥接了，这步就省下了）</li>
+</ul>
+<p><strong>目标：</strong></p>
+<ul>
+<li>我们的目标是将视频盘独立出来交给 ThinkPad 来处理。但因为 ThinkPad 偶尔也需要保持移动性，常年插着硬盘不太优雅，所以仍然通过网络挂载原来群晖下的视频盘目录。如果你有更高的性能要求，此处直接将硬盘阵列插到电脑上即可</li>
+<li>
+对于视频盘上的电影、电视剧：<ul>
+<li>可以在任意的端打开进行观看，包括手机（ Android/iOS ），电脑（ Mac/Win ），iPad ，电视（小米盒子）</li>
+<li>在满足上面需求的同时，界面能好看一点，操作便捷</li>
+<li>不区分内网外网，在家里用 WiFi 和在外面用流量要求使用体验一致</li>
+<li>在家里可以原始码率观看各类视频，在外面用流量的时候能够自动转码到适当的大小，不能在外面一个电影这个月的流量就没了…… 而且转码过程需要无感快速（原来这个群晖小机器就歇菜了）</li>
+<li>能够自动搜索及装载字幕，能够自动搜索封面、剧情信息等</li>
+</ul>
+</li>
+<li>能够同样在任意端可以观看直播节目，包括国内（央视、卫视）及港澳台的各个节目，且在观看的时候不需要在端侧进行翻墙</li>
+</ul>
+<p>其实这个过程中我即折腾了群晖下的 Plex ，也折腾了 Emby ，最后感觉还是 Emby 的体验对我而言更好一些，但整体流程大差不差，客官自行选择~</p>
+<p>接下来是我们会用到的一些工具准备：</p>
+<ul>
+<li>VMWare Workstation (Win)</li>
+<li>花生壳客户端 (Win)</li>
+<li>tinyMediaManager (Win)</li>
+<li>ChineseSubFinder (Win/Docker)</li>
+<li>Emby (群晖)</li>
+</ul>
+<h2>安装黑群晖</h2>
+<p>安装好 VMWare 之后，在 Github 处下载最新的 arpl 镜像：<a href="https://github.com/fbelavenuto/arpl/releases" rel="nofollow">https://github.com/fbelavenuto/arpl/releases</a></p>
+<p>在我写这篇文章的时候，最新版是 v1.0-beta9 。下载 arpl-1.0-beta9.vmdk-flat.zip 后，解压，得到两个文件 arpl.vmdk 和 arpl-flat.vmdk 两个文件，这里我将这两个文件放入 <code>D:\Synology</code> 目录下备用。</p>
+<p>之后安装 VMWare 新建虚拟机，系统选 Linux 就行，反正后面只是黑屏使用，不需要 VMWare Tools 。注意这里需要创建一个虚拟磁盘，用于给群晖系统使用，我这里直接虚拟出来了 4T 空间（实际只有 100G 物理空间）给它，类型注意选择 SATA ，不然一会儿 DSM 的安装系统不认。</p>
+<p>创建好之后，没用的设备，如光驱、声卡都删了，然后添加一块硬盘，选择刚才解压出来的 arpl.vmdk 文件（注意 arpl-flat.vmdk 需要和 arpl.vmdk 文件放到同一个目录下）。最后分配一下 CPU 和内存，我这边最后的结果图如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2dc5a4a80bf216534a1373ff94995aa9.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2dc5a4a80bf216534a1373ff94995aa9.jpg"/></a></p>
+<p>这里需要注意一点是关于网络的选择。一开始我使用桥接网络（期望在同一个路由网段下能够互连互通），但是网络性能较低，吞吐量在 20MB/s ~ 30MB/s ，而磁盘本身并没有性能瓶颈（ SSD ），后来查阅资料后说调整到 NAT 模式下可以提升网络吞吐性能，然后我就改成了 NAT 模式。这也就意味着所有的群晖中运行的系统都需要向上穿两层才能到达公网。下文都以 NAT 模式进行安装设置（实测 SSD 下可以到达 150MB/s 的吞吐，如果是机械的话，这个上限已经没有任何瓶颈问题了）。</p>
+<p>设置好 VMWare 虚拟机之后打开，会直接蹦到无可引导的提示。这个时候需要重启虚拟机，然后按 F2 进入 BIOS 设置，调整启动顺序为新加的那个 arpl SATA 盘优先启动才行（这里等待按键时间比较短，考验手速）。</p>
+<p>之后启动等待一会儿之后便会进入到下面的界面：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_a7a9931cf2499ab931fc2c15c2dc0ded.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_a7a9931cf2499ab931fc2c15c2dc0ded.jpg"/></a></p>
+<p>上面有一个 IP 地址，可以直接在当前机器打开，如上也就是 <code>http://192.168.24.130:7681</code>，接着按下面的步骤进行操作：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_62f4aade98d4ccf104e2221e3780d5cd.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_62f4aade98d4ccf104e2221e3780d5cd.jpg"/></a></p>
+<p>选择 Choose a model ，出现下图：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_96b00d31b0a41dc3dfc3204d74f3ffed.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_96b00d31b0a41dc3dfc3204d74f3ffed.jpg"/></a></p>
+<p>选择 DS918+，会自动退回到顶层菜单，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_36e7290e3da54c758c0c255617c1bae3.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_36e7290e3da54c758c0c255617c1bae3.jpg"/></a></p>
+<p>选择 Choose a Build Number ，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_713ba4b0f6c707ea2a9ac50c70153d3b.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_713ba4b0f6c707ea2a9ac50c70153d3b.jpg"/></a></p>
+<p>选择最新的一个编号即可，我这里是 42962 ，继续回车，又回到了顶层菜单：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f0c2caa7a09c0070fea6c63191243590.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f0c2caa7a09c0070fea6c63191243590.jpg"/></a></p>
+<p>继续选择 Choose a serial number ，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_1aaaf4561123ecee368f33deff97e00f.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_1aaaf4561123ecee368f33deff97e00f.jpg"/></a></p>
+<p>选择 Generate a random serial number ，又回到了顶层菜单：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_1a602b47be3d31ea744326c70b9d5aec.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_1a602b47be3d31ea744326c70b9d5aec.jpg"/></a></p>
+<p>最后选择 Build the loader 回车即可，然后开始了编译的过程（这个时候最好有科学上网，速度较快）。等待编译完成后会继续跳回到顶层菜单：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_97de10123c09f430e763a895cb384cc5.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_97de10123c09f430e763a895cb384cc5.jpg"/></a></p>
+<p>这次选择 Boot the loader ，回车之后手工重启 VMWare 的这个虚拟机，GRUB 界面选择 Boot the DSM ，之后即可看到下面的图：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_5ab32fa2c5cc9702f0a27e9195cc77a2.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_5ab32fa2c5cc9702f0a27e9195cc77a2.jpg"/></a></p>
+<p>等待大约 1min ，就可以登录 <code>http://192.168.24.130:5000</code> 进行安装步骤了，如果此时提示你磁盘找不到之类的，回去看看是不是自己的磁盘类型没有选择 SATA 导致的。</p>
+<p>安装好之后，各种套件该安装的安装，然后可以找淘宝买一个黑群晖洗白的 MAC 和 SN （卖家会提供教程，主要是改 arpl 中的 user-config.yml 的启动命令），再注册一个国际区的 Synology 的账号，用于各种需要账户登录的地方（ QuickConnect 是不能用的，需要自己进行配置）。</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_9ac8afc5db4afc43eae448a506883e53.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_9ac8afc5db4afc43eae448a506883e53.jpg"/></a></p>
+<h2>安装 Emby</h2>
+<p>打开 DSM 的套件中心，右上角“设置”中新增，填入 <code><a href="http://packages.synocommunity.com" rel="nofollow">http://packages.synocommunity.com</a></code>，然后保存。</p>
+<p>刷新后可以搜索到 Emby Server ，进行安装。安装成功后打开，会自动跳转到 :8096 端口，开始 Emby Server 的一些设置项，设置一些用户信息，此处不赘述。</p>
+<h2>映射远端磁盘</h2>
+<p>上面提到我的这台 ThinkPad 只是准备用来安装黑群晖及全套功能，但并不准备直接插磁盘阵列。还是依赖于网络上的外部存储的，这里直接使用 FileStation 中的 “工具 -&gt; 装载远程文件夹” 来挂载另外的数据盘，在我这里就是另外一台白群晖上面的 4T 的视频盘。效果如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_337986837b4f6fd9e2f63ec345ef2b98.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_337986837b4f6fd9e2f63ec345ef2b98.jpg"/></a></p>
+<p>注意这里需要将磁盘设置一下属性，里面权限让 Emby 有权限读取及写入才行，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2fd6130eed3f7fb597dc5e5a35698134.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2fd6130eed3f7fb597dc5e5a35698134.jpg"/></a></p>
+<h2>Emby 中创建媒体库</h2>
+<p>接下来就是让 Emby 来扫描我们视频盘中的内容了，打开 IP:8096 ，右上角设置，左边选择“媒体库”，然后挨个添加，推荐电影和电视剧分开存储，且遵循 Emby 要求的目录格式（可参考 <a href="https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/" rel="nofollow">https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/</a> 和 <a href="https://support.plex.tv/articles/naming-and-organizing-your-movie-media-files/" rel="nofollow">https://support.plex.tv/articles/naming-and-organizing-your-movie-media-files/</a> ） 。我这里设置好了之后，效果如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_fd07e0055fd0860d09daabc0fac82c46.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_fd07e0055fd0860d09daabc0fac82c46.jpg"/></a></p>
+<p>其实如果你的目录下有对应的电影和电视剧，现在已经凑活能看了，但其实现在还缺很多东西：</p>
+<ul>
+<li>只能当前电脑访问。还记得一开始我们网络模式设置为 NAT 了吗？我们的实际目标可是要穿透出公网来的，现在的 Emby 还在两层网络下面呢</li>
+<li>视频扫描的内容乱七八糟。如果你的视频只是简单命名了一下，那 Emby 自动扫描的结果可能给你乱写，比如 A 的电影安到 B 的头上</li>
+<li>字幕只有视频文件自带的内容</li>
+<li>电视直播还没搞呢</li>
+<li>其他手机端、电脑端、Pad 端、电视端小米盒子，它们还需要连过来</li>
+</ul>
+<p>下面我们一步一步来。</p>
+<h2>NAT 端口映射</h2>
+<p>因为我们一开始为了性能选择了 NAT ，那么现在就需要一层层向上暴露需要的端口。先梳理下我们需要暴露哪些端口到公网：</p>
+<ul>
+<li>8096: Emby Server 地址</li>
+<li>5000: 群晖 DSM Server 地址</li>
+</ul>
+<p>首先我们先在 DSM 中的控制面板 -&gt; 网络 -&gt; 网络界面 -&gt; 局域网 1 下面固定一下当前的 IP ，因为这个 IP 是 DHCP 自动分配的，下次又换了，所以我们在这里采用手工编辑的方式固定一下，确保每次重启 VM 保持不变，这样才能做接下来的端口映射。如下，这里我固定了 192.168.24.128 ，后面以此进行示例说明：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_cd651a5dcff7ddcaf65ad6ba931c6816.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_cd651a5dcff7ddcaf65ad6ba931c6816.jpg"/></a></p>
+<p>接下来打开 Windows 上的 VMWare 提供的“虚拟网络编辑器”，在开始菜单里面搜一下就行。打开后，有下角确认下“更改设置”以管理员身份启动，之后点击 VMNet8 网卡，再点击 “NAT 设置”，进入端口映射编辑界面，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_7b72aaf28b8ad3a986d96668277e778b.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_7b72aaf28b8ad3a986d96668277e778b.jpg"/></a></p>
+<p>点击“添加”，像下面这样填写即可：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f08b76cb0c8330ba47840a2dc4ae31be.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f08b76cb0c8330ba47840a2dc4ae31be.jpg"/></a></p>
+<p>之后保存退出，我们就已经将 5000/8096 端口向上提到了 Windows 这台机器上面。但现在如果直接访问 Windows 这台机器的 IP 加对应端口，还是访问不通的，我们需要在防火墙中设置入站规则进行放行。</p>
+<p>开始菜单搜索“Windows Defender 防火墙”，进入后左侧点击“高级设置”，弹出的窗口再选择左侧的“入站规则”，右侧点击“新建规则”进行新增。</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_dd0b1b32465ecb7982dfbee85d224f27.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_dd0b1b32465ecb7982dfbee85d224f27.jpg"/></a></p>
+<p>选择“端口”，然后下一步，输入 <code>5000,8096</code>，下一步均采用默认设置，直到完成。此时再次访问 Windows 这台机器的 IP 加对应端口，已经可以成功访问。至此，我们已经将 Emby 和群晖向上提到了家庭里面路由器的这个网段下面了。</p>
+<h2>设置 DDNS 及路由器层面端口转发</h2>
+<p>如果你的路由器没有公网 IP ，那么此处你需要使用 ngrok 或 frp 配合一台公网 ECS 之类的进行内网穿透来暴露到公网上。此处不赘述，可以找相关教程解决。或者花钱买方案，直接使用花生壳的内网穿透，里面有 NAS 专属场景，但是流量只有 10Mbps 。</p>
+<p>我这边假设你的宽带已经改成了桥接模式，并已经获得了公网 IP 。下载并安装花生壳客户端，这里并不是为了使用它的内网穿透功能，而是用它的 DDNS 功能。因为宽带对应的公网 IP 是一直变化的，重启就更新一个新的，所以需要通过 DDNS 来将这个动态 IP 不停的更新到一个固定 DNS 地址上。</p>
+<p>完成花生壳的注册后，会生成一个对应的壳域名，然后当你登录花生壳本地客户端的时候，就会自动将你当前的公网 IP 更新到这个壳域名上，并保持动态更新，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2741fce6a436e1df4135b626886d9133.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_2741fce6a436e1df4135b626886d9133.jpg"/></a></p>
+<p>现在，已经可以通过上面的壳域名直接请求到路由器这个公网 IP 了。那么接下来就是在路由器层面设置 DMZ 或者端口转发来将 5000/8096 的流量转发到当前这台 Windows 机器上即可。</p>
+<p>虽然 DMZ 很方便，但会让你当前 Windows Server 直接暴露到公网上，不安全。所以还是推荐直接在路由器内部配置指定端口转发，这样会更安全一些。</p>
+<p>这台 Windows 机器的 IP 地址也手动配置一下，这样确保重启不会被 DHCP 重新分配到其他 IP 。然后在路由器配置好对应的端口转发规则，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_ef55395eda31e15ae67569a700d4f2f0.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_ef55395eda31e15ae67569a700d4f2f0.jpg"/></a></p>
+<p>上图中的 192.168.50.185 就是我这台 ThinkPad 机器的固定 IP 。</p>
+<p>现在，通过花生壳的壳域名 + 端口 5000 或者 8096 ，你就可以直接在公网访问自己的群晖 DMZ 或者 Emby 了。而且因为 DDNS ，会直接和你自己宽带的公网 IP 直连，此处播放速度完全取决于你的上行带宽，我这里浙江电信，千兆宽带可以达到上行 5MB/s 左右。看视频够够的了。</p>
+<p>注意花生壳客户端配置一下自动启动，这样机器重启后也可以自动维护 DDNS 映射关系。</p>
+<h2>电影 /电视剧元信息维护</h2>
+<p>现在回到电影、电视剧内容本身。上面提到，Emby 自己扫描实际上很容易驴唇不对马嘴，这里需要使用一个工具 tinyMediaManager 进行自动维护及信息抓取。直接在官网下载最新版本并安装，打开后添加你的视频盘到数据源（本地 or 远端都行，和 Emby 用的是同一个就行）。</p>
+<p>抓取器设置的话，默认的 themoviedb 已经很全了，国内的各种电影电视剧也都有对应的中文描述。如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_826c4129c4fc2b2d70d88746478dac51.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_826c4129c4fc2b2d70d88746478dac51.jpg"/></a></p>
+<p>对于信息错误的视频，右键选择“搜索并抓取所选电影-自动匹配”就可以了，会自动进行更正并回写到对应的目录下。此时只要等 Emby 那边自动刷新就可以了，或者手动去 Emby 设置中媒体库下刷新一下即可。</p>
+<p>对于电视剧之类的，如果名字没有包含 Exx 之类的数字，没有被识别的话，可以手工加上之后，再让 tinyMediaManager 扫描并补全信息。</p>
+<p>到这里，所有 Emby 媒体库中添加的电影的元信息和剧情剧照之类的就都是正确的了。</p>
+<h2>中文字幕自动下载</h2>
+<p>这里推荐一个工具 ChineseSubFinder (<a href="https://github.com/ChineseSubFinder/ChineseSubFinder" rel="nofollow">Github</a>)，可以直接在群晖中运行，也可以在本地运行。我这里示例直接在本地运行了，毕竟大部分还是一次性的工作。</p>
+<p>下载 Releases 下的 win exe ，然后本地运行，之后就可以打开 <a href="http://localhost:19035" rel="nofollow">http://localhost:19035</a> 了。如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f36b85344a1405d51254071bca70c3aa.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_f36b85344a1405d51254071bca70c3aa.jpg"/></a></p>
+<p>进入配置中心，设置好电影和电视剧目录，然后配置好 Emby Server （ API Token 去 Emby Server 的管理后台下的 API 密钥中生成）。</p>
+<p>在 ChineseSubFinder 的配置中心的“实验室”下，勾选“共享字幕”，如下，这样可以自动去下载字幕到目录下，而不需要我们手工搜索再上传了：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_21ed831dc261b6219538b1a332285f57.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_21ed831dc261b6219538b1a332285f57.jpg"/></a></p>
+<p>之后去 “总览” 下面把进程启动，然后去“库”里面扫描并下载字幕就可以了，如下（点击下载选中）：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_58d8b9a673af695e43bd8fe021426f1a.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_58d8b9a673af695e43bd8fe021426f1a.jpg"/></a></p>
+<p>之后就可以去“下载队列”里面看字幕下载进度了，如果下载成功了，那么 Emby 那边看视频的时候，就已经可以直接选择对应的新的字幕了。</p>
+<h2>VMWare 虚拟机自动启动</h2>
+<p>毕竟笔记本没有服务器的稳定性，如果中途死机重启，或者安装系统更新重启了什么的，需要能够自动打开对应的 VM ，确保服务可用。</p>
+<p>首先在计算机 -&gt; 属性 -&gt; 高级系统设置 -&gt; 环境变量 -&gt; 系统环境变量 中，新增 VMWare 的安装路径，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_cbea34f0a6a9aa04a7bda758c3568b60.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_cbea34f0a6a9aa04a7bda758c3568b60.jpg"/></a></p>
+<p>然后随便在某个目录下保存一个 start.bat 脚本，内容如下：</p>
+<pre><code>vmrun -T ws start "D:\Synology\Synology.vmx" nogui
+</code></pre>
+<p>其中 vmx 文件是你的实际虚拟机文件。之后 Win+R ，输入 gpedit.msc 进入组策略编辑器，找到 用户配置 -&gt; Windows 设置 -&gt; 脚本(启动 /关机) -&gt; 启动，然后添加一个脚本，把刚才的路径写上来，如下：</p>
+<p><a href="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_bca548e9361de48daaea287eef18c564.jpg" rel="nofollow"><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://doraemonext.com/wp-content/uploads/2023/01/wp_editor_md_bca548e9361de48daaea287eef18c564.jpg"/></a></p>
+<p>可以重启一下电脑看看刚才的虚拟机有没有自动启动成功。</p>
+<h2>电视直播</h2>
+<p>Emby 中，可以使用 M3U 文件来导入直播。我自己 Github 找了很多文件，但苦于维护不佳，最后还是万能的淘宝，买了别人维护好的国内频道，一下子爽多了... 这里大家可以自行淘宝</p>
+<p>对于港澳台，可以使用 Github 上面的 m3u 文件，这块质量还都是不错的~ 我用的这个：<a href="https://github.com/imDazui/Tvlist-awesome-m3u-m3u8" rel="nofollow">https://github.com/imDazui/Tvlist-awesome-m3u-m3u8</a></p>
+<p>因为家里已经有科学上网环境了，所以在外面直接点开 Emby 客户端看直播，客户端本身就不再另外需要翻墙了，效果目前感觉还是很好的。</p>
+<h2>客户端</h2>
+<p>Android/iPhone/iPad/Mac/Win 都不用说了，直接下载 Emby 对应的客户端，然后不要用 Easy Connect ，直接跳过，然后填上自己上面的花生壳域名，直接登录即可。</p>
+<p>家里的电视是小米盒子，然后使用了一个 Emby 魔改后的版本： <a href="https://embywiki.feverss.cloud/use-on-various-devices/use-on-android-tv/android-tv-shang-shi-yong-guan-fang-ke-hu-duan" rel="nofollow">https://embywiki.feverss.cloud/use-on-various-devices/use-on-android-tv/android-tv-shang-shi-yong-guan-fang-ke-hu-duan</a> ，里面的破解版 C ，效果还不错，推荐给大家。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[NGINX] vue3 vite3 gzip 提示 Failed to load module script</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906132#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906132</id>
+	<published>2023-01-02T15:29:32Z</published>
+	<updated>2023-01-02T15:26:32Z</updated>
+	<author>
+		<name>jahnsli</name>
+		<uri>https://www.v2ex.com/member/jahnsli</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of “text/html”. Strict MIME type checking is enforced for module scripts per HTML spec</p>
+<p>这是 nginx 配置</p>
+<pre><code>#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    server_names_hash_bucket_size 3526;
+    server_names_hash_max_size 4096;
+    log_format combined_realip '$remote_addr $http_x_forwarded_for [$time_local]'
+    '$host "$request_uri" $status'
+    '"$http_referer" "$http_user_agent"';
+    sendfile on;
+    tcp_nopush on;
+    keepalive_timeout 300;
+    client_header_timeout 3m;
+    client_body_timeout 3m;
+    send_timeout 3m;
+    connection_pool_size 256;
+    client_header_buffer_size 16k;
+    large_client_header_buffers 8 4k;
+    request_pool_size 4k;
+    output_buffers 4 32k;
+    postpone_output 1460;
+    client_max_body_size 100m;
+    client_body_buffer_size 256k;
+    fastcgi_intercept_errors on;
+    tcp_nodelay on;
+    gzip on; 
+    gzip_buffers 4 16k;
+    gzip_types text/plain application/javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+    gzip_vary on;
+
+    upstream serveraddress{
+        server *****:8100;
+    }
+
+    server { 
+        listen       8080;
+        root   /usr/local/nginx/html/dist;
+        index index.html;
+        location / {       
+                try_files $uri $uri/ @router;
+             index index.html;
+              proxy_set_header X-Real-IP $remote_addr;
+             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }  
+
+        location @router {
+            rewrite ^.*$ /index.html last;
+        }
+
+        location ~^/apis/{
+                rewrite ^/apis/(.*)$ /$1 break;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_pass http://serveraddress; 
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        }  
+    }
+}
+
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[职场话题] 想了解一下后端的 recruiter 如何看待测开背景候选人？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906131#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906131</id>
+	<published>2023-01-02T15:26:00Z</published>
+	<updated>2023-01-02T15:34:28Z</updated>
+	<author>
+		<name>hugo54</name>
+		<uri>https://www.v2ex.com/member/hugo54</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>楼主目前 2.5 年测试开发经验，业务测试很熟练，代码也写的不少，比较想转后端开发。
+但投递过几家头部互联网的后端岗位，也尝试投递过几家小外企，无一例外都被简历拒了。</p>
+<p>我可以理解成这样么？</p>
+<ol>
+<li>现在市场形式不好，大家都想要背景、细分方向高度匹配的候选人</li>
+<li>社招本来就对想转方向的候选人不太 Open</li>
+</ol>
+
+	]]></content>
+</entry><entry>
+	<title>[macOS] 搞个剪切板历史软件咋样？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906130#reply5" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906130</id>
+	<published>2023-01-02T15:22:24Z</published>
+	<updated>2023-01-02T16:08:39Z</updated>
+	<author>
+		<name>Jony4Fun</name>
+		<uri>https://www.v2ex.com/member/Jony4Fun</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>原因：Paste 好看但收费，Maccy 收费但之前使用稳定崩溃。正好以此当作练手项目，想尝试一下 MacOS 开发。
+初步的想法是</p>
+<ul>
+<li>要么用 Rust+Tauri ，</li>
+<li>要么是 Swift 开发</li>
+</ul>
+<p>各位有何建议呀。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 能把 ts 文件中的一小段在不重编码的情况下转成 mp4 吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906128#reply6" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906128</id>
+	<published>2023-01-02T15:10:47Z</published>
+	<updated>2023-01-02T15:49:39Z</updated>
+	<author>
+		<name>edis0n0</name>
+		<uri>https://www.v2ex.com/member/edis0n0</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	tb 找的日本电视台演唱会代录录了全程 91 个 GB ，我的硬盘装不下了，只想要几个节目，重编码必然会有画质损失，有没有把 ts 文件中的一小段在不重编码的情况下转成 mp4 的方法？
+	]]></content>
+</entry><entry>
+	<title>[奇思妙想] 关于碎片化时间的一点思考</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906127#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906127</id>
+	<published>2023-01-02T14:56:01Z</published>
+	<updated>2023-01-02T14:53:01Z</updated>
+	<author>
+		<name>t202201</name>
+		<uri>https://www.v2ex.com/member/t202201</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>平时无聊经常刷的平台就是 b 站，在上面也关注了很多 up 主，科技、历史、科普类的都有。但最近看着看着就感觉没有什么意思，很多都是无用的知识，就只是填补一下自己无所事事不想干活时的空虚感。</p>
+<p>想知道大家有这种感觉不？如果利用这时候的闲暇时间，用来系统性地学习一下知识会不会更好？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[iPhone] iPhone 12 Pro Max AC+这个月 23 号到期，想去把电池换了</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906126#reply3" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906126</id>
+	<published>2023-01-02T14:47:47Z</published>
+	<updated>2023-01-02T15:49:02Z</updated>
+	<author>
+		<name>nbsn</name>
+		<uri>https://www.v2ex.com/member/nbsn</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	记得当时买 AC+多花了 1700 多，眼看就要到期了，电池只有 84%，想把电池换掉再战两年。<br />目前电池早上充满了，用到下午 1-2 点就 20%以下，而且掉电特别块。<br /><br />给苹果打过支持电话，技术人员远程登上来做了一下远程诊断，说我的电池使用一切正常。<br /><br />如果直接到天才吧要求更换电池，很大程度上会被拒绝把，即使你的 AC+还在有效期。<br /><br />国内的 AC+被玩坏了，即使天才吧答应给你换，也不是当场直接换新机，而是拿走手机返厂维修（被拿走了用什么？），显然是不行了。<br /><br />各位 V 友，有在天才吧直接要求更换电池，且在店成功更换了经历吗？
+	]]></content>
+</entry><entry>
+	<title>[Vue.js] Vue 如何实现根据当前所在页面不同决定点击后的不同行为？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906125#reply6" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906125</id>
+	<published>2023-01-02T14:45:12Z</published>
+	<updated>2023-01-02T15:27:18Z</updated>
+	<author>
+		<name>Nostalgia</name>
+		<uri>https://www.v2ex.com/member/Nostalgia</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	Vue 如何实现根据当前所在页面不同决定点击后的不同行为？<br /><br />现在有两个不同的页面 A 、B ，复用了同一个 component C （ eg. 侧边栏，或顶部导航栏，是全局的）<br />A 页面是主页面，希望点击 C 的链接后，局部刷新；<br />B 页面是个不重要的帮助 /说明页面，希望点击 C 的链接后，跳转到 A ，全局刷新。<br /><br />野生前端请教下这个该怎么实现？谢谢大家。
+	]]></content>
+</entry><entry>
+	<title>[互联网] 如果我在手机上设置的 DNS 和路由器上的不一样，哪个优先级高一些</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906123#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906123</id>
+	<published>2023-01-02T14:14:50Z</published>
+	<updated>2023-01-02T15:29:56Z</updated>
+	<author>
+		<name>eyeshuaji</name>
+		<uri>https://www.v2ex.com/member/eyeshuaji</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[Android] 使用 adb 访问安卓的剪贴板除了利用第三方 app 做桥梁没有其他直接方法了么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906122#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906122</id>
+	<published>2023-01-02T14:11:06Z</published>
+	<updated>2023-01-02T14:14:34Z</updated>
+	<author>
+		<name>zhwguest</name>
+		<uri>https://www.v2ex.com/member/zhwguest</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>好像从 android 11 开始，用什么 service call 的方法也被堵住了，为什么 adb 这么具有权限的东西，都无法访问一个剪贴板了呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[微软] 收微软 @live.com 邮箱， 1 字母， 2 字母-5 字母全 A 邮箱，数字不要。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906121#reply6" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906121</id>
+	<published>2023-01-02T14:09:03Z</published>
+	<updated>2023-01-02T14:44:47Z</updated>
+	<author>
+		<name>zhoujinjianx</name>
+		<uri>https://www.v2ex.com/member/zhoujinjianx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>硬性要求：Apple ，Google 、Facebook ，Twitter 未绑定（或可解绑），国内大部分网站可绑定。
+字母要以下字母：w 、e 、t 、u 、i 、o 、a 、s 、f 、h 、k 、z 、x 、c 、v ，n ，m 。
+虽然希望有点渺茫。
+欢迎老板联系：备注账号和价钱。
+wei/ 信：zhoujinjianxx 。备注 V2EX 。
+欢迎各位老板联系 Q：2025913394 。备注 V2EX 。</p>
+<p>补充内容 (2022-12-19 16:39):
+<a href="http://outlook.com/hotmail.com/gmail.com" rel="nofollow">outlook.com/hotmail.com/gmail.com</a> 后缀也可</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请问有类似 qt designer 的前端工具吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906119#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906119</id>
+	<published>2023-01-02T13:52:27Z</published>
+	<updated>2023-01-02T14:12:12Z</updated>
+	<author>
+		<name>quzard</name>
+		<uri>https://www.v2ex.com/member/quzard</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>想把之前做好的 pyqt 重构成 web ，不知道前端有类似 qt designer 画页面的工具吗</p>
+
+	]]></content>
+</entry><entry>
+	<title>[微软] [微软输入法]怎么样才能把这个小白条搞掉呀!看着好难受.</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906118#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906118</id>
+	<published>2023-01-02T13:47:10Z</published>
+	<updated>2023-01-02T13:59:49Z</updated>
+	<author>
+		<name>lixuanyy</name>
+		<uri>https://www.v2ex.com/member/lixuanyy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p><img alt="imgur" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/8OJhVx6.png"/></p>
+
+	]]></content>
+</entry><entry>
+	<title>[Apple] macbook pro M1 对于网安和搞渗透的师傅们，现在软件环境各方面的适配度如何啦？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906117#reply10" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906117</id>
+	<published>2023-01-02T13:35:05Z</published>
+	<updated>2023-01-02T15:40:28Z</updated>
+	<author>
+		<name>EdisonChan</name>
+		<uri>https://www.v2ex.com/member/EdisonChan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>目前手里还有台 windows 的笔记本，对于虚机装不了 windows server 的办法打算远程到 windows 这台上用，像其他的渗透经常用到的工具目前用的如何呢？很多小工具都是 exe 的，如果在 pd 装个 arm 的 win11 会不会存在运行失败的情况，希望师傅们能解答一下，谢谢~</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] AOC Q2790 几月前的某一天，用着这显示器好好的突然闪烁，慢慢发展成白花屏，然后慢慢变黑，今天拿出来点亮出奇的又好了。。。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906116#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906116</id>
+	<published>2023-01-02T13:23:19Z</published>
+	<updated>2023-01-02T14:23:20Z</updated>
+	<author>
+		<name>ijrou</name>
+		<uri>https://www.v2ex.com/member/ijrou</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	AOC Q2790 显示器<br /><br />几月前的某一天，用着这显示器好好的突然闪烁，慢慢发展成白花屏，然后继续变黑，最后点亮都点不亮了（前后差不多 2 分钟不到），以为屏幕彻底烧坏了，用着另一个副显示器，快过年了想拿出来拍视频给淘宝卖家想寄修，今天点亮突然又好了，，，，<br /><br />当时，尝试了很多方式、另一台显示器是正常显示的，也隔了好几天试了、线也换了、电源线也换了，都不行。。。操作系统也换了，，，<br /><br />所以，到底是什么原因导致显示器崩坏的呢？百思不得其解，，，
+	]]></content>
+</entry><entry>
+	<title>[职场话题] 精神内耗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906115#reply5" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906115</id>
+	<published>2023-01-02T13:22:04Z</published>
+	<updated>2023-01-02T14:51:50Z</updated>
+	<author>
+		<name>sadfasdfa</name>
+		<uri>https://www.v2ex.com/member/sadfasdfa</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>以前经常看到这个词，没怎么重视过，直到我昨天看到<a href="https://www.zhihu.com/question/571890398" rel="nofollow">这个</a>，才明白，原来我也有点「精神内耗」。B 站刚上映了一部电影《还是觉得你最好》，里面有一句对白“幸福最大的障碍，就是对未来，有太大的期待”，感觉确实是自己想的太多了，也太闲了。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 大佬们进来帮帮忙！如何从 0-1 实现一个 BI 系统</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906114#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906114</id>
+	<published>2023-01-02T13:18:13Z</published>
+	<updated>2023-01-02T13:41:30Z</updated>
+	<author>
+		<name>dtgxx</name>
+		<uri>https://www.v2ex.com/member/dtgxx</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	今年团队打算实现一个 BI 大数据分析平台，团队人不多，都 1-2 年经验，主要做 hadoop spark flink 这种的大数据开发工作，由于项目太多，而且项目都比较类似，接入数据源、处理分析、输出应用。<br />所以就想做一个通用化的平台，业务场景也不复杂，老板给时间让我们自研，所以不考虑使用现成的 BI 产品。<br /><br />但是我们对这个都没啥经验，无从下手，前些天看了网易有数，能实现有个简易版的网易有数这种就百分之百可以满足需求了，对于技术这块，有开源的产品可以借鉴吗？或者我们应该储备哪些知识点？都有哪些环节，如何开展呢？<br /><br />因为要讲图形化拖拽转化为代码逻辑，这块我就不知道是如何实现了，希望大佬们多给支支招！
+	]]></content>
+</entry><entry>
+	<title>[JetBrains] IntelliJ IDEA 8 折优惠券(免费送)</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906113#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906113</id>
+	<published>2023-01-02T13:12:20Z</published>
+	<updated>2023-01-02T13:12:20Z</updated>
+	<author>
+		<name>wzcloud</name>
+		<uri>https://www.v2ex.com/member/wzcloud</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>RT ， 有需要的么？官方送的优惠券今年 1 月 6 号过期（没几天了），需要的留下邮箱，我发给你。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Android] 吭哧吭哧花了两个月，我写了一个兼容 Joplin 同步格式的笔记应用 - Ruslin</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906112#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906112</id>
+	<published>2023-01-02T13:09:39Z</published>
+	<updated>2023-01-02T13:18:11Z</updated>
+	<author>
+		<name>DianQK</name>
+		<uri>https://www.v2ex.com/member/DianQK</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<h2>背景</h2>
+<p>主要是我发现 Chromium 系应用在的 Wayland 环境下，中文输入法不能用，不论是 fcitx5 还是 ibus 。（我从 KDE 切换到 Gnome 了）。
+反正 Joplin 开源？要不我写个 Linux 的原生版本好了。</p>
+<blockquote>
+<p>我简单调研了 Tauri ，目前感觉和 Electron 差不多（反正当时的输入法可用性也不高），应用大小我倒不怎么在意（ Linux 上会共享 Electron 动态库）。</p>
+</blockquote>
+<h2>先开源的 Android 版本</h2>
+<p>事实上 Linux 版本基于 GTK4 + Relm4 开发，已经具备最基本（ x100 ）的功能的了。此时我尝试了一下能否复用代码到其他客户端，所以我尝试学习了一下 Android 开发。</p>
+<p>到目前为止，手机上我已经基本不使用 Joplin 客户端了。</p>
+<blockquote>
+<p>虽然我自己在和 Joplin 其他客户端一起用，一起同步笔记，但目前这个版本我还是不建议这么用。</p>
+</blockquote>
+<p>源码地址： <a href="https://github.com/DianQK/ruslin-android" rel="nofollow">https://github.com/DianQK/ruslin-android</a> 。</p>
+<h2>Android 版本简介</h2>
+<p>🚧 目前处于 Pre-alpha 阶段，不建议在生产环境使用，请注意做好备份。 🚧</p>
+<p>已支持的功能：</p>
+<ul>
+<li>✅ 创建、修改和删除笔记</li>
+<li>✅ 创建文件夹</li>
+<li>✅ 简单的 Markdown 编辑器</li>
+<li>✅ 使用 jieba-rs 完成的全文搜索（支持中文和英文）</li>
+<li>✅ 使用自部署的 Joplin 服务器同步笔记</li>
+<li>✅ 手动和自动同步</li>
+<li>🚧 可能兼容 Joplin 的同步格式（不支持端到端加密）</li>
+</ul>
+<h2>接下来？</h2>
+<p>我也不知道什么时候达到一个生产环境基本可用的状态，可能至少要等上一年吧。
+Linux 版本可能会在 3 月左右完成和 Android 的 v0.0.1-pre-alpha.1 功能接近吧。（希望如此）</p>
+<p>开发这么费劲，主要是：</p>
+<ul>
+<li>Android &amp; Rust &amp; SQL &amp; GTK4 这些我也只是最近才开始学习，写的本身就费劲</li>
+<li>一周基本上也就周末可以写写代码</li>
+<li>这俩月写代码这段时间额外占据了我看书的时间，所以接下来开发的时间会更少了（我得多拿出点时间看书了）</li>
+</ul>
+<p>最后，可以复用的数据层代码在 <a href="https://gitlab.com/DianQK/ruslin-data" rel="nofollow">https://gitlab.com/DianQK/ruslin-data</a> 。</p>
+<blockquote>
+<p>欢迎基于 ruslin-data 开发其他平台的应用。Windows 上我目前做了很基础的调研，希望 WinUI 3 的学习能顺利。</p>
+</blockquote>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 如何订到国内航线的最优惠的靠谱机票？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906109#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906109</id>
+	<published>2023-01-02T12:27:41Z</published>
+	<updated>2023-01-01T00:42:22Z</updated>
 	<author>
 		<name>foreverstandbyu</name>
 		<uri>https://www.v2ex.com/member/foreverstandbyu</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	哪里可以看到一些专业的汽车维护知识呀。<br />感谢。
+	目前是在携程上面看之后去航司的 app 订票~~~<br /><br />这个操作安全一些~~ 还有哪些渠道可以订到优惠的呀？
 	]]></content>
 </entry><entry>
-	<title>[问与答] 百度网盘扫码登录问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906003#reply1" />
-	<id>tag:www.v2ex.com,2023-01-02:/t/906003</id>
-	<published>2023-01-02T00:20:24Z</published>
-	<updated>2023-01-02T00:18:24Z</updated>
+	<title>[问与答] 感觉翻车了, 京东买的盈通 3060 大地之神 12G 版本</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906108#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906108</id>
+	<published>2023-01-02T12:25:18Z</published>
+	<updated>2022-12-31T12:25:18Z</updated>
 	<author>
-		<name>Sabrina9</name>
-		<uri>https://www.v2ex.com/member/Sabrina9</uri>
+		<name>anyele</name>
+		<uri>https://www.v2ex.com/member/anyele</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	很久前就发现一个问题，每次使用手机扫码登录桌面版本百度网盘或者 Ipad 版本百度网盘时候，手机拍照画面 90%概率总会卡住几秒钟才跳转登录确认界面，很疑惑也觉得很烦人，我觉得这应该不属于 bug 吧，有这样的 bug 应该早修复了，有遇到类似情况的 V 友吗？
+	12 月 6 号买了京东自营的盈通 3060 大地之神 12G 版本, 玩了一个月发现 1-3 天一次黑屏死机, 主要是玩 LOL , 偶尔玩玩单机游戏, 每次黑屏死机都是在 LOL 的时候, 屏幕一黑还能听见声音, 等个几秒就重启了,或者是画面卡住完全动不了, 还有声音, 就一直动不了了.<br />最开始我以为是电源没插好, 电源是 600W 的, 重新查了 8PIN 线, 驱动也重装成官方上匹配的版本 512.59, LOL 和 WEGAME 也重装了, 今天依然遇到这个问题.<br /><br />最让我无法理解的是, 甜甜圈烤机 40 分钟没问题(隔一天烤一次, 烤了三次都没问题), 3DMARK 也跑了 2 次, 每次 40 分钟以上没问题, 甚至用 AIDA64 测试了稳定性也没问题, 这让我都想重装系统了, 系统是 WIN10 22H2 专业版<br />由于单机游戏玩的时间短而且没遇到过黑屏死机重启, 让我怀疑是不是单纯的 LOL 的问题, 准备售后了
 	]]></content>
 </entry><entry>
-	<title>[问与答] 大家在国外是如何在电视上收看国内的电视节目的？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906002#reply4" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/906002</id>
-	<published>2023-01-01T23:31:43Z</published>
-	<updated>2023-01-02T01:05:34Z</updated>
+	<title>[程序员] 个人博客主题模板</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906107#reply16" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906107</id>
+	<published>2023-01-02T12:14:06Z</published>
+	<updated>2023-01-02T16:10:46Z</updated>
 	<author>
-		<name>ZC3746</name>
-		<uri>https://www.v2ex.com/member/ZC3746</uri>
+		<name>cpf</name>
+		<uri>https://www.v2ex.com/member/cpf</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>爸妈要来半年，他们平时的娱乐活动就是看会电视，但在国外如何在电视上收看国内的电视节目呢？</p>
-<p>求指点，谢谢！</p>
+	想开始搞个人博客了，奈何自己没有 UI 的设计灵感，在 wordpress 、hexo 、halo 上看到了很多好看的模板，但是不知道怎么将里面的特效和代码拿出来（类似于 HTML+CSS ）之类的，然后想用 vue 或者 react 改写。<br /><br />或者有合适的模板可以推荐一下吗？<br /><br />好看的个人博客也可以发出来分享分享
+	]]></content>
+</entry><entry>
+	<title>[VPS] 收一个带原始邮箱的年付 119 刀搬瓦工</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906106#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906106</id>
+	<published>2023-01-02T12:09:12Z</published>
+	<updated>2023-01-02T12:08:12Z</updated>
+	<author>
+		<name>jackom</name>
+		<uri>https://www.v2ex.com/member/jackom</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>收一个带原始邮箱的年付 119 刀搬瓦工，1T 流量的，有意出的话麻烦 pm ，谢谢大家。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 流程图/手写/协作 三合一的白板就没有简单点的吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906001#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/906001</id>
-	<published>2023-01-01T23:20:04Z</published>
-	<updated>2023-01-02T00:53:18Z</updated>
+	<title>[问与答] WebHook 消息过滤</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906105#reply5" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906105</id>
+	<published>2023-01-02T12:07:08Z</published>
+	<updated>2023-01-02T14:52:46Z</updated>
 	<author>
-		<name>chaosrb79</name>
-		<uri>https://www.v2ex.com/member/chaosrb79</uri>
+		<name>Songxwn</name>
+		<uri>https://www.v2ex.com/member/Songxwn</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	试用了十几款磕磕碰碰回到语雀画板，本以为高度竞争的 tobsaas 早已有集大成，结果超越 cluckup 的白板都很少，但 clickup 本身太重了，怀念 AIO clickup 的状态，真他妈方便。
-	]]></content>
-</entry><entry>
-	<title>[推广] [创作热榜] 只创作，不上班 - 远程创作社区</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906000#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/906000</id>
-	<published>2023-01-01T22:40:33Z</published>
-	<updated>2023-01-01T22:40:33Z</updated>
-	<author>
-		<name>licheng7475</name>
-		<uri>https://www.v2ex.com/member/licheng7475</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h2>关于 牛喔创作 社区</h2>
-<p>只创作，不上班
-聚合全网热榜 文字 /视频 内容链接，可摸鱼，也是一个只讨论文字 /视频等相关工作话题的创作社区，复制了一套类似 V2EX 社区激励模型。</p>
-<h2>链接</h2>
-<p>牛喔 创作社区: <a href="https://www.niuoh.com/" rel="nofollow">https://www.niuoh.com/</a></p>
+	<p>目前大部分系统都用 WebHook 进行告警 /消息通知。
+请问大家有什么软件支持 WebHook 消息路由呢，接收 WebHook 消息，然后根据多个关键词进行静默或转发到指定的 WebHook 目标</p>
 
 	]]></content>
 </entry><entry>
-	<title>[Apple] macOS Monterey 12.x 上还有支持 App 管理的 iTunes 版本吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905999#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905999</id>
-	<published>2023-01-01T21:27:03Z</published>
-	<updated>2023-01-01T21:27:03Z</updated>
+	<title>[Apple] 共享图库无法显示 60 帧 HDR 等效果？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906103#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906103</id>
+	<published>2023-01-02T12:01:31Z</published>
+	<updated>2023-01-02T12:06:59Z</updated>
 	<author>
-		<name>hackpro</name>
-		<uri>https://www.v2ex.com/member/hackpro</uri>
+		<name>carykel</name>
+		<uri>https://www.v2ex.com/member/carykel</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	找了下 macOS 上最后一个支持 App 管理的版本似乎是 12.6.2<br /><a target="_blank" href="https://support.apple.com/kb/DL1934?locale=en_US" rel="nofollow noopener">https://support.apple.com/kb/DL1934?locale=en_US</a><br /><br />但是安装的时候会提示和现在的系统不兼容<br />大佬们你们是如何在更新版本 macOS 上用 iTunes 进行 App 管理的呀<br /><br />如果可以的话最新支持 App 管理的 iTunes 版本是多少啊<br />如果不可以那你们又是如果在 macOS 上实现旧版 App 抓包下载的 Windows 上好像还是可以的
+	跟家人开了共享图库，分享孩子的照片视频很方便。但发现拍的 60 帧或有 hdr 效果的视频在共享对象的手机上却看着却是 30 帧也没有 hdr （虽然信息上显示了是 60 帧），另外电影效果的视频倒是正常。这是普遍现象么？显示不了高帧率？
 	]]></content>
 </entry><entry>
-	<title>[分享发现] 看完这两篇文章后你可能会确信 Go 是个坑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905998#reply5" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905998</id>
-	<published>2023-01-01T20:40:50Z</published>
-	<updated>2023-01-02T00:51:53Z</updated>
+	<title>[VPS] 出 lite.moe 圣何塞 三网回程 GIA</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906102#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906102</id>
+	<published>2023-01-02T12:00:46Z</published>
+	<updated>2023-01-02T11:58:46Z</updated>
 	<author>
-		<name>gowl</name>
-		<uri>https://www.v2ex.com/member/gowl</uri>
+		<name>yczheng</name>
+		<uri>https://www.v2ex.com/member/yczheng</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	Lies we tell ourselves to keep using Golang<br /><a target="_blank" href="https://fasterthanli.me/articles/lies-we-tell-ourselves-to-keep-using-golang" rel="nofollow noopener">https://fasterthanli.me/articles/lies-we-tell-ourselves-to-keep-using-golang</a><br /><br />I want off Mr. Golang's Wild Ride<br /><a target="_blank" href="https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride" rel="nofollow noopener">https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride</a>
-	]]></content>
-</entry><entry>
-	<title>[上海] 上海张江这边有什么组队出去唱 k 的群或者小组吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905997#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905997</id>
-	<published>2023-01-01T18:18:26Z</published>
-	<updated>2022-12-30T14:18:26Z</updated>
-	<author>
-		<name>bandian</name>
-		<uri>https://www.v2ex.com/member/bandian</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>新晋上海打工人，平时喜欢去 KTV 发泄一下，但是一个人去的话比较贵，而且点歌经常匆匆忙忙。 </p>
-<p>所以想请教一下是否存在这种可以平时几个人组队去唱 k 的群</p>
+	<p>350 出 Moecloud(lite.moe) 双十一圣何塞 1C512M ，500G ，1000Mbps 三网回程 GIA ，可<a href="https://lite.moe/index.php/store/sjc-cn2-gia-super/special-plan-mini" rel="nofollow">链接</a> 查看详情。2023.11.11 到期，续费 299/y</p>
+<p>联系 <a href="https://t.me/zegle" rel="nofollow">TG</a>，或者留言邮箱。谢谢！</p>
 
 	]]></content>
 </entry><entry>
-	<title>[MacBook Pro] 2021MacBookPro 14inch 设置里 Apple ID 卡住问题</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905996#reply3" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905996</id>
-	<published>2023-01-01T18:11:10Z</published>
-	<updated>2023-01-02T00:41:24Z</updated>
+	<title>[全球工单系统] 京东自营店铺发错货</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906100#reply7" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906100</id>
+	<published>2023-01-02T11:58:30Z</published>
+	<updated>2023-01-02T15:07:56Z</updated>
 	<author>
-		<name>yanque</name>
-		<uri>https://www.v2ex.com/member/yanque</uri>
+		<name>AmoxiDu</name>
+		<uri>https://www.v2ex.com/member/AmoxiDu</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>系统是最新的 13.1, 以前不记得是否有这个问题.</p>
-<p>现在是每次打开系统设置后, 点击自己 Apple Id 就会卡住, 看内存占用越来越大不知道是否内存泄漏;
-控制台查看信息有异常: </p>
-<p>AppleIDSettings	"Daemon connection invalidated!"</p>
-<p>查找了一下没查到解决方案.</p>
+	吐槽一下，京东服务越来越差了，居然发生货不对版的情况，在 A 店铺下单，收到了 B 店铺另一品类商品。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 请教在 c++回调函数中如何初始化数据库连接？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906098#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906098</id>
+	<published>2023-01-02T11:50:37Z</published>
+	<updated>2022-12-31T11:50:37Z</updated>
+	<author>
+		<name>hunk</name>
+		<uri>https://www.v2ex.com/member/hunk</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	想在回调函数中写入 TDengine 数据，但不知道数据库连接在主程序中初始化作为参数传入加成调函数好，还是回调函数中初始化？<br />原来程序 demo 中是写入文本文件，不存在此问题。刚刚写 c++，有些思路上还没吃透，谢谢。
+	]]></content>
+</entry><entry>
+	<title>[macOS] 这个合并两个桌面是怎么做到的，有知道的朋友吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906096#reply9" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906096</id>
+	<published>2023-01-02T11:28:07Z</published>
+	<updated>2023-01-02T15:43:53Z</updated>
+	<author>
+		<name>as9567585</name>
+		<uri>https://www.v2ex.com/member/as9567585</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<a target="_blank" href="https://i.imgur.com/oZ7diYk.gif" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/oZ7diYk.gif" class="embedded_image" rel="noreferrer"></a><br /><br />==================<br />原视频在这里，大概 2 分 13 秒的位置<br />==================<br /><br /><div class="embedded_video_wrapper"><iframe src="https://www.youtube.com/embed/GXlckaGr0Eo" class="embedded_video" allowfullscreen="" type="text/html" id="ytplayer" frameborder="0"></iframe></div>
+	]]></content>
+</entry><entry>
+	<title>[Apple] 请问苹果 id 美区绑卡 提示无法验证付款信息是怎么回事呀</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906095#reply6" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906095</id>
+	<published>2023-01-02T11:25:58Z</published>
+	<updated>2023-01-02T14:44:36Z</updated>
+	<author>
+		<name>asdqwe01</name>
+		<uri>https://www.v2ex.com/member/asdqwe01</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>是美国的万事达卡</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 有没有买小米 AX9000 最优惠的方法</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905994#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905994</id>
-	<published>2023-01-01T16:45:07Z</published>
-	<updated>2023-01-01T18:14:24Z</updated>
+	<title>[分享发现] 2022 年结束了，大家来晒晒，你今年的收益或者支出吧。。。</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906093#reply3" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906093</id>
+	<published>2023-01-02T10:57:19Z</published>
+	<updated>2023-01-02T09:57:19Z</updated>
 	<author>
-		<name>blueorange</name>
-		<uri>https://www.v2ex.com/member/blueorange</uri>
+		<name>Dive</name>
+		<uri>https://www.v2ex.com/member/Dive</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
+	今年你赚了吗？今年你还有结余吗？
 	]]></content>
 </entry><entry>
-	<title>[生活] 小时候逢年过节祝愿亲朋身体健康，祝的时候心情很轻松，觉得健康不难实现。今年就觉得压抑，祝健康的话说不出口。埃。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905992#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905992</id>
-	<published>2023-01-01T16:19:38Z</published>
-	<updated>2023-01-01T17:19:38Z</updated>
+	<title>[宽带症候群] 目前 40T 的盘,有一些小站的经验,求一个馒头的药</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906091#reply4" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906091</id>
+	<published>2023-01-02T10:51:15Z</published>
+	<updated>2023-01-02T14:31:44Z</updated>
 	<author>
-		<name>gowl</name>
-		<uri>https://www.v2ex.com/member/gowl</uri>
+		<name>idealhs</name>
+		<uri>https://www.v2ex.com/member/idealhs</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
+	<p>分享率：7.905 上传量：988.67 GB 下载量：125.06 GB 当前活动：Torrents seeding9 Torrents leeching0   可连接：是 连接数：无限制<br/>
+NAS 里 24h 挂了一阵子,感觉还蛮简单的,各位有邀请的大佬拉一下<br/>
+邮箱 base64:aWRlYWxoc0Bob3RtYWlsLmNvbQ==</p>
+
 	]]></content>
 </entry><entry>
-	<title>[Apple] 有什么 homekit 家庭面板好的方式吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905991#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905991</id>
-	<published>2023-01-01T15:56:24Z</published>
-	<updated>2023-01-01T13:55:24Z</updated>
+	<title>[问与答] Mac 下破解 office 密码</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906090#reply8" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906090</id>
+	<published>2023-01-02T10:45:56Z</published>
+	<updated>2023-01-02T14:50:45Z</updated>
 	<author>
-		<name>Bananana</name>
-		<uri>https://www.v2ex.com/member/Bananana</uri>
+		<name>suibianzai</name>
+		<uri>https://www.v2ex.com/member/suibianzai</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	家里搞了一堆 homekit 智能家居，想搞个 iPad ，想办法贴墙上常量显示智能家居状态，但好像也不是很方便
+	<p>请问 Mac 下有什么破解 office 密码的工具吗？主要是 PPT 的密码
+像 win 下面有 advancedoffice password recovery pro 很好用</p>
+
 	]]></content>
 </entry><entry>
-	<title>[推广] 工程设计中间人服务-求设计</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905990#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905990</id>
-	<published>2023-01-01T15:46:20Z</published>
-	<updated>2023-01-01T15:45:20Z</updated>
+	<title>[问与答] 所以新冠后遗症会有白头发？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906089#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906089</id>
+	<published>2023-01-02T10:10:36Z</published>
+	<updated>2022-12-31T10:10:36Z</updated>
 	<author>
-		<name>huguadao</name>
-		<uri>https://www.v2ex.com/member/huguadao</uri>
+		<name>closedevice</name>
+		<uri>https://www.v2ex.com/member/closedevice</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>大家元旦快乐～</p>
-<p>这是我发挥自身所长能够为大家提供的一项业务：欢迎有装修、私宅、民宿、办公等各类设计需求的朋友使用我们的设计中间人服务：<a href="http://qiusheji.com" rel="nofollow">qiusheji.com</a></p>
-<p><img alt="截屏 2023-01-01 23.36.11.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://vip2.loli.io/2023/01/01/Gux3jnFw2d8gqUf.png"/></p>
-<h3>具备以下一些优势：</h3>
+	自之前新冠康复之后，经历了咳嗽、全身无力后，今天突然发现侧边多了很多的白头发，不知道的人以为我快 50 了。记得去年 12 月初还没有，发生了什么？
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 又可以生成兑换码了 在发一波标签记账 app 兑换码</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906088#reply6" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906088</id>
+	<published>2023-01-02T10:09:43Z</published>
+	<updated>2023-01-02T15:09:24Z</updated>
+	<author>
+		<name>lyuxiuchen</name>
+		<uri>https://www.v2ex.com/member/lyuxiuchen</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<a target="_blank" href="https://v2ex.com/t/904192#reply37" rel="nofollow noopener">https://v2ex.com/t/904192#reply37</a><br /><br />发邮件到这里：<br />feedback@labelledger.xyz <br />//避免留邮箱在帖子里<br /><br />会按照先后顺序回复兑换码，数量有限先到先得！<br />//省去大家试码的时间<br /><br />我先去修复个小 bug 去😢，一会一块回复，提前感谢🙏大家支持
+	]]></content>
+</entry><entry>
+	<title>[健康] 如何看“通俗讲就是病毒传不动了”</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906087#reply28" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906087</id>
+	<published>2023-01-02T10:08:42Z</published>
+	<updated>2023-01-02T16:18:58Z</updated>
+	<author>
+		<name>wkh007</name>
+		<uri>https://www.v2ex.com/member/wkh007</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>国家卫健委医政司司长焦雅辉表示，急性传染病有其自己的传播规律，在急性传染高峰之后，第一周和第二周是最艰难的。目前，不同的城市都在经历感染高峰，正是最艰难的时期。高峰期过去之后，就会出现往下走的趋势，通俗讲就是病毒传不动了。到了这个时候，困难一定会过去的。</p>
+
+	]]></content>
+</entry><entry>
+	<title>[云计算] 一般做对象存储都买什么硬盘呢？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906086#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906086</id>
+	<published>2023-01-02T10:08:06Z</published>
+	<updated>2023-01-02T06:07:06Z</updated>
+	<author>
+		<name>daimaosix</name>
+		<uri>https://www.v2ex.com/member/daimaosix</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	用 SeaweedFS 做对象存储，计划是买这一款： <a target="_blank" href="https://item.jd.com/100011598297.html" rel="nofollow noopener">https://item.jd.com/100011598297.html</a> ，大概就是 100TB 左右，SSD 做热数据缓存的话就三星或者英特尔，大家还有更好的推荐吗？
+	]]></content>
+</entry><entry>
+	<title>[程序员] 请教 DDD 对于单 Service 接口的多实现处理问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906085#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906085</id>
+	<published>2023-01-02T09:59:35Z</published>
+	<updated>2023-01-02T13:38:28Z</updated>
+	<author>
+		<name>lbllol365</name>
+		<uri>https://www.v2ex.com/member/lbllol365</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>在看极客时间的《设计模式之美》，看到 12:实战一个虚拟钱包。</p>
+<p>想到一个问题：贫血模型的一个 Service 接口的多个实现类，业务逻辑是在实现类里的。而 DDD 是把业务逻辑抽到了 domain 里，那这多个实现类都要抽一套 domain 出来？然后这些 domain 抽一个抽象类或者父类出来？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[VPS] 200 出腾讯云 HK 香港 2c2g 30g 30M 1T/月流量 2024-08-18</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906084#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906084</id>
+	<published>2023-01-02T09:44:42Z</published>
+	<updated>2023-01-02T11:44:52Z</updated>
+	<author>
+		<name>andych3n</name>
+		<uri>https://www.v2ex.com/member/andych3n</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>绿色软件  YW5keV9sZW9uaWk=</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有老哥在羊的时候洗过头吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906083#reply48" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906083</id>
+	<published>2023-01-02T09:43:42Z</published>
+	<updated>2023-01-01T22:58:22Z</updated>
+	<author>
+		<name>tanglu</name>
+		<uri>https://www.v2ex.com/member/tanglu</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	我之前一直没有哪里不舒服，昨天洗头的时候有种奇怪的感觉，后脑勺和背一瞬间像扎了针 有疼还有点痒<br />然后洗完头一下午怕冷，今天还是怕冷，但是喉咙不痛身体也没有感到肌无力 晃头有点不舒服（好像教雾脑）<br /><br />这是因为羊了的时候洗头导致的吗？
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有做行业网站的大佬吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906082#reply2" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906082</id>
+	<published>2023-01-02T09:43:17Z</published>
+	<updated>2023-01-02T10:49:24Z</updated>
+	<author>
+		<name>y4nssss</name>
+		<uri>https://www.v2ex.com/member/y4nssss</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>钓鱼,希望大佬们说说做行业网站怎么赚钱</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] OneDrive 感觉好慢 2023.1.2 号</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906079#reply3" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906079</id>
+	<published>2023-01-02T09:23:02Z</published>
+	<updated>2023-01-02T10:53:00Z</updated>
+	<author>
+		<name>leonzym99</name>
+		<uri>https://www.v2ex.com/member/leonzym99</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>不知道是不是我网络的问题，今天 onedrive 特别的慢，几乎没法同步。要么一直显示登录中，要么就一直显示准备上传中……</p>
+<p>我默认是开了代理，但关闭代理后也不行，重启也不行。</p>
+<p>macOS 11 Big Sur ，最新版 OneDrive 。</p>
+<p>V 友们的 OneDrive 今天怎么样？正常吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[Microsoft Office] [2023-01-02 17:00]https://onedrive.live.com/ 有一样打不开了的吗?[开代理也打不开]</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906078#reply5" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906078</id>
+	<published>2023-01-02T09:07:52Z</published>
+	<updated>2023-01-02T09:33:19Z</updated>
+	<author>
+		<name>bavtoex</name>
+		<uri>https://www.v2ex.com/member/bavtoex</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	onedrive 的文件在线预览直接跳转到:  <br /><a target="_blank" href="https://onedrive.live.com/error.html" rel="nofollow noopener">https://onedrive.live.com/error.html</a>  <br /><br />提示错误:    <br /><a target="_blank" href="https://i.imgur.com/yJ2RDC2.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/yJ2RDC2.png" class="embedded_image" rel="noreferrer"></a><br /><br /> <br />真少见,第一次遇见  <br /><a target="_blank" href="https://portal.office.com/servicestatus" rel="nofollow noopener">https://portal.office.com/servicestatus</a>  <br /><br /><a target="_blank" href="https://i.imgur.com/y4sIMru.png" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/y4sIMru.png" class="embedded_image" rel="noreferrer"></a>
+	]]></content>
+</entry><entry>
+	<title>[分享创造] 独立开发者们，这个一月你们的目标是什么？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906076#reply30" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906076</id>
+	<published>2023-01-02T08:59:36Z</published>
+	<updated>2023-01-02T15:34:21Z</updated>
+	<author>
+		<name>dearroy</name>
+		<uri>https://www.v2ex.com/member/dearroy</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>我先来抛砖引玉，这个一月我的安排还挺多的，主要都集中在 <a href="https://earlybird.im" rel="nofollow">EarlyBird</a>：</p>
 <ul>
-<li>设计费低至 80%</li>
-<li>有效的方案比选</li>
-<li>众多的合作伙伴</li>
-<li>全面的业务类型</li>
-<li>更少的试错成本</li>
-<li>合规的工程设计</li>
+<li>在 Product Hunt 发布 2023 年的第一款产品：Landing OS</li>
+<li>达成 2,000 注册用户</li>
+<li>达到 500 MRR</li>
 </ul>
-<p>在这里，您可以非常容易的实现「强方案、常方案 + 强落地、常方案」等不同的组合，通过我们提供的中间人服务获得国内外不同档次设计公司的服务，而少走弯路。</p>
-<p>2022 年就这么过去了，希望 2023 年能够有所好转，实在是太难了～</p>
+<p>也想看看大家给自己设定的目标，希望大家的目标都可以实现。</p>
 
 	]]></content>
 </entry><entry>
-	<title>[问与答] 你们每个月的订阅/会员要花多少钱？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905989#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905989</id>
-	<published>2023-01-01T15:30:39Z</published>
-	<updated>2022-12-28T15:29:39Z</updated>
+	<title>[分享创造] Logto 新年更新： Web hook, 多功能搜索 API, OAuth 与 OIDC 连接器</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906074#reply0" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906074</id>
+	<published>2023-01-02T08:43:57Z</published>
+	<updated>2023-01-02T08:40:57Z</updated>
 	<author>
-		<name>crazytree</name>
-		<uri>https://www.v2ex.com/member/crazytree</uri>
+		<name>logto</name>
+		<uri>https://www.v2ex.com/member/logto</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	现在啥都要会员，目前 QQ 音乐+共享单车=20/月
-	]]></content>
-</entry><entry>
-	<title>[问与答] 新年到了开始报税：经营所得 A 表使用了投资者减除费用 6 万的话</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905988#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905988</id>
-	<published>2023-01-01T15:30:00Z</published>
-	<updated>2022-12-24T15:29:00Z</updated>
-	<author>
-		<name>EeffDev</name>
-		<uri>https://www.v2ex.com/member/EeffDev</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我有一个个体户身份，同时还有一个职工身份收入。
-如果我在 经营所得 A 表 的 “综合所得中扣除”选择了否 ，然后使用了投资者减除费用 6 万的免税额度（每月 5 千）
-是否等我在 3 月份报个人所得税年度汇算清缴的时候，就不再享有个人每月 5 千的免税额度了？就要全额缴纳了？</p>
-<p>还是说投资者减除费用的 6 万 和 个人收入的 6 万是两个 buff 可以叠加？</p>
-<p><img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://pic4.58cdn.com.cn/nowater/webim/big/n_v28e7a2cef82e9477da09e81e5d8ef00a5.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[服务器] 求推荐用于内网穿透的便宜的云服务器</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905986#reply14" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905986</id>
-	<published>2023-01-01T15:17:04Z</published>
-	<updated>2023-01-01T19:32:25Z</updated>
-	<author>
-		<name>vftj</name>
-		<uri>https://www.v2ex.com/member/vftj</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>想租个云服务器用于内网穿透访问学校实验室的机器，访问学校的机器主要是用于写代码、跑代码（ vscode 和终端），不需要传大型文件。要求延迟低、带宽不要太低，其余没要求。</p>
-<p>求问有没有尽可能便宜的选项。</p>
-<p>另外本人是学生，如果有教育优惠也可以享受。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 求一个柠檬的💊</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905985#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905985</id>
-	<published>2023-01-01T15:08:40Z</published>
-	<updated>2023-01-01T15:08:40Z</updated>
-	<author>
-		<name>FrankAdler</name>
-		<uri>https://www.v2ex.com/member/FrankAdler</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>开药两天了，好几个站的邀请区发帖都没人理。。来求助 v 友</p>
-<p>PPTP 数据： <a href="https://sourl.cn/xmCTRS" rel="nofollow">https://sourl.cn/xmCTRS</a> 需要的话可以提供 uid 验证</p>
-<p>NAS 24 小时开机，16T 硬盘虚位以待</p>
-<p>注册信息： <a href="https://b64.ink/%21pB21lfosOBbPbRWD" rel="nofollow">https://b64.ink/!pB21lfosOBbPbRWD</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] Planet is sooo cool! Web3 世界的新大陆。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905984#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905984</id>
-	<published>2023-01-01T14:55:28Z</published>
-	<updated>2023-01-01T14:55:28Z</updated>
-	<author>
-		<name>paulguo</name>
-		<uri>https://www.v2ex.com/member/paulguo</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	Planet 就像是 Web3 世界的 Jekyll 和 RSS Reader ，也像是一个分布式的 V2EX ，不知道有多少 V 友已经开始用 Planet 了？可以留下有趣的 Planet 地址，非常希望关注 &amp; follow 一些有趣的内容。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 字节新加坡研发待遇怎样？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905983#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905983</id>
-	<published>2023-01-01T14:51:22Z</published>
-	<updated>2023-01-01T14:51:22Z</updated>
-	<author>
-		<name>aawei</name>
-		<uri>https://www.v2ex.com/member/aawei</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题，新加坡对比国内，工资会有明显差距吗？如果国内能拿 30w ，去了新加坡能拿 60w 么？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 测试-主题名</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905982#reply3" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905982</id>
-	<published>2023-01-01T14:47:20Z</published>
-	<updated>2023-01-01T15:47:12Z</updated>
-	<author>
-		<name>icearl</name>
-		<uri>https://www.v2ex.com/member/icearl</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	测试-主题内容
-	]]></content>
-</entry><entry>
-	<title>[小米] 小米空调伴侣 2 怎么选择匹配最准确且功能最多的型号？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905979#reply5" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905979</id>
-	<published>2023-01-01T14:26:50Z</published>
-	<updated>2023-01-01T15:22:28Z</updated>
-	<author>
-		<name>cwcc</name>
-		<uri>https://www.v2ex.com/member/cwcc</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>比如我家里空调是海尔的，但海尔型号下的第一个匹配就匹配到，并且可以用基础的功能，比如扫风、切换模式、温度调整等。</p>
-<p>我的空调还有灯光、辅热和睡眠按钮，我想在手机上操控这些，但选了几个型号都没有。是官方就从来没支持过别的功能，还是没有选择对呢？</p>
-<p>另外，怎么才能根据上面型号提供的 ID 来选择最准确的匹配型号呢？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[深圳] 求组鲤鱼门附近租房一房一厅 2000 以下</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905978#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905978</id>
-	<published>2023-01-01T14:22:07Z</published>
-	<updated>2023-01-01T14:22:07Z</updated>
-	<author>
-		<name>yhm2046</name>
-		<uri>https://www.v2ex.com/member/yhm2046</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>要求</p>
-<p>1.有电梯，天台可以晒衣服</p>
-<p>2.可以自己拉网线，可以养猫，楼下有电单车充电的地方</p>
-<p>3.附近饭店，医院，菜市离得近</p>
-
-	]]></content>
-</entry><entry>
-	<title>[奇思妙想] 物联网、智能家居方向还有什么创业机会，或者痛点 吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905977#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905977</id>
-	<published>2023-01-01T14:20:19Z</published>
-	<updated>2023-01-01T14:28:15Z</updated>
-	<author>
-		<name>lyping</name>
-		<uri>https://www.v2ex.com/member/lyping</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[微信] 微信在跟别人打电话的时候其他人给你打电话不占线了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905976#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905976</id>
-	<published>2023-01-01T14:18:24Z</published>
-	<updated>2023-01-01T14:17:24Z</updated>
-	<author>
-		<name>mengyifan</name>
-		<uri>https://www.v2ex.com/member/mengyifan</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	微信在跟别人打电话的时候其他人给你打电话不占线了<br />rt ，怎么发图，会正常进线图片在这里 <a target="_blank" href="http://tieba.baidu.com/p/8205727418?&amp;share=9105&amp;fr=sharewise&amp;is_video=false&amp;unique=9E7BF2A34E2C1745F594458F606FBB1B&amp;st=1672582831&amp;client_type=1&amp;client_version=12.32.1.1&amp;sfc=copy&amp;share_from=post&amp;source=12_16_sharecard_a" rel="nofollow noopener">http://tieba.baidu.com/p/8205727418?&amp;share=9105&amp;fr=sharewise&amp;is_video=false&amp;unique=9E7BF2A34E2C1745F594458F606FBB1B&amp;st=1672582831&amp;client_type=1&amp;client_version=12.32.1.1&amp;sfc=copy&amp;share_from=post&amp;source=12_16_sharecard_a</a>
-	]]></content>
-</entry><entry>
-	<title>[Java] 如何学习 B 端常见系统/模块建模？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905975#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905975</id>
-	<published>2023-01-01T14:07:09Z</published>
-	<updated>2023-01-01T14:39:20Z</updated>
-	<author>
-		<name>leonme</name>
-		<uri>https://www.v2ex.com/member/leonme</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	RT ，有什么书籍或者实践性的视频可供学习吗？
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 千兆带宽怎么选择光猫？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905974#reply8" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905974</id>
-	<published>2023-01-01T14:01:48Z</published>
-	<updated>2023-01-01T15:55:24Z</updated>
-	<author>
-		<name>Features</name>
-		<uri>https://www.v2ex.com/member/Features</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	最近布置新家的网络<br />准备拉一条千兆的电信带宽，光猫应该怎么选，直接用运营商送的机器可以吗？<br />另外家里 140㎡ 路由器选小米 HomeWifi Mesh 路由器够用吗？
-	]]></content>
-</entry><entry>
-	<title>[问与答] 今天看见别人分享的年度项目完成情况，想问一下有没有专门的应用是用来制定计划的呀（比如年度目标等等）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905973#reply3" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905973</id>
-	<published>2023-01-01T13:56:37Z</published>
-	<updated>2023-01-02T00:26:39Z</updated>
-	<author>
-		<name>WilliamColton</name>
-		<uri>https://www.v2ex.com/member/WilliamColton</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 联通的套餐介绍哪里最详细？像全家福这种组合套餐 app 都找不到介绍</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905972#reply5" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905972</id>
-	<published>2023-01-01T13:52:11Z</published>
-	<updated>2023-01-01T05:52:11Z</updated>
-	<author>
-		<name>revival83</name>
-		<uri>https://www.v2ex.com/member/revival83</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>好多套餐都藏着掖着。哪里可以直观的看到所有的套餐介绍呢</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Twitter] Twitter 有多个视频如何下载？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905971#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905971</id>
-	<published>2023-01-01T13:44:41Z</published>
-	<updated>2023-01-01T18:04:41Z</updated>
-	<author>
-		<name>andyliu24</name>
-		<uri>https://www.v2ex.com/member/andyliu24</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>Twitter 一个推文有多个视频，我想要后面的视频（第二个视频），yt-dlp 和一些网页下载器似乎都只能下载第一个视频，请问下 v 友有什么办法推荐吗？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 老哥们有推荐的双肩相机包吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905970#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905970</id>
-	<published>2023-01-01T13:38:34Z</published>
-	<updated>2023-01-01T13:50:39Z</updated>
-	<author>
-		<name>hcsu</name>
-		<uri>https://www.v2ex.com/member/hcsu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>期望（优先级由先到后）：</p>
-<ol>
-<li>双肩</li>
-<li>能装下 1 个相机+2 个镜头（其中包含一个 720 这种较长的头）</li>
-<li>拿、放方便</li>
-<li>包自重小，很轻便</li>
-<li>不装相机时可以当通勤包使用，最好小口袋比较多（感觉可能会跟#3 有冲突🤦）</li>
-<li>好看</li>
-<li>价格可以接受 1k 左右，如果稍贵也行但别太离谱</li>
-<li>最好是国际品牌</li>
-</ol>
-<p>目前在用 PD 的 EVERYDAY SLING 6L ，一机一镜，单肩背久了肩膀很累，想换个双肩的。</p>
-<p>我知道不存在完美的包，所以期望有优先级。想看看大佬们都用什么包呢？</p>
-<p>谢谢了先！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 2022 年终总结：不上班 700 多天，我得到了个寂寞，你呢？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905969#reply24" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905969</id>
-	<published>2023-01-01T13:38:15Z</published>
-	<updated>2023-01-02T01:06:17Z</updated>
-	<author>
-		<name>pzhyy</name>
-		<uri>https://www.v2ex.com/member/pzhyy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h1>前言</h1>
-<p>嘿，V 友们好！时光飞逝，不知不觉，我已经两年没有上班了。</p>
-<p>2019 年底，新冠病毒在武汉爆发，本以为没什么大不了的，万万没想到，它竟席卷了全球，一发不可收拾。</p>
-<p>2020 年，在疫情的冲击下，口罩变成了稀缺物品，随之而来的各种防疫措施，把原本自由的生活打得支离破碎。</p>
-<p>各行各业受到了疫情的影响，开始出现封城，延迟复工，裁员...等现象，大环境开始下行，焦虑开始漫延。</p>
-<p>在计算机行业也不例外，看起来多金的大厂，也开始出现裁员，我司自然也逃不过这法则。</p>
-<p>996 、内卷、人员过剩、35 岁危机，这些词汇都源自互联网行业，可想而知，竞争有多激烈？</p>
-<p>作为一名程序员，本就是一颗螺丝钉，随时有被替换或者拿掉的可能。</p>
-<p>尽管我从不担心自己会被优化掉，那是因为我还年轻，还卷得动呀！</p>
-<p>但是，在这焦虑感弥漫的大环境下，我很难不焦虑。</p>
-<p>危机感十足的我想，是时候出来做自己喜欢的事了，反正大家都不赚钱。</p>
-<p>于是，我在 2020 年底，裸辞了！</p>
-<h1>为什么？</h1>
-<p>很多朋友问我：为什么裸辞？你有 B 计划吗？</p>
-<p>我想说：没有，没有那么多为什么？我只是不想上班了！</p>
-<p>其实，这个想法由来已久，996 的工作枯燥又乏味，已经没有了刚入职场，一路升级打怪的热情。</p>
-<p>再加上上班路上的来回通勤时间，回到出租屋的我已经精疲力尽，无心再做其它事。</p>
-<p>我也不想再继续找新工作，不想刷题，不想面试，不想当螺丝，不想...</p>
-<p>我想用一身的技能，去创造属于自己的东西！</p>
-<h1>做什么？</h1>
-<p>不知道，但我想先放松一下自己，一切再从长计议。</p>
-<p>独立做一个有意思的产品，是我一直以来的梦想，我相信这也是很多程序员的梦想吧！</p>
-<p>所以，我的职业路线是这样的：UI 设计师 -&gt; Web 前端工程师 -&gt; Web 后端工程师 -&gt; Web 全栈工程师。</p>
-<p>从零开始设计自己的产品，用自己最喜欢的技术栈，写最佳实践的代码，去创作一个有价值的产品。</p>
-<p>这是在工作中无法完成的事，在公司的产品中，你不能倾入太多自己的情感。</p>
-<p>尽管你知道怎么做更好？但一切都只能按老板的意思来，你需要做就是高保真地完成任务。</p>
-<h1>做了什么？</h1>
-<p>那这两年，我到底做了什么？掰着手指头都能数得清：</p>
-<ol>
-<li>结了个婚</li>
-<li>做了第一个产品「别兔看榜」</li>
-<li>开了个淘宝店</li>
-<li>做了第二个产品「 Tapicker 」</li>
-</ol>
-<h1>结了个婚</h1>
-<p>躲是躲不过的，一推再推，还是得排上日程。</p>
-<p>我和我的爱人都是不喜欢仪式感的人，更不喜欢热闹的场面，只想安安静静地生活，不想那么多人情世故。</p>
-<p>但在这件事情上，我们都还做不了主。</p>
-<p>所以，就只能随它吧！</p>
-<h1>做了第一个产品「别兔看榜」</h1>
-<p>别兔看榜 —— 一个聚合各大热门网站热搜榜的看榜应用，让你一眼就知道今天发生了哪些热门事件。</p>
-<p><strong>功能构想：</strong></p>
-<ol>
-<li>查看实时热搜榜（完成）</li>
-<li>查看历史热搜榜（完成）</li>
-<li>自定义订阅榜单（完成）</li>
-<li>事件发酵趋势图（完成 50%）</li>
-<li>年度热搜&amp;热词（未完成）</li>
-<li>热点发现（未完成）</li>
-<li>舆情分析（未完成）</li>
-<li>事件脉络（未完成）</li>
-</ol>
-<p><strong>产品状态：</strong></p>
+	<p>给新朋友：我们的项目是 <a href="https://logto.io/" rel="nofollow">Logto</a>，是一个帮助开发者和企业快速搭建「登录注册体验」和「用户身份体系」的开源 Auth 解决方案。</p>
+<hr/>
+<p>在 2023 年第一天，我们发布了不少新东西：</p>
+<h3>新功能</h3>
 <ul>
-<li>用户：86</li>
-<li>盈利：0</li>
-<li>状态：已死</li>
-<li>原因：1. 一个伪需求，没人喜欢追热搜； 2. 推广不到位。</li>
+<li>Web hooks</li>
+<li>多功能搜索 API 与精确查询</li>
+<li>数个新的连接器（ OAuth 2 ，OIDC ，AWS SES ，腾讯 SMS ，飞书）</li>
 </ul>
-<p><strong>小结：</strong></p>
-<p>这是一个没做过什么调研的项目，它的死是意料之中的事，但还是有点难受的，有种出师不利的感觉！</p>
-<h1>开了淘宝店</h1>
-<p>这是一个无奈之举，因为太久没见过钱了，就想着怎么才能快点来钱？</p>
-<p>答案当然是去街边卖煎饼果子，毕竟这能直面客户，转化链最短，多劳多得。</p>
-<p>哈哈，但是身为一个程序员的我，极不擅长做抛头露面的事，社恐呀！</p>
-<p>所以，我就开了个淘宝店。</p>
-<p>一开始就没给它寄太大希望，只想赚点零花钱。</p>
-<p>在一次被王力宏公司举报后，觉得这件事不可持续发展，就停掉了。</p>
-<p><strong>思考：</strong></p>
-<p>兜兜转转，还是回到了原点！感受到了空前的迷茫，完全不知道该做什么好？</p>
-<p>有朋友建议我去接私活，这确实能解决我当前的困境，但也分走了我大部分精力，因此拒绝了。</p>
-<p>想想自己的优势与劣势，觉得还是得回到写代码这件事上来，这是我的优势呀！</p>
-<h1>做了第二个产品「 Tapicker 」</h1>
-<p>一次偶然，我接触到了「 Data Miner 」这个产品，试用了下，说实话，没有惊艳的感觉！</p>
-<p>只是觉得做的这么烂，为什么还有那么多用户选择它？况且还很久没更新了。</p>
-<p>20w+ 的装机用户，按 1% 的付费用户 和 个人入门套餐（$19.9/month ）计算，那收入也很可观啊！</p>
-<pre><code>200000 * 0.01 * 19.9 = 39800 ($)
-</code></pre>
-<p>再看看其它同类产品，我想我的机会来了，让我来卷死他们吧！</p>
-<p>于是，我做了现在这个产品，一个浏览器插件 👉 <a href="https://www.tapicker.com" rel="nofollow"><strong>Tapicker</strong></a>。</p>
-<p><strong>里程碑：</strong></p>
+<h3>重构与提升</h3>
 <ul>
-<li>
-<p>2022 年 03 月 01 日，终于发布了 1.0.0 版本，试了一下市场的反应。
-不错，有响应，但不明显，有点尴尬！
-秉承做了再说的原则，有响应就有希望，于是，我开始憋大招，一切好好规划，重新设计。</p>
-</li>
-<li>
-<p>2022 年 08 月 03 日，2.0.0 版本发布了，这一版本几乎改头换面，变成了另一个同类产品。
-新的产品架构，让 Tapicker 能应对各种复杂场景的数据采集。
-陆陆续续的来了一些咨询用户，帮助我不断的完善这个产品。</p>
-</li>
-<li>
-<p>2022 年 11 月 06 日，3.0.0 版本发布了，这一版本提高了稳定性，小的功能升级。
-数据采集是一件既复杂又繁琐的事，因为要面对的是各式各样的网页。
-所以，提高稳定性成了这个版本最主要的任务。</p>
-</li>
+<li>管理控制台详情页布局优化</li>
+<li>完全重构的 Interaction APIs</li>
+<li>更加细致的审计日志</li>
 </ul>
-<p><strong>产品状态：</strong></p>
-<ul>
-<li>用户：2477</li>
-<li>盈利：$178</li>
-<li>状态：活着</li>
-</ul>
-<p>嗯，看着这用户量和盈利，远远低于预期，肯定是不正常的。</p>
-<p><strong>小结：</strong></p>
-<p>2.0 版本发布后，我基本保持每两周一个版本的节奏迭代。</p>
-<p>时间基本都花在开发上，产品推广欠缺，用户增长缓慢，转化率极低，这是 Tapicker 目标比较棘手的问题。</p>
-<h1>总结</h1>
-<p>在这一年里，失去的远远比得到的多，但仔细想想，我终究踏出了这一步，熟悉这个过程。</p>
-<p>如果非要说得到了什么？那就只有经验了！</p>
-<p>假设再做一个产品，我会变得更加从容，毕竟很多东西可以沉淀下来。</p>
-<p>当然了，也发现自己的诸多不足：</p>
-<ol>
-<li>焦虑之下，病急乱投医走了一些弯路</li>
-<li>容易沉迷在技术里，导致研发进度缓慢</li>
-<li>容易受到干扰，消耗了很多进入状态的启动时间</li>
-<li>缺乏社交平台个人品牌建设，做起产品推广来极其费力</li>
-</ol>
-<p>这是非常重要的发现，都说人的优点和缺点就像一面镜子，我们往往只看到镜子的正面，而很少去镜子的背面。</p>
-<p>既然发现了自己的问题所在，接下来，就是去解决问题！</p>
-<p>期望 2023 更好的自己！💪</p>
+<p>我们正在准备第一个正式版，将包含用户 Profile 页面，RBAC 等功能。欢迎大家加入 <a href="https://discord.gg/vRvwuwgpVX" rel="nofollow">Discord 社区</a> 或者 <a href="https://logto.io/subscribe" rel="nofollow">订阅我们的邮件</a> 以时刻保持更新。</p>
+<p>祝大家新年快乐！</p>
 
 	]]></content>
 </entry><entry>
-	<title>[Apple] 请问一下，能把 iPhone 的屏幕能换成 iPad 的么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905968#reply3" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905968</id>
-	<published>2023-01-01T13:18:14Z</published>
-	<updated>2023-01-01T16:45:39Z</updated>
+	<title>[问与答] 入门付费的远控哪个好点</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906073#reply5" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906073</id>
+	<published>2023-01-02T08:43:09Z</published>
+	<updated>2023-01-02T11:47:10Z</updated>
 	<author>
-		<name>driven</name>
-		<uri>https://www.v2ex.com/member/driven</uri>
+		<name>dearmymy</name>
+		<uri>https://www.v2ex.com/member/dearmymy</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有个闲置的 iphone12mini ，想换一个大点的屏幕， 能换成 ipad 或者 12pro max 的屏幕， 在家当 homekit 的中控么？</p>
-
+	个人远程使用。预算不超过 100 一个月。<br />本来打算购买 todesk 了。但是最近问题很多，不敢下手了。<br />现在纠结的有<br />1.teamviewer 有个 50 多一个月授权，不知道这个授权好用不。<br />2.anydesk 的 78 一个月。不知道跟免费版比，速度优化么。<br />3.splashtop ，很便宜也，看着宣传也牛逼，但是感觉用的人不多<br />4.todesk ，还值得信任么。。
 	]]></content>
 </entry><entry>
-	<title>[生活] 要不晒晒年度账单？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905966#reply11" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905966</id>
-	<published>2023-01-01T13:09:54Z</published>
-	<updated>2023-01-01T15:23:41Z</updated>
+	<title>[问与答] 想知道几年前很火的 ios 和 android 程序员都转行了吗，尤其是现在市场惨淡的情况下</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/906069#reply1" />
+	<id>tag:www.v2ex.com,2023-01-02:/t/906069</id>
+	<published>2023-01-02T08:11:17Z</published>
+	<updated>2022-12-25T08:11:17Z</updated>
 	<author>
-		<name>estk</name>
-		<uri>https://www.v2ex.com/member/estk</uri>
+		<name>chanyiiiiiii</name>
+		<uri>https://www.v2ex.com/member/chanyiiiiiii</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>支付宝
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://bafkreicvpqqsj4rdnxgdbn525rurphedubx5yhzvksdx2yvdsazkh4mlbu.ipfs.nftstorage.link/"/></p>
-<p>微信
-<img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://bafkreigqutaxh3rnb4oso6usucr7gyske22doco3gshbzqc4yjtvycw6ia.ipfs.nftstorage.link/"/></p>
-<p>其它储蓄卡信用卡支出还有一万多</p>
-<p>问了老婆我和妈，十几万支出</p>
-<p>所以家庭总支出 40 万左右</p>
-<p>0 车 0 房 1 娃</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 前端想学一门后端语言，学哪个对工作会有帮助。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905965#reply2" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905965</id>
-	<published>2023-01-01T13:08:36Z</published>
-	<updated>2022-12-24T13:08:36Z</updated>
-	<author>
-		<name>maryshaw</name>
-		<uri>https://www.v2ex.com/member/maryshaw</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	感觉前端已经到瓶颈了，想学一门后端语言。在学 golang ，并且已经学了一段时间了，但是发现 boss 上找 golang +前端的全栈很少，并且用浅薄的 golang 能力学找工作肯定没现在前端的工作好，毕竟做前端已经优先年头了。现在 golang 语言的主要工作的岗位分布在什么行业和岗位。还有必要继续学 golang ，继续有大佬指点一下。
-	]]></content>
-</entry><entry>
-	<title>[问与答] 刚中了抽奖骗局</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905964#reply10" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905964</id>
-	<published>2023-01-01T13:06:18Z</published>
-	<updated>2023-01-01T16:25:48Z</updated>
-	<author>
-		<name>vicalloy</name>
-		<uri>https://www.v2ex.com/member/vicalloy</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	刚登录 t 移动 app ，点击 app 上的活动页面，跳到充值优惠活动页面。没有注意，以为是官方的活动，充值后后发现没有到账，再看活动规则，要下载一个 云享严选 的 app ，而且是一堆充值券，一个月还只能用一张。顿感上当。还不死心，查了一下，这个 app 几乎没有地方可以下载。<br /><br />由于用的是微信支付，查看支付记录，收款账号和活动商家不一致。于是决定先投诉，投诉后瞬间给我退款了。
-	]]></content>
-</entry><entry>
-	<title>[macOS] 老铁们来做个决定,让我晚上能睡个好 jiao</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905963#reply19" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905963</id>
-	<published>2023-01-01T12:52:32Z</published>
-	<updated>2023-01-01T17:06:13Z</updated>
-	<author>
-		<name>aapeli</name>
-		<uri>https://www.v2ex.com/member/aapeli</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>作者最近有空闲时间准备做一个基于 Electron 的 MacOS 应用来耍。现在有两个想法.</p>
-<ul>
-<li>RSS 订阅软件客户端, 类似 Reeder <a href="https://reederapp.com/" rel="nofollow">https://reederapp.com/</a></li>
-<li>剪贴板历史管理软件，类似 PasteNow</li>
-<li>MySQL 管理软件客户端，类似 Navicat.</li>
-</ul>
-<p>还在纠结中，老铁们来做个决定, 做哪个合适.</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] Windows 下有没有调节外接显示器声音和亮度的软件？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905961#reply3" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905961</id>
-	<published>2023-01-01T12:31:51Z</published>
-	<updated>2023-01-01T13:06:14Z</updated>
-	<author>
-		<name>8675bc86</name>
-		<uri>https://www.v2ex.com/member/8675bc86</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>类似 MAC 下的 betterdisplay ，可以调节外接显示器声音和亮度的软件。当前 Windows 默认的亮度和声音调节对外接显示器不工作。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 现在 MacOS Ventura 稳定性如何</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905960#reply8" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905960</id>
-	<published>2023-01-01T12:24:39Z</published>
-	<updated>2023-01-01T20:20:28Z</updated>
-	<author>
-		<name>leo7476040305</name>
-		<uri>https://www.v2ex.com/member/leo7476040305</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	现在 MacOS Ventura 稳定性如何，升级安全吗<br />平时主要用 VS Code, Xcode 和 Final Cut Pro ，有没有升级完的 V 友解答一下稳定性如何
-	]]></content>
-</entry><entry>
-	<title>[信息安全] 收到了一条有点诡异的邮件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905959#reply4" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905959</id>
-	<published>2023-01-01T12:19:18Z</published>
-	<updated>2023-01-01T12:53:05Z</updated>
-	<author>
-		<name>LxnChan</name>
-		<uri>https://www.v2ex.com/member/LxnChan</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://i.imgur.com/S8dPC48.png"/></p>
-<p>本来觉得没啥，但是看到下面有个“Jriginal”和很多看起来像 Government （不过为什么不是<code>.gov</code>）的地址，还是想问一下大家这种是加了为了防止被判定为垃圾邮件的还是什么情况。</p>
-<p><strong>请勿相信图中网赚信息，也不要叨扰图中的邮件地址</strong>。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 组件命名求建议，想了很多名字总觉得不能很好地表达业务含义。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905958#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905958</id>
-	<published>2023-01-01T12:15:48Z</published>
-	<updated>2022-12-31T20:15:48Z</updated>
-	<author>
-		<name>chuanqirenwu</name>
-		<uri>https://www.v2ex.com/member/chuanqirenwu</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><img alt="截屏 2023-01-01 19.56.17.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://img1.imgtp.com/2023/01/01/UjDctcBq.png"/></p>
-<p>页面如图，这个页面的功能是管理用户添加的通知应用集成（ Integration ），例如 Email 、Server 酱等。</p>
-<p>红色框显示的是用户已创建的 integration 列表，我把每个列表项组件叫做 Integration 。蓝色框是展示这个 integration 的信息，我想了几个名字，例如 IntegrationInfo 、IntegrationDetail 、IntegrationDisplay ，但感觉都不是很好。</p>
-<p>绿色框是显示支持添加的 integration 类型。</p>
-<p>想了快一周了，对自己想的命名都不是很满意，希望能够集思广益，得到一个准确符合业务含义的名字，谢谢大家！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[植物] 卡特兰小苗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905957#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905957</id>
-	<published>2023-01-01T12:04:19Z</published>
-	<updated>2023-01-01T12:04:19Z</updated>
-	<author>
-		<name>wfy0327</name>
-		<uri>https://www.v2ex.com/member/wfy0327</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	几周前买了一株 Cattleya purpurata var. werkhauseri <br /><br />原产巴西的一种附生兰花，国内一般叫灰蓝唇婆婆。喜中强光，15℃-30℃ 环境栽培。作为 CAM 植物，夏季需要加强遮阴、通风以控制温度，在长江中下游地区算好养的一种。<br /><br />这几天在家休息，拆了旧水苔重新上盆种植，陶盆底部垫了一半高度的泡沫塑料块，加快干湿循环速度。<br /><br /><a target="_blank" href="https://i.imgur.com/c2cj88y.jpg" rel="nofollow noopener" target="_blank"><img src="https://i.imgur.com/c2cj88y.jpg" class="embedded_image" rel="noreferrer"></a>
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [海外/IT 科技公司] 诚邀中高级技术/开发人才！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905956#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905956</id>
-	<published>2023-01-01T12:02:51Z</published>
-	<updated>2023-01-01T09:02:51Z</updated>
-	<author>
-		<name>xxx9054388812</name>
-		<uri>https://www.v2ex.com/member/xxx9054388812</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	官网： <a target="_blank" href="https://jobs-zhaopin01.com" rel="nofollow noopener">https://jobs-zhaopin01.com</a><br />我会尽全力达到老哥们的期望，欢迎有意者详谈！
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 写给我妈的 app，虽然没上一个优雅，但半年多了，每天都会打开看看， 苹果商店搜「丑儿照」</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905954#reply4" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905954</id>
-	<published>2023-01-01T11:46:35Z</published>
-	<updated>2023-01-01T14:25:01Z</updated>
-	<author>
-		<name>andyJado</name>
-		<uri>https://www.v2ex.com/member/andyJado</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	
-	]]></content>
-</entry><entry>
-	<title>[分享创造] 来豆田，记录属于你的 2023 吧！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905953#reply0" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905953</id>
-	<published>2023-01-01T11:42:11Z</published>
-	<updated>2023-01-01T11:42:11Z</updated>
-	<author>
-		<name>wbolor</name>
-		<uri>https://www.v2ex.com/member/wbolor</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<h3>豆田，记录我世界！</h3>
-<p>什么时间、与谁一起、做了什么事？</p>
-<p>我们相信每个人都有属于自己值得书写的每一刻。有些事我们可以写给他人，但也有许多事，我们只能写给自己。在豆田，这是属于你自己的精神自留地。</p>
-<p>在这里随着时间的积累，你可以看到你是如何成为今天的自己！</p>
-<h3>豆田可以做什么？</h3>
-<ul>
-<li>
-<p>你可以在豆田可以发布文字、图片和视频 Vlog ，这些内容你可以选择仅自己可见，或对他人公开</p>
-</li>
-<li>
-<p>你可以为发布的内容添加人、时间、位置、书和影剧等信息，来记录在什么时间与谁一起做了什么事</p>
-</li>
-<li>
-<p>豆田会生成你的人生足迹图，方便你回顾过去的岁月</p>
-</li>
-</ul>
-<h3>如何下载</h3>
-<p>iOS AppStore 直接搜索“豆田”即可。</p>
-<p>AppStore 的地址： <a href="https://apps.apple.com/us/app/%E8%B1%86%E7%94%B0-%E8%AE%B0%E5%BD%95%E6%88%91%E4%B8%96%E7%95%8C/id1033050726" rel="nofollow">https://apps.apple.com/us/app/%E8%B1%86%E7%94%B0-%E8%AE%B0%E5%BD%95%E6%88%91%E4%B8%96%E7%95%8C/id1033050726</a></p>
-<p>欢迎大家试用，提出宝贵的意见呀！</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://cdn.doutian.me/doutian_cover.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[Linux] ubuntu 安装 linuxQQ3.0 版本后无法运行，且提示非法指令</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905952#reply13" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905952</id>
-	<published>2023-01-01T11:30:38Z</published>
-	<updated>2023-01-01T16:12:20Z</updated>
-	<author>
-		<name>zhangxs1989</name>
-		<uri>https://www.v2ex.com/member/zhangxs1989</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>在官网下载的 appimage 格式的安装包，但是无法正常运行，用终端输入./xxx.appimage 后提示“非法指令（核心已转储）”
-请问各位技术大拿这是什么问题？以前似乎没有遇到过，其他的此类格式的应用可以正常，只有 linuxqq 提示这个</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 12306 居然没有当前车票信息小组件</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905951#reply8" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905951</id>
-	<published>2023-01-01T11:19:00Z</published>
-	<updated>2023-01-01T17:11:28Z</updated>
-	<author>
-		<name>alexlee0728</name>
-		<uri>https://www.v2ex.com/member/alexlee0728</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>每次都要打开 app ，挺麻烦的。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[Android] 请问小米或者红米手机刷国际版 rom，用电信卡和原来有区别吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905949#reply7" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905949</id>
-	<published>2023-01-01T10:54:10Z</published>
-	<updated>2023-01-01T15:42:10Z</updated>
-	<author>
-		<name>dextremao</name>
-		<uri>https://www.v2ex.com/member/dextremao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>请问小米或者红米手机刷国际版 rom ，用电信卡和原来有区别不，还有就是我的是 note11 刷印度版是否支持电信。谢谢！</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 想组个华硕 MESH，请问现在闲鱼购买哪款比较合适？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905948#reply1" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905948</id>
-	<published>2023-01-01T10:44:55Z</published>
-	<updated>2023-01-01T14:11:34Z</updated>
-	<author>
-		<name>phlips5437</name>
-		<uri>https://www.v2ex.com/member/phlips5437</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>家里现在 3 台无线路由器，都是通过有线来作 AP 发射信号，其中一台华硕 AC68U 国行，用到现在感觉最稳。</p>
-<p>因此想请问下组华硕 MESH ，现在闲鱼上买哪个型号比较合适？</p>
-<p>另外还有个疑问，华硕的 MESH 可以在非路由模式下来组建嘛？（自己有跑软路由作主路由，不想用硬路由）</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] Win7 x64 运行程序显示“无法找到函数 GetFileVersionInfoExA,程序无法正常运行”，有无办法修复此错误？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/905947#reply13" />
-	<id>tag:www.v2ex.com,2023-01-01:/t/905947</id>
-	<published>2023-01-01T10:39:16Z</published>
-	<updated>2023-01-01T13:19:00Z</updated>
-	<author>
-		<name>Apol1oBelvedere</name>
-		<uri>https://www.v2ex.com/member/Apol1oBelvedere</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	Win7 x64 运行程序显示“无法找到函数 GetFileVersionInfoExA,程序无法正常运行”，有无办法修复此错误？此程序需要在 Win7 x64 上使用。
+	现在市场貌似比较少这种手机端的岗位，都转前端或者后端了？还是转行了？
 	]]></content>
 </entry>
 </feed>
