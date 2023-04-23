@@ -8,15 +8,574 @@
 <link rel="self" type="application/atom+xml" href="https://www.v2ex.com/index.xml" />
 <id>https://www.v2ex.com/</id>
 
-<updated>2023-04-22T15:48:53Z</updated>
+<updated>2023-04-23T01:13:40Z</updated>
 
 <rights>Copyright © 2010-2018, V2EX</rights>
 <entry>
+	<title>[Linux] Ubuntu 不定时死机，从日志里看不出来啥</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934667#reply0" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934667</id>
+	<published>2023-04-23T01:14:40Z</published>
+	<updated>2023-04-23T01:13:40Z</updated>
+	<author>
+		<name>monetto</name>
+		<uri>https://www.v2ex.com/member/monetto</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>kern.log</p>
+<p>Apr 10 06:33:09 monetto-Lenovo-N480 kernel: [250602.381000] ath: doing EEPROM country-&gt;regdmn map search</p>
+<p>Apr 10 06:33:09 monetto-Lenovo-N480 kernel: [250602.381001] ath: country maps to regdmn code: 0x52</p>
+<p>Apr 10 06:33:09 monetto-Lenovo-N480 kernel: [250602.381002] ath: Country alpha2 being used: CN</p>
+<p>Apr 10 06:33:09 monetto-Lenovo-N480 kernel: [250602.381003] ath: Regpair used: 0x52</p>
+<p>Apr 10 06:33:09 monetto-Lenovo-N480 kernel: [250602.381004] ath: regdomain 0x809c dynamically updated by country element</p>
+<p>Apr 10 10:52:45 monetto-Lenovo-N480 kernel: [266178.315595] ath: phy0: DMA failed to stop in 10 ms AR_CR=0x00000024 AR_DIAG_SW=0x02000020 DMADBG_7=0x0000a400</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.482834] wlp8s0: authenticate with 64:09:80:75:df:46</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.502181] wlp8s0: send auth to 64:09:80:75:df:46 (try 1/3)</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.503479] wlp8s0: authenticated</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.504602] ath9k 0000:08:00.0 wlp8s0:
+disabling HT/VHT/HE due to WEP/TKIP use</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.506550] wlp8s0: associate with
+64:09:80:75:df:46 (try 1/3)</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507636] wlp8s0: RX AssocResp from
+64:09:80:75:df:46 (capab=0x431 status=0 aid=2)</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507788] wlp8s0: associated</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507878] ath: EEPROM regdomain: 0x809c</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507880] ath: EEPROM indicates we should
+expect a country code</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507881] ath: doing EEPROM country-&gt;regdmn
+map search</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507882] ath: country maps to regdmn code:
+0x52</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507883] ath: Country alpha2 being used: CN</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507884] ath: Regpair used: 0x52</p>
+<p>Apr 10 10:52:46 monetto-Lenovo-N480 kernel: [266179.507884] ath: regdomain 0x809c dynamically
+updated by country element</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 kernel: [    0.000000] microcode: microcode updated early
+to revision 0x21, date = 2019-02-13</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 kernel: [    0.000000] Linux version 5.15.0-69-generic
+(buildd@lcy02-amd64-071) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, GNU ld (GNU Binutils for
+Ubuntu) 2.34) #76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023 (Ubuntu 5.15.0-69.76~20.04.
+1-generic 5.15.87)</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 kernel: [    0.000000] Command line: BOOT_IMAGE=/boot/
+vmlinuz-5.15.0-69-generic root=UUID=ee9cfb1c-2a34-4cbc-a6bc-baaf360d07ae ro quiet splash vt.
+handoff=7</p>
+<p>sys.log</p>
+<p>Apr 10 14:26:32 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681107992.0486] manager:
+NetworkManager state is now CONNECTED_GLOBAL</p>
+<p>Apr 10 14:26:32 monetto-Lenovo-N480 whoopsie[1257]: [14:26:32] The default IPv4 route is: /
+org/freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:26:32 monetto-Lenovo-N480 whoopsie[1257]: [14:26:32] Not a paid data plan: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:26:32 monetto-Lenovo-N480 whoopsie[1257]: [14:26:32] Found usable connection: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:26:33 monetto-Lenovo-N480 whoopsie[1257]: [14:26:33] online</p>
+<p>Apr 10 14:26:42 monetto-Lenovo-N480 systemd[1]: NetworkManager-dispatcher.service: Succeeded.</p>
+<p>Apr 10 14:30:01 monetto-Lenovo-N480 CRON[11672]: (root) CMD ([ -x /etc/init.d/anacron ] &amp;&amp; if
+[ ! -d /run/systemd/system ]; then /usr/sbin/invoke-rc.d anacron start &gt;/dev/null; fi)</p>
+<p>Apr 10 14:33:56 monetto-Lenovo-N480 systemd[1]: Starting Ubuntu Advantage Timer for running
+repeated jobs...</p>
+<p>Apr 10 14:33:56 monetto-Lenovo-N480 systemd[1]: ua-timer.service: Succeeded.</p>
+<p>Apr 10 14:33:56 monetto-Lenovo-N480 systemd[1]: Finished Ubuntu Advantage Timer for running
+repeated jobs.</p>
+<p>Apr 10 14:34:56 monetto-Lenovo-N480 systemd[1]: Started Run anacron jobs.</p>
+<p>Apr 10 14:34:56 monetto-Lenovo-N480 anacron[11690]: Anacron 2.3 started on 2023-04-10</p>
+<p>Apr 10 14:34:56 monetto-Lenovo-N480 anacron[11690]: Normal exit (0 jobs run)</p>
+<p>Apr 10 14:34:56 monetto-Lenovo-N480 systemd[1]: anacron.service: Succeeded.</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681108911.3153] manager:
+NetworkManager state is now CONNECTED_SITE</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 whoopsie[1257]: [14:41:51] offline</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 dbus-daemon[616]: [system] Activating via systemd:
+service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.
+service' requested by ':1.12' (uid=0 pid=617 comm="/usr/sbin/NetworkManager --no-daemon "
+label="unconfined")</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 systemd[1]: Starting Network Manager Script Dispatcher
+Service...</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 dbus-daemon[616]: [system] Successfully activated service
+'org.freedesktop.nm_dispatcher'</p>
+<p>Apr 10 14:41:51 monetto-Lenovo-N480 systemd[1]: Started Network Manager Script Dispatcher
+Service.</p>
+<p>Apr 10 14:41:54 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681108914.4215] manager:
+NetworkManager state is now CONNECTED_GLOBAL</p>
+<p>Apr 10 14:41:54 monetto-Lenovo-N480 whoopsie[1257]: [14:41:54] The default IPv4 route is: /
+org/freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:41:54 monetto-Lenovo-N480 whoopsie[1257]: [14:41:54] Not a paid data plan: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:41:54 monetto-Lenovo-N480 whoopsie[1257]: [14:41:54] Found usable connection: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:41:55 monetto-Lenovo-N480 whoopsie[1257]: [14:41:55] online</p>
+<p>Apr 10 14:42:04 monetto-Lenovo-N480 systemd[1]: NetworkManager-dispatcher.service: Succeeded.</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681108932.3142] manager:
+NetworkManager state is now CONNECTED_SITE</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 whoopsie[1257]: [14:42:12] offline</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 dbus-daemon[616]: [system] Activating via systemd:
+service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.
+service' requested by ':1.12' (uid=0 pid=617 comm="/usr/sbin/NetworkManager --no-daemon "
+label="unconfined")</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 systemd[1]: Starting Network Manager Script Dispatcher
+Service...</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 dbus-daemon[616]: [system] Successfully activated service
+'org.freedesktop.nm_dispatcher'</p>
+<p>Apr 10 14:42:12 monetto-Lenovo-N480 systemd[1]: Started Network Manager Script Dispatcher
+Service.</p>
+<p>Apr 10 14:42:13 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681108933.1719] manager:
+NetworkManager state is now CONNECTED_GLOBAL</p>
+<p>Apr 10 14:42:13 monetto-Lenovo-N480 whoopsie[1257]: [14:42:13] The default IPv4 route is: /
+org/freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:42:13 monetto-Lenovo-N480 whoopsie[1257]: [14:42:13] Not a paid data plan: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:42:13 monetto-Lenovo-N480 whoopsie[1257]: [14:42:13] Found usable connection: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 14:42:13 monetto-Lenovo-N480 whoopsie[1257]: [14:42:13] online</p>
+<p>Apr 10 14:42:23 monetto-Lenovo-N480 systemd[1]: NetworkManager-dispatcher.service: Succeeded.</p>
+<p>Apr 10 14:45:13 monetto-Lenovo-N480 wpa_supplicant[650]: wlp8s0: WPA: Group rekeying
+completed with 64:09:80:75:df:46 [GTK=TKIP]</p>
+<p>Apr 10 15:17:01 monetto-Lenovo-N480 CRON[11739]: (root) CMD (   cd / &amp;&amp; run-parts --report /
+etc/cron.hourly)</p>
+<p>Apr 10 15:30:01 monetto-Lenovo-N480 CRON[11760]: (root) CMD ([ -x /etc/init.d/anacron ] &amp;&amp; if
+[ ! -d /run/systemd/system ]; then /usr/sbin/invoke-rc.d anacron start &gt;/dev/null; fi)</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681111952.3145] manager:
+NetworkManager state is now CONNECTED_SITE</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 whoopsie[1257]: [15:32:32] offline</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 dbus-daemon[616]: [system] Activating via systemd:
+service name='org.freedesktop.nm_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.
+service' requested by ':1.12' (uid=0 pid=617 comm="/usr/sbin/NetworkManager --no-daemon "
+label="unconfined")</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 systemd[1]: Starting Network Manager Script Dispatcher
+Service...</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 dbus-daemon[616]: [system] Successfully activated service
+'org.freedesktop.nm_dispatcher'</p>
+<p>Apr 10 15:32:32 monetto-Lenovo-N480 systemd[1]: Started Network Manager Script Dispatcher
+Service.</p>
+<p>Apr 10 15:32:33 monetto-Lenovo-N480 NetworkManager[617]: &lt;info&gt;  [1681111953.5199] manager:
+NetworkManager state is now CONNECTED_GLOBAL</p>
+<p>Apr 10 15:32:33 monetto-Lenovo-N480 whoopsie[1257]: [15:32:33] The default IPv4 route is: /
+org/freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 15:32:33 monetto-Lenovo-N480 whoopsie[1257]: [15:32:33] Not a paid data plan: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 15:32:33 monetto-Lenovo-N480 whoopsie[1257]: [15:32:33] Found usable connection: /org/
+freedesktop/NetworkManager/ActiveConnection/2</p>
+<p>Apr 10 15:32:34 monetto-Lenovo-N480 whoopsie[1257]: [15:32:34] online</p>
+<p>Apr 10 15:32:43 monetto-Lenovo-N480 systemd[1]: NetworkManager-dispatcher.service: Succeeded.</p>
+<p>Apr 10 15:34:35 monetto-Lenovo-N480 systemd[1]: Started Run anacron jobs.</p>
+<p>Apr 10 15:34:35 monetto-Lenovo-N480 anacron[11777]: Anacron 2.3 started on 2023-04-10</p>
+<p>Apr 10 15:34:35 monetto-Lenovo-N480 anacron[11777]: Normal exit (0 jobs run)</p>
+<p>Apr 10 15:34:35 monetto-Lenovo-N480 systemd[1]: anacron.service: Succeeded.</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-random-seed[267]: Kernel entropy pool is not
+initialized yet, waiting until it is.</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-modules-load[258]: Inserted module 'lp'</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-modules-load[258]: Inserted module 'ppdev'</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-modules-load[258]: Inserted module 'parport_pc'</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-modules-load[258]: Inserted module 'msr'</p>
+<p>Apr 11 08:02:04 monetto-Lenovo-N480 systemd-sysctl[276]: Not setting net/ipv4/conf/all/
+promote_secondaries (explicit setting exists).</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 如果你觉得整个城市都很傻 X，那到底是你傻 X 还是整个城市 傻 X 呢？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934666#reply6" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934666</id>
+	<published>2023-04-23T01:10:24Z</published>
+	<updated>2023-04-23T01:15:02Z</updated>
+	<author>
+		<name>LANB0</name>
+		<uri>https://www.v2ex.com/member/LANB0</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>如题，如果新到一个城市，在常住的一年多时间里，接触到各行各业（包括且不限于技术企业、ZF 部门、医院、市场化的各种服务业人员等等）的人都难以沟通，内心总有一种沟通就是对牛弹琴，对方纯 傻 X 的感觉。那到底是自己傻 X 还是这个城市傻 X 呢？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[MacBook Pro] 闲置 mac 出手 2020 款英特尔 和 2020 款 M1</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934663#reply2" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934663</id>
+	<published>2023-04-23T01:00:12Z</published>
+	<updated>2023-04-23T01:10:35Z</updated>
+	<author>
+		<name>ligaofeng0507</name>
+		<uri>https://www.v2ex.com/member/ligaofeng0507</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	2020 英特尔 5399 元<br />mac bookpro2020 款 9 成新  16g 运行内存 256 固态内存<br />女士一手，成色完美 9 成新，有轻微脏，一直用的外置键盘，键盘属于准新级别<br />原装电脑盒子，充电器均在<br /><br />可小刀<br />仅杭州自提<br /><br /> [闲鱼]  <a target="_blank" href="https://m.tb.cn/h.UGjTSqW?tk=fGjBdOnFV9p" rel="nofollow noopener">https://m.tb.cn/h.UGjTSqW?tk=fGjBdOnFV9p</a> CZ0001 「我在闲鱼发布了 [ mac bookpro2020 款 9 成新  16g 运行内存] 」<br />点击链接直接打开<br /><br />(贵有贵的道理 虽然时间长 但是几乎没怎么用，3 年电池循环 60 次，有想要的有想法的 诚心的闲鱼私... )<br /><br /><br />2020 M1   7450 元<br /><br />购于 2020 年官方店，99.9 新，无磕碰，无划痕，未拆修，附带原装充电器；<br />内存 16g<br />硬盘 256g<br />大小 13.3 寸<br />电池健康 89%<br />电池循环 70 次<br /><br />（ stable diffusion 默认参数出图 512*512 只需 10 秒）<br /> [闲鱼]  <a target="_blank" href="https://m.tb.cn/h.UGjhwPn?tk=f4lEdOnvaZc" rel="nofollow noopener">https://m.tb.cn/h.UGjhwPn?tk=f4lEdOnvaZc</a> CZ0001 「快来捡漏 [购于 2020 年官方店，99.9 新，无磕碰，无划痕，未拆] 」<br />点击链接直接打开<br /><br />（同样几乎没怎么用，键盘 马里奥键盘膜 磨砂外壳保护膜 保护的很好。 诚心闲鱼私... ）
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 新闻实验室免费 newsletter 推荐（附链接和正文）</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934662#reply0" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934662</id>
+	<published>2023-04-23T00:59:34Z</published>
+	<updated>2023-04-23T00:57:34Z</updated>
+	<author>
+		<name>mcnultytrek</name>
+		<uri>https://www.v2ex.com/member/mcnultytrek</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<a target="_blank" href="https://newsletter.newslab.info/social-media-died-faster-than-news-media/" rel="nofollow noopener">https://newsletter.newslab.info/social-media-died-faster-than-news-media/</a><br />以下正文<br />“新闻已死”喊了很多年，更快溃败的却是社交媒体平台｜免费 newsletter （ 063 ）<br />方可成<br />21 APR 2023 — 需要 12 分钟阅读<br /><br />本周二（ 4 月 18 日）中午，北京长峰医院发生火灾，造成至少 29 人死亡。从火灾发生，到当晚官媒《北京日报》发出情况通报，其间近 8 小时几乎没有任何信息传出，这样的静默令人愕然。<br /><br />端传媒的报道很好地总结了其中可能的原因。我想基于其中的信息，做一个简单的分析。<br /><br />今天，当我们提到“媒体”的时候，往往可能在说两种东西，第一是生产原创新闻报道的新闻媒体（或称“机构媒体”），第二是承载巨量信息、人人皆可发言的社交媒体平台，上面活跃着大量的“自媒体”。<br /><br />在两者的对比之中，许多人觉得社交媒体平台代表着更先进的生产力，就像汽车胜过马车一样；它们也的确创造了更大的商业成功，吸引广告主带着钱跟机构媒体说再见；也有人觉得社交媒体的社会意义和公共价值同样超过机构媒体，因为它大大加快了信息传播的速度、降低了表达的门槛、形成了民众监督的力量、带来了“围观改变中国”的可能。<br /><br />但是，在社交媒体平台已经入侵我们的生活十多年的今天，我们已经越来越清晰地认识到：至少在社会意义和公共价值方面，社交媒体平台带来的可能只是一些虚假希望。<br /><br />用一个我最近思考较多的概念——韧性（ resilience ）——来考察，北京长峰医院火灾显示出，新闻媒体在服务公共价值方面的韧性远远胜过社交媒体平台。在这里，我们可以简单将韧性理解为，在不利条件之下是否依然可以发挥原本应该发挥的作用。<br /><br />是的，机构媒体和社交媒体都受到打压，被束缚住手脚，但是——<br /><br />第一，社交媒体的快速、低门槛、“人人都是记者”的特性完全没有体现出来，官方通报之前，几乎没有任何现场照片和视频流传，通报之后亦无。与之形成对比的是，虽然一开始的 8 小时内机构媒体也没有报道，但在官方通报之后大约一天的短暂窗口期，包括财新、新京报、中国青年报、南方周末在内的多家机构媒体做了多角度的报道。<br /><br />第二，无论是图文型社交媒体，还是视频型社交媒体，与事件相关的内容几乎完全来自官方通报。与之形成对比的是，机构媒体的报道补充了不少官方通报没有提供的内容。<br /><br />第三，社交媒体上的不少账号将矛头转向长峰医院的民营属性，有意引导“医院因为是民营所以出问题”的舆论。与之形成对比的是，已经有机构媒体挖掘出了背后的真问题之一（虽然《新京报》该文后来被删除）：失能老人的长期医护照料需求难以满足。长峰医院提供了接收和照料失能老人的服务，填补了市场的一块空白，但也间接酿成了此次火灾中他们难以逃跑避难的悲剧。<br /><br />当然，这里并不是说机构媒体的表现一定是令人满意的——在重压之下，它们确实已经不比昨日，例如他们的体制内线人资源已经大量流失，例如窗口期本身也已经大大缩短。但是，起码它们依然在努力运转，为公众尽力奉上合格的作品。不像社交媒体，除了供人们表达惊讶和愤怒的情绪之外，交上的基本是一张白卷。<br /><br />“新闻以死”已经说了这么多年，但相比起来，社交媒体平台的溃败速度才是更加迅雷不及掩耳的。<br /><br />为什么会这样？如同我在此前关于“自媒体”的论文当中总结的：机构媒体虽然在技术和商业模式上不那么“先进”，但它从 1990 年代开始形成了一个有共同职业理念的专业群体，并且这种理念在逆境之中依然得到了传承，正是这种被称为“新闻专业主义”的观念的力量，使机构媒体具备了抗压的韧性。反观社交媒体平台公司，以及在平台上活跃的自媒体，则并未形成这样的职业理念，没有在“追逐注意力”之外发展出行业共享的、更具超越性的追求，自然也就在大风之下立马折弯了腰。<br /><br />所以，火灾逝者的尸骨未寒，在公共利益上未有任何建树的社交媒体已经迫不及待地转向了下一个热点，连篇累牍地关注起宝马 mini 展台的冰激凌。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 放开才是好的策略，体会到领导真的固执</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934661#reply1" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934661</id>
+	<published>2023-04-23T00:58:10Z</published>
+	<updated>2023-04-15T00:58:10Z</updated>
+	<author>
+		<name>acthtml</name>
+		<uri>https://www.v2ex.com/member/acthtml</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	
+	]]></content>
+</entry><entry>
+	<title>[软件] 有类似今日热榜的 app 推荐吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934660#reply1" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934660</id>
+	<published>2023-04-23T00:57:26Z</published>
+	<updated>2023-04-23T01:02:24Z</updated>
+	<author>
+		<name>billowssun123</name>
+		<uri>https://www.v2ex.com/member/billowssun123</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	发现这个软件挺好用的 有类似软件推荐吗
+	]]></content>
+</entry><entry>
+	<title>[问与答] win、mac 同网络下文件传输有什么好软件？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934659#reply8" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934659</id>
+	<published>2023-04-23T00:52:43Z</published>
+	<updated>2023-04-23T01:14:24Z</updated>
+	<author>
+		<name>cantonadong</name>
+		<uri>https://www.v2ex.com/member/cantonadong</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	大文件和小文件都会有
+	]]></content>
+</entry><entry>
+	<title>[酷工作] [深圳] 测试工程师</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934658#reply0" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934658</id>
+	<published>2023-04-23T00:39:28Z</published>
+	<updated>2023-04-23T00:37:28Z</updated>
+	<author>
+		<name>Wdafff</name>
+		<uri>https://www.v2ex.com/member/Wdafff</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>经验要求</p>
+<p>1 、3 年工作经验及以上，对数据高度敏感、工作认真细致；</p>
+<p>2 、熟练软件测试基本操作工具，如：禅道、Postman 、Loadrunner 、Jmeter 等；</p>
+<p>3 、熟悉软件测试方法及测试流程，能够独立完成测试用例设计与编写，及测试计划制定，分析测试结果；</p>
+<p>4 、熟悉集成开发，版本控制，构建等工具等；掌握自动化测试技术预研和实施能力；</p>
+<p>5 、了解 linux 命令，mysql 数据库，TCP/IP 、HTTP 等网络协议；</p>
+<p>6 、了解 python 、C++、Java 、Shell 其中一种语言 ；</p>
+<p>7 、掌握用户体验、易用性、兼容性等测试方法；掌握功能、接口、自动化、安全、性能测试方法；</p>
+<p>8 、细致有耐心，责任心强，有良好的语言表达，沟通，独立分析和解决问题的能力；</p>
+<p>工作职责：</p>
+<p>1 、根据需求文档编写测试用例，合理评估测试时间并进行测试验证，输出测试报告；</p>
+<p>2 、编写测试计划，测试用例并在测试环境中准备测试数据；</p>
+<p>3 、根据测试用例执行测试，反馈跟踪产品 BUG 及用例缺陷；</p>
+<p>4 、对测试中发现的问题进行分析和定位，与开发人员讨论缺陷解决方案；</p>
+<p>5 、完成产品的功能测试，集成测试和系统测试；</p>
+<p>6 、参与测试验收，产品上线 /迭代后的 bug 反馈修复；</p>
+<p>薪资范围：13-15K</p>
+<p>有意请联系：aHIwMDFANTF5aWhvbmcuY29t</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 固态硬盘辣么便宜了，当下性价比最高的外置是？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934657#reply8" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934657</id>
+	<published>2023-04-23T00:31:48Z</published>
+	<updated>2023-04-23T01:11:44Z</updated>
+	<author>
+		<name>binarymann</name>
+		<uri>https://www.v2ex.com/member/binarymann</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>准备买块外置移动固态来存点资源，特来请教 🙏</p>
+
+	]]></content>
+</entry><entry>
+	<title>[硬件] NVIDIA CMP 显卡能用来训练 AI 吗？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934656#reply4" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934656</id>
+	<published>2023-04-23T00:29:05Z</published>
+	<updated>2023-04-23T00:46:21Z</updated>
+	<author>
+		<name>Breakwa2333</name>
+		<uri>https://www.v2ex.com/member/Breakwa2333</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	就是 CMP 显卡很便宜，而且支持 CUDA ，特别是 TURING 架构的 CMP （核心阉割的比较少），但是为什么没有人用来训练 AI ？<br /><br />如题
+	]]></content>
+</entry><entry>
+	<title>[程序员] 双拼能不能通过声母快速输入？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934654#reply2" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934654</id>
+	<published>2023-04-23T00:15:08Z</published>
+	<updated>2023-04-22T12:15:08Z</updated>
+	<author>
+		<name>zjsxwc</name>
+		<uri>https://www.v2ex.com/member/zjsxwc</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	比如我输入“有没有”，<br />全拼我只需要输入“ymy”这 3 个字符，<br />而双拼却需要输入“ybmzyb” 6 个字符或“y'm'y” 5 个字符。<br />那么这种情况，双拼应该怎么快速输入？
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 4G 路由器模块，无 Wi-Fi， 60 一个包邮</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934653#reply8" />
+	<id>tag:www.v2ex.com,2023-04-23:/t/934653</id>
+	<published>2023-04-23T00:05:00Z</published>
+	<updated>2023-04-23T01:08:10Z</updated>
+	<author>
+		<name>Armor</name>
+		<uri>https://www.v2ex.com/member/Armor</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>之前开发剩下了 4 块全新的，有意向可以看看</p>
+<pre><code> [闲鱼]  https://m.tb.cn/h.Utrahpc?tk=iTDqdOnQjPV CZ0001 「我在闲鱼发布了 [ 4G 路由模块，三网通] 」
+点击链接直接打开
+</code></pre>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] mac spotify 登录提示 accesspoint17 错误</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934650#reply1" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934650</id>
+	<published>2023-04-22T23:35:38Z</published>
+	<updated>2023-04-22T21:35:38Z</updated>
+	<author>
+		<name>cantonadong</name>
+		<uri>https://www.v2ex.com/member/cantonadong</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	用的是美国的 IP ，资料地址也是 USA 。在 win 和手机上也是正常的。<br />到 mac 上就提示 accesspoint17 错误，且设置过自动配置，都不行。<br /><br />有遇到并解决的吗？
+	]]></content>
+</entry><entry>
+	<title>[优惠信息] MacUpdater 3 专业版 pro 拼车，学生折扣和国家折扣 4 折，还剩 3 席 ，每人 14 元</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934649#reply0" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934649</id>
+	<published>2023-04-22T23:10:37Z</published>
+	<updated>2023-04-23T00:59:48Z</updated>
+	<author>
+		<name>diascit</name>
+		<uri>https://www.v2ex.com/member/diascit</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>MacUpdater 3 专业版（ pro ）拼车，7 人席位，已经有 4 人 ，支持反激活，买断，学生折扣和国家折扣 4 折，还剩 3 席 ，每人 14 元。
+需要的联系我，微信 toru_chan</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 电视 app 哪家强？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934647#reply13" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934647</id>
+	<published>2023-04-22T22:51:26Z</published>
+	<updated>2023-04-23T00:31:14Z</updated>
+	<author>
+		<name>joefuzhou198x</name>
+		<uri>https://www.v2ex.com/member/joefuzhou198x</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>几年前的乐视电视，主要是家里老人在看，长期不看电视没研究，有什么 app 或者方案能实现高清多内容？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 在 ai 大幅提升生产力的背景下，我们需要什么样的制度来应对 ai 带来的挑战？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934646#reply1" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934646</id>
+	<published>2023-04-22T19:37:18Z</published>
+	<updated>2023-04-22T19:34:18Z</updated>
+	<author>
+		<name>t41372</name>
+		<uri>https://www.v2ex.com/member/t41372</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>完整版标题：在 ai 大幅提升生产力的背景下，市场经济，或者说当前世界主流的社会制度是否还能应对 ai 带来的挑战？我们需要什么样的制度以适应 ai 发展带来的失业风险和社会变革？</p>
+<p>我在<a href="https://www.zhihu.com/question/597198215" rel="nofollow">知乎</a>上也提了问，不过我更好奇 v2 上的人的想法，感兴趣的也可以过去回答。</p>
+<h4>术语定义</h4>
+<p>为了方便讨论，避免不必要的误解，这里定义一些用语
+ai 取代人类，不是指这个工作以后不需要人类了，而是指，因为 ai 大幅提升了生产力，资本家 /社会 已经不需要这么多人来完成这些工作了，很多人自然就会丢了饭碗。</p>
+<h2>问题描述</h2>
+<h4>ai 带来的失业问题</h4>
+<p>回看工业革命，机器所带来的生产力提升，使大量的工人不再被需要。但技术进步带来的新工种，宏观上补足了那些消失的工作所带来的就业缺口。</p>
+<p>微软 CEO Satya 在 <a href="https://www.youtube.com/watch?v=bsFXgfbj8Bc&amp;t=363s" rel="nofollow">一次华尔街日报的采访</a> 中提到，ai 进步会创造新的工作机会，来替代那些消失的岗位。但是 ai 带来的新工作机会，真的能够养活 ai 取代的工作吗？要明白，这一次，被 ai 威胁的是白领工种，是创造力岗位，是过去被认为难以被计算机取代的工作。</p>
+<p>技术进步会带来失业，而过去(如工业革命)，这些失业人口(宏观角度来看)大多都能找到需要他们的地方。</p>
+<p>而当 ai 取代了白领，ai 所带来的新的工作真的能与消失的岗位，数量上能取得平衡吗？ ai 进步所带来的新的工作真的能养活那些 因为 ai 而不再被需要的多余劳动力吗？</p>
+<p>传统经济学理论认为技术进步会带来收入水平与就业率的上升(在我看来有些傲慢)，因为技术进步<strong>似乎</strong>总能创造新的岗位，让那些多出来的生产力去做更有价值的工作。但近年，许多学者认为，技术进步不一定能带来足够的新岗位，以应对技术进步取代的工作岗位。</p>
+<p>除了白领工作，ai 的进步，特别是多模态的大语言模型的进步，是否会进一步提升机器对服务业或是工人阶级的渗透？</p>
+<h4>ai 带来的贫富差距扩大</h4>
+<p>若无法保持平衡，若 ai 消灭的工作多于 ai 创造的工作，我们将见到大量的岗位消失，大量的失业。而由于资本家所获得的仅仅是更低廉的生产成本，这可能会使贫富差距严重扩大。</p>
+<p>一篇发表于美国全国经济研究所(NBER) 的论文也表达了对 由生产力大幅提升带来的贫富差距扩大的担忧。文中提到， "快速的，節省勞動力的技術進步，會給熟練工人和資本所有者帶來短期收益。但長遠來看，卻會使那些沒有能力投資於實體或人力資本的人陷入貧困。"，应用到 ai 的变革，就是说向 ai 这种大幅度提高生产力的技术进步，会为资本家带来收益，同时让无产阶级陷入贫困。
+Sachs, Jeffrey D. and Kotlikoff, Laurence J., Smart Machines and Long-Term Misery (December 2012). NBER Working Paper No. w18629, Available at SSRN: <a href="https://ssrn.com/abstract=2192802" rel="nofollow">https://ssrn.com/abstract=2192802</a></p>
+<h4>所以我们应该遏制 ai 的发展吗？我们应该封锁或抵制 ai 吗？</h4>
+<p>不，因为封锁没有用。就像大公司不会停止 ai 研究一样。公司停止了 ai 发展，别的企业也会去补上。
+就算一个国家以法律手段封锁某种 ai 技术，也不能阻止这个 ai 技术在<strong>其他国家</strong>带来的生产成本的降低。这可能会使企业更倾向在允许使用 ai 的地区进行生产，或是使这个禁止使用 ai 的国家的生产成本显著高于它国同类产品。</p>
+<h4>所以，难道我们应该坐以待毙？</h4>
+<p>相信大家也听说了关于那份希望暂停大语言模型发展 6 个月的公开信 <a href="https://futureoflife.org/open-letter/pause-giant-ai-experiments/" rel="nofollow">暂停巨大的人工智能实验： 一封公开信</a>。这个公开信的重点不是 "暂停 ai 研究"， 而是 "我们的制度和审查还没有准备好，所以我们要先做好准备"</p>
+<p>但是同样的，我们知道这大概率就只会停留在公开信的地步了。没有一个脑子正常的企业会因此暂停 ai 实验。所以，我认为更具建设性的问题是：我们到底需要什么样的系统，什么样的制度，以应对 ai 世代所带来的挑战，来避免这样一个具有巨大潜力，明明能够造福人类的技术，带领我们前往一个黑暗的未来，一个只有少数人获得利益，而大多数人活得更糟的世界。</p>
+<p>[岱川博士: 最具争议的一期 - 为何我对 ChatGPT 不那么兴奋-哔哩哔哩]  <a href="https://b23.tv/ku0ZHHq" rel="nofollow">b23.tv</a></p>
+<p>生产力的提升明明是件好事，但这却会对我们的财富分配机制带来巨大的挑战。我们应该做出什么样的改变 - 或者说，什么样的分配系统会更适合 ai 世代所带来的巨大生产力提升？政策上，我们需要做出什么变化来应对这样的变化，来确保 ai 技术的利用是可持续的？</p>
+<h4>相关内容</h4>
+<p>下面列出了一些，我可能或多或少汲取了一些想法，却没有在上文中明确引用的文章或视频。</p>
+<blockquote>
+<p>研究結果顯示，隨著產業生產力的提高，行業就業率普遍下降。
+機器能力的快速提升可能會限制勞動力需求，因為技術日益侵占人類的工作任務，最終使勞動力陷入貧困。</p>
+</blockquote>
+<p>欧洲中央银行 2017
+Autor, David, and Anna Salomons. "Robocalypse now: Does productivity growth threaten employment." <em>Proceedings of the ECB Forum on Central Banking: Investment and Growth in Advanced Economie</em>. 2017.</p>
+<blockquote>
+<p>兩種對抗的經濟力量決定了勞動所得份額的演變：技術進步的進程逐漸取代“舊”任務，降低勞動所得份額，可能會降低實際工資；而內生技術進步則產生了新的需要勞動力的任務。這些力量的相互作用可以 -- 但不一定 -- 產生一條平衡增長路徑，在這條路徑上，由於任務替換減少了勞動力的短缺，因此產生了內生的新創建需要勞動力的工作任務，從而恢復了勞動所得份額。</p>
+</blockquote>
+<p>技術進步會取代 old jobs, 但是, 技術進步(偶爾, 但不一定)會帶來新的工作, 兩者相互抵銷, 使工人的收入佔比不變</p>
+<p>美国经济评论 2018 - "人与机器的竞赛： 技术对增长、要素份额和就业的影响"
+Acemoglu, Daron, and Pascual Restrepo. 2018. "The Race between Man and Machine: Implications of Technology for Growth, Factor Shares, and Employment." American Economic Review, 108 (6): 1488-1542.DOI: 10.1257/aer.20160696</p>
+<blockquote>
+<p>Acemoglu 和 Restrepo （ 2017 ）得出結論，相對暴露於工業機器人的美國地方勞動力市場在 1990 年至 2007 年間經歷了就業和工資水平的不同程度下降。這些證據具有普遍性的限制因素之一是，機器人目前只廣泛應用於少數工業應用領域，主要是重工業。隨著機器人技術的發展，涵蓋非工業應用領域的範圍變得更廣泛，例如醫療保健、維護、清潔、食品製備等，勞動力市場的後果也可能會發生改變。</p>
+</blockquote>
+<p>政治经济学杂志 芝加哥大学 2017 - "机器人和工作： 来自美国劳动力市场的证据"
+Acemoglu, Daron, and Pascual Restrepo. "Robots and jobs: Evidence from US labor markets." <em>Journal of political economy</em> 128.6 (2020): 2188-2244.</p>
+
+	]]></content>
+</entry><entry>
+	<title>[云计算] 阿里云的轻量香港也没了？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934644#reply5" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934644</id>
+	<published>2023-04-22T18:13:16Z</published>
+	<updated>2023-04-22T20:30:37Z</updated>
+	<author>
+		<name>lushan</name>
+		<uri>https://www.v2ex.com/member/lushan</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>家人们看图👀</p>
+<p><a href="https://imgur.com/WRN1N1f" rel="nofollow">https://imgur.com/WRN1N1f</a></p>
+<p>没搜到相关公告啊，应该不会偷偷下架吧</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 为什么通过 VPN 访问内网数据比直接把服务器暴露在公网更安全？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934643#reply18" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934643</id>
+	<published>2023-04-22T17:31:50Z</published>
+	<updated>2023-04-23T01:01:03Z</updated>
+	<author>
+		<name>UserName99</name>
+		<uri>https://www.v2ex.com/member/UserName99</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>看到本站经常有人讨论把家里某台内网设备暴露在公网上时怎么增加安全性，很多人会建议使用 VPN 访问内网设备。很多企业也是使用 VPN 访问内网服务器数据的。但是为什么使用 VPN 就会更安全呢？我理解把内网设备暴露在公网从外面访问就跟平时访问网站是差不多的，而平时访问网站是能保证安全的。比如下面几个常见场景：</p>
+<p>场景 1：在家里登录公司 VPN ,通过 VPN 往公司内网 GitLab 服务器提交代码。
+场景 2：把公司 GitLab 服务器暴露在公网上，直接在家往 GitLab 提交代码。
+场景 3：假设家里光猫有公网 IP ，通过 DDNS 和端口映射，可以实现在外面访问家里的 NAS 管理页面。
+场景 4：把场景 3 改造一下，NAS 不暴露在公网上，先在树莓派上搭个 VPN 服务器，从外面先连接树莓派上的 VPN ，然后再访问内网 NAS 。</p>
+<p>假设上面几种情况 VPN 、Git 、NAS 都是用账号密码的方式登录的，NAS 、GitLab 已开启 https 。</p>
+<p>场景 2 和往 GitHub 提交代码安全性应该是一样的，既然 GitHub 能保证安全，为什么换成公司的 GitLab 就不安全了呢？
+场景 4 里面，别人获取到 VPN 的账号密码就能进入内网，在场景 3 里别人获取 NAS 账号密码就能拿到 NAS 上的数据，拿到 VPN 的账号密码和拿到 NAS 的账号密码难度应该也是一样的。</p>
+<p>此时场景 1 和场景 4 里面，VPN 增加的安全性体现在哪里？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[分享发现] 感觉鼓励民间借贷真是个 6 的飞起的点子</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934642#reply15" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934642</id>
+	<published>2023-04-22T17:15:09Z</published>
+	<updated>2023-04-23T01:14:15Z</updated>
+	<author>
+		<name>cnfczn</name>
+		<uri>https://www.v2ex.com/member/cnfczn</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	既提高了居民短期可消费额度，又带动了企业创收，居民为了还贷还要继续踏实工作。<br /><br />这可比发什么消费券管用多了，不知道是不是我想多了。
+	]]></content>
+</entry><entry>
+	<title>[Apple TV] Apple TV 4K 2022 的遥控器掉电严重</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934640#reply7" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934640</id>
+	<published>2023-04-22T17:06:37Z</published>
+	<updated>2023-04-22T20:21:20Z</updated>
+	<author>
+		<name>Heisenbery</name>
+		<uri>https://www.v2ex.com/member/Heisenbery</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>每天至少会掉 10%的电，这是完全不使用的情况下。一旦使用耗电会更快，一周就要充一次，与官网标称的一年充电数次完全不符，是我的遥控器坏了吗？</p>
+
+	]]></content>
+</entry><entry>
+	<title>[程序员] 求群晖文件管理器和 Docker 容器可以稳定访问自建 Seafile 文件的方法</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934638#reply3" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934638</id>
+	<published>2023-04-22T16:47:07Z</published>
+	<updated>2023-04-22T18:54:20Z</updated>
+	<author>
+		<name>ZakaryTime</name>
+		<uri>https://www.v2ex.com/member/ZakaryTime</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	Seafile 在文件同步的性能和可靠性方面比起微力同步、Syncthing 还是高不少，但是 Saefile 同步后在后台会把文件分成小块，只能通过 Weddav 协议访问。<br />现在主要需求一是 Pichome 容器访问 Seafile 同步的 Eagle 库文件，实现 Web 端访问素材。二是 CloudSync 同步 Seafile 文件到 OneDrive 实现重要文件的多端备份。<br /><br /><br /><br />出现的问题是 CloudSync 通过 Webdav 访问 Seafile 的文件总是无法及时检测到文件变更，第一次同步后就不再继续同步了。 通过 Webdav 挂载到群规后，Cloudsync 可以访问到文件，但是和直接使用 Webdav 协议一样无法检测到变更，同时 Docker 容器无法挂载目录到容器。<br /><br /><br /><br />求大家指点能够稳定实现 Seafile 挂载或同步（最好是挂载的方法，减少存储占用），CloudSync 以及 Docker 可以正常访问的方法。
+	]]></content>
+</entry><entry>
+	<title>[问与答] 有买过希沃 w2 或者其他品牌学习机的吗</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934637#reply0" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934637</id>
+	<published>2023-04-22T16:33:46Z</published>
+	<updated>2023-04-22T16:33:46Z</updated>
+	<author>
+		<name>wellqq</name>
+		<uri>https://www.v2ex.com/member/wellqq</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	智商税还是真香，毕竟价格都不便宜，四千来块。有经验的发表一下值不值
+	]]></content>
+</entry><entry>
+	<title>[问与答] nas 里面存量照片如何通过 pixel1 备份到 google photo</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934636#reply0" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934636</id>
+	<published>2023-04-22T16:33:00Z</published>
+	<updated>2023-04-14T16:33:00Z</updated>
+	<author>
+		<name>cuixiao603</name>
+		<uri>https://www.v2ex.com/member/cuixiao603</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	nas 里面存量照片如何通过 pixel1 备份到 google photo ，搜到的帖子都是讲把新增照片同步至 google photo ，但是存量的照片有很多，没办法同时放入 pixel1 ，改如何解决呢。  <br />尝试通过 smb 挂载到手机本地目录，但是没有折腾成功，大佬有好的方案吗
+	]]></content>
+</entry><entry>
+	<title>[macOS] 关于 macOS 上中文输入法回车跳转搜索的问题</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934633#reply3" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934633</id>
+	<published>2023-04-22T16:27:02Z</published>
+	<updated>2023-04-22T20:04:35Z</updated>
+	<author>
+		<name>orangutan92</name>
+		<uri>https://www.v2ex.com/member/orangutan92</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	<p>github 的搜索框，如果在输入中文状态下，按下回车，会直接跳转搜索，而且是带单引号的。</p>
+<p>chatgpt 的聊天框也是这样，每次要手动切换成英文，很麻烦。</p>
+<p>Windows 上就没有这个问题，大家有遇到过吗？有办法解决吗？</p>
+<p>类似问题：<a href="https://discussionschinese.apple.com/thread/254662838" rel="nofollow">使用中文输入法输入时，按回车，会直接开始搜索 - Apple 社区</a></p>
+
+	]]></content>
+</entry><entry>
+	<title>[问与答] 主板上自带的 USB 与 TYPE-C 转出的 USB 有什么区别？</title>
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934632#reply2" />
+	<id>tag:www.v2ex.com,2023-04-22:/t/934632</id>
+	<published>2023-04-22T16:23:08Z</published>
+	<updated>2023-04-22T16:33:44Z</updated>
+	<author>
+		<name>Leon6868</name>
+		<uri>https://www.v2ex.com/member/Leon6868</uri>
+	</author>
+	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
+	比如说我想调用串口，在 Linux 下，它们都是 `/dev/tty*` 吗？
+	]]></content>
+</entry><entry>
 	<title>[分享创造] 基于 ChatGPT 的留学申请平台 - 火锅留学</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934629#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934629#reply8" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934629</id>
 	<published>2023-04-22T15:50:53Z</published>
-	<updated>2023-04-22T15:48:53Z</updated>
+	<updated>2023-04-23T01:15:45Z</updated>
 	<author>
 		<name>philosophy67</name>
 		<uri>https://www.v2ex.com/member/philosophy67</uri>
@@ -35,7 +594,7 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 2023 年了，希望果粉们不要掉在苹果的茧房里出不来了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934627#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934627#reply30" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934627</id>
 	<published>2023-04-22T15:41:00Z</published>
 	<updated>2023-04-21T23:40:00Z</updated>
@@ -52,10 +611,10 @@
 	]]></content>
 </entry><entry>
 	<title>[SQL Server] SQL Server 数据库迁移到 PostgreSQL 或者其它云原生 OLAP 库有哪些比较好的方案</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934626#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934626#reply7" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934626</id>
 	<published>2023-04-22T15:25:10Z</published>
-	<updated>2023-04-22T15:25:10Z</updated>
+	<updated>2023-04-22T17:30:13Z</updated>
 	<author>
 		<name>noparking188</name>
 		<uri>https://www.v2ex.com/member/noparking188</uri>
@@ -79,10 +638,10 @@
 	]]></content>
 </entry><entry>
 	<title>[天黑以后] 20230423 午夜俱乐部</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934624#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934624#reply4" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934624</id>
 	<published>2023-04-22T15:20:24Z</published>
-	<updated>2023-04-22T15:20:24Z</updated>
+	<updated>2023-04-22T18:30:39Z</updated>
 	<author>
 		<name>samohyes</name>
 		<uri>https://www.v2ex.com/member/samohyes</uri>
@@ -93,10 +652,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 不懂就问，有什么办法能买 hk 的储蓄保险</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934622#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934622#reply2" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934622</id>
 	<published>2023-04-22T15:05:11Z</published>
-	<updated>2023-04-22T15:05:11Z</updated>
+	<updated>2023-04-22T17:05:11Z</updated>
 	<author>
 		<name>Yuki321</name>
 		<uri>https://www.v2ex.com/member/Yuki321</uri>
@@ -106,10 +665,10 @@
 	]]></content>
 </entry><entry>
 	<title>[OpenAI] 即使访问不了 https://chat.openai.com，是不是也不影响基于 openai 的 token 来使用基于 chatgpt 的各种应用呢</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934621#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934621#reply1" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934621</id>
 	<published>2023-04-22T14:59:29Z</published>
-	<updated>2023-04-22T14:59:29Z</updated>
+	<updated>2023-04-22T15:59:29Z</updated>
 	<author>
 		<name>ningyu</name>
 		<uri>https://www.v2ex.com/member/ningyu</uri>
@@ -119,7 +678,7 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] mongodb 不适合用 prisma？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934620#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934620#reply4" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934620</id>
 	<published>2023-04-22T14:55:40Z</published>
 	<updated>2023-04-22T16:02:57Z</updated>
@@ -150,10 +709,10 @@
 	]]></content>
 </entry><entry>
 	<title>[程序员] 抖音又无法关注视频博主了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934618#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934618#reply2" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934618</id>
 	<published>2023-04-22T14:54:58Z</published>
-	<updated>2023-04-22T10:54:58Z</updated>
+	<updated>2023-04-22T12:54:58Z</updated>
 	<author>
 		<name>shuiyingwuhen</name>
 		<uri>https://www.v2ex.com/member/shuiyingwuhen</uri>
@@ -166,10 +725,10 @@
 	]]></content>
 </entry><entry>
 	<title>[ACG] 二次元游戏为什么不彻底封杀刷初始号的或者给新手福利好一些？一个经常翘课的同学淘宝卖各种游戏初始号赚了一千多万，已经润了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934616#reply11" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934616#reply22" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934616</id>
 	<published>2023-04-22T14:47:47Z</published>
-	<updated>2023-04-22T16:04:23Z</updated>
+	<updated>2023-04-23T01:16:33Z</updated>
 	<author>
 		<name>benrezzagmehamed</name>
 		<uri>https://www.v2ex.com/member/benrezzagmehamed</uri>
@@ -179,10 +738,10 @@
 	]]></content>
 </entry><entry>
 	<title>[北京] 北京租房，工作</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934615#reply0" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934615#reply1" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934615</id>
 	<published>2023-04-22T14:43:25Z</published>
-	<updated>2023-04-22T10:43:25Z</updated>
+	<updated>2023-04-22T11:43:25Z</updated>
 	<author>
 		<name>nbafive</name>
 		<uri>https://www.v2ex.com/member/nbafive</uri>
@@ -195,10 +754,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 如何找线下学习/练习语言的伙伴？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934614#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934614#reply5" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934614</id>
 	<published>2023-04-22T14:41:58Z</published>
-	<updated>2023-04-22T15:04:31Z</updated>
+	<updated>2023-04-22T16:04:31Z</updated>
 	<author>
 		<name>Goojoe</name>
 		<uri>https://www.v2ex.com/member/Goojoe</uri>
@@ -208,10 +767,10 @@
 	]]></content>
 </entry><entry>
 	<title>[问与答] 关于 2.5G 家用网络</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934613#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934613#reply8" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934613</id>
 	<published>2023-04-22T14:35:58Z</published>
-	<updated>2023-04-22T15:50:45Z</updated>
+	<updated>2023-04-22T18:50:45Z</updated>
 	<author>
 		<name>LokiSharp</name>
 		<uri>https://www.v2ex.com/member/LokiSharp</uri>
@@ -224,10 +783,10 @@
 	]]></content>
 </entry><entry>
 	<title>[Apple] 传说的中的 15 寸新 MacBook，会不会可能是上一代 15.6 with touchbar 模具</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934611#reply4" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934611#reply12" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934611</id>
 	<published>2023-04-22T13:51:55Z</published>
-	<updated>2023-04-22T15:41:55Z</updated>
+	<updated>2023-04-23T01:09:46Z</updated>
 	<author>
 		<name>Edward4074</name>
 		<uri>https://www.v2ex.com/member/Edward4074</uri>
@@ -250,10 +809,10 @@
 	]]></content>
 </entry><entry>
 	<title>[NAS] 请问国内有正确使用 Truenas 的姿势吗？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934608#reply3" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934608#reply5" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934608</id>
 	<published>2023-04-22T13:32:01Z</published>
-	<updated>2023-04-22T14:55:52Z</updated>
+	<updated>2023-04-22T17:54:59Z</updated>
 	<author>
 		<name>i979491586</name>
 		<uri>https://www.v2ex.com/member/i979491586</uri>
@@ -280,33 +839,16 @@ Error: [EFAULT] Failed to install chart release: Error: INSTALLATION FAILED: fai
 	]]></content>
 </entry><entry>
 	<title>[问与答] 求解 do not have access to chat.openai.com error 1020</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934606#reply2" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934606#reply3" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934606</id>
 	<published>2023-04-22T13:29:18Z</published>
-	<updated>2023-04-22T14:39:08Z</updated>
+	<updated>2023-04-22T17:41:22Z</updated>
 	<author>
 		<name>fire1980</name>
 		<uri>https://www.v2ex.com/member/fire1980</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	vps 的 ip 的 443 端口被封了，所以只能挂了一个 cloudflare 的 worker<br />开始 chatgpt 还能访问<br />这几天提示 do not have access to <a target="_blank" href="http://chat.openai.com" rel="nofollow noopener">chat.openai.com</a><br />清除 cookie<br />全局模式<br />都不行<br />估计是 cloudflare 的问题<br />求解
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 在少数派网站莫名其妙被禁言</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934605#reply17" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934605</id>
-	<published>2023-04-22T13:26:15Z</published>
-	<updated>2023-04-22T15:09:01Z</updated>
-	<author>
-		<name>dhou45</name>
-		<uri>https://www.v2ex.com/member/dhou45</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>此帖提前预定水深火热
-逛少数派网站想发个评论, 发现被禁言了, 于是给客服发了个邮件.. </p>
-<p>现在国内网站舆论管制这么严重了吗? 看他这回复感觉不像是自我阉割? </p>
-<p><img alt="sspai.PNG" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://s2.loli.net/2023/04/22/D1h2siUqPCN8v6f.png"/></p>
-
 	]]></content>
 </entry><entry>
 	<title>[职场话题] 暑期实习 offer 求比较</title>
@@ -343,10 +885,10 @@ Error: [EFAULT] Failed to install chart release: Error: INSTALLATION FAILED: fai
 	]]></content>
 </entry><entry>
 	<title>[MacBook Pro] 为什么 Mac 会在只有 USB 3.0 的扩展坞上识别出来 USB 2.0 接口</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934598#reply6" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934598#reply8" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934598</id>
 	<published>2023-04-22T12:30:00Z</published>
-	<updated>2023-04-22T13:08:59Z</updated>
+	<updated>2023-04-22T15:08:59Z</updated>
 	<author>
 		<name>Aurora0</name>
 		<uri>https://www.v2ex.com/member/Aurora0</uri>
@@ -367,7 +909,7 @@ Error: [EFAULT] Failed to install chart release: Error: INSTALLATION FAILED: fai
 	]]></content>
 </entry><entry>
 	<title>[Apple] 将 AppleNote 发布到博客，非常好的 idea</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934597#reply8" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934597#reply9" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934597</id>
 	<published>2023-04-22T12:20:21Z</published>
 	<updated>2023-04-22T15:17:39Z</updated>
@@ -403,7 +945,7 @@ Error: [EFAULT] Failed to install chart release: Error: INSTALLATION FAILED: fai
 	]]></content>
 </entry><entry>
 	<title>[OpenAI] 把 openai 的 API 二次转卖是个好生意吗</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934595#reply1" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934595#reply3" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934595</id>
 	<published>2023-04-22T12:10:06Z</published>
 	<updated>2023-04-22T04:10:06Z</updated>
@@ -419,507 +961,16 @@ Error: [EFAULT] Failed to install chart release: Error: INSTALLATION FAILED: fai
 	]]></content>
 </entry><entry>
 	<title>[程序员] 大家现在用什么字体可以分享下啊，想找个兼容中文的等宽字体</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934593#reply19" />
+	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934593#reply28" />
 	<id>tag:www.v2ex.com,2023-04-22:/t/934593</id>
 	<published>2023-04-22T11:48:11Z</published>
-	<updated>2023-04-22T16:12:20Z</updated>
+	<updated>2023-04-23T00:57:39Z</updated>
 	<author>
 		<name>iorilu</name>
 		<uri>https://www.v2ex.com/member/iorilu</uri>
 	</author>
 	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
 	平时用 consolas ，但中文总觉得压扁了不好看<br /><br />有没有中文好看的等宽字体，时候编码呢
-	]]></content>
-</entry><entry>
-	<title>[问与答] 怎么知道是哪个（哪些）软件，导致 Win 11 的任务管理器响应缓慢？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934592#reply1" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934592</id>
-	<published>2023-04-22T11:43:07Z</published>
-	<updated>2023-04-20T23:49:28Z</updated>
-	<author>
-		<name>weiweiwitch</name>
-		<uri>https://www.v2ex.com/member/weiweiwitch</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	现在 Win 11 最让我无法忍受的就是任务管理器打开、按某属性排序时，反应极其慢。<br /><br />但是我发现刚新装的 Win 11 ，是没有这个问题的。任务管理器用起来很顺畅。<br /><br />所以除了一个个卸载软件，有没有其他办法知道，是什么软件导致任务管理器反应这么慢？
-	]]></content>
-</entry><entry>
-	<title>[职场话题] 应届生 Offer 选择，求解惑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934591#reply8" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934591</id>
-	<published>2023-04-22T11:22:49Z</published>
-	<updated>2023-04-22T12:44:42Z</updated>
-	<author>
-		<name>redime</name>
-		<uri>https://www.v2ex.com/member/redime</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>9 硕 2 本，无实习
-Offer 情况：
-公司 1：运维开发工程师，40w
-公司 2：后端开发工程师(基础架构)，30w</p>
-<p>两者背书差不多，公司 1 给的高，公司 2 稳定。10w 的差距值不值的去公司 1 的运维开发？运维开发未来的前景真的不好么？求 V 友们指教。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 今天发现一款最接近彩色墨水屏的显示屏了，惊艳！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934590#reply19" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934590</id>
-	<published>2023-04-22T11:16:36Z</published>
-	<updated>2023-04-22T15:11:20Z</updated>
-	<author>
-		<name>James369</name>
-		<uri>https://www.v2ex.com/member/James369</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>一直在想将墨水屏应用到显示器上，毕竟天天面对显示器，可这个墨水屏的刷新率太低了，另外彩色的色彩也不行。</p>
-<p>今天逛街的时候，在小天才手表店铺看到了一款儿童平板电脑，绝了：
-那显示效果，没有任何反光。那刷新率可以看视频。那视角 360 度无死角。就跟在纸上看彩色一模一样。</p>
-<p>简直就是我苦苦追寻的电子墨水屏类似的效果。
-后来查了一下，也确实不错，9 层散射屏，纸质护眼，纳米技术。</p>
-<p>立马有一种想用来敲代码的快感。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 世界上又多了一个米黑</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934589#reply50" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934589</id>
-	<published>2023-04-22T11:15:41Z</published>
-	<updated>2023-04-22T16:12:58Z</updated>
-	<author>
-		<name>qipan0321</name>
-		<uri>https://www.v2ex.com/member/qipan0321</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	手机的 ip11 用了快四年，由于和雷军是校友，天然对小米有些许好感，准备入手小米的 13ultra 尝鲜。小米之家试玩 13ultra 发现真的又大又厚，最后今天下午四点买了台小米 13 顶配，五点不到到家迫不及待拆封。<br />        打开 B 站，调到最大音量，机器明显震动杂音，正常人都听得出来机器有问题那种。这种情况小米之家居然不给退，要我自己送去另外一个地方的售后点鉴定，拿到报告再去小米之家退机器？？？任你怎么说，人家都是都是一句：理解你的心情，但规定就这样。<br />        我买了新手机，正准备好好研究，到手就出问题，本来就影响心情。最后居然需要我花时间花精力开车大老远送手机去鉴定才给退换。还有天理吗？还有 wang--法吗？<br />        于是，世界上又多了一个米黑，黑的发亮那种。
-	]]></content>
-</entry><entry>
-	<title>[问与答] Windows 10 使用 Captura 无法录屏，报 System.IO.IOException</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934588#reply2" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934588</id>
-	<published>2023-04-22T11:08:32Z</published>
-	<updated>2023-04-22T13:09:47Z</updated>
-	<author>
-		<name>MiketsuSmasher</name>
-		<uri>https://www.v2ex.com/member/MiketsuSmasher</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>在 Windows 10 22H2 环境下使用 Captura 录屏，总是在持续最多几秒后中止，并出现如下错误信息：</p>
-<pre><code>System.IO.IOException: 系统资源不足，无法完成请求的服务。
-
-   在 System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   在 System.IO.Pipes.PipeStream.WinIOError(Int32 errorCode)
-   在 System.IO.Pipes.PipeStream.BeginWriteCore(Byte[] buffer, Int32 offset, Int32 count, AsyncCallback callback, Object state)
-   在 System.IO.Pipes.PipeStream.BeginWrite(Byte[] buffer, Int32 offset, Int32 count, AsyncCallback callback, Object state)
-   在 System.IO.Stream.&lt;&gt;c.&lt;BeginEndWriteAsync&gt;b__53_0(Stream stream, ReadWriteParameters args, AsyncCallback callback, Object state)
-   在 System.Threading.Tasks.TaskFactory`1.FromAsyncTrim[TInstance,TArgs](TInstance thisRef, TArgs args, Func`5 beginMethod, Func`3 endMethod)
-   在 System.IO.Stream.BeginEndWriteAsync(Byte[] buffer, Int32 offset, Int32 count)
-   在 System.IO.Stream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count, CancellationToken cancellationToken)
-   在 System.IO.Stream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count)
-   在 Captura.Models.FFmpegWriter.WriteFrame(IBitmapFrame Frame)
-   在 Captura.Models.WithPreviewWriter.WriteFrame(IBitmapFrame Image)
-   在 Screna.Recorder.DoWrite()
-</code></pre>
-<p>尝试使用管理员权限运行 Captura ，没有效果。</p>
-<p>刚才要把一局游戏的回放录下来，试了几次都没成功，想知道怎么解决无法录屏的问题？如果需要换录屏工具的话，可以推荐一个吗？</p>
-<p>btw ，用系统自带的 XBox Game Bar 录屏也会出现类似的错误，推测只要录屏就会出现此类错误，不单是 Captura 的问题。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] windows xbox pc 游戏能不能不改系统语言地区强制用中文？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934587#reply3" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934587</id>
-	<published>2023-04-22T11:04:33Z</published>
-	<updated>2023-04-22T14:26:10Z</updated>
-	<author>
-		<name>eb0c6551</name>
-		<uri>https://www.v2ex.com/member/eb0c6551</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>windows xbox pc game pass 里，不少游戏没有内置语言设置，而是根据系统语言 /地区决定。我已经习惯用英文版系统，不愿意就为了一个游戏改系统语言和地区。</p>
-<p>有办法在不改系统语言地区的情况下，强制简体中文吗？我试了比如<a href="https://xupefei.github.io/Locale-Emulator/" rel="nofollow">Locale Emulator</a>，但好像不起作用。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 一年前绑架了一只小猫，这一段 1 岁了。谢谢当时 v 友们的解答，来放点猫片</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934586#reply21" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934586</id>
-	<published>2023-04-22T11:00:29Z</published>
-	<updated>2023-04-22T15:49:16Z</updated>
-	<author>
-		<name>AsyncX</name>
-		<uri>https://www.v2ex.com/member/AsyncX</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>从小到大挑了一些照片，图床是 github+netlify ，速度可能会慢点。因为之前是在问与答提问的，还放在问答区了，谢谢当时的 v 友们。</p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221846680.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221847853.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221850640.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221851756.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221851416.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221854225.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221854950.png"/></p>
-<p><img alt="" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://jazzy-praline-dbe3ad.netlify.app/images/202304221858561.png"/></p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] gpt4 都出来这么久了，为啥还不管饱开放呢？ openai 也买不到显卡么？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934585#reply3" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934585</id>
-	<published>2023-04-22T10:57:39Z</published>
-	<updated>2023-04-22T13:09:46Z</updated>
-	<author>
-		<name>fengleiyidao</name>
-		<uri>https://www.v2ex.com/member/fengleiyidao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	为啥 api 与 plus ，都不量大管饱开放
-	]]></content>
-</entry><entry>
-	<title>[问与答] 你用的线路 ChatGPT 稳定吗?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934584#reply21" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934584</id>
-	<published>2023-04-22T10:45:08Z</published>
-	<updated>2023-04-22T14:53:30Z</updated>
-	<author>
-		<name>pdog18</name>
-		<uri>https://www.v2ex.com/member/pdog18</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>我以前一直用的  bywave , 现在是真的差劲, 我不知道是  bywave  的问题, 还是 openai  的限制.</p>
-<p>使用  ChatGPT, 上个月开了  Plus  之后, 可以一直对话, 不会经常断线. 但是最近即使是  Plus  也会频繁掉线了.</p>
-<p>对于我这个一年加起来用不了  100G  流量的小白来说, 叫我  100+月上奶昔之类的机场, 我真的要考虑一下.</p>
-<p>所以来问一下, 你们的线路使用  ChatGPT  稳定吗? 能一直保持对话不断开吗(不需要强制刷新)?  </p>
-<p>4 月 22 日</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 自我感受为什么会变？有点恐怖。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934583#reply4" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934583</id>
-	<published>2023-04-22T10:45:00Z</published>
-	<updated>2023-04-22T11:01:21Z</updated>
-	<author>
-		<name>numberator</name>
-		<uri>https://www.v2ex.com/member/numberator</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	就好像猫偶然看见了镜子中的自己，最近突然在镜子或者意识中有那么一瞬间感受到了和以往截然不同的自己，好像着装和内在感受很不一样，明明八百年没换衣服了，我根本不在乎这方面。我这是要进化了？还是人格要蹦进？
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] 谷歌是不是调整了 8.8.4.4/8.8.8.8 TCP DNS 服务策略</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934581#reply7" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934581</id>
-	<published>2023-04-22T10:35:07Z</published>
-	<updated>2023-04-22T14:06:33Z</updated>
-	<author>
-		<name>anytk</name>
-		<uri>https://www.v2ex.com/member/anytk</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>RT,路由 OP 里默认谷歌 DNS over TCP,今晚全挂了，进服务器发现 8.8.4.4 TCP EOF 这些错误，感觉奇怪，换成 CF 的 DNS 后好了。
-怀疑谷歌是不是改了 TCP DNS 的策略了</p>
-
-	]]></content>
-</entry><entry>
-	<title>[宽带症候群] B610 光猫真牛，电信跑桥街模式和路由模式差异很大</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934577#reply3" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934577</id>
-	<published>2023-04-22T10:13:37Z</published>
-	<updated>2023-04-22T14:50:25Z</updated>
-	<author>
-		<name>spediacn</name>
-		<uri>https://www.v2ex.com/member/spediacn</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>宽带升级了 1000M ，暂时没用 XPON ，用原来的华为 B610 来跑，同样的笔记本终端和设备和网线直接怼在猫上，跑桥街模式只有 610Mbps 左右，跑路由模式能到 970Mbps 。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] [搬运] 免费的 gpt3.5、gpt4</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934576#reply11" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934576</id>
-	<published>2023-04-22T10:09:39Z</published>
-	<updated>2023-04-22T15:24:09Z</updated>
-	<author>
-		<name>Xianmua</name>
-		<uri>https://www.v2ex.com/member/Xianmua</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	网站： https://chat.chatbot.sex/ ，能直连，目前能无限制用 gpt4<br />repo： <a target="_blank" href="https://github.com/xtekky/gpt4free" rel="nofollow noopener">https://github.com/xtekky/gpt4free</a><br />话说这要是公开国内厂商的 api ，估计很快就吃上牢饭了吧，当然 仅限于国内开发者
-	]]></content>
-</entry><entry>
-	<title>[Android] 程序里面怎么判断当前的 rom 是 funtouch os 还是 origin os?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934574#reply1" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934574</id>
-	<published>2023-04-22T09:49:43Z</published>
-	<updated>2023-04-22T11:58:23Z</updated>
-	<author>
-		<name>zhwguest</name>
-		<uri>https://www.v2ex.com/member/zhwguest</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>也没见个比较标准的说法，有 vivo 的同学帮忙指点下么？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[前端开发] BootStrap flex 属性的一个问题（需要看图，才能说明白）</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934573#reply2" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934573</id>
-	<published>2023-04-22T09:44:08Z</published>
-	<updated>2023-04-22T12:19:11Z</updated>
-	<author>
-		<name>coder4living</name>
-		<uri>https://www.v2ex.com/member/coder4living</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>这个问题需要看图，才能说明白</p>
-<p>在页面： <a href="https://getbootstrap.com/docs/5.1/utilities/flex/" rel="nofollow">https://getbootstrap.com/docs/5.1/utilities/flex/</a></p>
-<p>当我使用浏览器 chrome 右键菜单  inspect “I'm a flexbox container!” 这句话的时候，会出现如下的图片：</p>
-<p><a href="https://postimg.cc/nC3pBQ8t" rel="nofollow">Code-2023-04-22-17-33-32-Ehu1b-PRJpt.png</a></p>
-<p>我想问的问题是：图片中最后一部分， 反斜线画出的区域阴影部分是什么内容？ </p>
-<p>如何使用 bootstrap css 规则去掉这部分内容？</p>
-<p>说明：图片所在的图床，会在 7 天后删除该图片。</p>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 求教网络安全相关。</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934572#reply13" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934572</id>
-	<published>2023-04-22T09:42:19Z</published>
-	<updated>2023-04-22T14:27:12Z</updated>
-	<author>
-		<name>nyxsonsleep</name>
-		<uri>https://www.v2ex.com/member/nyxsonsleep</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	公司有个论坛，应该是 Discuz! X3.4 的前几天被黑了。还好有云服务快照，退回到了一个星期之前的状态。<br />现在老板开了个小比赛，找服务器或者论坛的漏洞，黑盒测试。<br />不指望拿什么奖励，就想问下怎么入门相关知识。<br />个人仅限于知道有 sql 注入、xss 、crsf 。但是感觉这些东西应该都是比较基础的内容，discuz 发展这么久的工具应该不会有这种错误吧。<br />服务器漏洞在我的理解中只要不设弱密码应该就能防御住，至于 0day 漏洞这是没办法的问题。<br />以上的理解有什么遗漏或者错误吗。
-	]]></content>
-</entry><entry>
-	<title>[酷工作] [深圳]iart 招聘前端， PM，运营经理</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934571#reply0" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934571</id>
-	<published>2023-04-22T09:38:40Z</published>
-	<updated>2023-04-22T09:35:40Z</updated>
-	<author>
-		<name>Kimm</name>
-		<uri>https://www.v2ex.com/member/Kimm</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><strong>iArt 总部位于深圳前海， 我们致力于下一代 AGI （ Artificial general intelligence 通用人工智能 or 强人工智能）, 具体地说，是做下一代的 Visual-ChatGPT ，基于多模态的对话式交互、检索和生成的 AGI 。</strong></p>
-<p><strong>拥有 20 名来自于世界各地的小伙伴， 人员分布在中国深圳，加拿大，英国，美国等，包括有来自帝国理工，卡迪夫，清华，港科大，港中文等的硕士博士和香港和英国的教授，也有微软，小米，字节等大厂出来的同学</strong>。</p>
-<p><strong>iart 的几位创始人已经在 AI 生成领域积累了很多经验，发表了很多顶刊顶会论文，像 siggraph, tvcg, cvpr, nature 都有，创业两年，已经获得由 YC CHINA 投资机构微软前全球副总裁陆奇的投资。</strong></p>
-<p><strong>目前公司做的是一个广义的 AI PPT ，简单的讲是图文内容的生成。比如电商领域的 newsletter ， 咨询行业的行业报告，教育行业的教案，都可以理解成图文内容。我们的图文内容生成，不光可以面向公共领域的信息，比如对互联网上的内容进行检索和生成，也可以面向私域的信息，比如支持用户上传自己的多媒体内容，依据内容进行生成。</strong></p>
-<p><strong>当然这是一个长期的目标，为了实现高效、智能的 AI PPT ，我们前期做了不少产品。 比如我们做了一个 AI 生成图片检索产品，可以检索我们后台 2000 万张 AI 生成的图片，用以匹配 AI PPT 需要的图像。我们还有一个 AI 图片编辑产品，可以针对用户上传的图像，以自然语言交互，进行 AI 的自动编辑，比如给电商类用户的服装类图像换背景，模特换人种等等。</strong></p>
-<p><strong>iart 的愿景是通过人工智能技术，为人们提供更加高效、个性化的信息获取和交流方式，让每个人都能够轻松获得、理解和分享信息，彻底改变人类信息的传递。</strong></p>
-<p><strong>It's a great time to be great ！我们欢迎有梦想，有初心的人才加入我们！</strong></p>
-<h2>前端工程师</h2>
-<p>岗位职责：
-1 、参与产品需求，将需求转化为稳定、可靠、安全、可扩展的 Web 设计；
-2 、参与产品用户体验优化，在界面交互方面有自己独到的见解；
-3 、根据产品需求负责完成 Web 前端界面设计、开发和调试工作；
-4 、研究和探索最新的前端技术、创新的开发思路；</p>
-<p>任职要求：
-1 、3 年以上前端项目开发经验；
-2 、HTML5 、CSS3 、JavaScript 基本功扎实；
-3 、熟练使用 React 、Redux 、hooks 、TypeScript 、next.js 等，需有相关项目经验；
-4 、熟练使用各种前端调试工具，性能分析工具；
-5 、具备前端工程化思维和实践经验，技术视野广阔，有主导前端技术方案设计的能力和经验，能够独立承担模块功能的前端开发工作；
-6 、具备较强的自驱力，良好的团队协作能力，能承受一定的工作压力。
-7 、具有 CI/CD /跨终端开发 /NodeJS/微前端架构经验优先考虑。</p>
-<h2>产品经理</h2>
-<p>主要职责：1. 制定项目计划，包括项目范围、时间表、预算和资源需求。2. 协调跨部门团队，包括研发、设计、产品和市场部门，确保项目顺利进行。3. 跟踪项目进度，定期报告项目状态，确保项目按计划进行。4. 识别和解决项目风险和问题，确保项目顺利进行。5. 与利益相关者保持紧密沟通，确保项目目标和期望得到满足。6. 监督和评估项目团队成员的绩效，为团队提供支持和指导。7. 不断改进项目管理流程，提高项目执行效率。</p>
-<p>任职要求：1. 计算机科学、软件工程或相关领域的学士学位。2. 至少 5 年的项目管理经验，熟悉敏捷开发和 Scrum 方法论。3. 对人工智能、机器学习和 GPT 技术有深入了解。4. 具备优秀的沟通、组织和领导能力，能够在压力下工作。5. 具备解决复杂问题的能力，能够制定有效的解决方案。6. 良好的英语书写沟通能力</p>
-<h2>运营主管</h2>
-<p>作为运营 Leader ，您将负责推动公司产品从 0 至 1 阶段的市场落地，制定和执行有效的运营策略，提高产品知名度和用户粘性。您将领导运营团队，与跨部门合作，共同实现公司的业务目标。</p>
-<p>主要职责：</p>
-<ol>
-<li>制定并执行产品运营策略，包括市场推广、用户增长、活动策划等。</li>
-<li>领导运营团队，确保团队达成业务目标，提高产品知名度和市场份额。</li>
-<li>与产品、研发、设计和市场部门紧密合作，确保产品持续优化，满足用户需求。</li>
-<li>跟踪并分析产品运营数据，为产品迭代和运营策略调整提供依据。</li>
-<li>建立和维护与合作伙伴的关系，寻求合作机会，推动产品在各渠道的推广。</li>
-<li>组织和管理线上、线下活动，提高公司知名度和用户粘性。</li>
-</ol>
-<p>任职要求：</p>
-<ol>
-<li>本科及以上学历，市场营销、管理、传媒或相关专业优先。</li>
-<li>5 年以上互联网产品运营经验，有从 0 至 1 阶段成功运营产品的案例优先。</li>
-<li>对人工智能、机器学习和 GPT 技术有一定了解。</li>
-<li>对国内外自媒体平台背后的运营逻辑较为熟悉，如 Twitter ，ins ，小红书，抖音等</li>
-<li>具备优秀的沟通、组织和领导能力，能够在压力下工作。</li>
-<li>良好的英语能力。</li>
-</ol>
-<p>薪资均面议
-投递邮箱：a2llbW1hNTIyQGdtYWlsLmNvbQ==</p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] Google Translate 有没有 PC 版客户端？</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934570#reply7" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934570</id>
-	<published>2023-04-22T09:31:05Z</published>
-	<updated>2023-04-22T14:13:49Z</updated>
-	<author>
-		<name>2232588429</name>
-		<uri>https://www.v2ex.com/member/2232588429</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>win 系统下，比较好用的有推荐么？</p>
-
-	]]></content>
-</entry><entry>
-	<title>[移民] 想润日本的朋友们：好消息来了</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934569#reply83" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934569</id>
-	<published>2023-04-22T09:28:18Z</published>
-	<updated>2023-04-22T16:07:36Z</updated>
-	<author>
-		<name>springwood</name>
-		<uri>https://www.v2ex.com/member/springwood</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p><strong>清华大学、北京大学、浙江大学、复旦大学、上海交通大学和中国科学技术大学</strong>的<strong>毕业五年内</strong>的学生</p>
-<p>有<strong>1 万人民币以上</strong>的存款，即可以获批在日本<strong>居住两年</strong>用于找工作。</p>
-<p>而且还可以携带配偶或子女，当然这种情况下需要提供多一些的存款了。</p>
-<p><a href="https://www.moj.go.jp/isa/applications/status/designatedactivities51.html" rel="nofollow">日文官网</a></p>
-<p><a href="https://springwood.me/japan-visa-j-find/" rel="nofollow">中文解读</a></p>
-
-	]]></content>
-</entry><entry>
-	<title>[iCloud] iCloud 不够用了 请问哪里可以上别人的车？
-求车！</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934567#reply2" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934567</id>
-	<published>2023-04-22T09:21:20Z</published>
-	<updated>2023-04-22T10:05:27Z</updated>
-	<author>
-		<name>iyg429</name>
-		<uri>https://www.v2ex.com/member/iyg429</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	如题描述<br />是不是家庭组的管理员，可以直接开启 家庭组成员的丢失模式？
-	]]></content>
-</entry><entry>
-	<title>[问与答] 请教各位大佬，在完成安装之前向导已中断</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934566#reply0" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934566</id>
-	<published>2023-04-22T09:14:13Z</published>
-	<updated>2023-04-22T09:14:13Z</updated>
-	<author>
-		<name>biglihao</name>
-		<uri>https://www.v2ex.com/member/biglihao</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>如题，安装 xshell 的时候提示这个，以前没有安装过 XSHELL ，不知道怎么解决，网上的方法都试过了
-[IMG]<a href="https://img86.pixhost.to/images/10/348691998_.jpg" rel="nofollow">https://img86.pixhost.to/images/10/348691998_.jpg</a>[/IMG]</p>
-
-	]]></content>
-</entry><entry>
-	<title>[分享发现] 在小红书里问了下妹子工资多少, 然后号被封了?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934565#reply15" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934565</id>
-	<published>2023-04-22T09:09:49Z</published>
-	<updated>2023-04-22T16:10:03Z</updated>
-	<author>
-		<name>jiuzhuans1</name>
-		<uri>https://www.v2ex.com/member/jiuzhuans1</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>感觉有几个可疑举动会被封号:</p>
-<ol>
-<li>挂 vpn 了, 节点是日本的, 然后偶尔也没挂</li>
-<li>有个妹子私聊我相亲, 她自我介绍身高 158,大专,期望男方月薪 3w+, 然后我问她工资多少, 她没理我, 然后过了一会儿我号就被封了😂</li>
-</ol>
-
-	]]></content>
-</entry><entry>
-	<title>[程序员] 我的开源项目与开源经历分享</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934564#reply13" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934564</id>
-	<published>2023-04-22T09:04:21Z</published>
-	<updated>2023-04-22T14:30:02Z</updated>
-	<author>
-		<name>nihaojob</name>
-		<uri>https://www.v2ex.com/member/nihaojob</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>大家好，我是一位 93 年的前端开发者，最近开源了一款基于 Fabric.js + Vue3 开发的 Web 图形编辑器，它是一个<strong>可以自定义设计模板、设计素材，让开发者快捷的开发出一个图片编辑应用</strong>，类似稿定设计、创客贴设计这样的工具。</p>
-<p>这篇笔记的两个目的：</p>
-<ol>
-<li>介绍开源项目，如果有类似场景大家可直接使用，不再重复开发。</li>
-<li>分享开源经历，鼓励和邀请对开源感兴趣的伙伴一起参与进来。</li>
-</ol>
-<h2>项目介绍</h2>
-<p><img alt="screenshot-20230415-142257.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fa746af9a6ee4b05984ae93d4eff989f%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<p>Github：<a href="https://github.com/nihaojob/vue-fabric-editor" rel="nofollow">https://github.com/nihaojob/vue-fabric-editor</a></p>
-<p>预览：<a href="https://nihaojob.github.io/vue-fabric-editor/" rel="nofollow">https://nihaojob.github.io/vue-fabric-editor/</a></p>
-<h3></h3>
-<h3>技术选型：</h3>
-<p><strong>项目以 Fabric.js 为底层，使用 Vue3 框架和精致的 View UI Plus 组件库构建</strong>。
-Fabric.js 是业界知名的 Canvas 工具库，它已经 12 岁了，在业界得到了广泛的应用和认可； Vue 提供更友好的入门曲线，尤其在国内应用更广；希望借助这些优秀的开源项目，<strong>构建底层强大、上手容易、便捷扩展、开箱即用的开源图像编辑器产品</strong>。</p>
-<h3>应用场景</h3>
-<p>它适用于<strong>海报设计、封面设计、T 恤设计、奖状 /工卡设计、电子价签设计、印章设计、手机壁纸、PPT 设计等场景，</strong>还有更复杂的工业软件场景，如机房拓扑拓展、设备巡检图等。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/867e54383ff847d7931e7cf9e6a04aff%7Etplv-k3u1fbpfcp-zoom-1.image"/>
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c5f1268b28694307b3cacc7c57bd3228%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<h3>产品特点</h3>
-<p>开源前做了一些调研，已经有一些比较专业的开源编辑器项目，比如知名的 SVGEdit 项目，它们很强大，类似在线版本的 PS ，提供给更专业的设计师使用；<strong>vue-fabric-editor 的产品定位是给非专业设计人员使用</strong>，例如让没有设计技能的运营同学在模板上简单修改，生成一张在公众号中使用的头图。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2f004e7389ae47889a53f16afa815366%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<h3>支持功能</h3>
-<ol>
-<li>支持导入导出 JSON 源文件，导出常见的图片 PNG 、SVG 格式。</li>
-<li>可自定义设计模板、字体样式模板、自定义分类素材。</li>
-<li>元素支持拖拽、组合、层级管理、多种对齐操作。</li>
-<li>图片素材支持插入、替换、滤镜、裁剪。</li>
-<li>支持形状素材、线条绘制，渐变、边框、透明度、阴影设置。</li>
-<li>画布可自定义尺寸、放大缩小、辅助线、标尺功能。</li>
-<li>快捷键、右键菜单快捷操作设置。</li>
-</ol>
-<p><img alt="20230422131548_rec_.gif" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f372975619e64f09a619b4c94e7f5261%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<p>以上就是项目的介绍了，总结一下，<strong>它是一个基于 Fabric + Vue3 开发的一款开源 Web 图片编辑器，二次开发简单、扩展便捷、可帮助开发者快速构建一个面向非专业设计人员的图形编辑器</strong>。</p>
-<h2>开源经历</h2>
-<h3>关于我</h3>
-<p>我曾就职于优信二手车，参与过低代码平台的开发，现在一家互联网保险公司工作，参与音视频营销工具、外呼系统的开发，都属于复杂度比较高的前端项目，一直对架构和开源比较感兴趣，也在学习和积累设计模式、架构设计、开源相关的经验。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c025963d7a44b2791c64ed9c748262d%7Etplv-k3u1fbpfcp-zoom-1.image"/>
-作为一位已经 30 岁的开发者，<strong>一直对开源有着强烈的兴趣，但是从未参与过</strong>，于是在好奇心的驱动下发起了这个开源项目。</p>
-<h3>项目经历</h3>
-<p>最初，我帮朋友实现了一个基于 Fabric.js 开发的图片生成工具，后面将核心功能抽离并开源到了 Github 上，投稿到了阮一峰老师的博客，获得了一些关注。</p>
-<p>Fabric.js 的底层能力非常强大，接口也很灵活，<strong>我最初以为只需要简单的 API 调用就可以实现一个图片编辑器</strong>，事实上我高估了自己的学习能力，也低估了 Fabric.js 的强大和灵活。</p>
-<p><strong>很多开发者反馈 Fabric.js 的文档不太友好</strong>，太过强大和灵活也有一个弊端，那就是细节太多，要实现一个基础功能完整、功能丰富的图编辑器应用并不轻松，<strong>要掌握很多的细节，做很多基础的封装工作</strong>。</p>
-<p>我将开发过程发布到了技术社区，结识了很多 Fabric.js 的开发者。</p>
-<ol>
-<li><a href="https://juejin.cn/post/7155040639497797645" rel="nofollow">《使用 fabric.js 快速开发一个图片编辑器》</a></li>
-<li><a href="https://juejin.cn/post/7199849226745430076" rel="nofollow">《 fabric.js 开发图片编辑器的细节实现》</a></li>
-<li><a href="https://juejin.cn/post/7222141882515128375" rel="nofollow">《 fabric.js 开发图片编辑器可以实现哪些功能？》</a></li>
-</ol>
-<p>短短几个月的时间，项目<strong>在 Github 上已经从 0 涨到 1K+ Star ，</strong>开源给我带来了新奇的体验。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b1695d59d38f4299bddd440984b6513e%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<h3>沉淀</h3>
-<p>在和众多的开发者交流后，发现大家都在做同一件事情，重复的开发；大家更期望在<strong>不做太多基础工作的情况下，快速构建一个功能完整、易于扩展的图片编辑应用</strong>。</p>
-<p>目前的项目还只是一个前端应用项目，希望未来和社区一起沉淀一个介于 Web 图片编辑器应用与 Fabric.js 底层库之间的封装层，<strong>面向应用开发者设计，提供更简单的接口，让开发者可以通过开源 SDK ，快速构建图片编辑器应用</strong>。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e6e8fec15d9844c1af2f2cdd8ba3084e%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<h3>邀请</h3>
-<p>开源是很有魅力一件事情，我在 Github 上结识了很多志同道合的贡献者，<strong>他们是一个个富有热情且有执行力的有趣灵魂</strong>，是他们在深夜付出自己的时间与热爱为项目贡献代码，让不相识的后来人受益，让项目越来越好，<strong>我也从一个开源门外汉，和大家一起成为了开源贡献者</strong>。
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ecc79fefc06848a8bdae4b7d531d5356%7Etplv-k3u1fbpfcp-zoom-1.image"/>
-<img alt="image.png" class="embedded_image" loading="lazy" referrerpolicy="no-referrer" rel="noreferrer" src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0df6172b6ca143a4a77e16dd87f6541f%7Etplv-k3u1fbpfcp-zoom-1.image"/></p>
-<p>这是一个很新的项目和社区，有太多的工作需要做，<strong>如果你对这件事情感兴趣，真诚的邀请你加入，希望我们一起边走边学，在未来一起成为开源世界里的一部分，期待你的加入。</strong></p>
-
-	]]></content>
-</entry><entry>
-	<title>[问与答] 有好用速度快的截图翻译软件吗?</title>
-	<link rel="alternate" type="text/html" href="https://www.v2ex.com/t/934563#reply13" />
-	<id>tag:www.v2ex.com,2023-04-22:/t/934563</id>
-	<published>2023-04-22T09:02:22Z</published>
-	<updated>2023-04-22T15:32:56Z</updated>
-	<author>
-		<name>hiroot199</name>
-		<uri>https://www.v2ex.com/member/hiroot199</uri>
-	</author>
-	<content type="html" xml:base="https://www.v2ex.com/" xml:lang="en"><![CDATA[
-	<p>有道词典网络卡一点就卡主了,按 ESC 也关闭不了必须按 ALT+F4 不好用
-qq 翻译也不好用,弹窗出来按 Esc 也不行
-经常要翻译英文,推荐一下</p>
-
 	]]></content>
 </entry>
 </feed>
